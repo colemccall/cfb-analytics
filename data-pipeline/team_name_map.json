@@ -1,0 +1,794 @@
+{
+  "Alabama": {
+    "publicName": "Crimson Valley University",
+    "publicAbbreviation": "CVU",
+    "publicMascot": "Tide",
+    "publicStadiumName": "Crimson Thunder Stadium"
+  },
+  "Arkansas": {
+    "publicName": "Razorback Ridge University",
+    "publicAbbreviation": "RRU",
+    "publicMascot": "Hogs",
+    "publicStadiumName": "Hog Ridge Stadium"
+  },
+  "Auburn": {
+    "publicName": "Tiger Plains University",
+    "publicAbbreviation": "TPU",
+    "publicMascot": "Tigers",
+    "publicStadiumName": "Plains Stadium"
+  },
+  "Florida": {
+    "publicName": "Swamp Gator University",
+    "publicAbbreviation": "SGU",
+    "publicMascot": "Gators",
+    "publicStadiumName": "The Swamp"
+  },
+  "Georgia": {
+    "publicName": "Bulldog Athens University",
+    "publicAbbreviation": "BAU",
+    "publicMascot": "Bulldogs",
+    "publicStadiumName": "Athens Stadium"
+  },
+  "Kentucky": {
+    "publicName": "Wildcat Bluegrass University",
+    "publicAbbreviation": "WBU",
+    "publicMascot": "Wildcats",
+    "publicStadiumName": "Bluegrass Stadium"
+  },
+  "LSU": {
+    "publicName": "Bayou Tiger University",
+    "publicAbbreviation": "BTU",
+    "publicMascot": "Tigers",
+    "publicStadiumName": "Death Valley South"
+  },
+  "Mississippi State": {
+    "publicName": "Bulldog Delta University",
+    "publicAbbreviation": "BDU",
+    "publicMascot": "Bulldogs",
+    "publicStadiumName": "Delta Stadium"
+  },
+  "Missouri": {
+    "publicName": "Tiger River University",
+    "publicAbbreviation": "TRU",
+    "publicMascot": "Tigers",
+    "publicStadiumName": "River Stadium"
+  },
+  "Oklahoma": {
+    "publicName": "Sooner Prairie University",
+    "publicAbbreviation": "SPU",
+    "publicMascot": "Sooners",
+    "publicStadiumName": "Prairie Memorial Stadium"
+  },
+  "Ole Miss": {
+    "publicName": "Rebel Grove University",
+    "publicAbbreviation": "RGU",
+    "publicMascot": "Rebels",
+    "publicStadiumName": "The Grove Stadium"
+  },
+  "South Carolina": {
+    "publicName": "Gamecock Lowcountry University",
+    "publicAbbreviation": "GLU",
+    "publicMascot": "Gamecocks",
+    "publicStadiumName": "Lowcountry Stadium"
+  },
+  "Tennessee": {
+    "publicName": "Volunteer Summit University",
+    "publicAbbreviation": "VSU",
+    "publicMascot": "Volunteers",
+    "publicStadiumName": "Rocky Top Stadium"
+  },
+  "Texas": {
+    "publicName": "Longhorn Capitol University",
+    "publicAbbreviation": "LCU",
+    "publicMascot": "Longhorns",
+    "publicStadiumName": "Capitol Stadium"
+  },
+  "Texas A&M": {
+    "publicName": "Aggie Station University",
+    "publicAbbreviation": "ASU",
+    "publicMascot": "Aggies",
+    "publicStadiumName": "12th Man Stadium"
+  },
+  "Vanderbilt": {
+    "publicName": "Commodore Gold University",
+    "publicAbbreviation": "CGU",
+    "publicMascot": "Commodores",
+    "publicStadiumName": "Gold Star Stadium"
+  },
+  "Illinois": {
+    "publicName": "Prairie Fighting University",
+    "publicAbbreviation": "PFU",
+    "publicMascot": "Illini",
+    "publicStadiumName": "Prairie Memorial Stadium"
+  },
+  "Indiana": {
+    "publicName": "Hoosier Heartland University",
+    "publicAbbreviation": "HHU",
+    "publicMascot": "Hoosiers",
+    "publicStadiumName": "Heartland Stadium"
+  },
+  "Iowa": {
+    "publicName": "Hawkeye River University",
+    "publicAbbreviation": "HRU",
+    "publicMascot": "Hawkeyes",
+    "publicStadiumName": "River City Stadium"
+  },
+  "Maryland": {
+    "publicName": "Terrapin Bay University",
+    "publicAbbreviation": "TBU",
+    "publicMascot": "Terrapins",
+    "publicStadiumName": "Chesapeake Stadium"
+  },
+  "Michigan": {
+    "publicName": "Wolverine Great Lakes University",
+    "publicAbbreviation": "WGL",
+    "publicMascot": "Wolverines",
+    "publicStadiumName": "The Big House"
+  },
+  "Michigan State": {
+    "publicName": "Spartan Lansing University",
+    "publicAbbreviation": "SLU",
+    "publicMascot": "Spartans",
+    "publicStadiumName": "Spartan Stadium"
+  },
+  "Minnesota": {
+    "publicName": "Gopher Twin Cities University",
+    "publicAbbreviation": "GTC",
+    "publicMascot": "Gophers",
+    "publicStadiumName": "Twin Cities Stadium"
+  },
+  "Nebraska": {
+    "publicName": "Cornhusker Plains University",
+    "publicAbbreviation": "CPU",
+    "publicMascot": "Huskers",
+    "publicStadiumName": "Sea of Red Stadium"
+  },
+  "Northwestern": {
+    "publicName": "Purple Wildcat University",
+    "publicAbbreviation": "PWU",
+    "publicMascot": "Wildcats",
+    "publicStadiumName": "Lakefront Stadium"
+  },
+  "Ohio State": {
+    "publicName": "Buckeye Plains University",
+    "publicAbbreviation": "BPU",
+    "publicMascot": "Buckeyes",
+    "publicStadiumName": "Horseshoe Stadium"
+  },
+  "Oregon": {
+    "publicName": "Cascade Green University",
+    "publicAbbreviation": "CGN",
+    "publicMascot": "Ducks",
+    "publicStadiumName": "Cascade Stadium"
+  },
+  "Penn State": {
+    "publicName": "Nittany Mountain University",
+    "publicAbbreviation": "NMU",
+    "publicMascot": "Lions",
+    "publicStadiumName": "Happy Valley Stadium"
+  },
+  "Purdue": {
+    "publicName": "Boilermaker Rail University",
+    "publicAbbreviation": "BRU",
+    "publicMascot": "Boilermakers",
+    "publicStadiumName": "Rail City Stadium"
+  },
+  "Rutgers": {
+    "publicName": "Scarlet River University",
+    "publicAbbreviation": "SRU",
+    "publicMascot": "Knights",
+    "publicStadiumName": "Scarlet Stadium"
+  },
+  "UCLA": {
+    "publicName": "Pacific Bruin University",
+    "publicAbbreviation": "PBU",
+    "publicMascot": "Bruins",
+    "publicStadiumName": "Rose Bowl West"
+  },
+  "USC": {
+    "publicName": "Trojan Sunset University",
+    "publicAbbreviation": "TSU",
+    "publicMascot": "Trojans",
+    "publicStadiumName": "Sunset Coliseum"
+  },
+  "Washington": {
+    "publicName": "Husky Sound University",
+    "publicAbbreviation": "HSU",
+    "publicMascot": "Huskies",
+    "publicStadiumName": "Puget Sound Stadium"
+  },
+  "Wisconsin": {
+    "publicName": "Badger Lakeshore University",
+    "publicAbbreviation": "BLU",
+    "publicMascot": "Badgers",
+    "publicStadiumName": "Camp Randall North"
+  },
+  "Arizona": {
+    "publicName": "Desert Wildcat University",
+    "publicAbbreviation": "DWU",
+    "publicMascot": "Wildcats",
+    "publicStadiumName": "Desert Bowl"
+  },
+  "Arizona State": {
+    "publicName": "Sun Devil Mesa University",
+    "publicAbbreviation": "SDM",
+    "publicMascot": "Sun Devils",
+    "publicStadiumName": "Sun Devil Stadium"
+  },
+  "Baylor": {
+    "publicName": "Bear River University",
+    "publicAbbreviation": "BRV",
+    "publicMascot": "Bears",
+    "publicStadiumName": "River Bears Stadium"
+  },
+  "BYU": {
+    "publicName": "Cougar Mountain University",
+    "publicAbbreviation": "CMU",
+    "publicMascot": "Cougars",
+    "publicStadiumName": "Mountain Bowl"
+  },
+  "UCF": {
+    "publicName": "Knight Citrus University",
+    "publicAbbreviation": "KCU",
+    "publicMascot": "Knights",
+    "publicStadiumName": "Citrus Bowl"
+  },
+  "Cincinnati": {
+    "publicName": "Bearcat River University",
+    "publicAbbreviation": "BCR",
+    "publicMascot": "Bearcats",
+    "publicStadiumName": "River Bend Stadium"
+  },
+  "Colorado": {
+    "publicName": "Buffalo Summit University",
+    "publicAbbreviation": "BSM",
+    "publicMascot": "Buffaloes",
+    "publicStadiumName": "Summit Stadium"
+  },
+  "Houston": {
+    "publicName": "Cougar Bayou University",
+    "publicAbbreviation": "CBU",
+    "publicMascot": "Cougars",
+    "publicStadiumName": "Bayou Stadium"
+  },
+  "Iowa State": {
+    "publicName": "Cyclone Prairie University",
+    "publicAbbreviation": "CYP",
+    "publicMascot": "Cyclones",
+    "publicStadiumName": "Cyclone Stadium"
+  },
+  "Kansas": {
+    "publicName": "Jayhawk Sunflower University",
+    "publicAbbreviation": "JSU",
+    "publicMascot": "Jayhawks",
+    "publicStadiumName": "Sunflower Stadium"
+  },
+  "Kansas State": {
+    "publicName": "Wildcat Flint University",
+    "publicAbbreviation": "WFU",
+    "publicMascot": "Wildcats",
+    "publicStadiumName": "Flint Hills Stadium"
+  },
+  "Oklahoma State": {
+    "publicName": "Cowboy Thunder University",
+    "publicAbbreviation": "CTU",
+    "publicMascot": "Cowboys",
+    "publicStadiumName": "Boone Pickens Field"
+  },
+  "TCU": {
+    "publicName": "Horned Frog Metroplex University",
+    "publicAbbreviation": "HFM",
+    "publicMascot": "Horned Frogs",
+    "publicStadiumName": "Metroplex Stadium"
+  },
+  "Texas Tech": {
+    "publicName": "Red Raider Llano University",
+    "publicAbbreviation": "RRL",
+    "publicMascot": "Red Raiders",
+    "publicStadiumName": "Llano Estacado Stadium"
+  },
+  "Utah": {
+    "publicName": "Ute Canyon University",
+    "publicAbbreviation": "UCY",
+    "publicMascot": "Utes",
+    "publicStadiumName": "Canyon Rim Stadium"
+  },
+  "West Virginia": {
+    "publicName": "Mountaineer Monongalia University",
+    "publicAbbreviation": "MMU",
+    "publicMascot": "Mountaineers",
+    "publicStadiumName": "Mountaineer Field"
+  },
+  "Boston College": {
+    "publicName": "Eagle Atlantic University",
+    "publicAbbreviation": "EAU",
+    "publicMascot": "Eagles",
+    "publicStadiumName": "Atlantic Heights Stadium"
+  },
+  "Clemson": {
+    "publicName": "Tiger Palmetto University",
+    "publicAbbreviation": "TPL",
+    "publicMascot": "Tigers",
+    "publicStadiumName": "Death Valley North"
+  },
+  "Duke": {
+    "publicName": "Blue Devil Durham University",
+    "publicAbbreviation": "BDD",
+    "publicMascot": "Blue Devils",
+    "publicStadiumName": "Durham Stadium"
+  },
+  "Florida State": {
+    "publicName": "Seminole Capital University",
+    "publicAbbreviation": "SCU",
+    "publicMascot": "Seminoles",
+    "publicStadiumName": "Capitol Stadium"
+  },
+  "Georgia Tech": {
+    "publicName": "Yellow Jacket Metro University",
+    "publicAbbreviation": "YJM",
+    "publicMascot": "Yellow Jackets",
+    "publicStadiumName": "Metro Bowl"
+  },
+  "Louisville": {
+    "publicName": "Cardinal Falls University",
+    "publicAbbreviation": "CFU",
+    "publicMascot": "Cardinals",
+    "publicStadiumName": "Falls City Stadium"
+  },
+  "Miami": {
+    "publicName": "Hurricane Coral University",
+    "publicAbbreviation": "HCU",
+    "publicMascot": "Hurricanes",
+    "publicStadiumName": "Coral Gables Stadium"
+  },
+  "NC State": {
+    "publicName": "Wolfpack Red University",
+    "publicAbbreviation": "WRU",
+    "publicMascot": "Wolfpack",
+    "publicStadiumName": "Red Wolf Stadium"
+  },
+  "North Carolina": {
+    "publicName": "Tar Heel Blue University",
+    "publicAbbreviation": "THB",
+    "publicMascot": "Tar Heels",
+    "publicStadiumName": "Blue Ridge Stadium"
+  },
+  "Notre Dame": {
+    "publicName": "Golden Dome University",
+    "publicAbbreviation": "GDU",
+    "publicMascot": "Fighting Irish",
+    "publicStadiumName": "Golden Dome Stadium"
+  },
+  "Pittsburgh": {
+    "publicName": "Panther Steel University",
+    "publicAbbreviation": "PST",
+    "publicMascot": "Panthers",
+    "publicStadiumName": "Steel City Stadium"
+  },
+  "SMU": {
+    "publicName": "Mustang Lone Star University",
+    "publicAbbreviation": "MLS",
+    "publicMascot": "Mustangs",
+    "publicStadiumName": "Lone Star Stadium"
+  },
+  "Stanford": {
+    "publicName": "Cardinal Redwood University",
+    "publicAbbreviation": "CRU",
+    "publicMascot": "Cardinal",
+    "publicStadiumName": "Redwood Stadium"
+  },
+  "Syracuse": {
+    "publicName": "Orange Upstate University",
+    "publicAbbreviation": "OUU",
+    "publicMascot": "Orange",
+    "publicStadiumName": "Carrier Dome North"
+  },
+  "Virginia": {
+    "publicName": "Cavalier Blue Ridge University",
+    "publicAbbreviation": "CBR",
+    "publicMascot": "Cavaliers",
+    "publicStadiumName": "Blue Ridge Bowl"
+  },
+  "Virginia Tech": {
+    "publicName": "Hokie New River University",
+    "publicAbbreviation": "HNR",
+    "publicMascot": "Hokies",
+    "publicStadiumName": "Lane Mountain Stadium"
+  },
+  "Wake Forest": {
+    "publicName": "Demon Deacon Triad University",
+    "publicAbbreviation": "DDT",
+    "publicMascot": "Demon Deacons",
+    "publicStadiumName": "Triad Stadium"
+  },
+  "Air Force": {
+    "publicName": "Falcon Peak University",
+    "publicAbbreviation": "FPU",
+    "publicMascot": "Falcons",
+    "publicStadiumName": "Peak Stadium"
+  },
+  "Boise State": {
+    "publicName": "Desert Blue University",
+    "publicAbbreviation": "DBU",
+    "publicMascot": "Stallions",
+    "publicStadiumName": "Blue Thunder Stadium"
+  },
+  "Colorado State": {
+    "publicName": "Ram Front Range University",
+    "publicAbbreviation": "RFR",
+    "publicMascot": "Rams",
+    "publicStadiumName": "Front Range Stadium"
+  },
+  "Fresno State": {
+    "publicName": "Bulldog Valley University",
+    "publicAbbreviation": "BVU",
+    "publicMascot": "Bulldogs",
+    "publicStadiumName": "Central Valley Stadium"
+  },
+  "Hawaii": {
+    "publicName": "Warrior Rainbow University",
+    "publicAbbreviation": "WRB",
+    "publicMascot": "Warriors",
+    "publicStadiumName": "Rainbow Stadium"
+  },
+  "Nevada": {
+    "publicName": "Wolf Pack Basin University",
+    "publicAbbreviation": "WPB",
+    "publicMascot": "Wolf Pack",
+    "publicStadiumName": "Basin Bowl"
+  },
+  "New Mexico": {
+    "publicName": "Lobo High Desert University",
+    "publicAbbreviation": "LHD",
+    "publicMascot": "Lobos",
+    "publicStadiumName": "High Desert Stadium"
+  },
+  "San Diego State": {
+    "publicName": "Aztec Pacific University",
+    "publicAbbreviation": "APU",
+    "publicMascot": "Aztecs",
+    "publicStadiumName": "Pacific Mesa Stadium"
+  },
+  "San Jose State": {
+    "publicName": "Spartan Bay Area University",
+    "publicAbbreviation": "SBA",
+    "publicMascot": "Spartans",
+    "publicStadiumName": "Bay Area Stadium"
+  },
+  "UNLV": {
+    "publicName": "Rebel Neon University",
+    "publicAbbreviation": "RNU",
+    "publicMascot": "Rebels",
+    "publicStadiumName": "Neon Bowl"
+  },
+  "Utah State": {
+    "publicName": "Aggie Cache University",
+    "publicAbbreviation": "ACU",
+    "publicMascot": "Aggies",
+    "publicStadiumName": "Cache Valley Stadium"
+  },
+  "Wyoming": {
+    "publicName": "Cowboy High Plains University",
+    "publicAbbreviation": "CHP",
+    "publicMascot": "Cowboys",
+    "publicStadiumName": "High Plains Stadium"
+  },
+  "Army": {
+    "publicName": "Black Knight Academy",
+    "publicAbbreviation": "BKA",
+    "publicMascot": "Black Knights",
+    "publicStadiumName": "Highlands Stadium"
+  },
+  "Charlotte": {
+    "publicName": "49er Queen City University",
+    "publicAbbreviation": "QCU",
+    "publicMascot": "49ers",
+    "publicStadiumName": "Queen City Stadium"
+  },
+  "East Carolina": {
+    "publicName": "Pirate Coastal University",
+    "publicAbbreviation": "PCU",
+    "publicMascot": "Pirates",
+    "publicStadiumName": "Coastal Stadium"
+  },
+  "Florida Atlantic": {
+    "publicName": "Owl Atlantic University",
+    "publicAbbreviation": "OAU",
+    "publicMascot": "Owls",
+    "publicStadiumName": "Atlantic Stadium"
+  },
+  "Memphis": {
+    "publicName": "Tiger Bluff University",
+    "publicAbbreviation": "TBL",
+    "publicMascot": "Tigers",
+    "publicStadiumName": "Bluff City Stadium"
+  },
+  "Navy": {
+    "publicName": "Midshipman Naval Academy",
+    "publicAbbreviation": "MNA",
+    "publicMascot": "Midshipmen",
+    "publicStadiumName": "Navy-Marine Corps Memorial"
+  },
+  "North Texas": {
+    "publicName": "Mean Green Eagle University",
+    "publicAbbreviation": "MGE",
+    "publicMascot": "Mean Green",
+    "publicStadiumName": "Apogee Stadium"
+  },
+  "Rice": {
+    "publicName": "Owl Bayou University",
+    "publicAbbreviation": "OBU",
+    "publicMascot": "Owls",
+    "publicStadiumName": "Bayou Stadium"
+  },
+  "South Florida": {
+    "publicName": "Bull Bay University",
+    "publicAbbreviation": "BBU",
+    "publicMascot": "Bulls",
+    "publicStadiumName": "Bull Bay Stadium"
+  },
+  "Temple": {
+    "publicName": "Owl Keystone University",
+    "publicAbbreviation": "OKU",
+    "publicMascot": "Owls",
+    "publicStadiumName": "Keystone Stadium"
+  },
+  "Tulane": {
+    "publicName": "Green Wave Crescent University",
+    "publicAbbreviation": "GWC",
+    "publicMascot": "Green Wave",
+    "publicStadiumName": "Crescent City Stadium"
+  },
+  "Tulsa": {
+    "publicName": "Golden Hurricane Oil University",
+    "publicAbbreviation": "GHO",
+    "publicMascot": "Golden Hurricane",
+    "publicStadiumName": "Oil Capital Stadium"
+  },
+  "UAB": {
+    "publicName": "Blazer Iron University",
+    "publicAbbreviation": "BIU",
+    "publicMascot": "Blazers",
+    "publicStadiumName": "Iron Bowl South"
+  },
+  "UTSA": {
+    "publicName": "Roadrunner Alamo University",
+    "publicAbbreviation": "RAU",
+    "publicMascot": "Roadrunners",
+    "publicStadiumName": "Alamo Stadium"
+  },
+  "Appalachian State": {
+    "publicName": "Blue Ridge Mountain University",
+    "publicAbbreviation": "BRM",
+    "publicMascot": "Mountaineers",
+    "publicStadiumName": "Kidd Brewer North"
+  },
+  "Arkansas State": {
+    "publicName": "Red Wolf Delta University",
+    "publicAbbreviation": "RWD",
+    "publicMascot": "Red Wolves",
+    "publicStadiumName": "Delta Bowl"
+  },
+  "Coastal Carolina": {
+    "publicName": "Chanticleer Shore University",
+    "publicAbbreviation": "CSU",
+    "publicMascot": "Chanticleers",
+    "publicStadiumName": "Shore Stadium"
+  },
+  "Georgia Southern": {
+    "publicName": "Eagle Savannah University",
+    "publicAbbreviation": "ESU",
+    "publicMascot": "Eagles",
+    "publicStadiumName": "Savannah Stadium"
+  },
+  "Georgia State": {
+    "publicName": "Panther Atlanta University",
+    "publicAbbreviation": "PAU",
+    "publicMascot": "Panthers",
+    "publicStadiumName": "Atlanta Bowl"
+  },
+  "James Madison": {
+    "publicName": "Duke Shenandoah University",
+    "publicAbbreviation": "DSU",
+    "publicMascot": "Dukes",
+    "publicStadiumName": "Shenandoah Valley Stadium"
+  },
+  "Louisiana": {
+    "publicName": "Cajun Prairie University",
+    "publicAbbreviation": "CPU",
+    "publicMascot": "Ragin Cajuns",
+    "publicStadiumName": "Prairie Stadium"
+  },
+  "Louisiana Monroe": {
+    "publicName": "Warhawk North Delta University",
+    "publicAbbreviation": "WND",
+    "publicMascot": "Warhawks",
+    "publicStadiumName": "North Delta Stadium"
+  },
+  "Marshall": {
+    "publicName": "Thundering Herd River University",
+    "publicAbbreviation": "THR",
+    "publicMascot": "Thundering Herd",
+    "publicStadiumName": "River Stadium"
+  },
+  "Old Dominion": {
+    "publicName": "Monarch Tidewater University",
+    "publicAbbreviation": "MTU",
+    "publicMascot": "Monarchs",
+    "publicStadiumName": "Tidewater Stadium"
+  },
+  "South Alabama": {
+    "publicName": "Jaguar Gulf University",
+    "publicAbbreviation": "JGU",
+    "publicMascot": "Jaguars",
+    "publicStadiumName": "Gulf Coast Stadium"
+  },
+  "Southern Miss": {
+    "publicName": "Eagle Gulf Coast University",
+    "publicAbbreviation": "EGC",
+    "publicMascot": "Eagles",
+    "publicStadiumName": "Gulf Stadium"
+  },
+  "Texas State": {
+    "publicName": "Bobcat Hill Country University",
+    "publicAbbreviation": "BHC",
+    "publicMascot": "Bobcats",
+    "publicStadiumName": "Hill Country Stadium"
+  },
+  "Troy": {
+    "publicName": "Trojan Wiregrass University",
+    "publicAbbreviation": "TWU",
+    "publicMascot": "Trojans",
+    "publicStadiumName": "Wiregrass Stadium"
+  },
+  "Akron": {
+    "publicName": "Zip Rubber City University",
+    "publicAbbreviation": "ZRC",
+    "publicMascot": "Zips",
+    "publicStadiumName": "Rubber City Stadium"
+  },
+  "Ball State": {
+    "publicName": "Cardinal Muncie University",
+    "publicAbbreviation": "CMU",
+    "publicMascot": "Cardinals",
+    "publicStadiumName": "Muncie Bowl"
+  },
+  "Bowling Green": {
+    "publicName": "Falcon Wood County University",
+    "publicAbbreviation": "FWC",
+    "publicMascot": "Falcons",
+    "publicStadiumName": "Wood County Stadium"
+  },
+  "Buffalo": {
+    "publicName": "Bull Lake Erie University",
+    "publicAbbreviation": "BLE",
+    "publicMascot": "Bulls",
+    "publicStadiumName": "Lake Erie Stadium"
+  },
+  "Central Michigan": {
+    "publicName": "Chippewa River University",
+    "publicAbbreviation": "CRV",
+    "publicMascot": "Chippewas",
+    "publicStadiumName": "River City Stadium"
+  },
+  "Eastern Michigan": {
+    "publicName": "Eagle Ypsilanti University",
+    "publicAbbreviation": "EYU",
+    "publicMascot": "Eagles",
+    "publicStadiumName": "Ypsilanti Stadium"
+  },
+  "Kent State": {
+    "publicName": "Golden Flash University",
+    "publicAbbreviation": "GFU",
+    "publicMascot": "Golden Flashes",
+    "publicStadiumName": "Dix Stadium"
+  },
+  "Miami (OH)": {
+    "publicName": "RedHawk Oxford University",
+    "publicAbbreviation": "ROU",
+    "publicMascot": "RedHawks",
+    "publicStadiumName": "Oxford Bowl"
+  },
+  "Northern Illinois": {
+    "publicName": "Huskie DeKalb University",
+    "publicAbbreviation": "HDU",
+    "publicMascot": "Huskies",
+    "publicStadiumName": "DeKalb Stadium"
+  },
+  "Ohio": {
+    "publicName": "Bobcat Hocking University",
+    "publicAbbreviation": "BHK",
+    "publicMascot": "Bobcats",
+    "publicStadiumName": "Hocking Hills Stadium"
+  },
+  "Toledo": {
+    "publicName": "Rocket Glass City University",
+    "publicAbbreviation": "RGC",
+    "publicMascot": "Rockets",
+    "publicStadiumName": "Glass Bowl"
+  },
+  "Western Michigan": {
+    "publicName": "Bronco Kalamazoo University",
+    "publicAbbreviation": "BKZ",
+    "publicMascot": "Broncos",
+    "publicStadiumName": "Kalamazoo Bowl"
+  },
+  "FIU": {
+    "publicName": "Panther Miami South University",
+    "publicAbbreviation": "PMS",
+    "publicMascot": "Panthers",
+    "publicStadiumName": "Miami South Stadium"
+  },
+  "Jacksonville State": {
+    "publicName": "Gamecock Anniston University",
+    "publicAbbreviation": "GAU",
+    "publicMascot": "Gamecocks",
+    "publicStadiumName": "Anniston Stadium"
+  },
+  "Kennesaw State": {
+    "publicName": "Owl North Atlanta University",
+    "publicAbbreviation": "ONA",
+    "publicMascot": "Owls",
+    "publicStadiumName": "North Atlanta Stadium"
+  },
+  "Liberty": {
+    "publicName": "Flames Blue Ridge University",
+    "publicAbbreviation": "FBR",
+    "publicMascot": "Flames",
+    "publicStadiumName": "Blue Ridge Stadium"
+  },
+  "Louisiana Tech": {
+    "publicName": "Bulldog Ark-La-Tex University",
+    "publicAbbreviation": "BAL",
+    "publicMascot": "Bulldogs",
+    "publicStadiumName": "Ark-La-Tex Stadium"
+  },
+  "Middle Tennessee": {
+    "publicName": "Blue Raider Limestone University",
+    "publicAbbreviation": "BRL",
+    "publicMascot": "Blue Raiders",
+    "publicStadiumName": "Limestone Stadium"
+  },
+  "New Mexico State": {
+    "publicName": "Aggie Desert South University",
+    "publicAbbreviation": "ADS",
+    "publicMascot": "Aggies",
+    "publicStadiumName": "Desert South Stadium"
+  },
+  "Sam Houston": {
+    "publicName": "Bearkat Piney Woods University",
+    "publicAbbreviation": "BPW",
+    "publicMascot": "Bearkats",
+    "publicStadiumName": "Piney Woods Stadium"
+  },
+  "UTEP": {
+    "publicName": "Miner Borderland University",
+    "publicAbbreviation": "MBU",
+    "publicMascot": "Miners",
+    "publicStadiumName": "Sun Bowl"
+  },
+  "Western Kentucky": {
+    "publicName": "Hilltoppers Red River University",
+    "publicAbbreviation": "HRR",
+    "publicMascot": "Hilltoppers",
+    "publicStadiumName": "Red River Stadium"
+  },
+  "Connecticut": {
+    "publicName": "Husky New England University",
+    "publicAbbreviation": "HNE",
+    "publicMascot": "Huskies",
+    "publicStadiumName": "New England Bowl"
+  },
+  "Massachusetts": {
+    "publicName": "Minuteman Pioneer University",
+    "publicAbbreviation": "MPU",
+    "publicMascot": "Minutemen",
+    "publicStadiumName": "Pioneer Stadium"
+  },
+  "UMass": {
+    "publicName": "Minuteman Pioneer University",
+    "publicAbbreviation": "MPU",
+    "publicMascot": "Minutemen",
+    "publicStadiumName": "Pioneer Stadium"
+  }
+}

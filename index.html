@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CFB Roster Viewer</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a2e; color: #e0e0e0; display: flex; height: 100vh; overflow: hidden; }
+
+  #sidebar { width: 290px; background: #16213e; display: flex; flex-direction: column; border-right: 1px solid #0f3460; flex-shrink: 0; }
+  .sidebar-controls { padding: 8px; display: flex; flex-direction: column; gap: 6px; border-bottom: 1px solid #0f3460; }
+  .sidebar-controls input { width: 100%; padding: 8px 10px; background: #0f3460; border: none; color: #fff; font-size: 13px; outline: none; border-radius: 4px; }
+  .sidebar-controls input::placeholder { color: #666; }
+  .controls-row { display: flex; gap: 6px; }
+  .controls-row select, .controls-row button { flex: 1; padding: 6px 8px; background: #0f3460; border: 1px solid #1a3a6e; color: #fff; font-size: 12px; border-radius: 4px; cursor: pointer; }
+  .controls-row button.active { background: #e94560; border-color: #e94560; }
+  #team-list { flex: 1; overflow-y: auto; }
+  .team-item { padding: 8px 10px; cursor: pointer; border-bottom: 1px solid #0f346033; display: flex; align-items: center; gap: 8px; }
+  .team-item:hover, .team-item.active { background: #0f3460; }
+  .team-logo { width: 26px; height: 26px; object-fit: contain; flex-shrink: 0; }
+  .team-info { flex: 1; min-width: 0; }
+  .team-name { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .team-conf { font-size: 10px; color: #888; }
+  .team-ovr { font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 3px; flex-shrink: 0; }
+
+  #main { flex: 1; overflow-y: auto; padding: 20px; }
+  .team-header { display: flex; align-items: center; gap: 16px; padding: 16px; border-radius: 8px; margin-bottom: 12px; }
+  .team-header img { width: 56px; height: 56px; object-fit: contain; }
+  .team-header-info h1 { font-size: 20px; }
+  .team-header-info p { font-size: 12px; color: #aaa; margin-top: 2px; }
+
+  .rating-cards { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .rating-card { background: #16213e; border-radius: 6px; padding: 10px 14px; text-align: center; min-width: 80px; flex: 1; }
+  .rating-card .label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+  .rating-card .value { font-size: 22px; font-weight: 800; margin-top: 2px; }
+
+  .filter-row { display: flex; gap: 4px; margin-bottom: 10px; flex-wrap: wrap; }
+  .pos-chip { padding: 3px 10px; background: #16213e; border: 1px solid #0f3460; border-radius: 12px; font-size: 11px; cursor: pointer; }
+  .pos-chip.active { background: #e94560; border-color: #e94560; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { text-align: left; padding: 6px 8px; background: #16213e; color: #aaa; font-weight: 600; position: sticky; top: 0; z-index: 1; cursor: pointer; user-select: none; }
+  th:hover { color: #fff; }
+  th.sorted-asc::after { content: ' ▲'; }
+  th.sorted-desc::after { content: ' ▼'; }
+  td { padding: 5px 8px; border-bottom: 1px solid #16213e22; }
+  tr:hover td { background: #16213e55; }
+  .ovr { display: inline-block; width: 30px; text-align: center; padding: 2px 4px; border-radius: 4px; font-weight: 700; font-size: 11px; }
+  .pos-badge { display: inline-block; background: #0f3460; padding: 1px 5px; border-radius: 3px; font-size: 10px; font-weight: 600; min-width: 28px; text-align: center; }
+
+  #loading { text-align: center; padding: 60px; font-size: 14px; color: #666; }
+</style>
+</head>
+<body>
+<div id="sidebar">
+  <div class="sidebar-controls">
+    <div class="controls-row">
+      <select id="year-select"></select>
+      <button id="mode-btn" onclick="toggleMode()">Private</button>
+    </div>
+    <input type="text" id="search" placeholder="Search teams...">
+  </div>
+  <div id="team-list"></div>
+</div>
+<div id="main">
+  <div id="loading">Loading data...</div>
+</div>
+
+<script>
+let dataByYear = {};
+let years = [];
+let currentYear = null;
+let mode = 'private';
+let selectedTeamId = null;
+let sortCol = 'overall';
+let sortAsc = false;
+let posFilter = 'ALL';
+
+const ratingColor = v => {
+  if (v >= 90) return '#00c853';
+  if (v >= 80) return '#4caf50';
+  if (v >= 75) return '#8bc34a';
+  if (v >= 70) return '#ffc107';
+  if (v >= 65) return '#ff9800';
+  if (v >= 60) return '#ff5722';
+  return '#f44336';
+};
+
+async function loadData() {
+  const base = 'app/assets/data/';
+  try {
+    years = await fetch(base + 'years.json').then(r => r.json());
+  } catch {
+    years = [2024];
+  }
+
+  document.getElementById('year-select').innerHTML = years.map(y =>
+    `<option value="${y}">${y} Season</option>`
+  ).join('');
+  document.getElementById('year-select').value = years[years.length - 1];
+  document.getElementById('year-select').onchange = e => { currentYear = parseInt(e.target.value); onDataReady(); };
+
+  for (const y of years) {
+    const yb = base + y + '/';
+    try {
+      const [tp, tpub, pp, ppub, rat] = await Promise.all([
+        fetch(yb + 'teams_private.json').then(r => r.json()),
+        fetch(yb + 'teams_public.json').then(r => r.json()),
+        fetch(yb + 'players_private.json').then(r => r.json()),
+        fetch(yb + 'players_public.json').then(r => r.json()),
+        fetch(yb + 'ratings.json').then(r => r.json()),
+      ]);
+      dataByYear[y] = { teams: tp, teamsPublic: tpub, players: pp, playersPublic: ppub, ratings: rat };
+    } catch (e) {
+      console.warn(`Failed to load ${y}:`, e);
+    }
+  }
+
+  currentYear = years[years.length - 1];
+  onDataReady();
+}
+
+function getData() { return dataByYear[currentYear] || {}; }
+function getTeams() { return mode === 'private' ? (getData().teams || []) : (getData().teamsPublic || []); }
+function getPlayers() { return mode === 'private' ? (getData().players || []) : (getData().playersPublic || []); }
+function getRatings() { return getData().ratings || []; }
+
+function onDataReady() {
+  renderTeamList();
+  const teams = getTeams();
+  if (teams.length) {
+    const prev = teams.find(t => t.id === selectedTeamId);
+    selectTeam(prev ? prev.id : teams[0].id);
+  }
+}
+
+function renderTeamList(filter = '') {
+  const list = document.getElementById('team-list');
+  const teams = getTeams().filter(t => t.name.toLowerCase().includes(filter.toLowerCase()));
+  teams.sort((a, b) => (b.ratings?.overall || 0) - (a.ratings?.overall || 0));
+  list.innerHTML = teams.map(t => {
+    const ovr = t.ratings?.overall || 0;
+    return `<div class="team-item ${t.id === selectedTeamId ? 'active' : ''}" onclick="selectTeam(${t.id})">
+      ${t.logoUrl ? `<img class="team-logo" src="${t.logoUrl}" onerror="this.style.display='none'">` : ''}
+      <div class="team-info">
+        <div class="team-name">${t.name}</div>
+        <div class="team-conf">${t.conference || ''}</div>
+      </div>
+      <span class="team-ovr" style="background:${ratingColor(ovr)};color:#000">${ovr}</span>
+    </div>`;
+  }).join('');
+}
+
+function selectTeam(id) {
+  selectedTeamId = id;
+  posFilter = 'ALL';
+  const t = getTeams().find(t => t.id === id);
+  if (!t) return;
+  renderMain(t);
+  renderTeamList(document.getElementById('search').value);
+}
+
+function renderMain(t) {
+  const ps = getPlayers().filter(p => p.teamId === t.id);
+  const rMap = {};
+  getRatings().forEach(r => rMap[r.playerId] = r);
+
+  const posGroups = ['ALL', ...new Set(ps.map(p => p.positionGroup))].sort();
+  const filtered = posFilter === 'ALL' ? ps : ps.filter(p => p.positionGroup === posFilter);
+
+  filtered.sort((a, b) => {
+    const ra = rMap[a.id] || {}, rb = rMap[b.id] || {};
+    let va, vb;
+    if (sortCol === 'name') { va = a.lastName; vb = b.lastName; }
+    else if (sortCol === 'pos') { va = a.position; vb = b.position; }
+    else if (sortCol === 'yr') { va = a.year || 0; vb = b.year || 0; }
+    else if (sortCol === 'jersey') { va = parseInt(a.jersey) || 99; vb = parseInt(b.jersey) || 99; }
+    else { va = ra[sortCol] || 0; vb = rb[sortCol] || 0; }
+    if (typeof va === 'string') return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+    return sortAsc ? va - vb : vb - va;
+  });
+
+  const r = t.ratings || {};
+  const main = document.getElementById('main');
+  main.innerHTML = `
+    <div class="team-header" style="background:${t.primaryColor}33">
+      ${t.logoUrl ? `<img src="${t.logoUrl}" onerror="this.style.display='none'">` : ''}
+      <div class="team-header-info">
+        <h1>${t.name} ${t.mascot || ''}</h1>
+        <p>${t.conference || ''} &bull; ${t.stadiumName || ''} &bull; ${t.city || ''}, ${t.state || ''}</p>
+      </div>
+    </div>
+    <div class="rating-cards">
+      ${['overall','passOff','runOff','passDef','runDef','specialTeams'].map(k => {
+        const labels = {overall:'Overall',passOff:'Pass Off',runOff:'Run Off',passDef:'Pass Def',runDef:'Run Def',specialTeams:'Spec Teams'};
+        const v = r[k] || 0;
+        return `<div class="rating-card"><div class="label">${labels[k]}</div><div class="value" style="color:${ratingColor(v)}">${v}</div></div>`;
+      }).join('')}
+    </div>
+    <div class="filter-row">
+      ${posGroups.map(pg => `<span class="pos-chip ${pg === posFilter ? 'active' : ''}" onclick="filterPos('${pg}')">${pg}</span>`).join('')}
+    </div>
+    <table>
+      <tr>
+        ${[['jersey','#'],['pos','Pos'],['name','Name'],['yr','Yr'],['overall','OVR'],['speed','SPD'],['strength','STR'],['agility','AGI'],['awareness','AWR'],['throwing','THR'],['catching','CTH'],['carrying','CAR'],['blocking','BLK'],['tackling','TKL'],['kickPower','KPW']].map(([col,lbl]) => {
+          const cls = sortCol === col ? (sortAsc ? 'sorted-asc' : 'sorted-desc') : '';
+          return `<th class="${cls}" onclick="sortBy('${col}')">${lbl}</th>`;
+        }).join('')}
+      </tr>
+      ${filtered.map(p => {
+        const r = rMap[p.id] || {};
+        return `<tr>
+          <td>${p.jersey || '-'}</td>
+          <td><span class="pos-badge">${p.position || '?'}</span></td>
+          <td>${p.firstName} ${p.lastName}</td>
+          <td>${p.year || ''}</td>
+          <td><span class="ovr" style="background:${ratingColor(r.overall || 0)};color:#000">${r.overall || '-'}</span></td>
+          ${['speed','strength','agility','awareness','throwing','catching','carrying','blocking','tackling','kickPower'].map(a =>
+            `<td>${r[a] || '-'}</td>`
+          ).join('')}
+        </tr>`;
+      }).join('')}
+    </table>
+    <div style="padding:8px;color:#666;font-size:11px">${filtered.length} players shown${posFilter !== 'ALL' ? ` (${posFilter})` : ''} &bull; ${ps.length} total on roster</div>
+  `;
+}
+
+function sortBy(col) {
+  if (sortCol === col) sortAsc = !sortAsc;
+  else { sortCol = col; sortAsc = col === 'name' || col === 'pos'; }
+  const t = getTeams().find(t => t.id === selectedTeamId);
+  if (t) renderMain(t);
+}
+
+function filterPos(pg) {
+  posFilter = pg;
+  const t = getTeams().find(t => t.id === selectedTeamId);
+  if (t) renderMain(t);
+}
+
+function toggleMode() {
+  mode = mode === 'private' ? 'public' : 'private';
+  document.getElementById('mode-btn').textContent = mode === 'private' ? 'Private' : 'Public';
+  document.getElementById('mode-btn').classList.toggle('active', mode === 'public');
+  onDataReady();
+}
+
+document.getElementById('search').addEventListener('input', e => renderTeamList(e.target.value));
+loadData();
+</script>
+</body>
+</html>
