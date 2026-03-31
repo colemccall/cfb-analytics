@@ -48,38 +48,39 @@ IRRELEVANT_DEFAULTS = {
 }
 
 POSITION_OVERALL_WEIGHTS = {
-    "QB":  {"throwing": 0.30, "awareness": 0.20, "speed": 0.10, "agility": 0.10,
-            "strength": 0.05, "carrying": 0.10, "catching": 0.0, "blocking": 0.0,
+    # Primary attribute gets ~0.55 weight so truly elite production reaches 95+
+    "QB":  {"throwing": 0.55, "awareness": 0.20, "carrying": 0.08, "speed": 0.07,
+            "agility": 0.07, "strength": 0.03, "catching": 0.0, "blocking": 0.0,
             "tackling": 0.0, "kickPower": 0.0},
-    "RB":  {"carrying": 0.25, "speed": 0.20, "agility": 0.15, "strength": 0.10,
-            "awareness": 0.10, "catching": 0.10, "blocking": 0.05, "throwing": 0.0,
+    "RB":  {"carrying": 0.50, "speed": 0.20, "agility": 0.13, "strength": 0.07,
+            "awareness": 0.05, "catching": 0.05, "blocking": 0.0, "throwing": 0.0,
             "tackling": 0.0, "kickPower": 0.0},
-    "FB":  {"blocking": 0.25, "strength": 0.20, "carrying": 0.15, "speed": 0.10,
-            "agility": 0.10, "awareness": 0.10, "catching": 0.05, "tackling": 0.05,
+    "FB":  {"blocking": 0.40, "strength": 0.25, "carrying": 0.15, "speed": 0.08,
+            "agility": 0.07, "awareness": 0.05, "catching": 0.0, "tackling": 0.0,
             "throwing": 0.0, "kickPower": 0.0},
-    "WR":  {"catching": 0.25, "speed": 0.25, "agility": 0.15, "awareness": 0.15,
-            "carrying": 0.10, "strength": 0.05, "blocking": 0.05, "throwing": 0.0,
+    "WR":  {"catching": 0.50, "speed": 0.22, "agility": 0.12, "awareness": 0.10,
+            "carrying": 0.06, "strength": 0.0, "blocking": 0.0, "throwing": 0.0,
             "tackling": 0.0, "kickPower": 0.0},
-    "TE":  {"catching": 0.20, "blocking": 0.20, "strength": 0.15, "speed": 0.10,
-            "agility": 0.10, "awareness": 0.15, "carrying": 0.05, "tackling": 0.05,
+    "TE":  {"catching": 0.35, "blocking": 0.25, "strength": 0.15, "awareness": 0.12,
+            "speed": 0.08, "agility": 0.05, "carrying": 0.0, "tackling": 0.0,
             "throwing": 0.0, "kickPower": 0.0},
-    "OL":  {"blocking": 0.30, "strength": 0.30, "awareness": 0.15, "agility": 0.10,
-            "speed": 0.05, "tackling": 0.05, "carrying": 0.0, "catching": 0.0,
+    "OL":  {"blocking": 0.55, "strength": 0.28, "awareness": 0.10, "agility": 0.05,
+            "speed": 0.02, "tackling": 0.0, "carrying": 0.0, "catching": 0.0,
             "throwing": 0.0, "kickPower": 0.0},
-    "DL":  {"tackling": 0.25, "strength": 0.25, "speed": 0.15, "agility": 0.10,
-            "awareness": 0.15, "blocking": 0.05, "carrying": 0.0, "catching": 0.0,
+    "DL":  {"tackling": 0.45, "strength": 0.28, "speed": 0.12, "agility": 0.10,
+            "awareness": 0.05, "blocking": 0.0, "carrying": 0.0, "catching": 0.0,
             "throwing": 0.0, "kickPower": 0.0},
-    "LB":  {"tackling": 0.25, "speed": 0.15, "strength": 0.15, "awareness": 0.20,
-            "agility": 0.10, "catching": 0.05, "blocking": 0.05, "carrying": 0.0,
+    "LB":  {"tackling": 0.45, "awareness": 0.20, "speed": 0.13, "strength": 0.12,
+            "agility": 0.07, "catching": 0.03, "blocking": 0.0, "carrying": 0.0,
             "throwing": 0.0, "kickPower": 0.0},
-    "DB":  {"speed": 0.25, "agility": 0.15, "awareness": 0.20, "tackling": 0.15,
-            "catching": 0.15, "strength": 0.05, "blocking": 0.0, "carrying": 0.0,
+    "DB":  {"speed": 0.30, "awareness": 0.28, "tackling": 0.18, "agility": 0.14,
+            "catching": 0.10, "strength": 0.0, "blocking": 0.0, "carrying": 0.0,
             "throwing": 0.0, "kickPower": 0.0},
-    "K":   {"kickPower": 0.40, "awareness": 0.30, "strength": 0.15, "agility": 0.10,
-            "speed": 0.05, "blocking": 0.0, "carrying": 0.0, "catching": 0.0,
+    "K":   {"kickPower": 0.60, "awareness": 0.28, "strength": 0.08, "agility": 0.04,
+            "speed": 0.0, "blocking": 0.0, "carrying": 0.0, "catching": 0.0,
             "tackling": 0.0, "throwing": 0.0},
-    "P":   {"kickPower": 0.40, "awareness": 0.30, "strength": 0.15, "agility": 0.10,
-            "speed": 0.05, "blocking": 0.0, "carrying": 0.0, "catching": 0.0,
+    "P":   {"kickPower": 0.60, "awareness": 0.28, "strength": 0.08, "agility": 0.04,
+            "speed": 0.0, "blocking": 0.0, "carrying": 0.0, "catching": 0.0,
             "tackling": 0.0, "throwing": 0.0},
 }
 
@@ -90,7 +91,7 @@ POSITION_MAP = {
     "LB": "LB", "ILB": "LB", "OLB": "LB", "MLB": "LB",
     "DB": "DB", "CB": "DB", "S": "DB", "FS": "DB", "SS": "DB",
     "K": "K", "PK": "K", "P": "P",
-    "ATH": "RB", "LS": "OL",
+    "EDGE": "DL", "ATH": "RB", "LS": "OL",
 }
 
 
@@ -225,19 +226,19 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
         team_sacks_allowed = _safe_float(team_stats.get("sacksAllowed", 0))
         team_sacks = _safe_float(team_stats.get("sacks", 0))
 
-        # Base from team quality: 0-10 range, then jitter ±8
-        # This gives a 0-18 spread within a team — enough to differentiate
-        jitter_mag = 8
+        # No-stat linemen: modest team proxy + small jitter so they cluster ~60-70 OVR
+        # Jitter ±4 keeps teammates from being clones without inflating anyone into elite range
+        jitter_mag = 4
 
         if pos_group == "OL":
-            base = (team_rush * 0.002 + max(0, 8 - team_sacks_allowed * 0.06)) * tq_mult
+            base = (team_rush * 0.001 + max(0, 5 - team_sacks_allowed * 0.04)) * tq_mult
             raw["blocking"] = base + _hash_jitter(player_id, "blocking", jitter_mag)
             raw["strength"] = base * 0.9 + _hash_jitter(player_id, "strength", jitter_mag)
             raw["awareness"] = base * 0.5 + _hash_jitter(player_id, "awareness", jitter_mag)
             raw["agility"] = base * 0.3 + _hash_jitter(player_id, "agility", jitter_mag)
             raw["speed"] = base * 0.2 + _hash_jitter(player_id, "speed", jitter_mag)
         elif pos_group == "DL":
-            base = (team_sacks * 0.15 + 3) * tq_mult
+            base = (team_sacks * 0.08 + 2) * tq_mult
             raw["tackling"] = base + _hash_jitter(player_id, "tackling", jitter_mag)
             raw["strength"] = base * 0.9 + _hash_jitter(player_id, "strength", jitter_mag)
             raw["speed"] = base * 0.5 + _hash_jitter(player_id, "speed", jitter_mag)
@@ -285,21 +286,23 @@ def normalize_all_ratings(raw_by_player):
                 equal = sum(1 for x in vals if x == v)
                 rank = (below + 0.5 * equal) / n
 
-                # Curve: median (0.5) → 70, bottom 5% → 45-52, top 1% → 93-99
+                # Curve: median (0.5) → 70, top 10% → 88+ (impact), top 3% → 95+ (dynasty)
                 if rank <= 0.05:
-                    rating = 45 + (rank / 0.05) * 7
+                    rating = 40 + (rank / 0.05) * 10        # 40-50
                 elif rank <= 0.20:
-                    rating = 52 + ((rank - 0.05) / 0.15) * 10
+                    rating = 50 + ((rank - 0.05) / 0.15) * 10   # 50-60
                 elif rank <= 0.50:
-                    rating = 62 + ((rank - 0.20) / 0.30) * 8
-                elif rank <= 0.80:
-                    rating = 70 + ((rank - 0.50) / 0.30) * 10
-                elif rank <= 0.95:
-                    rating = 80 + ((rank - 0.80) / 0.15) * 12
-                elif rank <= 0.99:
-                    rating = 92 + ((rank - 0.95) / 0.04) * 4
+                    rating = 60 + ((rank - 0.20) / 0.30) * 10   # 60-70 (median=70)
+                elif rank <= 0.75:
+                    rating = 70 + ((rank - 0.50) / 0.25) * 10   # 70-80
+                elif rank <= 0.90:
+                    rating = 80 + ((rank - 0.75) / 0.15) * 8    # 80-88
+                elif rank <= 0.97:
+                    rating = 88 + ((rank - 0.90) / 0.07) * 7    # 88-95 (impact tier)
+                elif rank <= 0.995:
+                    rating = 95 + ((rank - 0.97) / 0.025) * 3   # 95-98 (dynasty tier)
                 else:
-                    rating = 96 + ((rank - 0.99) / 0.01) * 3
+                    rating = 98 + ((rank - 0.995) / 0.005) * 1  # 98-99
 
                 rating = max(40, min(99, int(round(rating))))
                 if pid not in normalized:

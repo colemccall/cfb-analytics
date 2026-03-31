@@ -12,7 +12,7 @@ from api_client import (
 from rating_engine import get_position_group, compute_raw_ratings, normalize_all_ratings, compute_overall
 
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "app", "assets", "data")
-YEARS = [2022, 2023, 2024]
+YEARS = [2022, 2023, 2024, 2025]
 
 FIRST_NAMES = [
     "James", "John", "Robert", "Michael", "David", "Chris", "Daniel", "Marcus",
@@ -177,8 +177,59 @@ def build_recruit_lookup(api_key, year):
     return lookup
 
 
-def compute_team_ratings(team_id, players_private, ratings_list):
-    """Compute team category ratings: overall, passOff, runOff, passDef, runDef, specialTeams."""
+def build_team_performance_scores(team_stats_lookup):
+    """Normalize team performance stats to 0-1 across all FBS teams.
+    Returns dict: team_name_lower → {passOff, runOff, passDef, runDef} each 0-1.
+    """
+    teams = list(team_stats_lookup.keys())
+    if not teams:
+        return {}
+
+    def safe(t, k):
+        try:
+            return float(team_stats_lookup[t].get(k, 0) or 0)
+        except (TypeError, ValueError):
+            return 0.0
+
+    def normalize_vals(vals, invert=False):
+        """Normalize list to 0-1. invert=True means lower is better (defensive stats)."""
+        mn, mx = min(vals), max(vals)
+        r = mx - mn if mx > mn else 1
+        if invert:
+            return [(mx - v) / r for v in vals]
+        return [(v - mn) / r for v in vals]
+
+    pass_yds = [safe(t, "netPassingYards") for t in teams]
+    rush_yds = [safe(t, "rushingYards") for t in teams]
+    pass_yds_allowed = [safe(t, "netPassingYardsOpponent") for t in teams]
+    rush_yds_allowed = [safe(t, "rushingYardsOpponent") for t in teams]
+
+    pn = normalize_vals(pass_yds)
+    rn = normalize_vals(rush_yds)
+    pdn = normalize_vals(pass_yds_allowed, invert=True)
+    rdn = normalize_vals(rush_yds_allowed, invert=True)
+
+    scores = {}
+    for i, t in enumerate(teams):
+        scores[t] = {
+            "passOff": pn[i],
+            "runOff": rn[i],
+            "passDef": pdn[i],
+            "runDef": rdn[i],
+        }
+    return scores
+
+
+def perf_to_rating(perf_score_0_1):
+    """Convert 0-1 performance score to a 50-95 rating."""
+    return int(round(50 + perf_score_0_1 * 45))
+
+
+def compute_team_ratings(team_id, team_name_lower, players_private, ratings_list, perf_scores):
+    """Compute team category ratings blending player ratings + actual team performance."""
+    PLAYER_WEIGHT = 0.55
+    PERF_WEIGHT = 0.45
+
     rmap = {r["playerId"]: r for r in ratings_list}
     team_players = [p for p in players_private if p["teamId"] == team_id]
     if not team_players:
@@ -206,10 +257,24 @@ def compute_team_ratings(team_id, players_private, ratings_list):
     db_r = avg_top(dbs, 5)
     k_r = avg_top(ks, 2)
 
-    pass_off = int(round(qb_r * 0.45 + wr_r * 0.35 + ol_r * 0.20))
-    run_off = int(round(rb_r * 0.40 + ol_r * 0.40 + qb_r * 0.10 + wr_r * 0.10))
-    pass_def = int(round(db_r * 0.45 + dl_r * 0.25 + lb_r * 0.30))
-    run_def = int(round(dl_r * 0.40 + lb_r * 0.35 + db_r * 0.25))
+    # Player-based category scores
+    p_pass_off = qb_r * 0.45 + wr_r * 0.35 + ol_r * 0.20
+    p_run_off = rb_r * 0.40 + ol_r * 0.40 + qb_r * 0.10 + wr_r * 0.10
+    p_pass_def = db_r * 0.45 + dl_r * 0.25 + lb_r * 0.30
+    p_run_def = dl_r * 0.40 + lb_r * 0.35 + db_r * 0.25
+
+    # Performance-based category scores (actual team stats)
+    perf = perf_scores.get(team_name_lower, {})
+    perf_pass_off = perf_to_rating(perf.get("passOff", 0.3))
+    perf_run_off = perf_to_rating(perf.get("runOff", 0.3))
+    perf_pass_def = perf_to_rating(perf.get("passDef", 0.3))
+    perf_run_def = perf_to_rating(perf.get("runDef", 0.3))
+
+    # Blend
+    pass_off = int(round(p_pass_off * PLAYER_WEIGHT + perf_pass_off * PERF_WEIGHT))
+    run_off = int(round(p_run_off * PLAYER_WEIGHT + perf_run_off * PERF_WEIGHT))
+    pass_def = int(round(p_pass_def * PLAYER_WEIGHT + perf_pass_def * PERF_WEIGHT))
+    run_def = int(round(p_run_def * PLAYER_WEIGHT + perf_run_def * PERF_WEIGHT))
     special = k_r
     overall = int(round(pass_off * 0.25 + run_off * 0.25 + pass_def * 0.25 + run_def * 0.20 + special * 0.05))
 
@@ -328,8 +393,9 @@ def process_year(api_key, year, team_name_map):
 
     # Team ratings
     print("Computing team ratings...")
+    perf_scores = build_team_performance_scores(team_stats_lookup)
     for t in teams_private:
-        t["ratings"] = compute_team_ratings(t["id"], players_private, ratings)
+        t["ratings"] = compute_team_ratings(t["id"], t["name"].lower(), players_private, ratings, perf_scores)
 
     # Public versions
     print("Generating public names...")

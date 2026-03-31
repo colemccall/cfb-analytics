@@ -35,19 +35,22 @@ def _get(api_key, path, params=None, retries=5):
     ck = _cache_key(path, params)
     cache_file = os.path.join(CACHE_DIR, f"{ck}.json")
     if os.path.exists(cache_file):
+        print(f"    [cache] {path} {params or ''}")
         with open(cache_file, "r") as f:
             return json.load(f)
 
+    print(f"    GET {path} {params or ''}")
     for attempt in range(retries):
         resp = requests.get(f"{BASE_URL}{path}", headers=_headers(api_key), params=params)
         if resp.status_code == 429:
-            wait = 15 * (2 ** attempt)  # 15, 30, 60, 120, 240s
+            wait = 5 * (2 ** attempt)  # 5, 10, 20, 40, 80s
             print(f"    Rate limited, waiting {wait}s... (attempt {attempt+1}/{retries})")
             time.sleep(wait)
             continue
         resp.raise_for_status()
         data = resp.json()
-        # Cache the result
+        n = len(data) if isinstance(data, list) else "ok"
+        print(f"    -> {n} records, cached.")
         with open(cache_file, "w") as f:
             json.dump(data, f)
         return data

@@ -48,6 +48,9 @@
   tr:hover td { background: #16213e55; }
   .ovr { display: inline-block; width: 30px; text-align: center; padding: 2px 4px; border-radius: 4px; font-weight: 700; font-size: 11px; }
   .pos-badge { display: inline-block; background: #0f3460; padding: 1px 5px; border-radius: 3px; font-size: 10px; font-weight: 600; min-width: 28px; text-align: center; }
+  .tier-badge { display: inline-block; padding: 1px 6px; border-radius: 10px; font-size: 9px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; margin-left: 4px; vertical-align: middle; }
+  .tier-dynasty { background: #ffd700; color: #1a1a2e; }
+  .tier-impact  { background: #a78bfa; color: #1a1a2e; }
 
   #loading { text-align: center; padding: 60px; font-size: 14px; color: #666; }
 </style>
@@ -78,13 +81,19 @@ let sortAsc = false;
 let posFilter = 'ALL';
 
 const ratingColor = v => {
-  if (v >= 90) return '#00c853';
-  if (v >= 80) return '#4caf50';
-  if (v >= 75) return '#8bc34a';
-  if (v >= 70) return '#ffc107';
-  if (v >= 65) return '#ff9800';
-  if (v >= 60) return '#ff5722';
+  if (v >= 95) return '#ffd700';   // dynasty — gold
+  if (v >= 88) return '#a78bfa';   // impact — purple
+  if (v >= 80) return '#00c853';   // elite starter — green
+  if (v >= 70) return '#8bc34a';   // solid starter
+  if (v >= 60) return '#ffc107';   // backup
+  if (v >= 50) return '#ff9800';   // deep bench
   return '#f44336';
+};
+
+const tierBadge = v => {
+  if (v >= 95) return '<span class="tier-badge tier-dynasty">Dynasty</span>';
+  if (v >= 88) return '<span class="tier-badge tier-impact">Impact</span>';
+  return '';
 };
 
 async function loadData() {
@@ -213,7 +222,7 @@ function renderMain(t) {
         return `<tr>
           <td>${p.jersey || '-'}</td>
           <td><span class="pos-badge">${p.position || '?'}</span></td>
-          <td>${p.firstName} ${p.lastName}</td>
+          <td>${p.firstName} ${p.lastName}${tierBadge(r.overall || 0)}</td>
           <td>${p.year || ''}</td>
           <td><span class="ovr" style="background:${ratingColor(r.overall || 0)};color:#000">${r.overall || '-'}</span></td>
           ${['speed','strength','agility','awareness','throwing','catching','carrying','blocking','tackling','kickPower'].map(a =>
