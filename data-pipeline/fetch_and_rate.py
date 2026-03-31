@@ -10,7 +10,7 @@ from api_client import (
     fetch_ppa, fetch_team_stats, fetch_sp_ratings, fetch_talent, fetch_recruiting,
     fetch_player_usage,
 )
-from rating_engine import get_position_group, compute_raw_ratings, normalize_all_ratings, compute_overall
+from rating_engine import get_position_group, compute_raw_ratings, normalize_all_ratings, compute_overall, SKILL_ATTRS
 
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "app", "assets", "data")
 YEARS = [2022, 2023, 2024, 2025]
@@ -175,6 +175,44 @@ def build_team_quality(sp_ratings, talent_data):
     return quality
 
 
+def build_sp_detail(sp_ratings):
+    """Build per-team SP+ sub-ratings: overall, offense, defense, specialTeams.
+    Returns dict: team_name_lower → {overall, off, def, st} each normalized 0-1.
+    These are opponent-adjusted (unlike raw yard totals) so they correctly
+    discount stats piled up against weak schedules.
+    """
+    data = {}
+    for entry in sp_ratings:
+        team = entry.get("team", "").lower()
+        off_obj = entry.get("offense") or {}
+        def_obj = entry.get("defense") or {}
+        st_obj = entry.get("specialTeams") or {}
+        data[team] = {
+            "overall": entry.get("rating", 0) or 0,
+            "off": off_obj.get("rating", 0) or 0,
+            # SP+ defense: lower = better (points/plays allowed), so invert
+            "def": -(def_obj.get("rating", 0) or 0),
+            "st": st_obj.get("rating", 0) or 0,
+        }
+
+    def norm_field(field):
+        vals = [v[field] for v in data.values()]
+        mn, mx = min(vals), max(vals)
+        r = mx - mn if mx > mn else 1
+        return {team: (data[team][field] - mn) / r for team in data}
+
+    n_ovr = norm_field("overall")
+    n_off = norm_field("off")
+    n_def = norm_field("def")
+    n_st = norm_field("st")
+
+    return {
+        team: {"overall": n_ovr.get(team, 0.3), "off": n_off.get(team, 0.3),
+               "def": n_def.get(team, 0.3), "st": n_st.get(team, 0.3)}
+        for team in data
+    }
+
+
 def build_recruit_lookup(api_key, year):
     """Recruiting data for classes that feed into a given season."""
     lookup = {}
@@ -192,6 +230,75 @@ def build_recruit_lookup(api_key, year):
         except Exception as e:
             print(f"    Warning: {yr}: {e}")
     return lookup
+
+
+def capture_display_stats(pos_group, player_stats):
+    """Extract human-readable stats for player detail display."""
+    s = player_stats
+    sf = _safe_float
+
+    if pos_group == "QB":
+        pass_yds = sf(s.get("passingYDS", s.get("passingYards", 0)))
+        pass_tds = int(sf(s.get("passingTD", s.get("passingTDs", 0))))
+        comp = int(sf(s.get("passingCOMPLETIONS", s.get("passingCOMP", s.get("completions", 0)))))
+        ints = int(sf(s.get("passingINT", s.get("interceptions", 0))))
+        rush_yds = sf(s.get("rushingYDS", s.get("rushingYards", 0)))
+        return {"passYds": int(pass_yds), "passTDs": pass_tds, "comp": comp, "ints": ints, "rushYds": int(rush_yds)}
+
+    elif pos_group in ("RB", "FB"):
+        rush_yds = sf(s.get("rushingYDS", s.get("rushingYards", 0)))
+        rush_tds = int(sf(s.get("rushingTD", s.get("rushingTDs", 0))))
+        ypc = round(sf(s.get("rushingYPC", s.get("yardsPerRushAttempt", 0))), 1)
+        rec_yds = sf(s.get("receivingYDS", s.get("receivingYards", 0)))
+        rec_tds = int(sf(s.get("receivingTD", s.get("receivingTDs", 0))))
+        return {"rushYds": int(rush_yds), "rushTDs": rush_tds, "ypc": ypc, "recYds": int(rec_yds), "recTDs": rec_tds}
+
+    elif pos_group in ("WR", "TE"):
+        rec_yds = sf(s.get("receivingYDS", s.get("receivingYards", 0)))
+        rec_tds = int(sf(s.get("receivingTD", s.get("receivingTDs", 0))))
+        rec = int(sf(s.get("receivingREC", s.get("receptions", 0))))
+        ypr = round(rec_yds / max(rec, 1), 1) if rec > 0 else 0
+        return {"recYds": int(rec_yds), "recTDs": rec_tds, "receptions": rec, "ypr": ypr}
+
+    elif pos_group in ("DL", "LB", "DB"):
+        tackles = round(sf(s.get("defensiveTOT", s.get("totalTackles", 0))), 1)
+        sacks = round(sf(s.get("defensiveSACKS", s.get("sacks", 0))), 1)
+        ints = max(
+            sf(s.get("defensiveINT", s.get("interceptions", 0))),
+            sf(s.get("interceptionsINT", 0)),
+        )
+        pds = round(sf(s.get("defensivePD", s.get("passesDeflected", 0))), 1)
+        tfl = round(sf(s.get("defensiveTFL", 0)), 1)
+        qbh = round(sf(s.get("defensiveQBH", s.get("defensiveQB HUR", 0))), 1)
+        ff = round(sf(s.get("defensiveFF", 0)), 1)
+        int_tds = round(sf(s.get("interceptionsTD", 0)), 1)
+        return {"tackles": tackles, "sacks": sacks, "ints": int(ints), "pds": pds, "tfl": tfl, "qbh": qbh, "ff": ff, "intTDs": int_tds if int_tds > 0 else None}
+
+    elif pos_group == "K":
+        fgm = int(sf(s.get("kickingFGM", s.get("fieldGoalsMade", 0))))
+        fga = int(sf(s.get("kickingFGA", s.get("fieldGoalAttempts", 0))))
+        fg_pct = round(fgm / max(fga, 1) * 100, 1) if fga > 0 else 0
+        longest = int(sf(s.get("kickingLONG", s.get("longFieldGoal", 0))))
+        xpm = int(sf(s.get("kickingXPM", s.get("extraPointsMade", 0))))
+        xpa = int(sf(s.get("kickingXPA", s.get("extraPointAttempts", 0))))
+        return {"fgm": fgm, "fga": fga, "fgPct": fg_pct, "longFG": longest, "xpm": xpm, "xpa": xpa}
+
+    elif pos_group == "P":
+        punt_yds = sf(s.get("puntingYDS", s.get("puntYards", 0)))
+        punt_no = int(sf(s.get("puntingNO", s.get("punts", 0))))
+        punt_avg = round(punt_yds / max(punt_no, 1), 1) if punt_no > 0 else 0
+        punt_long = int(sf(s.get("puntingLONG", s.get("longPunt", 0))))
+        in20 = int(sf(s.get("puntingIN20", s.get("puntsInsideTwenty", 0))))
+        return {"punts": punt_no, "puntAvg": punt_avg, "longPunt": punt_long, "in20": in20}
+
+    return {}
+
+
+def _safe_float(val, default=0.0):
+    try:
+        return float(val)
+    except (TypeError, ValueError):
+        return default
 
 
 def build_team_performance_scores(team_stats_lookup):
@@ -242,17 +349,24 @@ def perf_to_rating(perf_score_0_1):
     return int(round(50 + perf_score_0_1 * 45))
 
 
-def compute_team_ratings(team_id, team_name_lower, players_private, ratings_list, perf_scores):
-    """Compute team category ratings blending player ratings + actual team performance."""
-    PLAYER_WEIGHT = 0.55
-    PERF_WEIGHT = 0.45
+def compute_team_ratings(team_id, team_name_lower, players_private, ratings_list,
+                         perf_scores, sp_detail):
+    """Compute team category ratings.
 
+    Three-way blend:
+      40% player ratings (individual talent signal)
+      35% SP+ sub-ratings (opponent-adjusted performance — corrects for weak schedules)
+      25% raw stats performance (directional confirmation of SP+)
+
+    SP+ is the dominant external signal because it's opponent-adjusted, preventing
+    mid-major teams with big raw numbers against weak competition from being over-rated.
+    """
     rmap = {r["playerId"]: r for r in ratings_list}
     team_players = [p for p in players_private if p["teamId"] == team_id]
     if not team_players:
         return {"overall": 50, "passOff": 50, "runOff": 50, "passDef": 50, "runDef": 50, "specialTeams": 50}
 
-    def avg_top(players, n=8):
+    def avg_top(players, n=5):
         vals = sorted([rmap[p["id"]]["overall"] for p in players if p["id"] in rmap], reverse=True)
         return int(round(sum(vals[:n]) / max(len(vals[:n]), 1))) if vals else 50
 
@@ -263,42 +377,94 @@ def compute_team_ratings(team_id, team_name_lower, players_private, ratings_list
     dls = [p for p in team_players if p["positionGroup"] == "DL"]
     lbs = [p for p in team_players if p["positionGroup"] == "LB"]
     dbs = [p for p in team_players if p["positionGroup"] == "DB"]
-    ks = [p for p in team_players if p["positionGroup"] in ("K", "P")]
+    ks =  [p for p in team_players if p["positionGroup"] in ("K", "P")]
 
-    qb_r = avg_top(qbs, 2)
-    wr_r = avg_top(wrs, 5)
-    ol_r = avg_top(ols, 5)
-    rb_r = avg_top(rbs, 3)
-    dl_r = avg_top(dls, 4)
-    lb_r = avg_top(lbs, 4)
-    db_r = avg_top(dbs, 5)
-    k_r = avg_top(ks, 2)
+    qb_r  = avg_top(qbs, 2)
+    wr_r  = avg_top(wrs, 5)
+    ol_r  = avg_top(ols, 5)
+    rb_r  = avg_top(rbs, 3)
+    dl_r  = avg_top(dls, 4)
+    lb_r  = avg_top(lbs, 4)
+    db_r  = avg_top(dbs, 5)
+    k_r   = avg_top(ks, 2)
 
-    # Player-based category scores
+    # ── Player-based category scores ──────────────────────────────────────
     p_pass_off = qb_r * 0.45 + wr_r * 0.35 + ol_r * 0.20
-    p_run_off = rb_r * 0.40 + ol_r * 0.40 + qb_r * 0.10 + wr_r * 0.10
-    p_pass_def = db_r * 0.45 + dl_r * 0.25 + lb_r * 0.30
-    p_run_def = dl_r * 0.40 + lb_r * 0.35 + db_r * 0.25
+    p_run_off  = rb_r * 0.40 + ol_r * 0.40 + qb_r * 0.10 + wr_r * 0.10
+    p_pass_def = db_r * 0.45 + lb_r * 0.30 + dl_r * 0.25
+    p_run_def  = dl_r * 0.40 + lb_r * 0.35 + db_r * 0.25
 
-    # Performance-based category scores (actual team stats)
+    # ── SP+ opponent-adjusted scores → 50-95 ─────────────────────────────
+    sp = sp_detail.get(team_name_lower, {})
+    sp_off_rating = perf_to_rating(sp.get("off", 0.3))   # overall SP+ offense
+    sp_def_rating = perf_to_rating(sp.get("def", 0.3))   # opponent-adj defense
+
+    # ── Raw performance scores (raw team stats, NOT opponent-adjusted) ────
     perf = perf_scores.get(team_name_lower, {})
-    perf_pass_off = perf_to_rating(perf.get("passOff", 0.3))
-    perf_run_off = perf_to_rating(perf.get("runOff", 0.3))
-    perf_pass_def = perf_to_rating(perf.get("passDef", 0.3))
-    perf_run_def = perf_to_rating(perf.get("runDef", 0.3))
+    raw_pass_off = perf_to_rating(perf.get("passOff", 0.3))
+    raw_run_off  = perf_to_rating(perf.get("runOff",  0.3))
+    raw_pass_def = perf_to_rating(perf.get("passDef", 0.3))
+    raw_run_def  = perf_to_rating(perf.get("runDef",  0.3))
 
-    # Blend
-    pass_off = int(round(p_pass_off * PLAYER_WEIGHT + perf_pass_off * PERF_WEIGHT))
-    run_off = int(round(p_run_off * PLAYER_WEIGHT + perf_run_off * PERF_WEIGHT))
-    pass_def = int(round(p_pass_def * PLAYER_WEIGHT + perf_pass_def * PERF_WEIGHT))
-    run_def = int(round(p_run_def * PLAYER_WEIGHT + perf_run_def * PERF_WEIGHT))
-    special = k_r
+    # ── Three-way blend ───────────────────────────────────────────────────
+    PLAYER = 0.40
+    SP_W   = 0.35   # SP+ is opponent-adjusted — most reliable for cross-conference comparison
+    RAW    = 0.25   # Raw stats provide within-conference directional signal
+
+    pass_off = int(round(p_pass_off * PLAYER + sp_off_rating * SP_W + raw_pass_off * RAW))
+    run_off  = int(round(p_run_off  * PLAYER + sp_off_rating * SP_W + raw_run_off  * RAW))
+    pass_def = int(round(p_pass_def * PLAYER + sp_def_rating * SP_W + raw_pass_def * RAW))
+    run_def  = int(round(p_run_def  * PLAYER + sp_def_rating * SP_W + raw_run_def  * RAW))
+    special  = k_r
+
     overall = int(round(pass_off * 0.25 + run_off * 0.25 + pass_def * 0.25 + run_def * 0.20 + special * 0.05))
-
     return {
         "overall": overall, "passOff": pass_off, "runOff": run_off,
         "passDef": pass_def, "runDef": run_def, "specialTeams": special,
     }
+
+
+def normalize_team_ratings(teams_private):
+    """Apply a percentile curve to team ratings to spread the distribution.
+
+    Target distribution (~130 FBS teams):
+      Top 1%  (~1-2 teams)  → 94-98  (national title contenders)
+      Top 10% (~13 teams)   → 88-93  (playoff-caliber)
+      Top 25% (~33 teams)   → 80-87  (bowl-game quality)
+      Median  (~65 teams)   → 74-75
+      Bottom 25%            → 65-70
+      Bottom                → 58-64
+
+    Applied to every rating field (overall, passOff, runOff, passDef, runDef, specialTeams).
+    """
+    fields = ["overall", "passOff", "runOff", "passDef", "runDef", "specialTeams"]
+
+    def curve(rank):
+        """rank = 0.0 (worst) to 1.0 (best)."""
+        if rank <= 0.05:
+            return 58 + rank / 0.05 * 6          # 58-64
+        elif rank <= 0.25:
+            return 64 + (rank - 0.05) / 0.20 * 11  # 64-75 (median ~75 at rank 0.5)
+        elif rank <= 0.50:
+            return 75 + (rank - 0.25) / 0.25 * 5   # 75-80  (hmm let me rethink)
+        elif rank <= 0.75:
+            return 80 + (rank - 0.50) / 0.25 * 7   # 80-87
+        elif rank <= 0.90:
+            return 87 + (rank - 0.75) / 0.15 * 6   # 87-93
+        elif rank <= 0.99:
+            return 93 + (rank - 0.90) / 0.09 * 5   # 93-98
+        else:
+            return 98
+
+    for field in fields:
+        vals = [(i, t["ratings"].get(field, 70)) for i, t in enumerate(teams_private)]
+        sorted_vals = sorted(vals, key=lambda x: x[1])
+        n = len(sorted_vals)
+        for rank_idx, (team_idx, raw_val) in enumerate(sorted_vals):
+            rank = (rank_idx + 0.5) / n
+            teams_private[team_idx]["ratings"][field] = max(58, min(99, int(round(curve(rank)))))
+
+    return teams_private
 
 
 def process_year(api_key, year, team_name_map):
@@ -344,6 +510,7 @@ def process_year(api_key, year, team_name_map):
     _time.sleep(0.5)
     talent_data = fetch_talent(api_key, year)
     team_quality = build_team_quality(sp_ratings, talent_data)
+    sp_detail = build_sp_detail(sp_ratings)
 
     print(f"\n[6/7] Fetching recruiting data...")
     recruit_lookup = build_recruit_lookup(api_key, year)
@@ -390,7 +557,7 @@ def process_year(api_key, year, team_name_map):
 
             usage = usage_lookup.get(pid, {})
             raw = compute_raw_ratings(pid, pos_group, p_stats, ppa_val, t_stats, tq, stars, usage)
-            raw_ratings_all[pid] = {"pos": pos_group, "raw": raw}
+            raw_ratings_all[pid] = {"pos": pos_group, "raw": raw, "stats": capture_display_stats(pos_group, p_stats)}
 
             players_private.append({
                 "id": pid,
@@ -411,15 +578,17 @@ def process_year(api_key, year, team_name_map):
     ratings = []
     for p in players_private:
         pid = p["id"]
-        attrs = normalized.get(pid, {a: 55 for a in ["speed","strength","agility","awareness","throwing","catching","carrying","blocking","tackling","kickPower"]})
+        attrs = normalized.get(pid, {a: 55 for a in SKILL_ATTRS.get(p["positionGroup"], ["runBlock", "passBlock"])})
         ovr = compute_overall(attrs, p["positionGroup"])
-        ratings.append({"playerId": pid, "overall": ovr, **attrs})
+        display_stats = raw_ratings_all.get(pid, {}).get("stats", {})
+        ratings.append({"playerId": pid, "overall": ovr, **attrs, "stats": display_stats})
 
-    # Team ratings
+    # Team ratings: compute then normalize distribution
     print("Computing team ratings...")
     perf_scores = build_team_performance_scores(team_stats_lookup)
     for t in teams_private:
-        t["ratings"] = compute_team_ratings(t["id"], t["name"].lower(), players_private, ratings, perf_scores)
+        t["ratings"] = compute_team_ratings(t["id"], t["name"].lower(), players_private, ratings, perf_scores, sp_detail)
+    normalize_team_ratings(teams_private)
 
     # Public versions
     print("Generating public names...")
