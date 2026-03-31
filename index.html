@@ -149,6 +149,16 @@
   .yoy-table td { padding: 5px 8px; border-bottom: 1px solid #0f346033; }
   .yoy-table tr.current-year td { background: #0f346055; }
 
+  /* ── Similarity ── */
+  .sim-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid #0f346022; cursor: pointer; }
+  .sim-row:hover { background: #0f346022; border-radius: 4px; padding-left: 4px; }
+  .sim-row:last-child { border-bottom: none; }
+  .sim-score { font-size: 11px; font-weight: 700; color: #a78bfa; width: 36px; text-align: right; flex-shrink: 0; }
+  .sim-name { flex: 1; font-size: 13px; }
+  .sim-team { font-size: 10px; color: #666; }
+  .sim-bar-wrap { width: 60px; background: #0f3460; border-radius: 2px; height: 6px; overflow: hidden; }
+  .sim-bar-fill { height: 100%; border-radius: 2px; background: #a78bfa; }
+
   #loading { text-align: center; padding: 60px; font-size: 14px; color: #666; }
 
   /* ── Explainability tab ── */
@@ -823,7 +833,7 @@ function showPlayerModal(playerId) {
     </table>
   </div>` : '';
 
-  // National + conference rank at this position group
+  // National + conference rank and similarity (need all players + teams)
   const allPlayers = getPlayers();
   const allTeams = getTeams();
   const positionPeers = allPlayers.filter(pl => pl.positionGroup === posGroup);
@@ -879,6 +889,23 @@ function showPlayerModal(playerId) {
     <div class="stat-grid">${careerCells}</div>
   </div>` : '';
 
+  // Similar players
+  const similar = computeSimilar(pid, posGroup, rMap, allPlayers, allTeams, 6);
+  const similarHTML = similar.length ? `<div class="modal-section">
+    <div class="modal-section-title">Similar Players (${currentYear})</div>
+    ${similar.map(({ p: sp, r: sr, similarity, team: st }) => `
+      <div class="sim-row" onclick="showPlayerModal('${sp.id}')">
+        <div class="sim-score">${similarity}%</div>
+        <div class="sim-bar-wrap"><div class="sim-bar-fill" style="width:${similarity}%"></div></div>
+        <span class="ovr" style="background:${ratingColor(sr.overall||0)};color:#000;flex-shrink:0">${sr.overall||'-'}</span>
+        <div style="flex:1;min-width:0">
+          <div class="sim-name">${sp.firstName} ${sp.lastName}</div>
+          <div class="sim-team">${st.name || ''}</div>
+        </div>
+        <span class="pos-badge" style="flex-shrink:0">${sp.position || posGroup}</span>
+      </div>`).join('')}
+  </div>` : '';
+
   const classYear = ['Fr','So','Jr','Sr','Gr'][Math.max(0, Math.min(4, (p.year||1) - 1))];
   document.getElementById('modal-body').innerHTML = `
     <div class="modal-player-header">
@@ -901,8 +928,48 @@ function showPlayerModal(playerId) {
     ${statsHTML}
     ${careerHTML}
     ${yoyHTML}
+    ${similarHTML}
   `;
   document.getElementById('player-modal').classList.add('open');
+}
+
+// ── Similarity Score ───────────────────────────────────────────────────────
+// Euclidean distance across normalized skill attributes within the same
+// position group. Returns top N most similar players sorted by similarity.
+function computeSimilar(pid, posGroup, rMap, allPlayers, allTeams, n = 6) {
+  const skills = (SKILL_ATTRS[posGroup] || []).map(([k]) => k);
+  if (!skills.length) return [];
+
+  const ref = rMap[pid];
+  if (!ref) return [];
+
+  // Build team map for name lookup
+  const tMap = {};
+  allTeams.forEach(t => tMap[t.id] = t);
+
+  // Normalize each skill to 0–1 across all players in this position group
+  // to give equal weight regardless of rating scale differences
+  const peers = allPlayers.filter(p => p.positionGroup === posGroup && String(p.id) !== pid);
+
+  const results = peers.map(p => {
+    const r = rMap[String(p.id)];
+    if (!r) return null;
+    // Euclidean distance in skill space (each skill equally weighted)
+    let distSq = 0;
+    for (const sk of skills) {
+      const diff = (ref[sk] || 0) - (r[sk] || 0);
+      distSq += diff * diff;
+    }
+    const dist = Math.sqrt(distSq / skills.length);  // RMS distance, 0–59 scale
+    const similarity = Math.max(0, Math.round(100 - dist * 100 / 59));
+    return { p, r, similarity, team: tMap[p.teamId] || {} };
+  }).filter(Boolean);
+
+  // Sort by similarity desc, exclude self, take top N
+  results.sort((a, b) => b.similarity - a.similarity);
+  // Filter to meaningful matches: OVR within ±15 of reference
+  const refOvr = ref.overall || 0;
+  return results.filter(x => Math.abs((x.r.overall || 0) - refOvr) <= 15).slice(0, n);
 }
 
 function closeModal() {
