@@ -10,7 +10,7 @@
 
   #sidebar { width: 290px; background: #16213e; display: flex; flex-direction: column; border-right: 1px solid #0f3460; flex-shrink: 0; }
   .sidebar-controls { padding: 8px; display: flex; flex-direction: column; gap: 6px; border-bottom: 1px solid #0f3460; }
-  .sidebar-controls input { width: 100%; padding: 8px 10px; background: #0f3460; border: none; color: #fff; font-size: 13px; outline: none; border-radius: 4px; }
+  .sidebar-controls input, .sidebar-controls select { width: 100%; padding: 8px 10px; background: #0f3460; border: none; color: #fff; font-size: 13px; outline: none; border-radius: 4px; }
   .sidebar-controls input::placeholder { color: #666; }
   .controls-row { display: flex; gap: 6px; }
   .controls-row select, .controls-row button { flex: 1; padding: 6px 8px; background: #0f3460; border: 1px solid #1a3a6e; color: #fff; font-size: 12px; border-radius: 4px; cursor: pointer; }
@@ -24,7 +24,13 @@
   .team-conf { font-size: 10px; color: #888; }
   .team-ovr { font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 3px; flex-shrink: 0; }
 
-  #main { flex: 1; overflow-y: auto; padding: 20px; }
+  #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  .tab-bar { display: flex; background: #16213e; border-bottom: 1px solid #0f3460; flex-shrink: 0; }
+  .tab-btn { padding: 10px 20px; font-size: 13px; font-weight: 600; cursor: pointer; color: #888; border-bottom: 2px solid transparent; transition: color 0.15s; }
+  .tab-btn:hover { color: #ccc; }
+  .tab-btn.active { color: #fff; border-bottom-color: #e94560; }
+  .tab-content { flex: 1; overflow-y: auto; padding: 20px; }
+
   .team-header { display: flex; align-items: center; gap: 16px; padding: 16px; border-radius: 8px; margin-bottom: 12px; }
   .team-header img { width: 56px; height: 56px; object-fit: contain; }
   .team-header-info h1 { font-size: 20px; }
@@ -52,6 +58,27 @@
   .tier-dynasty { background: #ffd700; color: #1a1a2e; }
   .tier-impact  { background: #a78bfa; color: #1a1a2e; }
 
+  /* Conference view */
+  .conf-section { margin-bottom: 28px; }
+  .conf-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid #0f3460; display: flex; align-items: center; gap: 8px; }
+  .conf-team-row { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 6px; cursor: pointer; }
+  .conf-team-row:hover { background: #16213e; }
+  .conf-rank { font-size: 12px; font-weight: 700; color: #555; width: 22px; text-align: right; flex-shrink: 0; }
+  .conf-rank.top3 { color: #ffd700; }
+  .conf-team-logo { width: 24px; height: 24px; object-fit: contain; flex-shrink: 0; }
+  .conf-team-name { flex: 1; font-size: 13px; font-weight: 600; }
+  .conf-team-conf { font-size: 10px; color: #666; }
+  .conf-ovr { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+
+  /* Top players view */
+  .top-players-controls { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+  .top-players-controls input { flex: 1; min-width: 180px; padding: 8px 12px; background: #0f3460; border: none; color: #fff; font-size: 13px; outline: none; border-radius: 4px; }
+  .top-players-controls input::placeholder { color: #666; }
+  .top-players-controls select { padding: 8px 10px; background: #0f3460; border: 1px solid #1a3a6e; color: #fff; font-size: 12px; border-radius: 4px; cursor: pointer; }
+  .player-rank { font-size: 12px; font-weight: 700; color: #555; width: 28px; text-align: right; }
+  .player-rank.top3 { color: #ffd700; }
+  .player-rank.top10 { color: #a78bfa; }
+
   #loading { text-align: center; padding: 60px; font-size: 14px; color: #666; }
 </style>
 </head>
@@ -63,11 +90,21 @@
       <button id="mode-btn" onclick="toggleMode()">Private</button>
     </div>
     <input type="text" id="search" placeholder="Search teams...">
+    <select id="conf-filter">
+      <option value="">All Conferences</option>
+    </select>
   </div>
   <div id="team-list"></div>
 </div>
 <div id="main">
-  <div id="loading">Loading data...</div>
+  <div class="tab-bar">
+    <div class="tab-btn active" onclick="switchTab('roster')">Roster</div>
+    <div class="tab-btn" onclick="switchTab('top-players')">Top Players</div>
+    <div class="tab-btn" onclick="switchTab('conferences')">Conferences</div>
+  </div>
+  <div class="tab-content" id="tab-content">
+    <div id="loading">Loading data...</div>
+  </div>
 </div>
 
 <script>
@@ -79,14 +116,17 @@ let selectedTeamId = null;
 let sortCol = 'overall';
 let sortAsc = false;
 let posFilter = 'ALL';
+let activeTab = 'roster';
+let topSortCol = 'overall';
+let topSortAsc = false;
 
 const ratingColor = v => {
-  if (v >= 95) return '#ffd700';   // dynasty — gold
-  if (v >= 88) return '#a78bfa';   // impact — purple
-  if (v >= 80) return '#00c853';   // elite starter — green
-  if (v >= 70) return '#8bc34a';   // solid starter
-  if (v >= 60) return '#ffc107';   // backup
-  if (v >= 50) return '#ff9800';   // deep bench
+  if (v >= 95) return '#ffd700';
+  if (v >= 88) return '#a78bfa';
+  if (v >= 80) return '#00c853';
+  if (v >= 70) return '#8bc34a';
+  if (v >= 60) return '#ffc107';
+  if (v >= 50) return '#ff9800';
   return '#f44336';
 };
 
@@ -98,17 +138,13 @@ const tierBadge = v => {
 
 async function loadData() {
   const base = 'app/assets/data/';
-  try {
-    years = await fetch(base + 'years.json').then(r => r.json());
-  } catch {
-    years = [2024];
-  }
+  try { years = await fetch(base + 'years.json').then(r => r.json()); }
+  catch { years = [2024]; }
 
-  document.getElementById('year-select').innerHTML = years.map(y =>
-    `<option value="${y}">${y} Season</option>`
-  ).join('');
-  document.getElementById('year-select').value = years[years.length - 1];
-  document.getElementById('year-select').onchange = e => { currentYear = parseInt(e.target.value); onDataReady(); };
+  const yearSel = document.getElementById('year-select');
+  yearSel.innerHTML = years.map(y => `<option value="${y}">${y} Season</option>`).join('');
+  yearSel.value = years[years.length - 1];
+  yearSel.onchange = e => { currentYear = parseInt(e.target.value); onDataReady(); };
 
   for (const y of years) {
     const yb = base + y + '/';
@@ -121,9 +157,7 @@ async function loadData() {
         fetch(yb + 'ratings.json').then(r => r.json()),
       ]);
       dataByYear[y] = { teams: tp, teamsPublic: tpub, players: pp, playersPublic: ppub, ratings: rat };
-    } catch (e) {
-      console.warn(`Failed to load ${y}:`, e);
-    }
+    } catch (e) { console.warn(`Failed to load ${y}:`, e); }
   }
 
   currentYear = years[years.length - 1];
@@ -136,17 +170,34 @@ function getPlayers() { return mode === 'private' ? (getData().players || []) : 
 function getRatings() { return getData().ratings || []; }
 
 function onDataReady() {
+  buildConfFilter();
   renderTeamList();
   const teams = getTeams();
   if (teams.length) {
     const prev = teams.find(t => t.id === selectedTeamId);
-    selectTeam(prev ? prev.id : teams[0].id);
+    selectTeam(prev ? prev.id : teams[0].id, false);
   }
+  if (activeTab !== 'roster') renderActiveTab();
 }
 
-function renderTeamList(filter = '') {
+function buildConfFilter() {
+  const confs = [...new Set(getTeams().map(t => t.conference).filter(Boolean))].sort();
+  const sel = document.getElementById('conf-filter');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">All Conferences</option>' +
+    confs.map(c => `<option value="${c}">${c}</option>`).join('');
+  if (confs.includes(cur)) sel.value = cur;
+}
+
+function renderTeamList() {
+  const search = document.getElementById('search').value.toLowerCase();
+  const conf = document.getElementById('conf-filter').value;
   const list = document.getElementById('team-list');
-  const teams = getTeams().filter(t => t.name.toLowerCase().includes(filter.toLowerCase()));
+  let teams = getTeams().filter(t => {
+    const matchSearch = t.name.toLowerCase().includes(search);
+    const matchConf = !conf || t.conference === conf;
+    return matchSearch && matchConf;
+  });
   teams.sort((a, b) => (b.ratings?.overall || 0) - (a.ratings?.overall || 0));
   list.innerHTML = teams.map(t => {
     const ovr = t.ratings?.overall || 0;
@@ -161,21 +212,40 @@ function renderTeamList(filter = '') {
   }).join('');
 }
 
-function selectTeam(id) {
+function selectTeam(id, switchToRoster = true) {
   selectedTeamId = id;
   posFilter = 'ALL';
+  if (switchToRoster && activeTab !== 'roster') switchTab('roster', false);
   const t = getTeams().find(t => t.id === id);
   if (!t) return;
-  renderMain(t);
-  renderTeamList(document.getElementById('search').value);
+  if (activeTab === 'roster') renderRoster(t);
+  renderTeamList();
 }
 
-function renderMain(t) {
-  const ps = getPlayers().filter(p => p.teamId === t.id);
-  const rMap = {};
-  getRatings().forEach(r => rMap[r.playerId] = r);
+function switchTab(tab, render = true) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', ['roster','top-players','conferences'][i] === tab);
+  });
+  if (render) renderActiveTab();
+}
 
-  const posGroups = ['ALL', ...new Set(ps.map(p => p.positionGroup))].sort();
+function renderActiveTab() {
+  if (activeTab === 'roster') {
+    const t = getTeams().find(t => t.id === selectedTeamId);
+    if (t) renderRoster(t);
+  } else if (activeTab === 'top-players') {
+    renderTopPlayers();
+  } else if (activeTab === 'conferences') {
+    renderConferences();
+  }
+}
+
+function renderRoster(t) {
+  const ps = getPlayers().filter(p => p.teamId === t.id);
+  const rMap = buildRatingMap();
+
+  const posGroups = ['ALL', ...new Set(ps.map(p => p.positionGroup).filter(Boolean))].sort();
   const filtered = posFilter === 'ALL' ? ps : ps.filter(p => p.positionGroup === posFilter);
 
   filtered.sort((a, b) => {
@@ -191,8 +261,7 @@ function renderMain(t) {
   });
 
   const r = t.ratings || {};
-  const main = document.getElementById('main');
-  main.innerHTML = `
+  document.getElementById('tab-content').innerHTML = `
     <div class="team-header" style="background:${t.primaryColor}33">
       ${t.logoUrl ? `<img src="${t.logoUrl}" onerror="this.style.display='none'">` : ''}
       <div class="team-header-info">
@@ -235,17 +304,156 @@ function renderMain(t) {
   `;
 }
 
+// --- Top Players Tab ---
+let topSearch = '';
+let topPosFilter = 'ALL';
+
+function renderTopPlayers() {
+  const rMap = buildRatingMap();
+  const teamMap = buildTeamMap();
+  const players = getPlayers();
+
+  const allPositions = ['ALL', ...new Set(players.map(p => p.positionGroup).filter(Boolean))].sort();
+
+  let filtered = players.filter(p => {
+    const matchPos = topPosFilter === 'ALL' || p.positionGroup === topPosFilter;
+    const name = `${p.firstName} ${p.lastName}`.toLowerCase();
+    const teamName = (teamMap[p.teamId]?.name || '').toLowerCase();
+    const matchSearch = !topSearch || name.includes(topSearch) || teamName.includes(topSearch);
+    return matchPos && matchSearch;
+  });
+
+  filtered.sort((a, b) => {
+    const ra = rMap[a.id] || {}, rb = rMap[b.id] || {};
+    let va = ra[topSortCol] || 0, vb = rb[topSortCol] || 0;
+    if (topSortCol === 'name') { va = a.lastName; vb = b.lastName; }
+    if (typeof va === 'string') return topSortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+    return topSortAsc ? va - vb : vb - va;
+  });
+
+  // cap display at 250 unless searching
+  const displayList = topSearch ? filtered : filtered.slice(0, 250);
+
+  document.getElementById('tab-content').innerHTML = `
+    <div class="top-players-controls">
+      <input type="text" id="top-search" placeholder="Search player or team..." value="${topSearch}" oninput="onTopSearch(this.value)">
+      <select id="top-pos-filter" onchange="onTopPos(this.value)">
+        ${allPositions.map(p => `<option value="${p}" ${p === topPosFilter ? 'selected' : ''}>${p}</option>`).join('')}
+      </select>
+    </div>
+    <table>
+      <tr>
+        <th style="width:28px">#</th>
+        ${[['name','Name'],['pos','Pos'],['team','Team'],['overall','OVR'],['speed','SPD'],['strength','STR'],['agility','AGI'],['awareness','AWR'],['throwing','THR'],['catching','CTH'],['carrying','CAR'],['blocking','BLK'],['tackling','TKL']].map(([col,lbl]) => {
+          const cls = topSortCol === col ? (topSortAsc ? 'sorted-asc' : 'sorted-desc') : '';
+          return `<th class="${cls}" onclick="sortTopBy('${col}')">${lbl}</th>`;
+        }).join('')}
+      </tr>
+      ${displayList.map((p, i) => {
+        const r = rMap[p.id] || {};
+        const team = teamMap[p.teamId] || {};
+        const rank = i + 1;
+        const rankCls = rank <= 3 ? 'top3' : rank <= 10 ? 'top10' : '';
+        return `<tr onclick="goToPlayer(${p.teamId})" style="cursor:pointer">
+          <td><span class="player-rank ${rankCls}">${rank}</span></td>
+          <td>${p.firstName} ${p.lastName}${tierBadge(r.overall || 0)}</td>
+          <td><span class="pos-badge">${p.position || '?'}</span></td>
+          <td style="font-size:11px;color:#aaa">${team.name || ''}</td>
+          <td><span class="ovr" style="background:${ratingColor(r.overall || 0)};color:#000">${r.overall || '-'}</span></td>
+          ${['speed','strength','agility','awareness','throwing','catching','carrying','blocking','tackling'].map(a =>
+            `<td>${r[a] || '-'}</td>`
+          ).join('')}
+        </tr>`;
+      }).join('')}
+    </table>
+    <div style="padding:8px;color:#666;font-size:11px">
+      ${topSearch ? `${filtered.length} results` : `Showing top ${displayList.length} of ${filtered.length} players`}
+    </div>
+  `;
+}
+
+function onTopSearch(val) {
+  topSearch = val.toLowerCase();
+  renderTopPlayers();
+}
+
+function onTopPos(val) {
+  topPosFilter = val;
+  renderTopPlayers();
+}
+
+function sortTopBy(col) {
+  if (topSortCol === col) topSortAsc = !topSortAsc;
+  else { topSortCol = col; topSortAsc = col === 'name' || col === 'team' || col === 'pos'; }
+  renderTopPlayers();
+}
+
+function goToPlayer(teamId) {
+  selectTeam(teamId, true);
+}
+
+// --- Conferences Tab ---
+function renderConferences() {
+  const teams = getTeams();
+  const confMap = {};
+  for (const t of teams) {
+    const c = t.conference || 'Independent';
+    if (!confMap[c]) confMap[c] = [];
+    confMap[c].push(t);
+  }
+
+  // Sort conferences: Power 4 first, then the rest alphabetically
+  const power4 = ['SEC','Big Ten','Big 12','ACC'];
+  const confNames = [
+    ...power4.filter(c => confMap[c]),
+    ...Object.keys(confMap).filter(c => !power4.includes(c)).sort()
+  ];
+
+  document.getElementById('tab-content').innerHTML = confNames.map(conf => {
+    const confTeams = confMap[conf].sort((a, b) => (b.ratings?.overall || 0) - (a.ratings?.overall || 0));
+    return `<div class="conf-section">
+      <div class="conf-title">
+        ${conf}
+        <span style="font-size:11px;color:#555;font-weight:400">${confTeams.length} teams</span>
+      </div>
+      ${confTeams.map((t, i) => {
+        const ovr = t.ratings?.overall || 0;
+        const rank = i + 1;
+        return `<div class="conf-team-row" onclick="selectTeam(${t.id})">
+          <span class="conf-rank ${rank <= 3 ? 'top3' : ''}">${rank}</span>
+          ${t.logoUrl ? `<img class="conf-team-logo" src="${t.logoUrl}" onerror="this.style.display='none'">` : ''}
+          <div class="conf-team-name">${t.name}</div>
+          <span class="conf-ovr" style="background:${ratingColor(ovr)};color:#000">${ovr}</span>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }).join('');
+}
+
+// --- Helpers ---
+function buildRatingMap() {
+  const rMap = {};
+  getRatings().forEach(r => rMap[r.playerId] = r);
+  return rMap;
+}
+
+function buildTeamMap() {
+  const tMap = {};
+  getTeams().forEach(t => tMap[t.id] = t);
+  return tMap;
+}
+
 function sortBy(col) {
   if (sortCol === col) sortAsc = !sortAsc;
   else { sortCol = col; sortAsc = col === 'name' || col === 'pos'; }
   const t = getTeams().find(t => t.id === selectedTeamId);
-  if (t) renderMain(t);
+  if (t) renderRoster(t);
 }
 
 function filterPos(pg) {
   posFilter = pg;
   const t = getTeams().find(t => t.id === selectedTeamId);
-  if (t) renderMain(t);
+  if (t) renderRoster(t);
 }
 
 function toggleMode() {
@@ -255,7 +463,8 @@ function toggleMode() {
   onDataReady();
 }
 
-document.getElementById('search').addEventListener('input', e => renderTeamList(e.target.value));
+document.getElementById('search').addEventListener('input', e => renderTeamList());
+document.getElementById('conf-filter').addEventListener('change', e => renderTeamList());
 loadData();
 </script>
 </body>
