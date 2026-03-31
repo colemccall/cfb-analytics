@@ -8,6 +8,7 @@ import sys
 from api_client import (
     load_api_key, fetch_teams, fetch_all_rosters, fetch_player_stats,
     fetch_ppa, fetch_team_stats, fetch_sp_ratings, fetch_talent, fetch_recruiting,
+    fetch_player_usage,
 )
 from rating_engine import get_position_group, compute_raw_ratings, normalize_all_ratings, compute_overall
 
@@ -122,6 +123,22 @@ def build_ppa_lookup(ppa_raw):
             lookup[key] = float(val)
         except (TypeError, ValueError):
             lookup[key] = 0.0
+    return lookup
+
+
+def build_usage_lookup(usage_raw):
+    """Build lookup by player ID: {player_id: {overall, pass, rush}}."""
+    lookup = {}
+    for entry in usage_raw:
+        pid = entry.get("id")
+        if not pid:
+            continue
+        usage = entry.get("usage") or {}
+        lookup[int(pid)] = {
+            "overall": float(usage.get("overall") or 0),
+            "pass": float(usage.get("pass") or 0),
+            "rush": float(usage.get("rush") or 0),
+        }
     return lookup
 
 
@@ -306,6 +323,12 @@ def process_year(api_key, year, team_name_map):
     stat_lookup = build_stat_lookup(player_stats_raw)
     print(f"  {len(stat_lookup)} player stat entries")
 
+    print(f"\n[3b] Fetching player usage...")
+    _time.sleep(0.5)
+    usage_raw = fetch_player_usage(api_key, year)
+    usage_lookup = build_usage_lookup(usage_raw)
+    print(f"  {len(usage_lookup)} usage entries")
+
     print(f"\n[4/7] Fetching PPA data...")
     _time.sleep(1)
     ppa_raw = fetch_ppa(api_key, year)
@@ -365,7 +388,8 @@ def process_year(api_key, year, team_name_map):
             full_lower = f"{first} {last}".lower()
             stars = recruit_lookup.get((full_lower, school.lower()), 0)
 
-            raw = compute_raw_ratings(pid, pos_group, p_stats, ppa_val, t_stats, tq, stars)
+            usage = usage_lookup.get(pid, {})
+            raw = compute_raw_ratings(pid, pos_group, p_stats, ppa_val, t_stats, tq, stars, usage)
             raw_ratings_all[pid] = {"pos": pos_group, "raw": raw}
 
             players_private.append({

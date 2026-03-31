@@ -102,3 +102,7 @@ def fetch_talent(api_key, year):
 
 def fetch_recruiting(api_key, year):
     return _get(api_key, "/recruiting/players", {"year": year})
+
+
+def fetch_player_usage(api_key, year):
+    return _get(api_key, "/player/usage", {"year": year, "seasonType": "regular"})

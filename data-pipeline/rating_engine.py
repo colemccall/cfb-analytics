@@ -129,7 +129,7 @@ def _has_meaningful_stats(player_stats):
 
 
 def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
-                        team_stats, team_quality, recruit_stars):
+                        team_stats, team_quality, recruit_stars, player_usage=None):
     """Compute raw ratings. No physicals — stats only.
 
     Players with individual stats get rated from those stats.
@@ -139,8 +139,20 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
     raw = {}
     has_stats = _has_meaningful_stats(player_stats)
 
+    # Snap/usage multiplier: scales stat-based ratings by play participation rate.
+    # Players with low usage (backups, garbage time) get proportionally lower raw scores.
+    # Only applies to players with actual stats. If no usage data, neutral (1.0).
+    if player_usage and has_stats:
+        overall_usage = float(player_usage.get("overall") or 0)
+        snap_mult = max(0.5, min(1.15, 0.5 + 0.65 * overall_usage))
+    else:
+        snap_mult = 1.0
+
     # Team quality multiplier: good team → 1.0x, bad team → 0.65x
     tq_mult = 0.65 + 0.35 * team_quality
+
+    # Combined quality + snap context multiplier for stat-based players
+    combined_mult = tq_mult * snap_mult
 
     # DL with individual defensive stats should be rated like LB/DB, not team-proxy
     has_defensive_stats = has_stats and any(
@@ -156,12 +168,12 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
         completions = _safe_float(player_stats.get("passingCOMPLETIONS", player_stats.get("passingCOMP", player_stats.get("completions", 0))))
         ints = _safe_float(player_stats.get("passingINT", player_stats.get("interceptions", 0)))
 
-        raw["throwing"] = (pass_yds * 0.01 + pass_tds * 2.0 + completions * 0.04 - ints * 1.5) * tq_mult
-        raw["awareness"] = (pass_tds * 1.5 + ppa_val * 3.0 - ints * 2.0 + completions * 0.03) * tq_mult
-        raw["speed"] = rush_yds * 0.02 * tq_mult
-        raw["agility"] = rush_yds * 0.015 * tq_mult + ppa_val * 0.8
+        raw["throwing"] = (pass_yds * 0.01 + pass_tds * 2.0 + completions * 0.04 - ints * 1.5) * combined_mult
+        raw["awareness"] = (pass_tds * 1.5 + ppa_val * 3.0 - ints * 2.0 + completions * 0.03) * combined_mult
+        raw["speed"] = rush_yds * 0.02 * combined_mult
+        raw["agility"] = rush_yds * 0.015 * combined_mult + ppa_val * 0.8
         raw["strength"] = 1.5 + rush_yds * 0.002
-        raw["carrying"] = rush_yds * 0.015 * tq_mult
+        raw["carrying"] = rush_yds * 0.015 * combined_mult
 
     elif pos_group in ("RB", "FB") and has_stats:
         rush_yds = _safe_float(player_stats.get("rushingYDS", player_stats.get("rushingYards", 0)))
@@ -169,51 +181,70 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
         ypc = _safe_float(player_stats.get("rushingYPC", player_stats.get("yardsPerRushAttempt", 0)))
         rec_yds = _safe_float(player_stats.get("receivingYDS", player_stats.get("receivingYards", 0)))
 
-        raw["carrying"] = (rush_yds * 0.01 + rush_tds * 2.0 + ypc * 1.5) * tq_mult
-        raw["speed"] = (ypc * 2.0 + rush_yds * 0.005) * tq_mult
-        raw["agility"] = (ypc * 1.5 + ppa_val * 2.0) * tq_mult
-        raw["strength"] = (rush_yds * 0.005 + rush_tds * 0.8) * tq_mult
-        raw["awareness"] = (ppa_val * 3.0 + rush_tds * 1.2) * tq_mult
-        raw["catching"] = rec_yds * 0.02 * tq_mult
+        raw["carrying"] = (rush_yds * 0.01 + rush_tds * 2.0 + ypc * 1.5) * combined_mult
+        raw["speed"] = (ypc * 2.0 + rush_yds * 0.005) * combined_mult
+        raw["agility"] = (ypc * 1.5 + ppa_val * 2.0) * combined_mult
+        raw["strength"] = (rush_yds * 0.005 + rush_tds * 0.8) * combined_mult
+        raw["awareness"] = (ppa_val * 3.0 + rush_tds * 1.2) * combined_mult
+        raw["catching"] = rec_yds * 0.02 * combined_mult
         if pos_group == "FB":
-            raw["blocking"] = 3.0 * tq_mult
+            raw["blocking"] = 3.0 * combined_mult
 
     elif pos_group in ("WR", "TE") and has_stats:
         rec_yds = _safe_float(player_stats.get("receivingYDS", player_stats.get("receivingYards", 0)))
         rec_tds = _safe_float(player_stats.get("receivingTD", player_stats.get("receivingTDs", 0)))
         receptions = _safe_float(player_stats.get("receivingREC", player_stats.get("receptions", 0)))
 
-        raw["catching"] = (rec_yds * 0.01 + rec_tds * 2.0 + receptions * 0.1) * tq_mult
-        raw["speed"] = (rec_yds * 0.007 + rec_tds * 1.2) * tq_mult
-        raw["agility"] = (receptions * 0.12 + ppa_val * 2.0) * tq_mult
-        raw["awareness"] = (ppa_val * 3.0 + rec_tds * 1.2 + receptions * 0.06) * tq_mult
-        raw["carrying"] = rec_yds * 0.003 * tq_mult
+        raw["catching"] = (rec_yds * 0.01 + rec_tds * 2.0 + receptions * 0.1) * combined_mult
+        raw["speed"] = (rec_yds * 0.007 + rec_tds * 1.2) * combined_mult
+        raw["agility"] = (receptions * 0.12 + ppa_val * 2.0) * combined_mult
+        raw["awareness"] = (ppa_val * 3.0 + rec_tds * 1.2 + receptions * 0.06) * combined_mult
+        raw["carrying"] = rec_yds * 0.003 * combined_mult
         if pos_group == "TE":
-            raw["blocking"] = 3.0 * tq_mult
-            raw["strength"] = 2.5 * tq_mult
+            raw["blocking"] = 3.0 * combined_mult
+            raw["strength"] = 2.5 * combined_mult
 
     elif (pos_group in ("LB", "DB") or (pos_group == "DL" and has_defensive_stats)) and has_stats:
         tackles = _safe_float(player_stats.get("defensiveTOT", player_stats.get("totalTackles", 0)))
         sacks = _safe_float(player_stats.get("defensiveSACKS", player_stats.get("sacks", 0)))
         ints = _safe_float(player_stats.get("defensiveINT", player_stats.get("interceptions", 0)))
         pds = _safe_float(player_stats.get("defensivePD", player_stats.get("passesDeflected", 0)))
+        tfl = _safe_float(player_stats.get("defensiveTFL", 0))
+        qbh = _safe_float(player_stats.get("defensiveQBH", 0))
+        ff = _safe_float(player_stats.get("defensiveFF", 0))
 
-        raw["tackling"] = (tackles * 0.08 + sacks * 2.5) * tq_mult
-        raw["speed"] = (sacks * 1.5 + ints * 2.0 + ppa_val * 1.0) * tq_mult
-        raw["awareness"] = (ints * 2.5 + pds * 1.2 + ppa_val * 2.5) * tq_mult
-        raw["strength"] = (tackles * 0.04 + sacks * 1.5) * tq_mult
-        raw["agility"] = (ints * 2.0 + pds * 1.0 + ppa_val * 1.0) * tq_mult
-        raw["catching"] = (ints * 2.0 + pds * 0.5) * tq_mult
+        raw["tackling"] = (tackles * 0.08 + sacks * 2.5 + tfl * 1.5) * combined_mult
+        raw["speed"] = (sacks * 1.5 + ints * 2.0 + qbh * 0.8 + ppa_val * 1.0) * combined_mult
+        raw["awareness"] = (ints * 2.5 + pds * 1.2 + ppa_val * 2.5 + ff * 0.8) * combined_mult
+        raw["strength"] = (tackles * 0.04 + sacks * 1.5 + tfl * 1.0) * combined_mult
+        raw["agility"] = (ints * 2.0 + pds * 1.0 + qbh * 1.0 + ppa_val * 1.0) * combined_mult
+        raw["catching"] = (ints * 2.0 + pds * 0.5) * combined_mult
 
-    elif pos_group in ("K", "P") and has_stats:
+    elif pos_group == "K" and has_stats:
         fgm = _safe_float(player_stats.get("kickingFGM", player_stats.get("fieldGoalsMade", 0)))
         fga = _safe_float(player_stats.get("kickingFGA", player_stats.get("fieldGoalAttempts", 0)))
         longest = _safe_float(player_stats.get("kickingLONG", player_stats.get("longFieldGoal", 0)))
         xpm = _safe_float(player_stats.get("kickingXPM", player_stats.get("extraPointsMade", 0)))
+        xpa = _safe_float(player_stats.get("kickingXPA", player_stats.get("extraPointAttempts", 0)))
+        fg_pct = fgm / max(fga, 1)
+        xp_pct = xpm / max(xpa, 1)
 
-        raw["kickPower"] = longest * 0.5 + fgm * 1.5
-        raw["awareness"] = (fgm / max(fga, 1)) * 10 + xpm * 0.2
-        raw["strength"] = longest * 0.25
+        # Distance = power, accuracy = awareness
+        raw["kickPower"] = (longest * 0.45 + fgm * 1.2 + fga * 0.25) * combined_mult
+        raw["awareness"] = (fg_pct * 10.0 + xp_pct * 4.0 + fgm * 0.4) * combined_mult
+        raw["strength"] = (longest * 0.20 + fgm * 0.5) * combined_mult
+
+    elif pos_group == "P" and has_stats:
+        punt_yds = _safe_float(player_stats.get("puntingYDS", player_stats.get("puntYards", 0)))
+        punt_no = _safe_float(player_stats.get("puntingNO", player_stats.get("punts", 0)))
+        punt_long = _safe_float(player_stats.get("puntingLONG", player_stats.get("longPunt", 0)))
+        punt_in20 = _safe_float(player_stats.get("puntingIN20", player_stats.get("puntsInsideTwenty", 0)))
+        punt_avg = punt_yds / max(punt_no, 1)
+        in20_rate = punt_in20 / max(punt_no, 1)
+
+        raw["kickPower"] = (punt_avg * 0.45 + punt_long * 0.12) * combined_mult
+        raw["awareness"] = (in20_rate * 9.0 + punt_no * 0.08) * combined_mult
+        raw["strength"] = punt_avg * 0.12 * combined_mult
 
     elif is_lineman:
         pass  # handled below
