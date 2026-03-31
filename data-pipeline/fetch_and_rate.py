@@ -127,7 +127,7 @@ def build_ppa_lookup(ppa_raw):
 
 
 def build_usage_lookup(usage_raw):
-    """Build lookup by player ID: {player_id: {overall, pass, rush}}."""
+    """Build lookup by player ID: {player_id: {overall, pass, rush, games}}."""
     lookup = {}
     for entry in usage_raw:
         pid = entry.get("id")
@@ -138,6 +138,7 @@ def build_usage_lookup(usage_raw):
             "overall": float(usage.get("overall") or 0),
             "pass": float(usage.get("pass") or 0),
             "rush": float(usage.get("rush") or 0),
+            "games": int(entry.get("games") or 0),
         }
     return lookup
 
@@ -281,9 +282,13 @@ def capture_display_stats(pos_group, player_stats):
         pass_yds = sf(s.get("passingYDS", s.get("passingYards", 0)))
         pass_tds = int(sf(s.get("passingTD", s.get("passingTDs", 0))))
         comp = int(sf(s.get("passingCOMPLETIONS", s.get("passingCOMP", s.get("completions", 0)))))
+        att = int(sf(s.get("passingATT", s.get("passingAttempts", s.get("attempts", 0)))))
         ints = int(sf(s.get("passingINT", s.get("interceptions", 0))))
         rush_yds = sf(s.get("rushingYDS", s.get("rushingYards", 0)))
-        return {"passYds": int(pass_yds), "passTDs": pass_tds, "comp": comp, "ints": ints, "rushYds": int(rush_yds)}
+        comp_pct = round(comp / att * 100, 1) if att > 0 else 0.0
+        ypa = round(pass_yds / att, 1) if att > 0 else 0.0
+        return {"passYds": int(pass_yds), "passTDs": pass_tds, "comp": comp, "att": att,
+                "compPct": comp_pct, "ypa": ypa, "ints": ints, "rushYds": int(rush_yds)}
 
     elif pos_group in ("RB", "FB"):
         rush_yds = sf(s.get("rushingYDS", s.get("rushingYards", 0)))
@@ -297,7 +302,7 @@ def capture_display_stats(pos_group, player_stats):
         rec_yds = sf(s.get("receivingYDS", s.get("receivingYards", 0)))
         rec_tds = int(sf(s.get("receivingTD", s.get("receivingTDs", 0))))
         rec = int(sf(s.get("receivingREC", s.get("receptions", 0))))
-        ypr = round(rec_yds / max(rec, 1), 1) if rec > 0 else 0
+        ypr = round(rec_yds / rec, 1) if rec > 0 else 0.0
         return {"recYds": int(rec_yds), "recTDs": rec_tds, "receptions": rec, "ypr": ypr}
 
     elif pos_group in ("DL", "LB", "DB"):
@@ -343,7 +348,8 @@ def _safe_float(val, default=0.0):
 
 def build_team_performance_scores(team_stats_lookup):
     """Normalize team performance stats to 0-1 across all FBS teams.
-    Returns dict: team_name_lower → {passOff, runOff, passDef, runDef} each 0-1.
+    Returns dict: team_name_lower → {passOff, runOff, passDef, runDef, thirdDownOff,
+    thirdDownDef, havoc} each 0-1.
     """
     teams = list(team_stats_lookup.keys())
     if not teams:
@@ -368,18 +374,38 @@ def build_team_performance_scores(team_stats_lookup):
     pass_yds_allowed = [safe(t, "netPassingYardsOpponent") for t in teams]
     rush_yds_allowed = [safe(t, "rushingYardsOpponent") for t in teams]
 
-    pn = normalize_vals(pass_yds)
-    rn = normalize_vals(rush_yds)
-    pdn = normalize_vals(pass_yds_allowed, invert=True)
-    rdn = normalize_vals(rush_yds_allowed, invert=True)
+    # Third down: higher conversion rate = better offense; lower opponent rate = better defense
+    td3_conv = [safe(t, "thirdDownConversions") for t in teams]
+    td3_att  = [max(safe(t, "thirdDowns"), 1) for t in teams]
+    td3_opp_conv = [safe(t, "thirdDownConversionsOpponent") for t in teams]
+    td3_opp_att  = [max(safe(t, "thirdDownsOpponent"), 1) for t in teams]
+    td3_off_rate = [td3_conv[i] / td3_att[i] for i in range(len(teams))]
+    td3_def_rate = [td3_opp_conv[i] / td3_opp_att[i] for i in range(len(teams))]  # lower = better
+
+    # Havoc: defensive TFL + INTs caused + fumbles recovered — measures chaos creation
+    tfl   = [safe(t, "tacklesForLoss") for t in teams]
+    ints  = [safe(t, "interceptions") for t in teams]
+    fumr  = [safe(t, "fumblesRecovered") for t in teams]
+    havoc = [tfl[i] + ints[i] * 2 + fumr[i] for i in range(len(teams))]
+
+    pn   = normalize_vals(pass_yds)
+    rn   = normalize_vals(rush_yds)
+    pdn  = normalize_vals(pass_yds_allowed, invert=True)
+    rdn  = normalize_vals(rush_yds_allowed, invert=True)
+    t3on = normalize_vals(td3_off_rate)
+    t3dn = normalize_vals(td3_def_rate, invert=True)   # lower opponent 3rd-down rate = better
+    havn = normalize_vals(havoc)
 
     scores = {}
     for i, t in enumerate(teams):
         scores[t] = {
-            "passOff": pn[i],
-            "runOff": rn[i],
-            "passDef": pdn[i],
-            "runDef": rdn[i],
+            "passOff":      pn[i],
+            "runOff":       rn[i],
+            "passDef":      pdn[i],
+            "runDef":       rdn[i],
+            "thirdDownOff": t3on[i],
+            "thirdDownDef": t3dn[i],
+            "havoc":        havn[i],
         }
     return scores
 
@@ -441,20 +467,31 @@ def compute_team_ratings(team_id, team_name_lower, players_private, ratings_list
 
     # ── Raw performance scores (raw team stats, NOT opponent-adjusted) ────
     perf = perf_scores.get(team_name_lower, {})
-    raw_pass_off = perf_to_rating(perf.get("passOff", 0.3))
-    raw_run_off  = perf_to_rating(perf.get("runOff",  0.3))
-    raw_pass_def = perf_to_rating(perf.get("passDef", 0.3))
-    raw_run_def  = perf_to_rating(perf.get("runDef",  0.3))
+    raw_pass_off  = perf_to_rating(perf.get("passOff",      0.3))
+    raw_run_off   = perf_to_rating(perf.get("runOff",       0.3))
+    raw_pass_def  = perf_to_rating(perf.get("passDef",      0.3))
+    raw_run_def   = perf_to_rating(perf.get("runDef",       0.3))
+    raw_3rd_off   = perf_to_rating(perf.get("thirdDownOff", 0.3))
+    raw_3rd_def   = perf_to_rating(perf.get("thirdDownDef", 0.3))
+    raw_havoc     = perf_to_rating(perf.get("havoc",        0.3))
 
-    # ── Three-way blend ───────────────────────────────────────────────────
+    # ── Three-way blend (advanced stats blend into raw component) ─────────
+    # Advanced stats (3rd down, havoc) are blended into the raw stats component.
+    # They're correlated with raw yards but measure execution quality more precisely.
     PLAYER = 0.30
     SP_W   = 0.45   # SP+ is opponent-adjusted — most reliable for cross-conference comparison
     RAW    = 0.25   # Raw stats provide within-conference directional signal
 
-    pass_off = int(round(p_pass_off * PLAYER + sp_off_rating * SP_W + raw_pass_off * RAW))
-    run_off  = int(round(p_run_off  * PLAYER + sp_off_rating * SP_W + raw_run_off  * RAW))
-    pass_def = int(round(p_pass_def * PLAYER + sp_def_rating * SP_W + raw_pass_def * RAW))
-    run_def  = int(round(p_run_def  * PLAYER + sp_def_rating * SP_W + raw_run_def  * RAW))
+    # Blend advanced stats into raw component: 60% yardage, 40% 3rd down/havoc
+    adv_pass_off = int(round(raw_pass_off * 0.6 + raw_3rd_off * 0.4))
+    adv_run_off  = int(round(raw_run_off  * 0.6 + raw_3rd_off * 0.4))
+    adv_pass_def = int(round(raw_pass_def * 0.6 + raw_3rd_def * 0.2 + raw_havoc * 0.2))
+    adv_run_def  = int(round(raw_run_def  * 0.6 + raw_3rd_def * 0.2 + raw_havoc * 0.2))
+
+    pass_off = int(round(p_pass_off * PLAYER + sp_off_rating * SP_W + adv_pass_off * RAW))
+    run_off  = int(round(p_run_off  * PLAYER + sp_off_rating * SP_W + adv_run_off  * RAW))
+    pass_def = int(round(p_pass_def * PLAYER + sp_def_rating * SP_W + adv_pass_def * RAW))
+    run_def  = int(round(p_run_def  * PLAYER + sp_def_rating * SP_W + adv_run_def  * RAW))
     special  = k_r
 
     overall = int(round(pass_off * 0.25 + run_off * 0.25 + pass_def * 0.25 + run_def * 0.20 + special * 0.05))
@@ -517,7 +554,7 @@ def normalize_team_ratings(teams_private):
     return teams_private
 
 
-def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids=None):
+def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids=None, prior_player_teams=None):
     """Process a single year and return all data dicts."""
     print(f"\n{'='*60}")
     print(f"  PROCESSING YEAR {year}")
@@ -623,12 +660,18 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
             if pos_group == "OL":
                 draft_round = draft_lookup.get(full_lower, 0)
                 award_tier = awards_lookup.get((full_lower, school.lower()), 0)
-                returning = bool(prior_player_ids and pid in prior_player_ids)
-                if draft_round or award_tier or returning:
+                # Continuity floor only applies to same-team returners.
+                # Transfers are in a new system and their prior performance is uncertain.
+                prior_team = prior_player_teams.get(pid) if prior_player_teams else None
+                returning_same_team = bool(
+                    prior_player_ids and pid in prior_player_ids
+                    and (prior_team is None or prior_team == school)
+                )
+                if draft_round or award_tier or returning_same_team:
                     ol_boost_signals[pid] = {
                         "draft_round": draft_round,
                         "award_tier": award_tier,
-                        "returning": returning,
+                        "returning": returning_same_team,
                     }
 
             players_private.append({
@@ -777,15 +820,26 @@ def main():
         draft_data = []
 
     for year in years_to_run:
-        # Cross-year continuity: load prior year's player IDs if available
+        # Cross-year continuity: load prior year's player IDs and team mapping
         prior_player_ids = set()
-        prior_year_dir = os.path.join(OUTPUT_DIR, str(year - 1), "players_private.json")
-        if os.path.exists(prior_year_dir):
-            with open(prior_year_dir) as f:
-                prior_player_ids = {p["id"] for p in json.load(f)}
+        prior_player_teams = {}  # pid -> school name (to detect transfers)
+        prior_year_path = os.path.join(OUTPUT_DIR, str(year - 1), "players_private.json")
+        prior_teams_path = os.path.join(OUTPUT_DIR, str(year - 1), "teams_private.json")
+        if os.path.exists(prior_year_path):
+            with open(prior_year_path) as f:
+                prior_players = json.load(f)
+            prior_player_ids = {p["id"] for p in prior_players}
+            # Build team_id → school name from prior year's teams file
+            prior_team_id_to_name = {}
+            if os.path.exists(prior_teams_path):
+                with open(prior_teams_path) as tf:
+                    for t in json.load(tf):
+                        prior_team_id_to_name[t["id"]] = t["name"]
+            prior_player_teams = {p["id"]: prior_team_id_to_name.get(p["teamId"], "") for p in prior_players}
             print(f"  Loaded {len(prior_player_ids)} player IDs from {year-1} for continuity check")
 
-        data = process_year(api_key, year, team_name_map, draft_data=draft_data, prior_player_ids=prior_player_ids)
+        data = process_year(api_key, year, team_name_map, draft_data=draft_data,
+                            prior_player_ids=prior_player_ids, prior_player_teams=prior_player_teams)
         print(f"\nWriting to {os.path.abspath(OUTPUT_DIR)}/")
         write_year(year, data, OUTPUT_DIR)
 

@@ -262,7 +262,7 @@ const SKILL_COLS = {  // short labels for table headers
 
 // Stats display config per position: [key, label]
 const STAT_LABELS = {
-  QB:  [['passYds','Pass Yds'],['passTDs','Pass TDs'],['comp','Comp'],['ints','INTs'],['rushYds','Rush Yds']],
+  QB:  [['passYds','Pass Yds'],['passTDs','Pass TDs'],['comp','Comp'],['att','Att'],['compPct','Comp %'],['ypa','YPA'],['ints','INTs'],['rushYds','Rush Yds']],
   RB:  [['rushYds','Rush Yds'],['rushTDs','Rush TDs'],['ypc','YPC'],['recYds','Rec Yds'],['recTDs','Rec TDs']],
   FB:  [['rushYds','Rush Yds'],['rushTDs','Rush TDs'],['ypc','YPC'],['recYds','Rec Yds']],
   WR:  [['recYds','Rec Yds'],['recTDs','Rec TDs'],['receptions','Receptions'],['ypr','Yds/Rec']],
@@ -950,9 +950,9 @@ function toggleMode() {
 function renderExplain() {
   const POS_EXPLAIN = [
     { pos: 'QB', color: '#e94560', skills: [
-      ['Pass Rating', '0.55', 'Pass yards, TDs, completions, INTs'],
-      ['Accuracy',    '0.22', 'Completion quality minus INT penalty + PPA'],
-      ['Deep Ball',   '0.13', 'TD rate + PPA (explosiveness)'],
+      ['Pass Rating', '0.55', 'Pass yards, TDs, comp %, yards per attempt, INTs'],
+      ['Accuracy',    '0.22', 'Completion % + YPA quality minus INT penalty + PPA'],
+      ['Deep Ball',   '0.13', 'TD rate + YPA + PPA (explosiveness)'],
       ['Mobility',    '0.10', 'Rushing yards'],
     ]},
     { pos: 'RB', color: '#f97316', skills: [
@@ -962,8 +962,8 @@ function renderExplain() {
     ]},
     { pos: 'WR', color: '#22c55e', skills: [
       ['Receiving',     '0.60', 'Rec yards, TDs, receptions'],
-      ['Route Running', '0.25', 'Target efficiency + PPA'],
-      ['YAC',           '0.15', 'TD rate + PPA (big-play after catch)'],
+      ['Route Running', '0.25', 'Receptions, yards per reception + PPA'],
+      ['YAC',           '0.15', 'TD rate + YPR + PPA (big-play after catch)'],
     ]},
     { pos: 'TE', color: '#14b8a6', skills: [
       ['Receiving',     '0.50', 'Rec yards, TDs, receptions'],
@@ -1083,9 +1083,10 @@ function renderExplain() {
         <div class="explain-blend-bar">
           <div class="explain-blend-seg" style="width:30%;background:#4fc3f7">Player Ratings 30%</div>
           <div class="explain-blend-seg" style="width:45%;background:#6366f1">SP+ (opp-adj) 45%</div>
-          <div class="explain-blend-seg" style="width:25%;background:#8b5cf6">Raw Stats 25%</div>
+          <div class="explain-blend-seg" style="width:25%;background:#8b5cf6">Advanced Stats 25%</div>
         </div>
       </div>
+      <p style="margin-top:8px;font-size:12px;color:#999">Advanced stats (25% component) blends: raw yards (60%) + 3rd down conversion rate (20%) + defensive havoc rate — TFL, INTs, fumble recoveries (20%)</p>
       <ul style="margin-top:10px">
         <li><strong>Top 1–2 teams</strong> → 91–94 (national title contenders)</li>
         <li><strong>Top 5–15 teams</strong> → 87–91 (playoff-caliber)</li>
@@ -1117,8 +1118,8 @@ function renderExplain() {
       <ul>
         <li>OL ratings are team-level proxies — two starting OL on the same team will have nearly identical ratings (differentiated only by recruiting stars, usage, and jitter)</li>
         <li>The <code>/awards</code> API endpoint currently returns empty data — award-tier boosts are wired up but inactive until the API improves</li>
-        <li>Small sample sizes (1–2 game players) can inflate ratings — a minimum games-played filter is planned</li>
-        <li>Transfer portal context is not modeled — a player who transferred up from a G5 to a P4 may be under/over-rated in their first season</li>
+        <li>Small sample sizes are penalized via a games-played multiplier (≥10 games = 1.0×, 3–5 games = 0.75×, &lt;3 games = 0.55×) but very short appearances can still inflate</li>
+        <li>OL cross-year continuity floor only applies to same-team returners — transfers do not receive the floor since they're entering a new system</li>
         <li>All ratings are relative to the <em>current dataset years</em> (${years.join(', ')}) — a 99 OVR in 2022 and 2024 are not directly comparable across years</li>
       </ul>
     </div>

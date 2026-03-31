@@ -112,13 +112,31 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
     else:
         snap_mult = 1.0
 
+    # Sample size multiplier: penalizes stat-based players with few games played.
+    # A player with 2 great games should not rate the same as one with 12 great games.
+    # Only applied when we have games data (0 means unknown → no penalty).
+    if player_usage and has_stats:
+        games = int(player_usage.get("games") or 0)
+        if games >= 10:
+            sample_mult = 1.0
+        elif games >= 6:
+            sample_mult = 0.90
+        elif games >= 3:
+            sample_mult = 0.75
+        elif games > 0:
+            sample_mult = 0.55
+        else:
+            sample_mult = 1.0  # no data → assume full season
+    else:
+        sample_mult = 1.0
+
     # Team quality multiplier: good team → 1.0x, bad team → 0.50x
     # Wider range (0.50-1.0 vs old 0.65-1.0) creates more separation between G5 and P4
     # players on no-stat proxy positions (OL/DL), reducing G5 starter inflation
     tq_mult = 0.50 + 0.50 * team_quality
 
-    # Combined quality + snap context multiplier for stat-based players
-    combined_mult = tq_mult * snap_mult
+    # Combined: quality × snap context × sample size
+    combined_mult = tq_mult * snap_mult * sample_mult
 
     # DL with individual defensive stats should use stat-based formulas
     has_defensive_stats = has_stats and any(
@@ -133,14 +151,21 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
         pass_tds = _safe_float(player_stats.get("passingTD", player_stats.get("passingTDs", 0)))
         rush_yds = _safe_float(player_stats.get("rushingYDS", player_stats.get("rushingYards", 0)))
         completions = _safe_float(player_stats.get("passingCOMPLETIONS", player_stats.get("passingCOMP", player_stats.get("completions", 0))))
+        attempts = _safe_float(player_stats.get("passingATT", player_stats.get("passingAttempts", player_stats.get("attempts", 0))))
         ints = _safe_float(player_stats.get("passingINT", player_stats.get("interceptions", 0)))
 
-        raw["passRating"] = (pass_yds * 0.01 + pass_tds * 2.0 + completions * 0.04 - ints * 1.5) * combined_mult
-        # deepBall: big-play ability — TD rate + PPA (measures explosiveness)
-        raw["deepBall"] = (pass_tds * 2.0 + ppa_val * 4.0) * combined_mult
-        # accuracy: completion quality minus turnover penalty
-        acc_base = completions * 0.05 - ints * 2.5
-        raw["accuracy"] = max(0, acc_base) * combined_mult + ppa_val * 1.5
+        # Efficiency metrics — only meaningful with sufficient attempts
+        comp_pct = completions / attempts if attempts >= 5 else 0.0
+        ypa = pass_yds / attempts if attempts >= 5 else 0.0
+
+        # passRating: blends volume (yards, TDs) with efficiency (comp %, YPA)
+        # YPA is the single best predictor of QB quality in college football
+        raw["passRating"] = (pass_yds * 0.007 + pass_tds * 1.8 + completions * 0.02
+                             + ypa * 4.0 + comp_pct * 8.0 - ints * 1.5) * combined_mult
+        # deepBall: big-play ability — TD rate, YPA efficiency, PPA
+        raw["deepBall"] = (pass_tds * 2.0 + ypa * 2.0 + ppa_val * 4.0) * combined_mult
+        # accuracy: completion % and efficiency quality minus turnover penalty
+        raw["accuracy"] = (comp_pct * 14.0 + ypa * 2.5 - ints * 2.5 + ppa_val * 1.5) * combined_mult
         raw["mobility"] = rush_yds * 0.025 * combined_mult
 
     # ── RB / FB ───────────────────────────────────────────────────────────
@@ -163,11 +188,15 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
         rec_tds = _safe_float(player_stats.get("receivingTD", player_stats.get("receivingTDs", 0)))
         receptions = _safe_float(player_stats.get("receivingREC", player_stats.get("receptions", 0)))
 
+        # Yards per reception: separates efficient big-play receivers from slot volume guys
+        # Only meaningful with 3+ catches to avoid single-reception outliers
+        ypr = rec_yds / receptions if receptions >= 3 else 0.0
+
         raw["receiving"] = (rec_yds * 0.010 + rec_tds * 2.0 + receptions * 0.10) * combined_mult
-        # routeRunning: target efficiency proxy — receptions per opportunity + PPA
-        raw["routeRunning"] = (receptions * 0.12 + ppa_val * 2.5) * combined_mult
-        # yac: TD rate + efficiency measures big-play after-catch ability
-        raw["yac"] = (rec_tds * 2.5 + ppa_val * 2.0) * combined_mult
+        # routeRunning: efficiency — receptions per opportunity, YPR, and PPA signal
+        raw["routeRunning"] = (receptions * 0.10 + ypr * 0.15 + ppa_val * 2.5) * combined_mult
+        # yac: big-play ability — TD rate, YPR (separates YAC monsters from short-route receivers), PPA
+        raw["yac"] = (rec_tds * 2.5 + ypr * 0.20 + ppa_val * 2.0) * combined_mult
         if pos_group == "TE":
             raw["blocking"] = 3.0 * combined_mult  # no individual TE blocking stats
 
