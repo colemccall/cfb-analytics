@@ -112,8 +112,10 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
     else:
         snap_mult = 1.0
 
-    # Team quality multiplier: good team → 1.0x, bad team → 0.65x
-    tq_mult = 0.65 + 0.35 * team_quality
+    # Team quality multiplier: good team → 1.0x, bad team → 0.50x
+    # Wider range (0.50-1.0 vs old 0.65-1.0) creates more separation between G5 and P4
+    # players on no-stat proxy positions (OL/DL), reducing G5 starter inflation
+    tq_mult = 0.50 + 0.50 * team_quality
 
     # Combined quality + snap context multiplier for stat-based players
     combined_mult = tq_mult * snap_mult

@@ -443,7 +443,7 @@ function renderRoster(t) {
       </tr>
       ${filtered.map(p => {
         const r = rMap[p.id] || {};
-        return `<tr class="clickable" onclick="showPlayerModal(${p.id})">
+        return `<tr class="clickable" onclick="showPlayerModal('${p.id}')">
           <td>${p.jersey || '-'}</td>
           <td><span class="pos-badge">${p.position || '?'}</span></td>
           <td>${p.firstName} ${p.lastName}${tierBadge(r.overall || 0)}</td>
@@ -477,7 +477,7 @@ function renderDepth(t) {
       const skillHtml = skills.map(([a, lbl]) =>
         `<span class="depth-skill" style="color:${ratingColor(r[a] || 0)}">${lbl} ${r[a] || '-'}</span>`
       ).join('');
-      return `<div class="depth-row" onclick="showPlayerModal(${p.id})">
+      return `<div class="depth-row" onclick="showPlayerModal('${p.id}')">
         <span class="depth-slot ${isStarter ? 'starter' : ''}">${i === 0 ? '★' : i + 1}</span>
         <span class="pos-badge" style="flex-shrink:0">${p.position || '?'}</span>
         <span class="depth-name">${p.firstName} ${p.lastName}${tierBadge(r.overall || 0)}</span>
@@ -546,7 +546,7 @@ function renderTopPlayers() {
         const team = teamMap[p.teamId] || {};
         const rank = i + 1;
         const rankCls = rank <= 3 ? 'top3' : rank <= 10 ? 'top10' : '';
-        return `<tr class="clickable" onclick="showPlayerModal(${p.id})">
+        return `<tr class="clickable" onclick="showPlayerModal('${p.id}')">
           <td><span class="player-rank ${rankCls}">${rank}</span></td>
           <td>${p.firstName} ${p.lastName}${tierBadge(r.overall || 0)}</td>
           <td><span class="pos-badge">${p.position || '?'}</span></td>
@@ -716,13 +716,14 @@ function renderPositionGroupComparison(leftTeam, rightTeam) {
 
 // ── Player Modal ───────────────────────────────────────────────────────────
 function showPlayerModal(playerId) {
-  // Find player in current year
+  // Find player in current year — coerce to string since IDs are strings in JSON
+  const pid = String(playerId);
   const players = getPlayers();
-  const p = players.find(pl => pl.id === playerId);
+  const p = players.find(pl => String(pl.id) === pid);
   if (!p) return;
 
   const rMap = buildRatingMap();
-  const r = rMap[playerId] || {};
+  const r = rMap[pid] || {};
   const teamMap = buildTeamMap();
   const team = teamMap[p.teamId] || {};
   const posGroup = p.positionGroup;
@@ -758,12 +759,15 @@ function showPlayerModal(playerId) {
     const yData = dataByYear[y];
     if (!yData) return null;
     const yPlayers = mode === 'private' ? yData.players : yData.playersPublic;
+    const yTeams = mode === 'private' ? yData.teams : yData.teamsPublic;
     const yRatings = yData.ratings;
     if (!yPlayers || !yRatings) return null;
-    const yp = yPlayers.find(pl => pl.id === playerId);
+    const yp = yPlayers.find(pl => String(pl.id) === pid);
     if (!yp) return null;
-    const yr = yRatings.find(rr => rr.playerId === playerId);
+    const yr = yRatings.find(rr => String(rr.playerId) === pid);
     if (!yr) return null;
+    const yTeam = (yTeams || []).find(t => t.id === yp.teamId);
+    const yTeamName = yTeam ? yTeam.name : '';
     const ySkills = (SKILL_ATTRS[posGroup] || []).map(([k, lbl]) =>
       yr[k] != null ? `<td style="color:${ratingColor(yr[k])}">${yr[k]}</td>` : '<td>-</td>'
     ).join('');
@@ -772,6 +776,7 @@ function showPlayerModal(playerId) {
       .slice(0,3).map(([k,lbl]) => `${lbl}: ${yStats[k]}`).join(' · ');
     return `<tr class="${y === currentYear ? 'current-year' : ''}">
       <td style="font-weight:700">${y}</td>
+      <td style="font-size:11px;color:#aaa;white-space:nowrap">${yTeamName}</td>
       <td><span class="ovr" style="background:${ratingColor(yr.overall||0)};color:#000">${yr.overall||'-'}</span></td>
       ${ySkills}
       <td style="font-size:10px;color:#888">${yStatsStr}</td>
@@ -782,12 +787,68 @@ function showPlayerModal(playerId) {
     <div class="modal-section-title">Year-over-Year</div>
     <table class="yoy-table">
       <tr>
-        <th>Year</th><th>OVR</th>
+        <th>Year</th><th>Team</th><th>OVR</th>
         ${(SKILL_ATTRS[posGroup] || []).map(([,lbl]) => `<th>${lbl}</th>`).join('')}
         <th>Key Stats</th>
       </tr>
       ${yoyRows.join('')}
     </table>
+  </div>` : '';
+
+  // National + conference rank at this position group
+  const allPlayers = getPlayers();
+  const allTeams = getTeams();
+  const positionPeers = allPlayers.filter(pl => pl.positionGroup === posGroup);
+  const sortedByOvr = positionPeers.slice().sort((a, b) => (rMap[String(b.id)]?.overall || 0) - (rMap[String(a.id)]?.overall || 0));
+  const natRank = sortedByOvr.findIndex(pl => String(pl.id) === pid) + 1;
+  const teamConf = (allTeams.find(t => t.id === p.teamId) || {}).conference || '';
+  const confPeers = teamConf ? positionPeers.filter(pl => (allTeams.find(t => t.id === pl.teamId) || {}).conference === teamConf) : [];
+  const confSorted = confPeers.slice().sort((a, b) => (rMap[String(b.id)]?.overall || 0) - (rMap[String(a.id)]?.overall || 0));
+  const confRank = confSorted.findIndex(pl => String(pl.id) === pid) + 1;
+  const rankHTML = natRank > 0 ? `
+    <div style="display:flex;gap:16px;margin-top:6px">
+      <div style="font-size:11px;color:#888">National <span style="color:${natRank<=10?'#ffd700':natRank<=25?'#a78bfa':'#e0e0e0'};font-weight:700;font-size:13px">#${natRank}</span> ${posGroup}</div>
+      ${confRank > 0 ? `<div style="font-size:11px;color:#888">${teamConf} <span style="color:${confRank<=3?'#ffd700':confRank<=8?'#a78bfa':'#e0e0e0'};font-weight:700;font-size:13px">#${confRank}</span></div>` : ''}
+    </div>` : '';
+
+  // Career stats: sum additive stats across all years where the player appears
+  const careerTotals = {};
+  const CAREER_ADDITIVE = {
+    QB:  ['passYds','passTDs','comp','ints','rushYds'],
+    RB:  ['rushYds','rushTDs','recYds','recTDs'],
+    FB:  ['rushYds','rushTDs','recYds'],
+    WR:  ['recYds','recTDs','receptions'],
+    TE:  ['recYds','recTDs','receptions'],
+    DL:  ['tackles','sacks','tfl','qbh','ff'],
+    LB:  ['tackles','sacks','ints','pds','tfl','ff'],
+    DB:  ['tackles','ints','pds','ff','tfl'],
+    K:   ['fgm','fga','xpm'],
+    P:   ['punts'],
+  };
+  const careerKeys = CAREER_ADDITIVE[posGroup] || [];
+  let careerYears = 0;
+  for (const y of years) {
+    const yData = dataByYear[y];
+    if (!yData) continue;
+    const yRatings = yData.ratings;
+    if (!yRatings) continue;
+    const yr = yRatings.find(rr => String(rr.playerId) === pid);
+    if (!yr) continue;
+    const yStats = yr.stats || {};
+    careerYears++;
+    for (const k of careerKeys) {
+      if (yStats[k] != null && yStats[k] !== 0) careerTotals[k] = (careerTotals[k] || 0) + yStats[k];
+    }
+  }
+  const careerCells = careerKeys.filter(k => careerTotals[k]).map(k => {
+    const lbl = (STAT_LABELS[posGroup] || []).find(([sk]) => sk === k)?.[1] || k;
+    const val = typeof careerTotals[k] === 'number' && !Number.isInteger(careerTotals[k])
+      ? careerTotals[k].toFixed(1) : careerTotals[k];
+    return `<div class="stat-cell"><div class="sv">${val}</div><div class="sk">${lbl}</div></div>`;
+  }).join('');
+  const careerHTML = careerCells && careerYears > 1 ? `<div class="modal-section">
+    <div class="modal-section-title">Career Totals (${careerYears} seasons)</div>
+    <div class="stat-grid">${careerCells}</div>
   </div>` : '';
 
   const classYear = ['Fr','So','Jr','Sr','Gr'][Math.max(0, Math.min(4, (p.year||1) - 1))];
@@ -802,6 +863,7 @@ function showPlayerModal(playerId) {
           <span style="cursor:pointer;color:#a0c4ff" onclick="closeModal();goToTeam(${p.teamId})">${team.name || ''}</span>
           ${p.height ? ` &bull; ${p.height}` : ''} ${p.weight ? `/ ${p.weight} lbs` : ''}
         </div>
+        ${rankHTML}
       </div>
     </div>
     <div class="modal-section">
@@ -809,6 +871,7 @@ function showPlayerModal(playerId) {
       ${skillBarsHTML || '<div style="color:#666;font-size:12px">No skill data available</div>'}
     </div>
     ${statsHTML}
+    ${careerHTML}
     ${yoyHTML}
   `;
   document.getElementById('player-modal').classList.add('open');
@@ -825,7 +888,7 @@ function handleModalClick(e) {
 // ── Helpers ────────────────────────────────────────────────────────────────
 function buildRatingMap() {
   const rMap = {};
-  getRatings().forEach(r => rMap[r.playerId] = r);
+  getRatings().forEach(r => rMap[String(r.playerId)] = r);
   return rMap;
 }
 

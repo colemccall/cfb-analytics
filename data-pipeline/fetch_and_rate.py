@@ -447,8 +447,8 @@ def compute_team_ratings(team_id, team_name_lower, players_private, ratings_list
     raw_run_def  = perf_to_rating(perf.get("runDef",  0.3))
 
     # ── Three-way blend ───────────────────────────────────────────────────
-    PLAYER = 0.40
-    SP_W   = 0.35   # SP+ is opponent-adjusted — most reliable for cross-conference comparison
+    PLAYER = 0.30
+    SP_W   = 0.45   # SP+ is opponent-adjusted — most reliable for cross-conference comparison
     RAW    = 0.25   # Raw stats provide within-conference directional signal
 
     pass_off = int(round(p_pass_off * PLAYER + sp_off_rating * SP_W + raw_pass_off * RAW))
