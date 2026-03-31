@@ -8,7 +8,7 @@ import sys
 from api_client import (
     load_api_key, fetch_teams, fetch_all_rosters, fetch_player_stats,
     fetch_ppa, fetch_team_stats, fetch_sp_ratings, fetch_talent, fetch_recruiting,
-    fetch_player_usage,
+    fetch_player_usage, fetch_awards,
 )
 from rating_engine import get_position_group, compute_raw_ratings, normalize_all_ratings, compute_overall, SKILL_ATTRS
 
@@ -139,6 +139,46 @@ def build_usage_lookup(usage_raw):
             "pass": float(usage.get("pass") or 0),
             "rush": float(usage.get("rush") or 0),
         }
+    return lookup
+
+
+def build_awards_lookup(awards_raw):
+    """Map (name_lower, team_lower) -> award tier.
+    Tier 3 = All-American / major lineman award (Outland, Rimington, Lombardi)
+    Tier 2 = 1st-team All-Conference
+    Tier 1 = 2nd-team / Honorable Mention All-Conference
+    """
+    lookup = {}
+    for entry in awards_raw:
+        name = (entry.get("player") or entry.get("name") or "").lower().strip()
+        team = (entry.get("team") or "").lower().strip()
+        award = (entry.get("award") or entry.get("category") or "").lower()
+        if not name or not award:
+            continue
+        if any(x in award for x in ["all-american", "outland", "rimington", "lombardi", "bednarik"]):
+            tier = 3
+        elif "all-" in award and any(x in award for x in ["first", "1st"]):
+            tier = 2
+        elif "all-" in award and any(x in award for x in ["second", "2nd", "honorable"]):
+            tier = 1
+        else:
+            continue
+        key = (name, team)
+        if key not in lookup or lookup[key] < tier:
+            lookup[key] = tier
+    return lookup
+
+
+def build_draft_lookup(draft_data, college_year):
+    """Map name_lower -> round for OL drafted after the given college year."""
+    nfl_year = college_year + 1
+    lookup = {}
+    for entry in draft_data:
+        if entry.get("nfl_year") != nfl_year or entry.get("_comment"):
+            continue
+        name = (entry.get("name") or "").lower().strip()
+        if name:
+            lookup[name] = entry.get("round", 7)
     return lookup
 
 
@@ -440,21 +480,31 @@ def normalize_team_ratings(teams_private):
     fields = ["overall", "passOff", "runOff", "passDef", "runDef", "specialTeams"]
 
     def curve(rank):
-        """rank = 0.0 (worst) to 1.0 (best)."""
+        """rank = 0.0 (worst) to 1.0 (best).
+
+        Target (~133 FBS teams):
+          Top ~5 teams  (rank > 0.962) → 91-94
+          Next ~10 teams (0.887-0.962) → 87-91
+          Bowl-caliber  (0.75-0.887)   → 85-87
+          Middle        (0.50-0.75)    → 79-85
+          Below avg     (0.25-0.50)    → 75-79
+          Bottom        (0.00-0.05)    → 58-64
+          97-99: reserved for teams with SP+ top-5 offense AND defense (separate boost)
+        """
         if rank <= 0.05:
-            return 58 + rank / 0.05 * 6          # 58-64
+            return 58 + rank / 0.05 * 6             # 58-64
         elif rank <= 0.25:
-            return 64 + (rank - 0.05) / 0.20 * 11  # 64-75 (median ~75 at rank 0.5)
+            return 64 + (rank - 0.05) / 0.20 * 11   # 64-75
         elif rank <= 0.50:
-            return 75 + (rank - 0.25) / 0.25 * 5   # 75-80  (hmm let me rethink)
+            return 75 + (rank - 0.25) / 0.25 * 4    # 75-79
         elif rank <= 0.75:
-            return 80 + (rank - 0.50) / 0.25 * 7   # 80-87
-        elif rank <= 0.90:
-            return 87 + (rank - 0.75) / 0.15 * 6   # 87-93
-        elif rank <= 0.99:
-            return 93 + (rank - 0.90) / 0.09 * 5   # 93-98
+            return 79 + (rank - 0.50) / 0.25 * 6    # 79-85
+        elif rank <= 0.887:
+            return 85 + (rank - 0.75) / 0.137 * 2   # 85-87 (top ~15 teams)
+        elif rank <= 0.962:
+            return 87 + (rank - 0.887) / 0.075 * 4  # 87-91 (top ~5-15 teams)
         else:
-            return 98
+            return 91 + (rank - 0.962) / 0.038 * 3  # 91-94 (top ~5 teams)
 
     for field in fields:
         vals = [(i, t["ratings"].get(field, 70)) for i, t in enumerate(teams_private)]
@@ -467,7 +517,7 @@ def normalize_team_ratings(teams_private):
     return teams_private
 
 
-def process_year(api_key, year, team_name_map):
+def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids=None):
     """Process a single year and return all data dicts."""
     print(f"\n{'='*60}")
     print(f"  PROCESSING YEAR {year}")
@@ -495,6 +545,15 @@ def process_year(api_key, year, team_name_map):
     usage_lookup = build_usage_lookup(usage_raw)
     print(f"  {len(usage_lookup)} usage entries")
 
+    print(f"\n[3c] Fetching player awards...")
+    _time.sleep(0.5)
+    awards_raw = fetch_awards(api_key, year)
+    awards_lookup = build_awards_lookup(awards_raw)
+    print(f"  {len(awards_lookup)} award entries")
+
+    draft_lookup = build_draft_lookup(draft_data or [], year)
+    print(f"  {len(draft_lookup)} OL draft picks mapped for {year+1} NFL Draft")
+
     print(f"\n[4/7] Fetching PPA data...")
     _time.sleep(1)
     ppa_raw = fetch_ppa(api_key, year)
@@ -519,6 +578,7 @@ def process_year(api_key, year, team_name_map):
     teams_private = []
     players_private = []
     raw_ratings_all = {}
+    ol_boost_signals = {}  # pid -> {draft_round, award_tier, returning}
 
     for team in teams_raw:
         school = team["school"]
@@ -559,6 +619,18 @@ def process_year(api_key, year, team_name_map):
             raw = compute_raw_ratings(pid, pos_group, p_stats, ppa_val, t_stats, tq, stars, usage)
             raw_ratings_all[pid] = {"pos": pos_group, "raw": raw, "stats": capture_display_stats(pos_group, p_stats)}
 
+            # Collect OL boost signals: draft, awards, cross-year continuity
+            if pos_group == "OL":
+                draft_round = draft_lookup.get(full_lower, 0)
+                award_tier = awards_lookup.get((full_lower, school.lower()), 0)
+                returning = bool(prior_player_ids and pid in prior_player_ids)
+                if draft_round or award_tier or returning:
+                    ol_boost_signals[pid] = {
+                        "draft_round": draft_round,
+                        "award_tier": award_tier,
+                        "returning": returning,
+                    }
+
             players_private.append({
                 "id": pid,
                 "teamId": team_id,
@@ -574,6 +646,36 @@ def process_year(api_key, year, team_name_map):
 
     print("Normalizing ratings...")
     normalized = normalize_all_ratings(raw_ratings_all)
+
+    # ── OL boost: apply floor ratings driven by draft status, awards, and continuity ──
+    # These three signals are the best proxies we have for OL quality with no individual stats.
+    # Applied as floors (never lower a player's rating, only raise it).
+    OL_DRAFT_FLOORS = {1: 88, 2: 82, 3: 77, 4: 73, 5: 71, 6: 69, 7: 67}
+    OL_AWARD_FLOORS = {3: 85, 2: 78, 1: 73}   # All-American=3, 1st-conf=2, 2nd/HM=1
+    OL_RETURNING_FLOOR = 68                    # Any multi-year returner
+
+    boosted_count = 0
+    for pid, signals in ol_boost_signals.items():
+        attrs = normalized.get(pid)
+        if not attrs:
+            continue
+        floor = 0
+        if signals["draft_round"]:
+            floor = max(floor, OL_DRAFT_FLOORS.get(signals["draft_round"], 67))
+        if signals["award_tier"]:
+            floor = max(floor, OL_AWARD_FLOORS.get(signals["award_tier"], 73))
+        if signals["returning"]:
+            floor = max(floor, OL_RETURNING_FLOOR)
+        if floor > 0:
+            changed = False
+            for skill in ("runBlock", "passBlock"):
+                if skill in attrs and attrs[skill] < floor:
+                    attrs[skill] = floor
+                    changed = True
+            if changed:
+                boosted_count += 1
+    if boosted_count:
+        print(f"  OL boosts applied to {boosted_count} player(s) (draft/awards/continuity)")
 
     ratings = []
     for p in players_private:
@@ -665,8 +767,25 @@ def main():
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
+    # Load NFL draft data once — used across all years
+    draft_path = os.path.join(script_dir, "nfl_draft.json")
+    try:
+        with open(draft_path) as f:
+            draft_data = [e for e in json.load(f) if not str(e.get("nfl_year", "")).startswith("_")]
+        print(f"  Loaded {len(draft_data)} NFL draft entries from nfl_draft.json")
+    except FileNotFoundError:
+        draft_data = []
+
     for year in years_to_run:
-        data = process_year(api_key, year, team_name_map)
+        # Cross-year continuity: load prior year's player IDs if available
+        prior_player_ids = set()
+        prior_year_dir = os.path.join(OUTPUT_DIR, str(year - 1), "players_private.json")
+        if os.path.exists(prior_year_dir):
+            with open(prior_year_dir) as f:
+                prior_player_ids = {p["id"] for p in json.load(f)}
+            print(f"  Loaded {len(prior_player_ids)} player IDs from {year-1} for continuity check")
+
+        data = process_year(api_key, year, team_name_map, draft_data=draft_data, prior_player_ids=prior_player_ids)
         print(f"\nWriting to {os.path.abspath(OUTPUT_DIR)}/")
         write_year(year, data, OUTPUT_DIR)
 

@@ -255,9 +255,11 @@ const DEPTH_POSITIONS = [
   { group:'WR', label:'Wide Receivers', slots:5 },
   { group:'TE', label:'Tight Ends',     slots:3 },
   { group:'OL', label:'Offensive Line', slots:7 },
-  { group:'DL', label:'Def. Line',      slots:5 },
+  { group:'DL', label:'Edge Rushers',   slots:4, positions:['DE','EDGE'] },
+  { group:'DL', label:'Interior DL',    slots:3, positions:['DT','NT'] },
   { group:'LB', label:'Linebackers',    slots:5 },
-  { group:'DB', label:'Def. Backs',     slots:6 },
+  { group:'DB', label:'Cornerbacks',    slots:4, positions:['CB'] },
+  { group:'DB', label:'Safeties',       slots:3, positions:['S','FS','SS'] },
   { group:'K',  label:'Kickers',        slots:2 },
   { group:'P',  label:'Punters',        slots:2 },
 ];
@@ -460,9 +462,9 @@ function renderDepth(t) {
   const ps = getPlayers().filter(p => p.teamId === t.id);
   const rMap = buildRatingMap();
 
-  const sections = DEPTH_POSITIONS.map(({ group, label, slots }) => {
+  const sections = DEPTH_POSITIONS.map(({ group, label, slots, positions }) => {
     const groupPlayers = ps
-      .filter(p => p.positionGroup === group)
+      .filter(p => p.positionGroup === group && (!positions || positions.includes(p.position)))
       .map(p => ({ p, r: rMap[p.id] || {} }))
       .sort((a, b) => (b.r.overall || 0) - (a.r.overall || 0))
       .slice(0, slots);

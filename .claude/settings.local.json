@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \":*)",
+      "Bash(python fetch_and_rate.py 2024)",
+      "Bash(python fetch_and_rate.py 2022)",
+      "Bash(python fetch_and_rate.py 2025)",
+      "Bash(python -c \"from fetch_and_rate import build_usage_lookup; from rating_engine import compute_raw_ratings; print\\(''imports OK''\\)\")",
+      "Bash(python fetch_and_rate.py 2022 2023 2024)",
+      "Bash(python fetch_and_rate.py 2022 2023 2024 2025)",
+      "Bash(python fetch_and_rate.py)"
+    ]
+  }
+}

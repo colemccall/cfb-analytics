@@ -40,7 +40,7 @@ POSITION_OVERALL_WEIGHTS = {
     "OL":  {"runBlock": 0.50, "passBlock": 0.50},
     "DL":  {"passRush": 0.55, "runStop": 0.45},
     "LB":  {"runStop": 0.40, "coverage": 0.38, "passRush": 0.22},
-    "DB":  {"coverage": 0.55, "ballHawking": 0.28, "tackling": 0.17},
+    "DB":  {"coverage": 0.48, "ballHawking": 0.22, "tackling": 0.30},
     "K":   {"power": 0.55, "accuracy": 0.45},
     "P":   {"distance": 0.50, "placement": 0.50},
     "LS":  {"runBlock": 0.50, "passBlock": 0.50},
@@ -201,7 +201,8 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
             # DB: coverage primary, ball hawking (turnovers), tackling
             # INTs are the definitive coverage play — weight 4x vs PDs which are more common
             raw["coverage"] = (ints * 4.0 + pds * 1.0 + ppa_val * 2.5) * combined_mult
-            raw["tackling"] = (tackles * 0.10 + tfl * 1.0) * combined_mult
+            # tackling includes sacks — a DB with several sacks is an elite blitzer/run-stopper
+            raw["tackling"] = (tackles * 0.10 + tfl * 1.0 + sacks * 2.5) * combined_mult
             # ballHawking = ability to create turnovers; INTs are 8x more valuable than PDs
             raw["ballHawking"] = (ints * 8.0 + pds * 1.0 + ff * 2.0) * combined_mult
 
@@ -250,16 +251,24 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
         stars_signal = max(0.0, (recruit_stars - 2) * 0.5)
         jitter_mag = 2  # smaller jitter since stars provide the main spread
 
+        # Usage multiplier for no-stat linemen: separates starters (high usage) from backups.
+        # A starter at ~65% usage gets ~1.0x; a backup at 20% gets ~0.35x; 0 usage → 0.5x.
+        ol_usage_mult = 0.5  # default when no usage data (unknown)
+        if player_usage:
+            overall_usage = float(player_usage.get("overall") or 0)
+            if overall_usage > 0:
+                ol_usage_mult = max(0.30, min(1.20, overall_usage / 0.65))
+
         if pos_group == "OL":
-            # runBlock: team rushing quality + recruiting signal + jitter
-            run_base = team_rush * 0.0012 * tq_mult + stars_signal
+            # runBlock: team rushing quality + usage (starter vs backup) + star signal + jitter
+            run_base = team_rush * 0.0012 * tq_mult * ol_usage_mult + stars_signal
             raw["runBlock"] = run_base + _hash_jitter(player_id, "runBlock", jitter_mag)
-            # passBlock: sacks-allowed quality + recruiting signal + jitter
-            pass_base = max(0, 5 - team_sacks_allowed * 0.035) * tq_mult + stars_signal
+            # passBlock: sacks-allowed quality + usage + star signal + jitter
+            pass_base = max(0, 5 - team_sacks_allowed * 0.035) * tq_mult * ol_usage_mult + stars_signal
             raw["passBlock"] = pass_base + _hash_jitter(player_id, "passBlock", jitter_mag)
 
         elif pos_group == "DL":
-            base = (team_sacks * 0.08 + 2) * tq_mult + stars_signal
+            base = (team_sacks * 0.08 + 2) * tq_mult * ol_usage_mult + stars_signal
             raw["passRush"] = base + _hash_jitter(player_id, "passRush", jitter_mag)
             raw["runStop"] = base * 0.9 + _hash_jitter(player_id, "runStop", jitter_mag)
 
@@ -303,23 +312,24 @@ def normalize_all_ratings(raw_by_player):
                 equal = sum(1 for x in vals if x == v)
                 rank = (below + 0.5 * equal) / n
 
-                # Curve: median (0.5) → 70, top 10% → 88+ (impact), top 3% → 95+ (dynasty)
+                # Curve: median (0.5) → 65, top 10% → 84+, top 3% → 91+, elite → 95-99
+                # Compressed vs before to prevent 85-90 inflation for ordinary starters
                 if rank <= 0.05:
-                    rating = 40 + (rank / 0.05) * 10
+                    rating = 38 + (rank / 0.05) * 9
                 elif rank <= 0.20:
-                    rating = 50 + ((rank - 0.05) / 0.15) * 10
+                    rating = 47 + ((rank - 0.05) / 0.15) * 10
                 elif rank <= 0.50:
-                    rating = 60 + ((rank - 0.20) / 0.30) * 10
+                    rating = 57 + ((rank - 0.20) / 0.30) * 11
                 elif rank <= 0.75:
-                    rating = 70 + ((rank - 0.50) / 0.25) * 10
+                    rating = 68 + ((rank - 0.50) / 0.25) * 9
                 elif rank <= 0.90:
-                    rating = 80 + ((rank - 0.75) / 0.15) * 8
+                    rating = 77 + ((rank - 0.75) / 0.15) * 7
                 elif rank <= 0.97:
-                    rating = 88 + ((rank - 0.90) / 0.07) * 7
+                    rating = 84 + ((rank - 0.90) / 0.07) * 7
                 elif rank <= 0.995:
-                    rating = 95 + ((rank - 0.97) / 0.025) * 3
+                    rating = 91 + ((rank - 0.97) / 0.025) * 4
                 else:
-                    rating = 98 + ((rank - 0.995) / 0.005) * 1
+                    rating = 95 + ((rank - 0.995) / 0.005) * 4
 
                 rating = max(40, min(99, int(round(rating))))
                 if pid not in normalized:

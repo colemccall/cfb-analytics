@@ -106,3 +106,12 @@ def fetch_recruiting(api_key, year):
 
 def fetch_player_usage(api_key, year):
     return _get(api_key, "/player/usage", {"year": year, "seasonType": "regular"})
+
+
+def fetch_awards(api_key, year):
+    """Fetch player awards/honors. Returns [] if endpoint unavailable."""
+    try:
+        result = _get(api_key, "/awards", {"year": year})
+        return result if isinstance(result, list) else []
+    except Exception:
+        return []
