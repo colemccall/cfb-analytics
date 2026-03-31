@@ -150,6 +150,32 @@
   .yoy-table tr.current-year td { background: #0f346055; }
 
   #loading { text-align: center; padding: 60px; font-size: 14px; color: #666; }
+
+  /* ── Explainability tab ── */
+  .explain-section { margin-bottom: 32px; }
+  .explain-section h2 { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 4px; padding-bottom: 8px; border-bottom: 2px solid #e94560; display: inline-block; }
+  .explain-section p, .explain-section li { font-size: 13px; color: #bbb; line-height: 1.65; margin-bottom: 6px; }
+  .explain-section ul { padding-left: 18px; margin-top: 6px; }
+  .explain-section li { margin-bottom: 3px; }
+  .explain-section strong { color: #e0e0e0; }
+  .explain-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-top: 12px; }
+  .explain-pos-card { background: #16213e; border-radius: 8px; padding: 14px 16px; border-left: 3px solid #0f3460; }
+  .explain-pos-card h3 { font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+  .explain-pos-card .skill-entry { display: flex; align-items: baseline; gap: 6px; margin-bottom: 4px; font-size: 12px; }
+  .explain-pos-card .skill-name { color: #a78bfa; font-weight: 700; min-width: 110px; }
+  .explain-pos-card .skill-desc { color: #999; font-size: 11px; }
+  .explain-pos-card .weight-badge { font-size: 10px; background: #0f3460; padding: 1px 5px; border-radius: 3px; color: #aaa; margin-left: auto; flex-shrink: 0; }
+  .explain-pipeline { display: flex; align-items: center; gap: 0; flex-wrap: wrap; margin: 12px 0; }
+  .explain-step { background: #16213e; border: 1px solid #0f3460; border-radius: 6px; padding: 10px 14px; font-size: 12px; min-width: 120px; text-align: center; }
+  .explain-step .step-num { font-size: 10px; color: #e94560; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
+  .explain-step .step-name { font-weight: 700; color: #fff; font-size: 13px; }
+  .explain-step .step-desc { color: #888; font-size: 10px; margin-top: 3px; }
+  .explain-arrow { color: #0f3460; font-size: 18px; padding: 0 6px; }
+  .explain-blend-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 12px; }
+  .explain-blend-label { color: #888; width: 180px; }
+  .explain-blend-bar { flex: 1; background: #0f3460; border-radius: 3px; height: 14px; overflow: hidden; display: flex; }
+  .explain-blend-seg { height: 100%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: #000; }
+  .explain-note { background: #16213e; border-left: 3px solid #ffd700; padding: 10px 14px; border-radius: 0 6px 6px 0; font-size: 12px; color: #bbb; margin: 10px 0; }
 </style>
 </head>
 <body>
@@ -173,6 +199,7 @@
     <div class="tab-btn"         onclick="switchTab('top-players')">Top Players</div>
     <div class="tab-btn"         onclick="switchTab('conferences')">Conferences</div>
     <div class="tab-btn"         onclick="switchTab('compare')">Compare</div>
+    <div class="tab-btn"         onclick="switchTab('explain')">How It Works</div>
   </div>
   <div class="tab-content" id="tab-content">
     <div id="loading">Loading data...</div>
@@ -368,7 +395,7 @@ function selectTeam(id, switchToRoster = true) {
 
 function switchTab(tab, render = true) {
   activeTab = tab;
-  const tabs = ['roster','depth','top-players','conferences','compare'];
+  const tabs = ['roster','depth','top-players','conferences','compare','explain'];
   document.querySelectorAll('.tab-btn').forEach((btn, i) => {
     btn.classList.toggle('active', tabs[i] === tab);
   });
@@ -382,6 +409,7 @@ function renderActiveTab() {
   else if (activeTab === 'top-players') renderTopPlayers();
   else if (activeTab === 'conferences') renderConferences();
   else if (activeTab === 'compare') renderCompare();
+  else if (activeTab === 'explain') renderExplain();
 }
 
 // ── Team header HTML (shared by Roster + Depth) ───────────────────────────
@@ -916,6 +944,186 @@ function toggleMode() {
   document.getElementById('mode-btn').textContent = mode === 'private' ? 'Private' : 'Public';
   document.getElementById('mode-btn').classList.toggle('active', mode === 'public');
   onDataReady();
+}
+
+// ── Explainability Tab ─────────────────────────────────────────────────────
+function renderExplain() {
+  const POS_EXPLAIN = [
+    { pos: 'QB', color: '#e94560', skills: [
+      ['Pass Rating', '0.55', 'Pass yards, TDs, completions, INTs'],
+      ['Accuracy',    '0.22', 'Completion quality minus INT penalty + PPA'],
+      ['Deep Ball',   '0.13', 'TD rate + PPA (explosiveness)'],
+      ['Mobility',    '0.10', 'Rushing yards'],
+    ]},
+    { pos: 'RB', color: '#f97316', skills: [
+      ['Rushing',       '0.65', 'Rush yards, TDs, yards per carry'],
+      ['Power Running', '0.22', 'Rush volume + TD bulk'],
+      ['Receiving',     '0.13', 'Receiving yards'],
+    ]},
+    { pos: 'WR', color: '#22c55e', skills: [
+      ['Receiving',     '0.60', 'Rec yards, TDs, receptions'],
+      ['Route Running', '0.25', 'Target efficiency + PPA'],
+      ['YAC',           '0.15', 'TD rate + PPA (big-play after catch)'],
+    ]},
+    { pos: 'TE', color: '#14b8a6', skills: [
+      ['Receiving',     '0.50', 'Rec yards, TDs, receptions'],
+      ['Blocking',      '0.28', 'Team proxy (no individual TE block stats)'],
+      ['Route Running', '0.22', 'Target efficiency + PPA'],
+    ]},
+    { pos: 'OL', color: '#6366f1', skills: [
+      ['Run Block', '0.50', 'Team rush yards × usage × team quality'],
+      ['Pass Block','0.50', 'Sacks allowed (inverted) × usage × team quality'],
+    ]},
+    { pos: 'DL', color: '#8b5cf6', skills: [
+      ['Pass Rush', '0.55', 'Sacks, TFL, QB hurries, forced fumbles'],
+      ['Run Stop',  '0.45', 'Total tackles, TFL'],
+    ]},
+    { pos: 'LB', color: '#ec4899', skills: [
+      ['Run Stop',  '0.40', 'Tackles, TFL'],
+      ['Coverage',  '0.38', 'INTs, PDs, PPA'],
+      ['Pass Rush', '0.22', 'Sacks, QB hurries, forced fumbles'],
+    ]},
+    { pos: 'DB', color: '#06b6d4', skills: [
+      ['Coverage',    '0.48', 'INTs (×4), PDs, PPA'],
+      ['Tackling',    '0.30', 'Tackles, TFL, sacks (×2.5 — blitz credit)'],
+      ['Ball Hawking','0.22', 'INTs (×8), PDs, forced fumbles'],
+    ]},
+    { pos: 'K', color: '#f59e0b', skills: [
+      ['Power',   '0.55', 'Longest FG, FG volume'],
+      ['Accuracy','0.45', 'FG%, XP%, made volume'],
+    ]},
+    { pos: 'P', color: '#84cc16', skills: [
+      ['Distance', '0.50', 'Punt average, longest punt'],
+      ['Placement','0.50', 'Inside-20 rate, punt volume'],
+    ]},
+  ];
+
+  const posCards = POS_EXPLAIN.map(({ pos, color, skills }) => `
+    <div class="explain-pos-card" style="border-left-color:${color}">
+      <h3>${pos}</h3>
+      ${skills.map(([name, w, desc]) => `
+        <div class="skill-entry">
+          <span class="skill-name">${name}</span>
+          <span class="skill-desc">${desc}</span>
+          <span class="weight-badge">${(parseFloat(w)*100).toFixed(0)}%</span>
+        </div>`).join('')}
+    </div>`).join('');
+
+  const pipelineSteps = [
+    ['1', 'API Fetch', 'Rosters, stats, SP+, recruiting, PPA, usage'],
+    ['2', 'Raw Scores', 'Position-specific formulas from real stats'],
+    ['3', 'Team Quality', 'SP+ + talent blend scales raw scores'],
+    ['4', 'Normalize', 'Percentile curve: median ~65, top 3% → 91+'],
+    ['5', 'OL Boosts', 'Draft round, awards, and continuity floors'],
+    ['6', 'Overall', 'Weighted average of skill ratings'],
+    ['7', 'Team Ratings', 'Player ratings + SP+ + raw stats blend'],
+  ];
+
+  const pipeline = pipelineSteps.map(([n, name, desc], i) => `
+    ${i > 0 ? '<span class="explain-arrow">→</span>' : ''}
+    <div class="explain-step">
+      <div class="step-num">Step ${n}</div>
+      <div class="step-name">${name}</div>
+      <div class="step-desc">${desc}</div>
+    </div>`).join('');
+
+  document.getElementById('tab-content').innerHTML = `
+    <div style="max-width:900px">
+
+    <div class="explain-section">
+      <h2>How Ratings Work</h2>
+      <p>Every rating is derived from <strong>real CFB Data API stats</strong> — no guessing, no manual overrides. The pipeline runs in Python, fetches data for each season, computes raw scores from stats, normalizes them into a 40–99 scale, and outputs JSON that powers this viewer.</p>
+      <div class="explain-pipeline">${pipeline}</div>
+    </div>
+
+    <div class="explain-section">
+      <h2>Normalization Curve</h2>
+      <p>Raw scores are converted to ratings using a <strong>percentile curve</strong> applied within each position group. This means a 99 OVR QB is the best QB in the dataset that year — not an absolute score.</p>
+      <ul>
+        <li><strong>Bottom 5%</strong> → 38–47 (walk-ons, pure backups)</li>
+        <li><strong>20th–50th percentile</strong> → 57–68 (depth players)</li>
+        <li><strong>Median (50th)</strong> → ~65 (average starter)</li>
+        <li><strong>75th–90th percentile</strong> → 68–84 (quality starters)</li>
+        <li><strong>Top 10%</strong> → 84–91 (conference standouts)</li>
+        <li><strong>Top 3%</strong> → 91–95 (All-Conference caliber)</li>
+        <li><strong>Top 0.5%</strong> → 95–99 (Heisman / All-American tier)</li>
+      </ul>
+      <div class="explain-note">Normalization is applied <em>within each position group</em>, so OL ratings compare OL to OL — a 75 OVR OL means top-quartile among all FBS offensive linemen that year.</div>
+    </div>
+
+    <div class="explain-section">
+      <h2>Team Quality Scaling</h2>
+      <p>Raw stat scores are multiplied by a <strong>team quality factor</strong> (0.50–1.0) derived from SP+ rating and recruiting talent composite. This prevents G5 players from being over-rated simply because they have big numbers against weak competition.</p>
+      <div class="explain-blend-row">
+        <span class="explain-blend-label">Team quality blend</span>
+        <div class="explain-blend-bar">
+          <div class="explain-blend-seg" style="width:60%;background:#6366f1">SP+ 60%</div>
+          <div class="explain-blend-seg" style="width:40%;background:#8b5cf6">Talent 40%</div>
+        </div>
+      </div>
+      <p style="margin-top:8px">Elite P4 team → 1.0× multiplier &nbsp;|&nbsp; Average G5 team → ~0.70× &nbsp;|&nbsp; Weakest programs → 0.50×</p>
+    </div>
+
+    <div class="explain-section">
+      <h2>Offensive Line Special Case</h2>
+      <p>The CFB Data API has <strong>no individual OL stats</strong>. Ratings are built from a team proxy + three external signals applied as post-normalization <em>floors</em> (a floor only raises ratings, never lowers them):</p>
+      <ul>
+        <li><strong>Team proxy:</strong> rushing yards + sacks allowed, scaled by team quality × snap usage rate</li>
+        <li><strong>NFL Draft round:</strong> Round 1 → floor 88 | Round 2 → 82 | Round 3 → 77 | Rounds 4–6 → 69–73</li>
+        <li><strong>Award tiers:</strong> All-American / Outland / Rimington → floor 85 | 1st-team All-Conf → 78 | 2nd-team → 73</li>
+        <li><strong>Cross-year continuity:</strong> Any returning player from prior season → floor 68 (prevents good starters from vanishing)</li>
+      </ul>
+    </div>
+
+    <div class="explain-section">
+      <h2>Team Ratings</h2>
+      <p>Team overalls are a three-way blend, then run through a second percentile curve targeting the distribution below:</p>
+      <div class="explain-blend-row">
+        <span class="explain-blend-label">passOff / runOff / passDef / runDef</span>
+        <div class="explain-blend-bar">
+          <div class="explain-blend-seg" style="width:30%;background:#4fc3f7">Player Ratings 30%</div>
+          <div class="explain-blend-seg" style="width:45%;background:#6366f1">SP+ (opp-adj) 45%</div>
+          <div class="explain-blend-seg" style="width:25%;background:#8b5cf6">Raw Stats 25%</div>
+        </div>
+      </div>
+      <ul style="margin-top:10px">
+        <li><strong>Top 1–2 teams</strong> → 91–94 (national title contenders)</li>
+        <li><strong>Top 5–15 teams</strong> → 87–91 (playoff-caliber)</li>
+        <li><strong>Bowl-caliber</strong> → 85–87</li>
+        <li><strong>Median</strong> → 74–79</li>
+        <li><strong>Bottom teams</strong> → 58–64</li>
+      </ul>
+      <div class="explain-note">SP+ is the dominant component because it's <strong>opponent-adjusted</strong> — a G5 team with great raw stats against weak opponents will be correctly penalized once SP+ is factored in.</div>
+    </div>
+
+    <div class="explain-section">
+      <h2>Ratings by Position</h2>
+      <p>Each position group uses only the skills that its stats actually measure. Weights show how much each skill contributes to overall rating.</p>
+      <div class="explain-grid">${posCards}</div>
+    </div>
+
+    <div class="explain-section">
+      <h2>Data Sources</h2>
+      <ul>
+        <li><strong>collegefootballdata.com API</strong> — rosters, player stats, team stats, SP+ ratings, recruiting rankings, PPA (predicted points added), player usage rates</li>
+        <li><strong>nfl_draft.json</strong> — manually maintained NFL Draft OL picks (2023–2025 drafts) used as OL quality signal</li>
+        <li><strong>team_name_map.json</strong> — mapping real school names to fictional public names for the public-mode view</li>
+      </ul>
+      <div class="explain-note"><strong>Private mode</strong> shows real team and player names from the API. <strong>Public mode</strong> replaces them with fictional names — use this for gameplay to avoid IP issues.</div>
+    </div>
+
+    <div class="explain-section">
+      <h2>Known Limitations</h2>
+      <ul>
+        <li>OL ratings are team-level proxies — two starting OL on the same team will have nearly identical ratings (differentiated only by recruiting stars, usage, and jitter)</li>
+        <li>The <code>/awards</code> API endpoint currently returns empty data — award-tier boosts are wired up but inactive until the API improves</li>
+        <li>Small sample sizes (1–2 game players) can inflate ratings — a minimum games-played filter is planned</li>
+        <li>Transfer portal context is not modeled — a player who transferred up from a G5 to a P4 may be under/over-rated in their first season</li>
+        <li>All ratings are relative to the <em>current dataset years</em> (${years.join(', ')}) — a 99 OVR in 2022 and 2024 are not directly comparable across years</li>
+      </ul>
+    </div>
+
+    </div>`;
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
