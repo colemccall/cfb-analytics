@@ -9,8 +9,9 @@ from api_client import (
     load_api_key, fetch_teams, fetch_all_rosters, fetch_player_stats,
     fetch_ppa, fetch_team_stats, fetch_sp_ratings, fetch_talent, fetch_recruiting,
     fetch_player_usage, fetch_awards, fetch_games,
-    fetch_all_game_player_stats, fetch_all_drives, fetch_all_plays,
+    fetch_all_game_player_stats, fetch_drives_for_year, fetch_plays_for_year,
 )
+from collections import defaultdict
 from rating_engine import get_position_group, compute_raw_ratings, normalize_all_ratings, compute_overall, SKILL_ATTRS
 
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "app", "assets", "data")
@@ -239,6 +240,8 @@ def build_sp_detail(sp_ratings):
 
     def norm_field(field):
         vals = [v[field] for v in data.values()]
+        if not vals:
+            return {}
         mn, mx = min(vals), max(vals)
         r = mx - mn if mx > mn else 1
         return {team: (data[team][field] - mn) / r for team in data}
@@ -853,15 +856,19 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
     game_stats_raw = fetch_all_game_player_stats(api_key, team_names, year)
     print(f"  {len(game_stats_raw)} unique games with player stats fetched")
 
-    print(f"\n[6c] Fetching drives and plays per team (weeks 1-16)...")
+    print(f"\n[6c] Fetching drives and plays by week (weeks 1-16)...")
     _time2.sleep(1)
-    drives_by_team = fetch_all_drives(api_key, team_names, year)
-    total_drives = sum(len(v) for v in drives_by_team.values())
-    print(f"  {total_drives} total drives fetched")
+    drives_flat = fetch_drives_for_year(api_key, year)
+    drives_by_team = defaultdict(list)
+    for d in drives_flat:
+        drives_by_team[d.get("offense", "")].append(d)
+    print(f"  {len(drives_flat)} total drives fetched")
     _time2.sleep(1)
-    plays_by_team = fetch_all_plays(api_key, team_names, year)
-    total_plays = sum(len(v) for v in plays_by_team.values())
-    print(f"  {total_plays} total plays fetched")
+    plays_flat = fetch_plays_for_year(api_key, year)
+    plays_by_team = defaultdict(list)
+    for p in plays_flat:
+        plays_by_team[p.get("offense", "")].append(p)
+    print(f"  {len(plays_flat)} total plays fetched")
 
     print(f"\n[7/7] Processing ratings...")
     teams_private = []
@@ -1179,6 +1186,10 @@ def build_projected_year(api_key, proj_year, base_year, output_dir, team_name_ma
 
     print(f"  Fetching {proj_year} rosters...")
     rosters = fetch_all_rosters(api_key, team_names, proj_year)
+    total_players = sum(len(v) for v in rosters.values())
+    if total_players == 0:
+        print(f"  No {proj_year} roster data found — falling back to {base_year} rosters")
+        rosters = fetch_all_rosters(api_key, team_names, base_year)
 
     base_dir = os.path.join(output_dir, str(base_year))
     with open(os.path.join(base_dir, "ratings.json")) as f:
