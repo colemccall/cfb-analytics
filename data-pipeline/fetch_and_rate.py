@@ -1337,7 +1337,7 @@ def build_projected_year(api_key, proj_year, base_year, output_dir, team_name_ma
             prev = base_ratings[pid]
             prev_school = prev_team_map.get(pid)
             is_transfer = prev_school is not None and prev_school != school
-            new_ovr = prev.get("trajectory") or min(99, prev.get("overall", 55) + 1)
+            new_ovr = prev.get("overall", 55)  # straight copy — no trajectory projection
             r_entry = {k: v for k, v in prev.items() if k not in ("playerId", "overall", "trajectory", "stats")}
             if is_transfer or status == "transfer_in":
                 proj_type = "transfer"
@@ -1403,10 +1403,8 @@ def build_projected_year(api_key, proj_year, base_year, output_dir, team_name_ma
             in_portal_out = (fn, ln, school_norm) in portal_out
 
             if in_portal_out:
-                # Player is in the transfer portal leaving this school — keep on
-                # roster but flag them; do NOT advance their year
-                status = "transferred_out"
-                _add_player(pid, team_id, school, player, status, prev_year=None)
+                # Player transferred out — remove from this roster entirely
+                continue
             else:
                 # Advance year by 1
                 advanced_year = min((prev_year or 1) + 1, 6)
@@ -1508,7 +1506,22 @@ def main():
     except FileNotFoundError:
         draft_data = []
 
+    PROJECTED_YEARS = {2026}  # years handled by build_projected_year, not process_year
+
     for year in years_to_run:
+        if year in PROJECTED_YEARS:
+            # Projected years use portal/recruiting data, not live API stats
+            base_year = year - 1
+            if os.path.exists(os.path.join(OUTPUT_DIR, str(base_year), "players_private.json")):
+                print(f"\nBuilding {year} projected roster (base: {base_year})...")
+                try:
+                    build_projected_year(api_key, year, base_year, OUTPUT_DIR, team_name_map)
+                except Exception as e:
+                    print(f"  WARNING: {year} projection failed: {e}")
+            else:
+                print(f"  Skipping {year} projection — {base_year} data not found")
+            continue
+
         # Cross-year continuity: load prior year's player IDs and team mapping
         prior_player_ids = set()
         prior_player_teams = {}  # pid -> school name (to detect transfers)
@@ -1532,9 +1545,9 @@ def main():
         print(f"\nWriting to {os.path.abspath(OUTPUT_DIR)}/")
         write_year(year, data, OUTPUT_DIR)
 
-    # Build 2026 projected roster (if 2025 data is available and 2026 was not explicitly requested)
-    if 2025 in years_to_run or os.path.exists(os.path.join(OUTPUT_DIR, "2025", "players_private.json")):
-        if 2026 not in years_to_run:
+    # Build 2026 projected roster automatically after any regular-year run (if not already run)
+    if any(y not in PROJECTED_YEARS for y in years_to_run):
+        if 2026 not in years_to_run and os.path.exists(os.path.join(OUTPUT_DIR, "2025", "players_private.json")):
             print("\nBuilding 2026 projected roster...")
             try:
                 build_projected_year(api_key, 2026, 2025, OUTPUT_DIR, team_name_map)
