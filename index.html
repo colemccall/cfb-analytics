@@ -1369,12 +1369,12 @@ function renderExplain() {
       ['Pass Rating', '0.55', 'Pass yards, TDs, comp %, yards per attempt, INTs'],
       ['Accuracy',    '0.22', 'Completion % + YPA quality minus INT penalty + PPA'],
       ['Deep Ball',   '0.13', 'TD rate + YPA + PPA (explosiveness)'],
-      ['Mobility',    '0.10', 'Rushing yards'],
+      ['Mobility',    '0.10', 'Rushing yards — bonus only; low mobility never penalizes overall'],
     ]},
     { pos: 'RB', color: '#f97316', skills: [
       ['Rushing',       '0.65', 'Rush yards, TDs, yards per carry'],
       ['Power Running', '0.22', 'Rush volume + TD bulk'],
-      ['Receiving',     '0.13', 'Receiving yards'],
+      ['Receiving',     '0.13', 'Receiving yards, TDs, receptions'],
     ]},
     { pos: 'WR', color: '#22c55e', skills: [
       ['Receiving',     '0.60', 'Rec yards, TDs, receptions'],
@@ -1426,13 +1426,15 @@ function renderExplain() {
     </div>`).join('');
 
   const pipelineSteps = [
-    ['1', 'API Fetch', 'Rosters, stats, SP+, recruiting, PPA, usage'],
+    ['1', 'API Fetch', 'Rosters, stats, SP+, recruiting, PPA, usage, game results, game-level player stats'],
     ['2', 'Raw Scores', 'Position-specific formulas from real stats'],
     ['3', 'Team Quality', 'SP+ + talent blend scales raw scores'],
     ['4', 'Normalize', 'Percentile curve: median ~65, top 3% → 91+'],
     ['5', 'OL Boosts', 'Draft round, awards, and continuity floors'],
-    ['6', 'Overall', 'Weighted average of skill ratings'],
-    ['7', 'Team Ratings', 'Player ratings + SP+ + raw stats blend'],
+    ['6', 'Overall', 'Weighted average of skill ratings (QB mobility = bonus only)'],
+    ['7', 'Trajectory', 'YoY growth + momentum projected for returning players'],
+    ['8', 'Team Ratings', 'Player ratings + SP+ + raw stats blend'],
+    ['9', 'Game Logs', 'Per-player, per-game stats written to player_gamelog.json'],
   ];
 
   const pipeline = pipelineSteps.map(([n, name, desc], i) => `
@@ -1450,6 +1452,41 @@ function renderExplain() {
       <h2>How Ratings Work</h2>
       <p>Every rating is derived from <strong>real CFB Data API stats</strong> — no guessing, no manual overrides. The pipeline runs in Python, fetches data for each season, computes raw scores from stats, normalizes them into a 40–99 scale, and outputs JSON that powers this viewer.</p>
       <div class="explain-pipeline">${pipeline}</div>
+    </div>
+
+    <div class="explain-section">
+      <h2>Player Archetypes</h2>
+      <p>Each player is assigned an <strong>archetype label</strong> based on their skill rating profile. Archetypes are purely descriptive — they don't affect ratings — but they quickly communicate a player's style. Examples:</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">
+        ${['Dual Threat','Pocket Passer','Big Arm','Scrambler','Game Manager',
+           'Power Back','Speed Back','Receiving Back','All-Purpose Back',
+           'No. 1 Receiver','Route Runner','YAC Monster','Slot Receiver',
+           'Complete TE','Pass Catcher','Blocking TE',
+           'Pass Rusher','Run Stuffer','Ball Hawk','Hit Man','Shutdown Corner',
+           'Edge Rusher','Coverage LB','Run Stopper','Pass Blocker','Run Blocker'].map(a =>
+          `<span class="archetype-badge" style="font-size:11px">${a}</span>`).join('')}
+      </div>
+    </div>
+
+    <div class="explain-section">
+      <h2>Trajectory Rating (Phase 2)</h2>
+      <p>For players appearing in <strong>two or more consecutive seasons</strong>, a projected overall is shown alongside the current rating. It uses year-over-year OVR growth, skill momentum, and a regression dampener that prevents elite players from projecting unrealistically high.</p>
+      <pre style="background:#0f1b2d;padding:12px;border-radius:6px;font-size:12px;color:#a0c4ff;overflow-x:auto">projected = current_ovr + clamp(
+  (yoy_growth × 0.4 + momentum_bonus × 0.3) × dampener,
+  -5, +8
+)
+dampener = max(0.20, 1.0 − (current_ovr − 60) / 100)</pre>
+      <div class="explain-note">Trajectory is a projection, not a guarantee. Players at 90+ OVR have a steep dampener and are unlikely to project above 99.</div>
+    </div>
+
+    <div class="explain-section">
+      <h2>Game Log &amp; Schedule Data (Phase 2)</h2>
+      <p>The pipeline now fetches <strong>game-by-game player stats</strong> and <strong>team schedules</strong> from the API. This powers two new features:</p>
+      <ul>
+        <li><strong>Schedule tab:</strong> Every team's regular-season games with results, margin, and opponent SP+ rank. Click any row to expand a box score showing top performers for both teams.</li>
+        <li><strong>Game Log tab:</strong> Inside each player's modal, week-by-week stats with top performances highlighted in green (top 75% of their personal-best for that stat).</li>
+      </ul>
+      <div class="explain-note">Game log data is loaded lazily — it is not fetched on page load. It is only requested when you open the Schedule tab or the Game Log tab in a player modal.</div>
     </div>
 
     <div class="explain-section">
@@ -1481,14 +1518,20 @@ function renderExplain() {
     </div>
 
     <div class="explain-section">
-      <h2>Offensive Line Special Case</h2>
-      <p>The CFB Data API has <strong>no individual OL stats</strong>. Ratings are built from a team proxy + three external signals applied as post-normalization <em>floors</em> (a floor only raises ratings, never lowers them):</p>
+      <h2>Offensive Line — Special Case ⚠️ Known Limitations</h2>
+      <p>The CFB Data API has <strong>no individual OL blocking stats</strong>. This is the biggest unsolved problem in the rating system. OL ratings are currently built from a team proxy + external signals, which means teammates on the same OL will have similar ratings regardless of individual performance.</p>
+      <p>Current approach — ratings come from a <strong>team proxy</strong> + three external floors (a floor only raises, never lowers):</p>
       <ul>
         <li><strong>Team proxy:</strong> rushing yards + sacks allowed, scaled by team quality × snap usage rate</li>
         <li><strong>NFL Draft round:</strong> Round 1 → floor 88 | Round 2 → 82 | Round 3 → 77 | Rounds 4–6 → 69–73</li>
         <li><strong>Award tiers:</strong> All-American / Outland / Rimington → floor 85 | 1st-team All-Conf → 78 | 2nd-team → 73</li>
-        <li><strong>Cross-year continuity:</strong> Any returning player from prior season → floor 68 (prevents good starters from vanishing)</li>
+        <li><strong>Cross-year continuity:</strong> Returning same-team player → floor 68 (prevents proven starters from rating lower than freshmen)</li>
+        <li><strong>Position-specific weights:</strong> LT carries the highest pass protection value (blind side premium); guards/center have higher run blocking value</li>
+        <li><strong>Sack attribution by position:</strong> LT bears 30% of team sacks allowed, RT 22%, guards/center the remainder</li>
       </ul>
+      <div class="explain-note" style="border-left-color:#f59e0b;background:#1a1200">
+        <strong>⚠️ Still needed:</strong> Individual OL differentiation within the same team remains the weakest part of the system. Future work may incorporate PFF-style grades, Pro Football Reference data, or pressure rate metrics to separate an elite LT from a backup on the same team. Right now, two OL on the same team are largely distinguished only by recruiting stars, usage rate, and a small deterministic jitter.
+      </div>
     </div>
 
     <div class="explain-section">
@@ -1532,11 +1575,13 @@ function renderExplain() {
     <div class="explain-section">
       <h2>Known Limitations</h2>
       <ul>
-        <li>OL ratings are team-level proxies — two starting OL on the same team will have nearly identical ratings (differentiated only by recruiting stars, usage, and jitter)</li>
-        <li>The <code>/awards</code> API endpoint currently returns empty data — award-tier boosts are wired up but inactive until the API improves</li>
-        <li>Small sample sizes are penalized via a games-played multiplier (≥10 games = 1.0×, 3–5 games = 0.75×, &lt;3 games = 0.55×) but very short appearances can still inflate</li>
-        <li>OL cross-year continuity floor only applies to same-team returners — transfers do not receive the floor since they're entering a new system</li>
-        <li>All ratings are relative to the <em>current dataset years</em> (${years.join(', ')}) — a 99 OVR in 2022 and 2024 are not directly comparable across years</li>
+        <li><strong>OL individual differentiation:</strong> Two starting OL on the same team are largely identical in ratings — differentiated only by recruiting stars, usage, and a small deterministic jitter. This is the #1 open problem. See the OL section above.</li>
+        <li><strong>Awards API:</strong> The <code>/awards</code> endpoint currently returns empty data — award-tier floors for OL (All-American, All-Conference) are wired up but effectively inactive until the API improves.</li>
+        <li><strong>Sample size penalty:</strong> Small sample sizes are penalized (≥10 games = 1.0×, 3–5 games = 0.75×, &lt;3 games = 0.55×) but very short high-efficiency appearances can still inflate ratings.</li>
+        <li><strong>Transfer continuity:</strong> The OL cross-year floor only applies to same-team returners — transfers enter a new system and do not receive the continuity floor.</li>
+        <li><strong>Cross-year comparability:</strong> All ratings are relative within their season. A 99 OVR in 2022 and a 99 OVR in 2024 are not directly comparable — they both mean "best at their position that year."</li>
+        <li><strong>Game log coverage:</strong> Game log and schedule data requires the pipeline to have been run with the Phase 2 API calls (<code>fetch_games</code>, <code>fetch_game_player_stats</code>). If these files are missing, the Schedule and Game Log tabs will show "no data available."</li>
+        <li><strong>QB mobility:</strong> Mobility is a bonus — pocket passers are rated at a neutral baseline and do not receive a pass-rush penalty for staying in the pocket. Very mobile QBs receive a boost; immobile QBs are unaffected.</li>
       </ul>
     </div>
 
