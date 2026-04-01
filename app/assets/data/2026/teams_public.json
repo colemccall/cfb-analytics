@@ -1,17 +1,16 @@
 [
   {
     "id": 2005,
-    "name": "Air Force",
-    "abbreviation": "AF",
+    "name": "Falcon Peak University",
+    "abbreviation": "FPU",
     "mascot": "Falcons",
     "conference": "Mountain West",
     "primaryColor": "##004a7b",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2005.png",
-    "stadiumName": "Falcon Stadium",
+    "stadiumName": "Peak Stadium",
     "city": "Colorado Springs",
     "state": "CO",
-    "capacity": 46692,
     "ratings": {
       "overall": 76,
       "passOff": 78,
@@ -19,21 +18,21 @@
       "passDef": 63,
       "runDef": 68,
       "specialTeams": 67
-    }
+    },
+    "projected": true
   },
   {
     "id": 2006,
-    "name": "Akron",
-    "abbreviation": "AKR",
+    "name": "Zip Rubber City University",
+    "abbreviation": "ZRC",
     "mascot": "Zips",
     "conference": "Mid-American",
     "primaryColor": "##00285e",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2006.png",
-    "stadiumName": "InfoCision Stadium",
+    "stadiumName": "Rubber City Stadium",
     "city": "Akron",
     "state": "OH",
-    "capacity": 30000,
     "ratings": {
       "overall": 68,
       "passOff": 67,
@@ -41,21 +40,21 @@
       "passDef": 78,
       "runDef": 78,
       "specialTeams": 72
-    }
+    },
+    "projected": true
   },
   {
     "id": 333,
-    "name": "Alabama",
-    "abbreviation": "ALA",
-    "mascot": "Crimson Tide",
+    "name": "Crimson Valley University",
+    "abbreviation": "CVU",
+    "mascot": "Tide",
     "conference": "SEC",
     "primaryColor": "##9e1632",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/333.png",
-    "stadiumName": "Bryant-Denny Stadium",
+    "stadiumName": "Crimson Thunder Stadium",
     "city": "Tuscaloosa",
     "state": "AL",
-    "capacity": 101821,
     "ratings": {
       "overall": 87,
       "passOff": 87,
@@ -63,11 +62,12 @@
       "passDef": 88,
       "runDef": 86,
       "specialTeams": 86
-    }
+    },
+    "projected": true
   },
   {
     "id": 2026,
-    "name": "App State",
+    "name": "App State University",
     "abbreviation": "APP",
     "mascot": "Mountaineers",
     "conference": "Sun Belt",
@@ -77,7 +77,6 @@
     "stadiumName": "Kidd Brewer Stadium",
     "city": "Boone",
     "state": "NC",
-    "capacity": 30000,
     "ratings": {
       "overall": 71,
       "passOff": 76,
@@ -85,21 +84,21 @@
       "passDef": 68,
       "runDef": 75,
       "specialTeams": 78
-    }
+    },
+    "projected": true
   },
   {
     "id": 12,
-    "name": "Arizona",
-    "abbreviation": "ARIZ",
+    "name": "Desert Wildcat University",
+    "abbreviation": "DWU",
     "mascot": "Wildcats",
     "conference": "Big 12",
     "primaryColor": "##0c234b",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/12.png",
-    "stadiumName": "Arizona Stadium",
+    "stadiumName": "Desert Bowl",
     "city": "Tucson",
     "state": "AZ",
-    "capacity": 50782,
     "ratings": {
       "overall": 86,
       "passOff": 84,
@@ -107,21 +106,21 @@
       "passDef": 88,
       "runDef": 85,
       "specialTeams": 79
-    }
+    },
+    "projected": true
   },
   {
     "id": 9,
-    "name": "Arizona State",
-    "abbreviation": "ASU",
+    "name": "Sun Devil Mesa University",
+    "abbreviation": "SDM",
     "mascot": "Sun Devils",
     "conference": "Big 12",
     "primaryColor": "##8e0c3a",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/9.png",
-    "stadiumName": "Mountain America Stadium",
+    "stadiumName": "Sun Devil Stadium",
     "city": "Tempe",
     "state": "AZ",
-    "capacity": 65870,
     "ratings": {
       "overall": 81,
       "passOff": 78,
@@ -129,21 +128,21 @@
       "passDef": 82,
       "runDef": 83,
       "specialTeams": 79
-    }
+    },
+    "projected": true
   },
   {
     "id": 8,
-    "name": "Arkansas",
-    "abbreviation": "ARK",
-    "mascot": "Razorbacks",
+    "name": "Razorback Ridge University",
+    "abbreviation": "RRU",
+    "mascot": "Hogs",
     "conference": "SEC",
     "primaryColor": "##a41f35",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/8.png",
-    "stadiumName": "Razorback Stadium",
+    "stadiumName": "Hog Ridge Stadium",
     "city": "Fayetteville",
     "state": "AR",
-    "capacity": 80000,
     "ratings": {
       "overall": 81,
       "passOff": 87,
@@ -151,21 +150,21 @@
       "passDef": 76,
       "runDef": 76,
       "specialTeams": 79
-    }
+    },
+    "projected": true
   },
   {
     "id": 2032,
-    "name": "Arkansas State",
-    "abbreviation": "ARST",
+    "name": "Red Wolf Delta University",
+    "abbreviation": "RWD",
     "mascot": "Red Wolves",
     "conference": "Sun Belt",
     "primaryColor": "##e81018",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2032.png",
-    "stadiumName": "Centennial Bank Stadium",
+    "stadiumName": "Delta Bowl",
     "city": "Jonesboro",
     "state": "AR",
-    "capacity": 30382,
     "ratings": {
       "overall": 76,
       "passOff": 77,
@@ -173,21 +172,21 @@
       "passDef": 70,
       "runDef": 75,
       "specialTeams": 79
-    }
+    },
+    "projected": true
   },
   {
     "id": 349,
-    "name": "Army",
-    "abbreviation": "ARMY",
+    "name": "Black Knight Academy",
+    "abbreviation": "BKA",
     "mascot": "Black Knights",
     "conference": "American Athletic",
     "primaryColor": "##ce9c00",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/349.png",
-    "stadiumName": "Michie Stadium",
+    "stadiumName": "Highlands Stadium",
     "city": "West Point",
     "state": "NY",
-    "capacity": 38000,
     "ratings": {
       "overall": 77,
       "passOff": 70,
@@ -195,21 +194,21 @@
       "passDef": 80,
       "runDef": 78,
       "specialTeams": 65
-    }
+    },
+    "projected": true
   },
   {
     "id": 2,
-    "name": "Auburn",
-    "abbreviation": "AUB",
+    "name": "Tiger Plains University",
+    "abbreviation": "TPU",
     "mascot": "Tigers",
     "conference": "SEC",
     "primaryColor": "##002b5c",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2.png",
-    "stadiumName": "Jordan-Hare Stadium",
+    "stadiumName": "Plains Stadium",
     "city": "Auburn",
     "state": "AL",
-    "capacity": 87451,
     "ratings": {
       "overall": 85,
       "passOff": 79,
@@ -217,21 +216,21 @@
       "passDef": 86,
       "runDef": 89,
       "specialTeams": 90
-    }
+    },
+    "projected": true
   },
   {
     "id": 2050,
-    "name": "Ball State",
-    "abbreviation": "BALL",
+    "name": "Cardinal Muncie University",
+    "abbreviation": "CMU",
     "mascot": "Cardinals",
     "conference": "Mid-American",
     "primaryColor": "##DA0000",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2050.png",
-    "stadiumName": "Scheumann Stadium",
+    "stadiumName": "Muncie Bowl",
     "city": "Muncie",
     "state": "IN",
-    "capacity": 22500,
     "ratings": {
       "overall": 61,
       "passOff": 60,
@@ -239,21 +238,21 @@
       "passDef": 68,
       "runDef": 68,
       "specialTeams": 73
-    }
+    },
+    "projected": true
   },
   {
     "id": 239,
-    "name": "Baylor",
-    "abbreviation": "BAY",
+    "name": "Bear River University",
+    "abbreviation": "BRV",
     "mascot": "Bears",
     "conference": "Big 12",
     "primaryColor": "##154734",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/239.png",
-    "stadiumName": "McLane Stadium",
+    "stadiumName": "River Bears Stadium",
     "city": "Waco",
     "state": "TX",
-    "capacity": 45140,
     "ratings": {
       "overall": 78,
       "passOff": 85,
@@ -261,21 +260,21 @@
       "passDef": 75,
       "runDef": 68,
       "specialTeams": 79
-    }
+    },
+    "projected": true
   },
   {
     "id": 68,
-    "name": "Boise State",
-    "abbreviation": "BOIS",
-    "mascot": "Broncos",
-    "conference": "Mountain West",
+    "name": "Desert Blue University",
+    "abbreviation": "DBU",
+    "mascot": "Stallions",
+    "conference": "Pac-12",
     "primaryColor": "##0033a0",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/68.png",
-    "stadiumName": "Albertsons Stadium",
+    "stadiumName": "Blue Thunder Stadium",
     "city": "Boise",
     "state": "ID",
-    "capacity": 36387,
     "ratings": {
       "overall": 83,
       "passOff": 82,
@@ -283,21 +282,21 @@
       "passDef": 83,
       "runDef": 79,
       "specialTeams": 78
-    }
+    },
+    "projected": true
   },
   {
     "id": 103,
-    "name": "Boston College",
-    "abbreviation": "BC",
+    "name": "Eagle Atlantic University",
+    "abbreviation": "EAU",
     "mascot": "Eagles",
     "conference": "ACC",
     "primaryColor": "##8c2232",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/103.png",
-    "stadiumName": "Alumni Stadium (Chestnut Hill, MA)",
+    "stadiumName": "Atlantic Heights Stadium",
     "city": "Chestnut Hill",
     "state": "MA",
-    "capacity": 44500,
     "ratings": {
       "overall": 72,
       "passOff": 78,
@@ -305,21 +304,21 @@
       "passDef": 68,
       "runDef": 69,
       "specialTeams": 68
-    }
+    },
+    "projected": true
   },
   {
     "id": 189,
-    "name": "Bowling Green",
-    "abbreviation": "BGSU",
+    "name": "Falcon Wood County University",
+    "abbreviation": "FWC",
     "mascot": "Falcons",
     "conference": "Mid-American",
     "primaryColor": "##2b1000",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/189.png",
-    "stadiumName": "Doyt L. Perry Stadium",
+    "stadiumName": "Wood County Stadium",
     "city": "Bowling Green",
     "state": "OH",
-    "capacity": 24000,
     "ratings": {
       "overall": 72,
       "passOff": 63,
@@ -327,21 +326,21 @@
       "passDef": 78,
       "runDef": 79,
       "specialTeams": 79
-    }
+    },
+    "projected": true
   },
   {
     "id": 2084,
-    "name": "Buffalo",
-    "abbreviation": "BUF",
+    "name": "Bull Lake Erie University",
+    "abbreviation": "BLE",
     "mascot": "Bulls",
     "conference": "Mid-American",
     "primaryColor": "##041A9B",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2084.png",
-    "stadiumName": "UB Stadium",
+    "stadiumName": "Lake Erie Stadium",
     "city": "Amherst",
     "state": "NY",
-    "capacity": 30270,
     "ratings": {
       "overall": 77,
       "passOff": 68,
@@ -349,21 +348,21 @@
       "passDef": 82,
       "runDef": 80,
       "specialTeams": 84
-    }
+    },
+    "projected": true
   },
   {
     "id": 252,
-    "name": "BYU",
-    "abbreviation": "BYU",
+    "name": "Cougar Mountain University",
+    "abbreviation": "CMU",
     "mascot": "Cougars",
     "conference": "Big 12",
     "primaryColor": "##003da5",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/252.png",
-    "stadiumName": "LaVell Edwards Stadium",
+    "stadiumName": "Mountain Bowl",
     "city": "Provo",
     "state": "UT",
-    "capacity": 63470,
     "ratings": {
       "overall": 86,
       "passOff": 86,
@@ -371,11 +370,12 @@
       "passDef": 86,
       "runDef": 86,
       "specialTeams": 86
-    }
+    },
+    "projected": true
   },
   {
     "id": 25,
-    "name": "California",
+    "name": "California University",
     "abbreviation": "CAL",
     "mascot": "Golden Bears",
     "conference": "ACC",
@@ -385,7 +385,6 @@
     "stadiumName": "California Memorial Stadium",
     "city": "Berkeley",
     "state": "CA",
-    "capacity": 62467,
     "ratings": {
       "overall": 77,
       "passOff": 80,
@@ -393,21 +392,21 @@
       "passDef": 78,
       "runDef": 77,
       "specialTeams": 73
-    }
+    },
+    "projected": true
   },
   {
     "id": 2117,
-    "name": "Central Michigan",
-    "abbreviation": "CMU",
+    "name": "Chippewa River University",
+    "abbreviation": "CRV",
     "mascot": "Chippewas",
     "conference": "Mid-American",
     "primaryColor": "##6a0032",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2117.png",
-    "stadiumName": "Kelly/Shorts Stadium",
+    "stadiumName": "River City Stadium",
     "city": "Mount Pleasant",
     "state": "MI",
-    "capacity": 30255,
     "ratings": {
       "overall": 76,
       "passOff": 67,
@@ -415,21 +414,21 @@
       "passDef": 80,
       "runDef": 80,
       "specialTeams": 74
-    }
+    },
+    "projected": true
   },
   {
     "id": 2429,
-    "name": "Charlotte",
-    "abbreviation": "CLT",
+    "name": "49er Queen City University",
+    "abbreviation": "QCU",
     "mascot": "49ers",
     "conference": "American Athletic",
     "primaryColor": "##046A38",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2429.png",
-    "stadiumName": "Jerry Richardson Stadium",
+    "stadiumName": "Queen City Stadium",
     "city": "Charlotte",
     "state": "NC",
-    "capacity": 15300,
     "ratings": {
       "overall": 59,
       "passOff": 64,
@@ -437,21 +436,21 @@
       "passDef": 59,
       "runDef": 61,
       "specialTeams": 61
-    }
+    },
+    "projected": true
   },
   {
     "id": 2132,
-    "name": "Cincinnati",
-    "abbreviation": "CIN",
+    "name": "Bearcat River University",
+    "abbreviation": "BCR",
     "mascot": "Bearcats",
     "conference": "Big 12",
     "primaryColor": "##E00122",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2132.png",
-    "stadiumName": "Nippert Stadium",
+    "stadiumName": "River Bend Stadium",
     "city": "Cincinnati",
     "state": "OH",
-    "capacity": 40000,
     "ratings": {
       "overall": 79,
       "passOff": 83,
@@ -459,21 +458,21 @@
       "passDef": 78,
       "runDef": 77,
       "specialTeams": 77
-    }
+    },
+    "projected": true
   },
   {
     "id": 228,
-    "name": "Clemson",
-    "abbreviation": "CLEM",
+    "name": "Tiger Palmetto University",
+    "abbreviation": "TPL",
     "mascot": "Tigers",
     "conference": "ACC",
     "primaryColor": "##f56600",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/228.png",
-    "stadiumName": "Memorial Stadium (Clemson, SC)",
+    "stadiumName": "Death Valley North",
     "city": "Clemson",
     "state": "SC",
-    "capacity": 81500,
     "ratings": {
       "overall": 85,
       "passOff": 81,
@@ -481,21 +480,21 @@
       "passDef": 84,
       "runDef": 87,
       "specialTeams": 86
-    }
+    },
+    "projected": true
   },
   {
     "id": 324,
-    "name": "Coastal Carolina",
-    "abbreviation": "CCU",
+    "name": "Chanticleer Shore University",
+    "abbreviation": "CSU",
     "mascot": "Chanticleers",
     "conference": "Sun Belt",
     "primaryColor": "##007073",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/324.png",
-    "stadiumName": "Brooks Stadium (SC)",
+    "stadiumName": "Shore Stadium",
     "city": "Conway",
     "state": "SC",
-    "capacity": 21000,
     "ratings": {
       "overall": 66,
       "passOff": 72,
@@ -503,21 +502,21 @@
       "passDef": 65,
       "runDef": 65,
       "specialTeams": 77
-    }
+    },
+    "projected": true
   },
   {
     "id": 38,
-    "name": "Colorado",
-    "abbreviation": "COLO",
+    "name": "Buffalo Summit University",
+    "abbreviation": "BSM",
     "mascot": "Buffaloes",
     "conference": "Big 12",
     "primaryColor": "##CFB87C",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/38.png",
-    "stadiumName": "Folsom Field",
+    "stadiumName": "Summit Stadium",
     "city": "Boulder",
     "state": "CO",
-    "capacity": 50183,
     "ratings": {
       "overall": 76,
       "passOff": 76,
@@ -525,21 +524,21 @@
       "passDef": 78,
       "runDef": 75,
       "specialTeams": 84
-    }
+    },
+    "projected": true
   },
   {
     "id": 36,
-    "name": "Colorado State",
-    "abbreviation": "CSU",
+    "name": "Ram Front Range University",
+    "abbreviation": "RFR",
     "mascot": "Rams",
-    "conference": "Mountain West",
+    "conference": "Pac-12",
     "primaryColor": "##1e4d2b",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/36.png",
-    "stadiumName": "Canvas Stadium",
+    "stadiumName": "Front Range Stadium",
     "city": "Fort Collins",
     "state": "CO",
-    "capacity": 36500,
     "ratings": {
       "overall": 64,
       "passOff": 68,
@@ -547,11 +546,12 @@
       "passDef": 70,
       "runDef": 65,
       "specialTeams": 64
-    }
+    },
+    "projected": true
   },
   {
     "id": 48,
-    "name": "Delaware",
+    "name": "Delaware University",
     "abbreviation": "DEL",
     "mascot": "Blue Hens",
     "conference": "Conference USA",
@@ -561,7 +561,6 @@
     "stadiumName": "Delaware Stadium",
     "city": "Newark",
     "state": "DE",
-    "capacity": 22000,
     "ratings": {
       "overall": 72,
       "passOff": 80,
@@ -569,21 +568,21 @@
       "passDef": 65,
       "runDef": 69,
       "specialTeams": 65
-    }
+    },
+    "projected": true
   },
   {
     "id": 150,
-    "name": "Duke",
-    "abbreviation": "DUKE",
+    "name": "Blue Devil Durham University",
+    "abbreviation": "BDD",
     "mascot": "Blue Devils",
     "conference": "ACC",
     "primaryColor": "##013088",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/150.png",
-    "stadiumName": "Wallace Wade Stadium",
+    "stadiumName": "Durham Stadium",
     "city": "Durham",
     "state": "NC",
-    "capacity": 40004,
     "ratings": {
       "overall": 82,
       "passOff": 87,
@@ -591,21 +590,21 @@
       "passDef": 74,
       "runDef": 78,
       "specialTeams": 78
-    }
+    },
+    "projected": true
   },
   {
     "id": 151,
-    "name": "East Carolina",
-    "abbreviation": "ECU",
+    "name": "Pirate Coastal University",
+    "abbreviation": "PCU",
     "mascot": "Pirates",
     "conference": "American Athletic",
     "primaryColor": "##4b1869",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/151.png",
-    "stadiumName": "Dowdy-Ficklen Stadium",
+    "stadiumName": "Coastal Stadium",
     "city": "Greenville",
     "state": "NC",
-    "capacity": 50000,
     "ratings": {
       "overall": 85,
       "passOff": 86,
@@ -613,21 +612,21 @@
       "passDef": 80,
       "runDef": 84,
       "specialTeams": 74
-    }
+    },
+    "projected": true
   },
   {
     "id": 2199,
-    "name": "Eastern Michigan",
-    "abbreviation": "EMU",
+    "name": "Eagle Ypsilanti University",
+    "abbreviation": "EYU",
     "mascot": "Eagles",
     "conference": "Mid-American",
     "primaryColor": "##00331b",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2199.png",
-    "stadiumName": "Rynearson Stadium",
+    "stadiumName": "Ypsilanti Stadium",
     "city": "Ypsilanti",
     "state": "MI",
-    "capacity": 30200,
     "ratings": {
       "overall": 66,
       "passOff": 70,
@@ -635,21 +634,21 @@
       "passDef": 74,
       "runDef": 64,
       "specialTeams": 74
-    }
+    },
+    "projected": true
   },
   {
     "id": 57,
-    "name": "Florida",
-    "abbreviation": "FLA",
+    "name": "Swamp Gator University",
+    "abbreviation": "SGU",
     "mascot": "Gators",
     "conference": "SEC",
     "primaryColor": "##0021a5",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/57.png",
-    "stadiumName": "Ben Hill Griffin Stadium",
+    "stadiumName": "The Swamp",
     "city": "Gainesville",
     "state": "FL",
-    "capacity": 88548,
     "ratings": {
       "overall": 78,
       "passOff": 75,
@@ -657,21 +656,21 @@
       "passDef": 83,
       "runDef": 82,
       "specialTeams": 90
-    }
+    },
+    "projected": true
   },
   {
     "id": 2226,
-    "name": "Florida Atlantic",
-    "abbreviation": "FAU",
+    "name": "Owl Atlantic University",
+    "abbreviation": "OAU",
     "mascot": "Owls",
     "conference": "American Athletic",
     "primaryColor": "##00447c",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2226.png",
-    "stadiumName": "FAU Stadium",
+    "stadiumName": "Atlantic Stadium",
     "city": "Boca Raton",
     "state": "FL",
-    "capacity": 29419,
     "ratings": {
       "overall": 73,
       "passOff": 81,
@@ -679,11 +678,12 @@
       "passDef": 64,
       "runDef": 64,
       "specialTeams": 68
-    }
+    },
+    "projected": true
   },
   {
     "id": 2229,
-    "name": "Florida International",
+    "name": "Florida International University",
     "abbreviation": "FIU",
     "mascot": "Panthers",
     "conference": "Conference USA",
@@ -693,7 +693,6 @@
     "stadiumName": "Pitbull Stadium",
     "city": "Miami",
     "state": "FL",
-    "capacity": null,
     "ratings": {
       "overall": 73,
       "passOff": 77,
@@ -701,21 +700,21 @@
       "passDef": 65,
       "runDef": 70,
       "specialTeams": 75
-    }
+    },
+    "projected": true
   },
   {
     "id": 52,
-    "name": "Florida State",
-    "abbreviation": "FSU",
+    "name": "Seminole Capital University",
+    "abbreviation": "SCU",
     "mascot": "Seminoles",
     "conference": "ACC",
     "primaryColor": "##782f40",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/52.png",
-    "stadiumName": "Doak Campbell Stadium",
+    "stadiumName": "Capitol Stadium",
     "city": "Tallahassee",
     "state": "FL",
-    "capacity": 67277,
     "ratings": {
       "overall": 85,
       "passOff": 84,
@@ -723,21 +722,21 @@
       "passDef": 84,
       "runDef": 84,
       "specialTeams": 75
-    }
+    },
+    "projected": true
   },
   {
     "id": 278,
-    "name": "Fresno State",
-    "abbreviation": "FRES",
+    "name": "Bulldog Valley University",
+    "abbreviation": "BVU",
     "mascot": "Bulldogs",
-    "conference": "Mountain West",
+    "conference": "Pac-12",
     "primaryColor": "##db0032",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/278.png",
-    "stadiumName": "Valley Children's Stadium",
+    "stadiumName": "Central Valley Stadium",
     "city": "Fresno",
     "state": "CA",
-    "capacity": 41031,
     "ratings": {
       "overall": 79,
       "passOff": 73,
@@ -745,21 +744,21 @@
       "passDef": 86,
       "runDef": 84,
       "specialTeams": 77
-    }
+    },
+    "projected": true
   },
   {
     "id": 61,
-    "name": "Georgia",
-    "abbreviation": "UGA",
+    "name": "Bulldog Athens University",
+    "abbreviation": "BAU",
     "mascot": "Bulldogs",
     "conference": "SEC",
     "primaryColor": "##ba0c2f",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/61.png",
-    "stadiumName": "Sanford Stadium",
+    "stadiumName": "Athens Stadium",
     "city": "Athens",
     "state": "GA",
-    "capacity": 92746,
     "ratings": {
       "overall": 89,
       "passOff": 87,
@@ -767,21 +766,21 @@
       "passDef": 86,
       "runDef": 89,
       "specialTeams": 93
-    }
+    },
+    "projected": true
   },
   {
     "id": 290,
-    "name": "Georgia Southern",
-    "abbreviation": "GASO",
+    "name": "Eagle Savannah University",
+    "abbreviation": "ESU",
     "mascot": "Eagles",
     "conference": "Sun Belt",
     "primaryColor": "##003775",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/290.png",
-    "stadiumName": "Allen E. Paulson Stadium",
+    "stadiumName": "Savannah Stadium",
     "city": "Statesboro",
     "state": "GA",
-    "capacity": 25000,
     "ratings": {
       "overall": 74,
       "passOff": 80,
@@ -789,21 +788,21 @@
       "passDef": 64,
       "runDef": 63,
       "specialTeams": 75
-    }
+    },
+    "projected": true
   },
   {
     "id": 2247,
-    "name": "Georgia State",
-    "abbreviation": "GAST",
+    "name": "Panther Atlanta University",
+    "abbreviation": "PAU",
     "mascot": "Panthers",
     "conference": "Sun Belt",
     "primaryColor": "##1e539a",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2247.png",
-    "stadiumName": "Center Parc Stadium",
+    "stadiumName": "Atlanta Bowl",
     "city": "Atlanta",
     "state": "GA",
-    "capacity": 25000,
     "ratings": {
       "overall": 62,
       "passOff": 73,
@@ -811,21 +810,21 @@
       "passDef": 60,
       "runDef": 59,
       "specialTeams": 68
-    }
+    },
+    "projected": true
   },
   {
     "id": 59,
-    "name": "Georgia Tech",
-    "abbreviation": "GT",
+    "name": "Yellow Jacket Metro University",
+    "abbreviation": "YJM",
     "mascot": "Yellow Jackets",
     "conference": "ACC",
     "primaryColor": "##003057",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/59.png",
-    "stadiumName": "Bobby Dodd Stadium",
+    "stadiumName": "Metro Bowl",
     "city": "Atlanta",
     "state": "GA",
-    "capacity": 55000,
     "ratings": {
       "overall": 83,
       "passOff": 86,
@@ -833,11 +832,12 @@
       "passDef": 79,
       "runDef": 79,
       "specialTeams": 87
-    }
+    },
+    "projected": true
   },
   {
     "id": 62,
-    "name": "Hawai'i",
+    "name": "Hawai'i University",
     "abbreviation": "HAW",
     "mascot": "Rainbow Warriors",
     "conference": "Mountain West",
@@ -847,7 +847,6 @@
     "stadiumName": "Clarence T.C. Ching Athletics Complex",
     "city": "Honolulu",
     "state": "HI",
-    "capacity": 9000,
     "ratings": {
       "overall": 78,
       "passOff": 81,
@@ -855,21 +854,21 @@
       "passDef": 79,
       "runDef": 80,
       "specialTeams": 86
-    }
+    },
+    "projected": true
   },
   {
     "id": 248,
-    "name": "Houston",
-    "abbreviation": "HOU",
+    "name": "Cougar Bayou University",
+    "abbreviation": "CBU",
     "mascot": "Cougars",
     "conference": "Big 12",
     "primaryColor": "##c92a39",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/248.png",
-    "stadiumName": "TDECU Stadium",
+    "stadiumName": "Bayou Stadium",
     "city": "Houston",
     "state": "TX",
-    "capacity": 40000,
     "ratings": {
       "overall": 83,
       "passOff": 83,
@@ -877,21 +876,21 @@
       "passDef": 81,
       "runDef": 82,
       "specialTeams": 87
-    }
+    },
+    "projected": true
   },
   {
     "id": 356,
-    "name": "Illinois",
-    "abbreviation": "ILL",
-    "mascot": "Fighting Illini",
+    "name": "Prairie Fighting University",
+    "abbreviation": "PFU",
+    "mascot": "Illini",
     "conference": "Big Ten",
     "primaryColor": "##ff5f05",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/356.png",
-    "stadiumName": "Memorial Stadium (Champaign, IL)",
+    "stadiumName": "Prairie Memorial Stadium",
     "city": "Champaign",
     "state": "IL",
-    "capacity": 60670,
     "ratings": {
       "overall": 84,
       "passOff": 84,
@@ -899,21 +898,21 @@
       "passDef": 81,
       "runDef": 82,
       "specialTeams": 83
-    }
+    },
+    "projected": true
   },
   {
     "id": 84,
-    "name": "Indiana",
-    "abbreviation": "IU",
+    "name": "Hoosier Heartland University",
+    "abbreviation": "HHU",
     "mascot": "Hoosiers",
     "conference": "Big Ten",
     "primaryColor": "##990000",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/84.png",
-    "stadiumName": "Memorial Stadium (Bloomington, IN)",
+    "stadiumName": "Heartland Stadium",
     "city": "Bloomington",
     "state": "IN",
-    "capacity": 52656,
     "ratings": {
       "overall": 94,
       "passOff": 93,
@@ -921,21 +920,21 @@
       "passDef": 93,
       "runDef": 94,
       "specialTeams": 84
-    }
+    },
+    "projected": true
   },
   {
     "id": 2294,
-    "name": "Iowa",
-    "abbreviation": "IOWA",
+    "name": "Hawkeye River University",
+    "abbreviation": "HRU",
     "mascot": "Hawkeyes",
     "conference": "Big Ten",
     "primaryColor": "##000000",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2294.png",
-    "stadiumName": "Kinnick Stadium",
+    "stadiumName": "River City Stadium",
     "city": "Iowa City",
     "state": "IA",
-    "capacity": 69250,
     "ratings": {
       "overall": 86,
       "passOff": 80,
@@ -943,21 +942,21 @@
       "passDef": 90,
       "runDef": 89,
       "specialTeams": 87
-    }
+    },
+    "projected": true
   },
   {
     "id": 66,
-    "name": "Iowa State",
-    "abbreviation": "ISU",
+    "name": "Cyclone Prairie University",
+    "abbreviation": "CYP",
     "mascot": "Cyclones",
     "conference": "Big 12",
     "primaryColor": "##822433",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/66.png",
-    "stadiumName": "Jack Trice Stadium",
+    "stadiumName": "Cyclone Stadium",
     "city": "Ames",
     "state": "IA",
-    "capacity": 61500,
     "ratings": {
       "overall": 84,
       "passOff": 79,
@@ -965,21 +964,21 @@
       "passDef": 84,
       "runDef": 84,
       "specialTeams": 84
-    }
+    },
+    "projected": true
   },
   {
     "id": 55,
-    "name": "Jacksonville State",
-    "abbreviation": "JXST",
+    "name": "Gamecock Anniston University",
+    "abbreviation": "GAU",
     "mascot": "Gamecocks",
     "conference": "Conference USA",
     "primaryColor": "##b50500",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/55.png",
-    "stadiumName": "AmFirst Stadium",
+    "stadiumName": "Anniston Stadium",
     "city": "Jacksonville",
     "state": "AL",
-    "capacity": 24000,
     "ratings": {
       "overall": 78,
       "passOff": 78,
@@ -987,21 +986,21 @@
       "passDef": 74,
       "runDef": 76,
       "specialTeams": 76
-    }
+    },
+    "projected": true
   },
   {
     "id": 256,
-    "name": "James Madison",
-    "abbreviation": "JMU",
+    "name": "Duke Shenandoah University",
+    "abbreviation": "DSU",
     "mascot": "Dukes",
     "conference": "Sun Belt",
     "primaryColor": "##450084",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/256.png",
-    "stadiumName": "Bridgeforth Stadium",
+    "stadiumName": "Shenandoah Valley Stadium",
     "city": "Harrisonburg",
     "state": "VA",
-    "capacity": 24877,
     "ratings": {
       "overall": 86,
       "passOff": 85,
@@ -1009,21 +1008,21 @@
       "passDef": 86,
       "runDef": 86,
       "specialTeams": 76
-    }
+    },
+    "projected": true
   },
   {
     "id": 2305,
-    "name": "Kansas",
-    "abbreviation": "KU",
+    "name": "Jayhawk Sunflower University",
+    "abbreviation": "JSU",
     "mascot": "Jayhawks",
     "conference": "Big 12",
     "primaryColor": "##0051ba",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2305.png",
-    "stadiumName": "Memorial Stadium",
+    "stadiumName": "Sunflower Stadium",
     "city": "Lawrence",
     "state": "KS",
-    "capacity": 47000,
     "ratings": {
       "overall": 79,
       "passOff": 82,
@@ -1031,21 +1030,21 @@
       "passDef": 79,
       "runDef": 78,
       "specialTeams": 79
-    }
+    },
+    "projected": true
   },
   {
     "id": 2306,
-    "name": "Kansas State",
-    "abbreviation": "KSU",
+    "name": "Wildcat Flint University",
+    "abbreviation": "WFU",
     "mascot": "Wildcats",
     "conference": "Big 12",
     "primaryColor": "##3c0969",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2306.png",
-    "stadiumName": "Bill Snyder Family Stadium",
+    "stadiumName": "Flint Hills Stadium",
     "city": "Manhattan",
     "state": "KS",
-    "capacity": 50000,
     "ratings": {
       "overall": 82,
       "passOff": 80,
@@ -1053,21 +1052,21 @@
       "passDef": 83,
       "runDef": 81,
       "specialTeams": 84
-    }
+    },
+    "projected": true
   },
   {
     "id": 338,
-    "name": "Kennesaw State",
-    "abbreviation": "KENN",
+    "name": "Owl North Atlanta University",
+    "abbreviation": "ONA",
     "mascot": "Owls",
     "conference": "Conference USA",
     "primaryColor": "##fdbb30",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/338.png",
-    "stadiumName": "Fifth Third Stadium",
+    "stadiumName": "North Atlanta Stadium",
     "city": "Kennesaw",
     "state": "GA",
-    "capacity": 8318,
     "ratings": {
       "overall": 78,
       "passOff": 80,
@@ -1075,12 +1074,13 @@
       "passDef": 76,
       "runDef": 76,
       "specialTeams": 75
-    }
+    },
+    "projected": true
   },
   {
     "id": 2309,
-    "name": "Kent State",
-    "abbreviation": "KENT",
+    "name": "Golden Flash University",
+    "abbreviation": "GFU",
     "mascot": "Golden Flashes",
     "conference": "Mid-American",
     "primaryColor": "##003976",
@@ -1089,7 +1089,6 @@
     "stadiumName": "Dix Stadium",
     "city": "Kent",
     "state": "OH",
-    "capacity": 25319,
     "ratings": {
       "overall": 63,
       "passOff": 66,
@@ -1097,21 +1096,21 @@
       "passDef": 69,
       "runDef": 66,
       "specialTeams": 66
-    }
+    },
+    "projected": true
   },
   {
     "id": 96,
-    "name": "Kentucky",
-    "abbreviation": "UK",
+    "name": "Wildcat Bluegrass University",
+    "abbreviation": "WBU",
     "mascot": "Wildcats",
     "conference": "SEC",
     "primaryColor": "##0033a0",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/96.png",
-    "stadiumName": "Kroger Field",
+    "stadiumName": "Bluegrass Stadium",
     "city": "Lexington",
     "state": "KY",
-    "capacity": 61000,
     "ratings": {
       "overall": 80,
       "passOff": 77,
@@ -1119,21 +1118,21 @@
       "passDef": 81,
       "runDef": 82,
       "specialTeams": 85
-    }
+    },
+    "projected": true
   },
   {
     "id": 2335,
-    "name": "Liberty",
-    "abbreviation": "LIB",
+    "name": "Flames Blue Ridge University",
+    "abbreviation": "FBR",
     "mascot": "Flames",
     "conference": "Conference USA",
     "primaryColor": "##071740",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2335.png",
-    "stadiumName": "Williams Stadium (VA)",
+    "stadiumName": "Blue Ridge Stadium",
     "city": "Lynchburg",
     "state": "VA",
-    "capacity": 25000,
     "ratings": {
       "overall": 74,
       "passOff": 75,
@@ -1141,21 +1140,21 @@
       "passDef": 76,
       "runDef": 70,
       "specialTeams": 75
-    }
+    },
+    "projected": true
   },
   {
     "id": 309,
-    "name": "Louisiana",
-    "abbreviation": "UL",
-    "mascot": "Ragin' Cajuns",
+    "name": "Cajun Prairie University",
+    "abbreviation": "CPU",
+    "mascot": "Ragin Cajuns",
     "conference": "Sun Belt",
     "primaryColor": "##ce181e",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/309.png",
-    "stadiumName": "Cajun Field",
+    "stadiumName": "Prairie Stadium",
     "city": "Lafayette",
     "state": "LA",
-    "capacity": 41426,
     "ratings": {
       "overall": 74,
       "passOff": 75,
@@ -1163,21 +1162,21 @@
       "passDef": 71,
       "runDef": 70,
       "specialTeams": 77
-    }
+    },
+    "projected": true
   },
   {
     "id": 2348,
-    "name": "Louisiana Tech",
-    "abbreviation": "LT",
+    "name": "Bulldog Ark-La-Tex University",
+    "abbreviation": "BAL",
     "mascot": "Bulldogs",
     "conference": "Conference USA",
     "primaryColor": "##002d65",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2348.png",
-    "stadiumName": "Joe Aillet Stadium",
+    "stadiumName": "Ark-La-Tex Stadium",
     "city": "Ruston",
     "state": "LA",
-    "capacity": 28019,
     "ratings": {
       "overall": 78,
       "passOff": 77,
@@ -1185,21 +1184,21 @@
       "passDef": 78,
       "runDef": 79,
       "specialTeams": 80
-    }
+    },
+    "projected": true
   },
   {
     "id": 97,
-    "name": "Louisville",
-    "abbreviation": "LOU",
+    "name": "Cardinal Falls University",
+    "abbreviation": "CFU",
     "mascot": "Cardinals",
     "conference": "ACC",
     "primaryColor": "##c9001f",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/97.png",
-    "stadiumName": "L&N Federal Credit Union Stadium",
+    "stadiumName": "Falls City Stadium",
     "city": "Louisville",
     "state": "KY",
-    "capacity": 60000,
     "ratings": {
       "overall": 85,
       "passOff": 81,
@@ -1207,21 +1206,21 @@
       "passDef": 86,
       "runDef": 86,
       "specialTeams": 85
-    }
+    },
+    "projected": true
   },
   {
     "id": 99,
-    "name": "LSU",
-    "abbreviation": "LSU",
+    "name": "Bayou Tiger University",
+    "abbreviation": "BTU",
     "mascot": "Tigers",
     "conference": "SEC",
     "primaryColor": "##461d7c",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/99.png",
-    "stadiumName": "Tiger Stadium (LA)",
+    "stadiumName": "Death Valley South",
     "city": "Baton Rouge",
     "state": "LA",
-    "capacity": 102321,
     "ratings": {
       "overall": 85,
       "passOff": 79,
@@ -1229,21 +1228,21 @@
       "passDef": 87,
       "runDef": 87,
       "specialTeams": 94
-    }
+    },
+    "projected": true
   },
   {
     "id": 276,
-    "name": "Marshall",
-    "abbreviation": "MRSH",
+    "name": "Thundering Herd River University",
+    "abbreviation": "THR",
     "mascot": "Thundering Herd",
     "conference": "Sun Belt",
     "primaryColor": "##00ae42",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/276.png",
-    "stadiumName": "Joan C. Edwards Stadium",
+    "stadiumName": "River Stadium",
     "city": "Huntington",
     "state": "WV",
-    "capacity": 38016,
     "ratings": {
       "overall": 77,
       "passOff": 81,
@@ -1251,21 +1250,21 @@
       "passDef": 69,
       "runDef": 75,
       "specialTeams": 72
-    }
+    },
+    "projected": true
   },
   {
     "id": 120,
-    "name": "Maryland",
-    "abbreviation": "MD",
+    "name": "Terrapin Bay University",
+    "abbreviation": "TBU",
     "mascot": "Terrapins",
     "conference": "Big Ten",
     "primaryColor": "##D5002B",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/120.png",
-    "stadiumName": "SECU Stadium",
+    "stadiumName": "Chesapeake Stadium",
     "city": "College Park",
     "state": "MD",
-    "capacity": 51802,
     "ratings": {
       "overall": 78,
       "passOff": 78,
@@ -1273,21 +1272,21 @@
       "passDef": 81,
       "runDef": 80,
       "specialTeams": 88
-    }
+    },
+    "projected": true
   },
   {
     "id": 113,
-    "name": "Massachusetts",
-    "abbreviation": "MASS",
+    "name": "Minuteman Pioneer University",
+    "abbreviation": "MPU",
     "mascot": "Minutemen",
     "conference": "Mid-American",
     "primaryColor": "##971B2F",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/113.png",
-    "stadiumName": "Warren McGuirk Alumni Stadium",
+    "stadiumName": "Pioneer Stadium",
     "city": "Hadley",
     "state": "MA",
-    "capacity": 17000,
     "ratings": {
       "overall": 58,
       "passOff": 58,
@@ -1295,21 +1294,21 @@
       "passDef": 58,
       "runDef": 58,
       "specialTeams": 72
-    }
+    },
+    "projected": true
   },
   {
     "id": 235,
-    "name": "Memphis",
-    "abbreviation": "MEM",
+    "name": "Tiger Bluff University",
+    "abbreviation": "TBL",
     "mascot": "Tigers",
     "conference": "American Athletic",
     "primaryColor": "##004991",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/235.png",
-    "stadiumName": "Simmons Bank Liberty Stadium",
+    "stadiumName": "Bluff City Stadium",
     "city": "Memphis",
     "state": "TN",
-    "capacity": 58325,
     "ratings": {
       "overall": 84,
       "passOff": 85,
@@ -1317,21 +1316,21 @@
       "passDef": 79,
       "runDef": 80,
       "specialTeams": 80
-    }
+    },
+    "projected": true
   },
   {
     "id": 2390,
-    "name": "Miami",
-    "abbreviation": "MIA",
+    "name": "Hurricane Coral University",
+    "abbreviation": "HCU",
     "mascot": "Hurricanes",
     "conference": "ACC",
     "primaryColor": "##005030",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2390.png",
-    "stadiumName": "Hard Rock Stadium",
+    "stadiumName": "Coral Gables Stadium",
     "city": "Miami Gardens",
     "state": "FL",
-    "capacity": 64767,
     "ratings": {
       "overall": 90,
       "passOff": 88,
@@ -1339,21 +1338,21 @@
       "passDef": 89,
       "runDef": 91,
       "specialTeams": 90
-    }
+    },
+    "projected": true
   },
   {
     "id": 193,
-    "name": "Miami (OH)",
-    "abbreviation": "M-OH",
+    "name": "RedHawk Oxford University",
+    "abbreviation": "ROU",
     "mascot": "RedHawks",
     "conference": "Mid-American",
     "primaryColor": "##a4000c",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/193.png",
-    "stadiumName": "Yager Stadium",
+    "stadiumName": "Oxford Bowl",
     "city": "Oxford",
     "state": "OH",
-    "capacity": 24286,
     "ratings": {
       "overall": 78,
       "passOff": 74,
@@ -1361,21 +1360,21 @@
       "passDef": 81,
       "runDef": 82,
       "specialTeams": 85
-    }
+    },
+    "projected": true
   },
   {
     "id": 130,
-    "name": "Michigan",
-    "abbreviation": "MICH",
+    "name": "Wolverine Great Lakes University",
+    "abbreviation": "WGL",
     "mascot": "Wolverines",
     "conference": "Big Ten",
     "primaryColor": "##00274c",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/130.png",
-    "stadiumName": "Michigan Stadium",
+    "stadiumName": "The Big House",
     "city": "Ann Arbor",
     "state": "MI",
-    "capacity": 107601,
     "ratings": {
       "overall": 86,
       "passOff": 82,
@@ -1383,12 +1382,13 @@
       "passDef": 86,
       "runDef": 87,
       "specialTeams": 86
-    }
+    },
+    "projected": true
   },
   {
     "id": 127,
-    "name": "Michigan State",
-    "abbreviation": "MSU",
+    "name": "Spartan Lansing University",
+    "abbreviation": "SLU",
     "mascot": "Spartans",
     "conference": "Big Ten",
     "primaryColor": "##18453b",
@@ -1397,7 +1397,6 @@
     "stadiumName": "Spartan Stadium",
     "city": "East Lansing",
     "state": "MI",
-    "capacity": 75005,
     "ratings": {
       "overall": 77,
       "passOff": 78,
@@ -1405,21 +1404,21 @@
       "passDef": 77,
       "runDef": 77,
       "specialTeams": 80
-    }
+    },
+    "projected": true
   },
   {
     "id": 2393,
-    "name": "Middle Tennessee",
-    "abbreviation": "MTSU",
+    "name": "Blue Raider Limestone University",
+    "abbreviation": "BRL",
     "mascot": "Blue Raiders",
     "conference": "Conference USA",
     "primaryColor": "##006db6",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2393.png",
-    "stadiumName": "Johnny \"Red\" Floyd Stadium",
+    "stadiumName": "Limestone Stadium",
     "city": "Murfreesboro",
     "state": "TN",
-    "capacity": 30788,
     "ratings": {
       "overall": 67,
       "passOff": 74,
@@ -1427,21 +1426,21 @@
       "passDef": 66,
       "runDef": 72,
       "specialTeams": 77
-    }
+    },
+    "projected": true
   },
   {
     "id": 135,
-    "name": "Minnesota",
-    "abbreviation": "MINN",
-    "mascot": "Golden Gophers",
+    "name": "Gopher Twin Cities University",
+    "abbreviation": "GTC",
+    "mascot": "Gophers",
     "conference": "Big Ten",
     "primaryColor": "##5e0a2f",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/135.png",
-    "stadiumName": "Huntington Bank Stadium",
+    "stadiumName": "Twin Cities Stadium",
     "city": "Minneapolis",
     "state": "MN",
-    "capacity": 50850,
     "ratings": {
       "overall": 80,
       "passOff": 77,
@@ -1449,21 +1448,21 @@
       "passDef": 85,
       "runDef": 85,
       "specialTeams": 85
-    }
+    },
+    "projected": true
   },
   {
     "id": 344,
-    "name": "Mississippi State",
-    "abbreviation": "MSST",
+    "name": "Bulldog Delta University",
+    "abbreviation": "BDU",
     "mascot": "Bulldogs",
     "conference": "SEC",
     "primaryColor": "##5d1725",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/344.png",
-    "stadiumName": "Davis Wade Stadium",
+    "stadiumName": "Delta Stadium",
     "city": "Starkville",
     "state": "MS",
-    "capacity": 61337,
     "ratings": {
       "overall": 80,
       "passOff": 85,
@@ -1471,21 +1470,21 @@
       "passDef": 78,
       "runDef": 76,
       "specialTeams": 85
-    }
+    },
+    "projected": true
   },
   {
     "id": 142,
-    "name": "Missouri",
-    "abbreviation": "MIZ",
+    "name": "Tiger River University",
+    "abbreviation": "TRU",
     "mascot": "Tigers",
     "conference": "SEC",
     "primaryColor": "##f1b82d",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/142.png",
-    "stadiumName": "Memorial Stadium",
+    "stadiumName": "River Stadium",
     "city": "Columbia",
     "state": "MO",
-    "capacity": 71168,
     "ratings": {
       "overall": 87,
       "passOff": 83,
@@ -1493,11 +1492,12 @@
       "passDef": 90,
       "runDef": 90,
       "specialTeams": 80
-    }
+    },
+    "projected": true
   },
   {
     "id": 2623,
-    "name": "Missouri State",
+    "name": "Missouri State University",
     "abbreviation": "MOST",
     "mascot": "Bears",
     "conference": "Conference USA",
@@ -1507,7 +1507,6 @@
     "stadiumName": "Plaster Sports Complex",
     "city": "Springfield",
     "state": "MO",
-    "capacity": 17337,
     "ratings": {
       "overall": 75,
       "passOff": 79,
@@ -1515,21 +1514,21 @@
       "passDef": 70,
       "runDef": 72,
       "specialTeams": 62
-    }
+    },
+    "projected": true
   },
   {
     "id": 2426,
-    "name": "Navy",
-    "abbreviation": "NAVY",
+    "name": "Midshipman Naval Academy",
+    "abbreviation": "MNA",
     "mascot": "Midshipmen",
     "conference": "American Athletic",
     "primaryColor": "##00225b",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2426.png",
-    "stadiumName": "Navy-Marine Corps Memorial Stadium",
+    "stadiumName": "Navy-Marine Corps Memorial",
     "city": "Annapolis",
     "state": "MD",
-    "capacity": 34000,
     "ratings": {
       "overall": 82,
       "passOff": 83,
@@ -1537,21 +1536,21 @@
       "passDef": 77,
       "runDef": 78,
       "specialTeams": 66
-    }
+    },
+    "projected": true
   },
   {
     "id": 152,
-    "name": "NC State",
-    "abbreviation": "NCSU",
+    "name": "Wolfpack Red University",
+    "abbreviation": "WRU",
     "mascot": "Wolfpack",
     "conference": "ACC",
     "primaryColor": "##cc0000",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/152.png",
-    "stadiumName": "Carter-Finley Stadium",
+    "stadiumName": "Red Wolf Stadium",
     "city": "Raleigh",
     "state": "NC",
-    "capacity": 58000,
     "ratings": {
       "overall": 80,
       "passOff": 85,
@@ -1559,21 +1558,21 @@
       "passDef": 77,
       "runDef": 81,
       "specialTeams": 78
-    }
+    },
+    "projected": true
   },
   {
     "id": 158,
-    "name": "Nebraska",
-    "abbreviation": "NEB",
-    "mascot": "Cornhuskers",
+    "name": "Cornhusker Plains University",
+    "abbreviation": "CPU",
+    "mascot": "Huskers",
     "conference": "Big Ten",
     "primaryColor": "##d00000",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/158.png",
-    "stadiumName": "Memorial Stadium (Lincoln, NE)",
+    "stadiumName": "Sea of Red Stadium",
     "city": "Lincoln",
     "state": "NE",
-    "capacity": 85458,
     "ratings": {
       "overall": 84,
       "passOff": 83,
@@ -1581,21 +1580,21 @@
       "passDef": 85,
       "runDef": 80,
       "specialTeams": 78
-    }
+    },
+    "projected": true
   },
   {
     "id": 2440,
-    "name": "Nevada",
-    "abbreviation": "NEV",
+    "name": "Wolf Pack Basin University",
+    "abbreviation": "WPB",
     "mascot": "Wolf Pack",
     "conference": "Mountain West",
     "primaryColor": "##002d62",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2440.png",
-    "stadiumName": "Mackay Stadium",
+    "stadiumName": "Basin Bowl",
     "city": "Reno",
     "state": "NV",
-    "capacity": 27000,
     "ratings": {
       "overall": 67,
       "passOff": 61,
@@ -1603,21 +1602,21 @@
       "passDef": 78,
       "runDef": 78,
       "specialTeams": 76
-    }
+    },
+    "projected": true
   },
   {
     "id": 167,
-    "name": "New Mexico",
-    "abbreviation": "UNM",
+    "name": "Lobo High Desert University",
+    "abbreviation": "LHD",
     "mascot": "Lobos",
     "conference": "Mountain West",
     "primaryColor": "##BA0C2F",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/167.png",
-    "stadiumName": "University Stadium (NM)",
+    "stadiumName": "High Desert Stadium",
     "city": "Albuquerque",
     "state": "NM",
-    "capacity": 39224,
     "ratings": {
       "overall": 77,
       "passOff": 77,
@@ -1625,21 +1624,21 @@
       "passDef": 77,
       "runDef": 79,
       "specialTeams": 76
-    }
+    },
+    "projected": true
   },
   {
     "id": 166,
-    "name": "New Mexico State",
-    "abbreviation": "NMSU",
+    "name": "Aggie Desert South University",
+    "abbreviation": "ADS",
     "mascot": "Aggies",
     "conference": "Conference USA",
     "primaryColor": "##891216",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/166.png",
-    "stadiumName": "Aggie Memorial Stadium",
+    "stadiumName": "Desert South Stadium",
     "city": "Las Cruces",
     "state": "NM",
-    "capacity": 28853,
     "ratings": {
       "overall": 68,
       "passOff": 70,
@@ -1647,21 +1646,21 @@
       "passDef": 71,
       "runDef": 72,
       "specialTeams": 76
-    }
+    },
+    "projected": true
   },
   {
     "id": 153,
-    "name": "North Carolina",
-    "abbreviation": "UNC",
+    "name": "Tar Heel Blue University",
+    "abbreviation": "THB",
     "mascot": "Tar Heels",
     "conference": "ACC",
     "primaryColor": "##7bafd4",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/153.png",
-    "stadiumName": "Kenan Stadium",
+    "stadiumName": "Blue Ridge Stadium",
     "city": "Chapel Hill",
     "state": "NC",
-    "capacity": 50500,
     "ratings": {
       "overall": 76,
       "passOff": 68,
@@ -1669,21 +1668,43 @@
       "passDef": 82,
       "runDef": 82,
       "specialTeams": 86
-    }
+    },
+    "projected": true
+  },
+  {
+    "id": 2449,
+    "name": "North Dakota State University",
+    "abbreviation": "NDSU",
+    "mascot": "Bison",
+    "conference": "Mountain West",
+    "primaryColor": "##01402A",
+    "secondaryColor": "#666666",
+    "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2449.png",
+    "stadiumName": "Fargodome",
+    "city": "Fargo",
+    "state": "ND",
+    "ratings": {
+      "overall": 70,
+      "passOff": 70,
+      "runOff": 70,
+      "passDef": 70,
+      "runDef": 70,
+      "specialTeams": 70
+    },
+    "projected": true
   },
   {
     "id": 2459,
-    "name": "Northern Illinois",
-    "abbreviation": "NIU",
+    "name": "Huskie DeKalb University",
+    "abbreviation": "HDU",
     "mascot": "Huskies",
-    "conference": "Mid-American",
+    "conference": "Mountain West",
     "primaryColor": "##F1122C",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2459.png",
-    "stadiumName": "Huskie Stadium",
+    "stadiumName": "DeKalb Stadium",
     "city": "DeKalb",
     "state": "IL",
-    "capacity": 23595,
     "ratings": {
       "overall": 65,
       "passOff": 59,
@@ -1691,21 +1712,21 @@
       "passDef": 79,
       "runDef": 76,
       "specialTeams": 64
-    }
+    },
+    "projected": true
   },
   {
     "id": 249,
-    "name": "North Texas",
-    "abbreviation": "UNT",
+    "name": "Mean Green Eagle University",
+    "abbreviation": "MGE",
     "mascot": "Mean Green",
     "conference": "American Athletic",
     "primaryColor": "##00853E",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/249.png",
-    "stadiumName": "DATCU Stadium",
+    "stadiumName": "Apogee Stadium",
     "city": "Denton",
     "state": "TX",
-    "capacity": 30850,
     "ratings": {
       "overall": 87,
       "passOff": 93,
@@ -1713,21 +1734,21 @@
       "passDef": 82,
       "runDef": 76,
       "specialTeams": 76
-    }
+    },
+    "projected": true
   },
   {
     "id": 77,
-    "name": "Northwestern",
-    "abbreviation": "NU",
+    "name": "Purple Wildcat University",
+    "abbreviation": "PWU",
     "mascot": "Wildcats",
     "conference": "Big Ten",
     "primaryColor": "##582c83",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/77.png",
-    "stadiumName": "Lanny and Sharon Martin Stadium",
+    "stadiumName": "Lakefront Stadium",
     "city": "Evanston",
     "state": "IL",
-    "capacity": null,
     "ratings": {
       "overall": 80,
       "passOff": 76,
@@ -1735,21 +1756,21 @@
       "passDef": 85,
       "runDef": 84,
       "specialTeams": 80
-    }
+    },
+    "projected": true
   },
   {
     "id": 87,
-    "name": "Notre Dame",
-    "abbreviation": "ND",
+    "name": "Golden Dome University",
+    "abbreviation": "GDU",
     "mascot": "Fighting Irish",
     "conference": "FBS Independents",
     "primaryColor": "##0c2340",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/87.png",
-    "stadiumName": "Notre Dame Stadium",
+    "stadiumName": "Golden Dome Stadium",
     "city": "Notre Dame",
     "state": "IN",
-    "capacity": 80795,
     "ratings": {
       "overall": 91,
       "passOff": 89,
@@ -1757,21 +1778,21 @@
       "passDef": 89,
       "runDef": 90,
       "specialTeams": 80
-    }
+    },
+    "projected": true
   },
   {
     "id": 195,
-    "name": "Ohio",
-    "abbreviation": "OHIO",
+    "name": "Bobcat Hocking University",
+    "abbreviation": "BHK",
     "mascot": "Bobcats",
     "conference": "Mid-American",
     "primaryColor": "##295A29",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/195.png",
-    "stadiumName": "Peden Stadium",
+    "stadiumName": "Hocking Hills Stadium",
     "city": "Athens",
     "state": "OH",
-    "capacity": 24000,
     "ratings": {
       "overall": 79,
       "passOff": 76,
@@ -1779,21 +1800,21 @@
       "passDef": 82,
       "runDef": 81,
       "specialTeams": 67
-    }
+    },
+    "projected": true
   },
   {
     "id": 194,
-    "name": "Ohio State",
-    "abbreviation": "OSU",
+    "name": "Buckeye Plains University",
+    "abbreviation": "BPU",
     "mascot": "Buckeyes",
     "conference": "Big Ten",
     "primaryColor": "##ce1141",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/194.png",
-    "stadiumName": "Ohio Stadium",
+    "stadiumName": "Horseshoe Stadium",
     "city": "Columbus",
     "state": "OH",
-    "capacity": 102780,
     "ratings": {
       "overall": 93,
       "passOff": 90,
@@ -1801,21 +1822,21 @@
       "passDef": 94,
       "runDef": 93,
       "specialTeams": 88
-    }
+    },
+    "projected": true
   },
   {
     "id": 201,
-    "name": "Oklahoma",
-    "abbreviation": "OU",
+    "name": "Sooner Prairie University",
+    "abbreviation": "SPU",
     "mascot": "Sooners",
     "conference": "SEC",
     "primaryColor": "##a32036",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/201.png",
-    "stadiumName": "Memorial Stadium (Norman, OK)",
+    "stadiumName": "Prairie Memorial Stadium",
     "city": "Norman",
     "state": "OK",
-    "capacity": 86112,
     "ratings": {
       "overall": 87,
       "passOff": 82,
@@ -1823,21 +1844,21 @@
       "passDef": 92,
       "runDef": 92,
       "specialTeams": 86
-    }
+    },
+    "projected": true
   },
   {
     "id": 197,
-    "name": "Oklahoma State",
-    "abbreviation": "OKST",
+    "name": "Cowboy Thunder University",
+    "abbreviation": "CTU",
     "mascot": "Cowboys",
     "conference": "Big 12",
     "primaryColor": "##FF7300",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/197.png",
-    "stadiumName": "Boone Pickens Stadium",
+    "stadiumName": "Boone Pickens Field",
     "city": "Stillwater",
     "state": "OK",
-    "capacity": 55509,
     "ratings": {
       "overall": 65,
       "passOff": 64,
@@ -1845,21 +1866,21 @@
       "passDef": 72,
       "runDef": 73,
       "specialTeams": 85
-    }
+    },
+    "projected": true
   },
   {
     "id": 295,
-    "name": "Old Dominion",
-    "abbreviation": "ODU",
+    "name": "Monarch Tidewater University",
+    "abbreviation": "MTU",
     "mascot": "Monarchs",
     "conference": "Sun Belt",
     "primaryColor": "##00507d",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/295.png",
-    "stadiumName": "S.B. Ballard Stadium",
+    "stadiumName": "Tidewater Stadium",
     "city": "Norfolk",
     "state": "VA",
-    "capacity": 20118,
     "ratings": {
       "overall": 85,
       "passOff": 82,
@@ -1867,21 +1888,21 @@
       "passDef": 85,
       "runDef": 83,
       "specialTeams": 76
-    }
+    },
+    "projected": true
   },
   {
     "id": 145,
-    "name": "Ole Miss",
-    "abbreviation": "MISS",
+    "name": "Rebel Grove University",
+    "abbreviation": "RGU",
     "mascot": "Rebels",
     "conference": "SEC",
     "primaryColor": "##13294b",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/145.png",
-    "stadiumName": "Vaught-Hemingway Stadium",
+    "stadiumName": "The Grove Stadium",
     "city": "Oxford",
     "state": "MS",
-    "capacity": 64038,
     "ratings": {
       "overall": 90,
       "passOff": 94,
@@ -1889,21 +1910,21 @@
       "passDef": 85,
       "runDef": 84,
       "specialTeams": 91
-    }
+    },
+    "projected": true
   },
   {
     "id": 2483,
-    "name": "Oregon",
-    "abbreviation": "ORE",
+    "name": "Cascade Green University",
+    "abbreviation": "CGN",
     "mascot": "Ducks",
     "conference": "Big Ten",
     "primaryColor": "##007030",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2483.png",
-    "stadiumName": "Autzen Stadium",
+    "stadiumName": "Cascade Stadium",
     "city": "Eugene",
     "state": "OR",
-    "capacity": 54000,
     "ratings": {
       "overall": 92,
       "passOff": 89,
@@ -1911,11 +1932,12 @@
       "passDef": 91,
       "runDef": 90,
       "specialTeams": 89
-    }
+    },
+    "projected": true
   },
   {
     "id": 204,
-    "name": "Oregon State",
+    "name": "Oregon State University",
     "abbreviation": "ORST",
     "mascot": "Beavers",
     "conference": "Pac-12",
@@ -1925,7 +1947,6 @@
     "stadiumName": "Reser Stadium",
     "city": "Corvallis",
     "state": "OR",
-    "capacity": 43363,
     "ratings": {
       "overall": 69,
       "passOff": 69,
@@ -1933,21 +1954,21 @@
       "passDef": 77,
       "runDef": 77,
       "specialTeams": 77
-    }
+    },
+    "projected": true
   },
   {
     "id": 213,
-    "name": "Penn State",
-    "abbreviation": "PSU",
-    "mascot": "Nittany Lions",
+    "name": "Nittany Mountain University",
+    "abbreviation": "NMU",
+    "mascot": "Lions",
     "conference": "Big Ten",
     "primaryColor": "##041E42",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/213.png",
-    "stadiumName": "Beaver Stadium",
+    "stadiumName": "Happy Valley Stadium",
     "city": "University Park",
     "state": "PA",
-    "capacity": 106572,
     "ratings": {
       "overall": 87,
       "passOff": 86,
@@ -1955,21 +1976,21 @@
       "passDef": 87,
       "runDef": 85,
       "specialTeams": 89
-    }
+    },
+    "projected": true
   },
   {
     "id": 221,
-    "name": "Pittsburgh",
-    "abbreviation": "PITT",
+    "name": "Panther Steel University",
+    "abbreviation": "PST",
     "mascot": "Panthers",
     "conference": "ACC",
     "primaryColor": "##003263",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/221.png",
-    "stadiumName": "Acrisure Stadium",
+    "stadiumName": "Steel City Stadium",
     "city": "Pittsburgh",
     "state": "PA",
-    "capacity": 68400,
     "ratings": {
       "overall": 86,
       "passOff": 84,
@@ -1977,21 +1998,21 @@
       "passDef": 84,
       "runDef": 86,
       "specialTeams": 86
-    }
+    },
+    "projected": true
   },
   {
     "id": 2509,
-    "name": "Purdue",
-    "abbreviation": "PUR",
+    "name": "Boilermaker Rail University",
+    "abbreviation": "BRU",
     "mascot": "Boilermakers",
     "conference": "Big Ten",
     "primaryColor": "##000000",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2509.png",
-    "stadiumName": "Ross-Ade Stadium",
+    "stadiumName": "Rail City Stadium",
     "city": "West Lafayette",
     "state": "IN",
-    "capacity": 57282,
     "ratings": {
       "overall": 75,
       "passOff": 76,
@@ -1999,21 +2020,21 @@
       "passDef": 76,
       "runDef": 76,
       "specialTeams": 81
-    }
+    },
+    "projected": true
   },
   {
     "id": 242,
-    "name": "Rice",
-    "abbreviation": "RICE",
+    "name": "Owl Bayou University",
+    "abbreviation": "OBU",
     "mascot": "Owls",
     "conference": "American Athletic",
     "primaryColor": "##d1d5d8",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/242.png",
-    "stadiumName": "Rice Stadium",
+    "stadiumName": "Bayou Stadium",
     "city": "Houston",
     "state": "TX",
-    "capacity": 47000,
     "ratings": {
       "overall": 65,
       "passOff": 65,
@@ -2021,21 +2042,21 @@
       "passDef": 66,
       "runDef": 71,
       "specialTeams": 77
-    }
+    },
+    "projected": true
   },
   {
     "id": 164,
-    "name": "Rutgers",
-    "abbreviation": "RUTG",
-    "mascot": "Scarlet Knights",
+    "name": "Scarlet River University",
+    "abbreviation": "SRU",
+    "mascot": "Knights",
     "conference": "Big Ten",
     "primaryColor": "##d21034",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/164.png",
-    "stadiumName": "SHI Stadium",
+    "stadiumName": "Scarlet Stadium",
     "city": "Piscataway",
     "state": "NJ",
-    "capacity": 52454,
     "ratings": {
       "overall": 79,
       "passOff": 84,
@@ -2043,21 +2064,43 @@
       "passDef": 77,
       "runDef": 73,
       "specialTeams": 77
-    }
+    },
+    "projected": true
+  },
+  {
+    "id": 16,
+    "name": "Sacramento State University",
+    "abbreviation": "SAC",
+    "mascot": "Hornets",
+    "conference": "Mid-American",
+    "primaryColor": "##00573C",
+    "secondaryColor": "#666666",
+    "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/16.png",
+    "stadiumName": "Hornet Stadium",
+    "city": "Sacramento",
+    "state": "CA",
+    "ratings": {
+      "overall": 70,
+      "passOff": 70,
+      "runOff": 70,
+      "passDef": 70,
+      "runDef": 70,
+      "specialTeams": 70
+    },
+    "projected": true
   },
   {
     "id": 2534,
-    "name": "Sam Houston",
-    "abbreviation": "SHSU",
+    "name": "Bearkat Piney Woods University",
+    "abbreviation": "BPW",
     "mascot": "Bearkats",
     "conference": "Conference USA",
     "primaryColor": "##fe5000",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2534.png",
-    "stadiumName": "Elliott T. Bowers Stadium",
+    "stadiumName": "Piney Woods Stadium",
     "city": "Huntsville",
     "state": "TX",
-    "capacity": 14000,
     "ratings": {
       "overall": 60,
       "passOff": 62,
@@ -2065,21 +2108,21 @@
       "passDef": 61,
       "runDef": 60,
       "specialTeams": 76
-    }
+    },
+    "projected": true
   },
   {
     "id": 21,
-    "name": "San Diego State",
-    "abbreviation": "SDSU",
+    "name": "Aztec Pacific University",
+    "abbreviation": "APU",
     "mascot": "Aztecs",
-    "conference": "Mountain West",
+    "conference": "Pac-12",
     "primaryColor": "##c41230",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/21.png",
-    "stadiumName": "Snapdragon Stadium",
+    "stadiumName": "Pacific Mesa Stadium",
     "city": "San Diego",
     "state": "CA",
-    "capacity": 35000,
     "ratings": {
       "overall": 82,
       "passOff": 74,
@@ -2087,11 +2130,12 @@
       "passDef": 87,
       "runDef": 85,
       "specialTeams": 91
-    }
+    },
+    "projected": true
   },
   {
     "id": 23,
-    "name": "San Jos\u00e9 State",
+    "name": "San Jos\u00e9 State University",
     "abbreviation": "SJSU",
     "mascot": "Spartans",
     "conference": "Mountain West",
@@ -2101,7 +2145,6 @@
     "stadiumName": "CEFCU Stadium",
     "city": "San Jose",
     "state": "CA",
-    "capacity": 30456,
     "ratings": {
       "overall": 69,
       "passOff": 77,
@@ -2109,21 +2152,21 @@
       "passDef": 67,
       "runDef": 65,
       "specialTeams": 69
-    }
+    },
+    "projected": true
   },
   {
     "id": 2567,
-    "name": "SMU",
-    "abbreviation": "SMU",
+    "name": "Mustang Lone Star University",
+    "abbreviation": "MLS",
     "mascot": "Mustangs",
     "conference": "ACC",
     "primaryColor": "##354ca1",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2567.png",
-    "stadiumName": "Gerald J. Ford Stadium",
+    "stadiumName": "Lone Star Stadium",
     "city": "University Park",
     "state": "TX",
-    "capacity": 32000,
     "ratings": {
       "overall": 86,
       "passOff": 86,
@@ -2131,21 +2174,21 @@
       "passDef": 84,
       "runDef": 87,
       "specialTeams": 86
-    }
+    },
+    "projected": true
   },
   {
     "id": 6,
-    "name": "South Alabama",
-    "abbreviation": "USA",
+    "name": "Jaguar Gulf University",
+    "abbreviation": "JGU",
     "mascot": "Jaguars",
     "conference": "Sun Belt",
     "primaryColor": "##00205B",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/6.png",
-    "stadiumName": "Hancock Whitney Stadium",
+    "stadiumName": "Gulf Coast Stadium",
     "city": "Mobile",
     "state": "AL",
-    "capacity": 25450,
     "ratings": {
       "overall": 75,
       "passOff": 76,
@@ -2153,21 +2196,21 @@
       "passDef": 72,
       "runDef": 66,
       "specialTeams": 69
-    }
+    },
+    "projected": true
   },
   {
     "id": 2579,
-    "name": "South Carolina",
-    "abbreviation": "SC",
+    "name": "Gamecock Lowcountry University",
+    "abbreviation": "GLU",
     "mascot": "Gamecocks",
     "conference": "SEC",
     "primaryColor": "##73000a",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2579.png",
-    "stadiumName": "Williams-Brice Stadium",
+    "stadiumName": "Lowcountry Stadium",
     "city": "Columbia",
     "state": "SC",
-    "capacity": 80250,
     "ratings": {
       "overall": 79,
       "passOff": 76,
@@ -2175,21 +2218,21 @@
       "passDef": 85,
       "runDef": 85,
       "specialTeams": 70
-    }
+    },
+    "projected": true
   },
   {
     "id": 2572,
-    "name": "Southern Miss",
-    "abbreviation": "USM",
-    "mascot": "Golden Eagles",
+    "name": "Eagle Gulf Coast University",
+    "abbreviation": "EGC",
+    "mascot": "Eagles",
     "conference": "Sun Belt",
     "primaryColor": "##FFAA3C",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2572.png",
-    "stadiumName": "M. M. Roberts Stadium",
+    "stadiumName": "Gulf Stadium",
     "city": "Hattiesburg",
     "state": "MS",
-    "capacity": 36000,
     "ratings": {
       "overall": 77,
       "passOff": 79,
@@ -2197,21 +2240,21 @@
       "passDef": 76,
       "runDef": 76,
       "specialTeams": 70
-    }
+    },
+    "projected": true
   },
   {
     "id": 58,
-    "name": "South Florida",
-    "abbreviation": "USF",
+    "name": "Bull Bay University",
+    "abbreviation": "BBU",
     "mascot": "Bulls",
     "conference": "American Athletic",
     "primaryColor": "##004A36",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/58.png",
-    "stadiumName": "Raymond James Stadium",
+    "stadiumName": "Bull Bay Stadium",
     "city": "Tampa",
     "state": "FL",
-    "capacity": 65828,
     "ratings": {
       "overall": 86,
       "passOff": 89,
@@ -2219,21 +2262,21 @@
       "passDef": 80,
       "runDef": 81,
       "specialTeams": 81
-    }
+    },
+    "projected": true
   },
   {
     "id": 24,
-    "name": "Stanford",
-    "abbreviation": "STAN",
+    "name": "Cardinal Redwood University",
+    "abbreviation": "CRU",
     "mascot": "Cardinal",
     "conference": "ACC",
     "primaryColor": "##8c1515",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/24.png",
-    "stadiumName": "Stanford Stadium",
+    "stadiumName": "Redwood Stadium",
     "city": "Stanford",
     "state": "CA",
-    "capacity": 50424,
     "ratings": {
       "overall": 70,
       "passOff": 71,
@@ -2241,21 +2284,21 @@
       "passDef": 72,
       "runDef": 78,
       "specialTeams": 81
-    }
+    },
+    "projected": true
   },
   {
     "id": 183,
-    "name": "Syracuse",
-    "abbreviation": "SYR",
+    "name": "Orange Upstate University",
+    "abbreviation": "OUU",
     "mascot": "Orange",
     "conference": "ACC",
     "primaryColor": "##ff6500",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/183.png",
-    "stadiumName": "JMA Wireless Dome",
+    "stadiumName": "Carrier Dome North",
     "city": "Syracuse",
     "state": "NY",
-    "capacity": 49057,
     "ratings": {
       "overall": 70,
       "passOff": 71,
@@ -2263,21 +2306,21 @@
       "passDef": 73,
       "runDef": 74,
       "specialTeams": 81
-    }
+    },
+    "projected": true
   },
   {
     "id": 2628,
-    "name": "TCU",
-    "abbreviation": "TCU",
+    "name": "Horned Frog Metroplex University",
+    "abbreviation": "HFM",
     "mascot": "Horned Frogs",
     "conference": "Big 12",
     "primaryColor": "##4d1979",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2628.png",
-    "stadiumName": "Amon G. Carter Stadium",
+    "stadiumName": "Metroplex Stadium",
     "city": "Fort Worth",
     "state": "TX",
-    "capacity": 46000,
     "ratings": {
       "overall": 84,
       "passOff": 86,
@@ -2285,21 +2328,21 @@
       "passDef": 80,
       "runDef": 83,
       "specialTeams": 78
-    }
+    },
+    "projected": true
   },
   {
     "id": 218,
-    "name": "Temple",
-    "abbreviation": "TEM",
+    "name": "Owl Keystone University",
+    "abbreviation": "OKU",
     "mascot": "Owls",
     "conference": "American Athletic",
     "primaryColor": "##A80532",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/218.png",
-    "stadiumName": "Lincoln Financial Field",
+    "stadiumName": "Keystone Stadium",
     "city": "Philadelphia",
     "state": "PA",
-    "capacity": 69879,
     "ratings": {
       "overall": 76,
       "passOff": 78,
@@ -2307,21 +2350,21 @@
       "passDef": 75,
       "runDef": 67,
       "specialTeams": 81
-    }
+    },
+    "projected": true
   },
   {
     "id": 2633,
-    "name": "Tennessee",
-    "abbreviation": "TENN",
+    "name": "Volunteer Summit University",
+    "abbreviation": "VSU",
     "mascot": "Volunteers",
     "conference": "SEC",
     "primaryColor": "##ff8200",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2633.png",
-    "stadiumName": "Neyland Stadium",
+    "stadiumName": "Rocky Top Stadium",
     "city": "Knoxville",
     "state": "TN",
-    "capacity": 102455,
     "ratings": {
       "overall": 87,
       "passOff": 91,
@@ -2329,21 +2372,21 @@
       "passDef": 80,
       "runDef": 83,
       "specialTeams": 85
-    }
+    },
+    "projected": true
   },
   {
     "id": 251,
-    "name": "Texas",
-    "abbreviation": "TEX",
+    "name": "Longhorn Capitol University",
+    "abbreviation": "LCU",
     "mascot": "Longhorns",
     "conference": "SEC",
     "primaryColor": "##c15d26",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/251.png",
-    "stadiumName": "DKR-Texas Memorial Stadium",
+    "stadiumName": "Capitol Stadium",
     "city": "Austin",
     "state": "TX",
-    "capacity": 100119,
     "ratings": {
       "overall": 88,
       "passOff": 86,
@@ -2351,21 +2394,21 @@
       "passDef": 87,
       "runDef": 87,
       "specialTeams": 93
-    }
+    },
+    "projected": true
   },
   {
     "id": 245,
-    "name": "Texas A&M",
-    "abbreviation": "TA&M",
+    "name": "Aggie Station University",
+    "abbreviation": "ASU",
     "mascot": "Aggies",
     "conference": "SEC",
     "primaryColor": "##500000",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/245.png",
-    "stadiumName": "Kyle Field",
+    "stadiumName": "12th Man Stadium",
     "city": "College Station",
     "state": "TX",
-    "capacity": 102733,
     "ratings": {
       "overall": 90,
       "passOff": 88,
@@ -2373,21 +2416,21 @@
       "passDef": 91,
       "runDef": 91,
       "specialTeams": 87
-    }
+    },
+    "projected": true
   },
   {
     "id": 326,
-    "name": "Texas State",
-    "abbreviation": "TXST",
+    "name": "Bobcat Hill Country University",
+    "abbreviation": "BHC",
     "mascot": "Bobcats",
-    "conference": "Sun Belt",
+    "conference": "Pac-12",
     "primaryColor": "##4e1719",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/326.png",
-    "stadiumName": "Bobcat Stadium (TX)",
+    "stadiumName": "Hill Country Stadium",
     "city": "San Marcos",
     "state": "TX",
-    "capacity": 30000,
     "ratings": {
       "overall": 82,
       "passOff": 87,
@@ -2395,21 +2438,21 @@
       "passDef": 75,
       "runDef": 76,
       "specialTeams": 78
-    }
+    },
+    "projected": true
   },
   {
     "id": 2641,
-    "name": "Texas Tech",
-    "abbreviation": "TTU",
+    "name": "Red Raider Llano University",
+    "abbreviation": "RRL",
     "mascot": "Red Raiders",
     "conference": "Big 12",
     "primaryColor": "##CC0000",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2641.png",
-    "stadiumName": "Jones AT&T Stadium",
+    "stadiumName": "Llano Estacado Stadium",
     "city": "Lubbock",
     "state": "TX",
-    "capacity": 60454,
     "ratings": {
       "overall": 93,
       "passOff": 90,
@@ -2417,12 +2460,13 @@
       "passDef": 93,
       "runDef": 93,
       "specialTeams": 92
-    }
+    },
+    "projected": true
   },
   {
     "id": 2649,
-    "name": "Toledo",
-    "abbreviation": "TOL",
+    "name": "Rocket Glass City University",
+    "abbreviation": "RGC",
     "mascot": "Rockets",
     "conference": "Mid-American",
     "primaryColor": "##0a2240",
@@ -2431,7 +2475,6 @@
     "stadiumName": "Glass Bowl",
     "city": "Toledo",
     "state": "OH",
-    "capacity": 26038,
     "ratings": {
       "overall": 84,
       "passOff": 79,
@@ -2439,21 +2482,21 @@
       "passDef": 90,
       "runDef": 88,
       "specialTeams": 59
-    }
+    },
+    "projected": true
   },
   {
     "id": 2653,
-    "name": "Troy",
-    "abbreviation": "TROY",
+    "name": "Trojan Wiregrass University",
+    "abbreviation": "TWU",
     "mascot": "Trojans",
     "conference": "Sun Belt",
     "primaryColor": "##AE0210",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2653.png",
-    "stadiumName": "Veterans Memorial Stadium (AL)",
+    "stadiumName": "Wiregrass Stadium",
     "city": "Troy",
     "state": "AL",
-    "capacity": 30000,
     "ratings": {
       "overall": 77,
       "passOff": 76,
@@ -2461,21 +2504,21 @@
       "passDef": 79,
       "runDef": 77,
       "specialTeams": 82
-    }
+    },
+    "projected": true
   },
   {
     "id": 2655,
-    "name": "Tulane",
-    "abbreviation": "TULN",
+    "name": "Green Wave Crescent University",
+    "abbreviation": "GWC",
     "mascot": "Green Wave",
     "conference": "American Athletic",
     "primaryColor": "##006547",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2655.png",
-    "stadiumName": "Yulman Stadium",
+    "stadiumName": "Crescent City Stadium",
     "city": "New Orleans",
     "state": "LA",
-    "capacity": 30000,
     "ratings": {
       "overall": 82,
       "passOff": 85,
@@ -2483,21 +2526,21 @@
       "passDef": 76,
       "runDef": 79,
       "specialTeams": 89
-    }
+    },
+    "projected": true
   },
   {
     "id": 202,
-    "name": "Tulsa",
-    "abbreviation": "TLSA",
+    "name": "Golden Hurricane Oil University",
+    "abbreviation": "GHO",
     "mascot": "Golden Hurricane",
     "conference": "American Athletic",
     "primaryColor": "##003595",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/202.png",
-    "stadiumName": "Chapman Stadium",
+    "stadiumName": "Oil Capital Stadium",
     "city": "Tulsa",
     "state": "OK",
-    "capacity": 30000,
     "ratings": {
       "overall": 75,
       "passOff": 76,
@@ -2505,21 +2548,21 @@
       "passDef": 75,
       "runDef": 74,
       "specialTeams": 78
-    }
+    },
+    "projected": true
   },
   {
     "id": 5,
-    "name": "UAB",
-    "abbreviation": "UAB",
+    "name": "Blazer Iron University",
+    "abbreviation": "BIU",
     "mascot": "Blazers",
     "conference": "American Athletic",
     "primaryColor": "##003b28",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/5.png",
-    "stadiumName": "Protective Stadium",
+    "stadiumName": "Iron Bowl South",
     "city": "Birmingham",
     "state": "AL",
-    "capacity": 0,
     "ratings": {
       "overall": 70,
       "passOff": 78,
@@ -2527,21 +2570,21 @@
       "passDef": 62,
       "runDef": 62,
       "specialTeams": 65
-    }
+    },
+    "projected": true
   },
   {
     "id": 2116,
-    "name": "UCF",
-    "abbreviation": "UCF",
+    "name": "Knight Citrus University",
+    "abbreviation": "KCU",
     "mascot": "Knights",
     "conference": "Big 12",
     "primaryColor": "##ba9b37",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2116.png",
-    "stadiumName": "FBC Mortgage Stadium",
+    "stadiumName": "Citrus Bowl",
     "city": "Orlando",
     "state": "FL",
-    "capacity": 44206,
     "ratings": {
       "overall": 79,
       "passOff": 77,
@@ -2549,21 +2592,21 @@
       "passDef": 84,
       "runDef": 83,
       "specialTeams": 82
-    }
+    },
+    "projected": true
   },
   {
     "id": 26,
-    "name": "UCLA",
-    "abbreviation": "UCLA",
+    "name": "Pacific Bruin University",
+    "abbreviation": "PBU",
     "mascot": "Bruins",
     "conference": "Big Ten",
     "primaryColor": "##2774ae",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/26.png",
-    "stadiumName": "Rose Bowl",
+    "stadiumName": "Rose Bowl West",
     "city": "Pasadena",
     "state": "CA",
-    "capacity": 88565,
     "ratings": {
       "overall": 75,
       "passOff": 75,
@@ -2571,11 +2614,12 @@
       "passDef": 76,
       "runDef": 71,
       "specialTeams": 82
-    }
+    },
+    "projected": true
   },
   {
     "id": 41,
-    "name": "UConn",
+    "name": "UConn University",
     "abbreviation": "CONN",
     "mascot": "Huskies",
     "conference": "FBS Independents",
@@ -2585,7 +2629,6 @@
     "stadiumName": "Pratt & Whitney Stadium",
     "city": "East Hartford",
     "state": "CT",
-    "capacity": 40000,
     "ratings": {
       "overall": 83,
       "passOff": 86,
@@ -2593,11 +2636,12 @@
       "passDef": 79,
       "runDef": 77,
       "specialTeams": 87
-    }
+    },
+    "projected": true
   },
   {
     "id": 2433,
-    "name": "UL Monroe",
+    "name": "UL Monroe University",
     "abbreviation": "ULM",
     "mascot": "Warhawks",
     "conference": "Sun Belt",
@@ -2607,7 +2651,6 @@
     "stadiumName": "Malone Stadium",
     "city": "Monroe",
     "state": "LA",
-    "capacity": 27617,
     "ratings": {
       "overall": 64,
       "passOff": 65,
@@ -2615,21 +2658,21 @@
       "passDef": 67,
       "runDef": 67,
       "specialTeams": 70
-    }
+    },
+    "projected": true
   },
   {
     "id": 2439,
-    "name": "UNLV",
-    "abbreviation": "UNLV",
+    "name": "Rebel Neon University",
+    "abbreviation": "RNU",
     "mascot": "Rebels",
     "conference": "Mountain West",
     "primaryColor": "##b10202",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2439.png",
-    "stadiumName": "Allegiant Stadium",
+    "stadiumName": "Neon Bowl",
     "city": "Las Vegas",
     "state": "NV",
-    "capacity": 65000,
     "ratings": {
       "overall": 83,
       "passOff": 86,
@@ -2637,21 +2680,21 @@
       "passDef": 77,
       "runDef": 77,
       "specialTeams": 83
-    }
+    },
+    "projected": true
   },
   {
     "id": 30,
-    "name": "USC",
-    "abbreviation": "USC",
+    "name": "Trojan Sunset University",
+    "abbreviation": "TSU",
     "mascot": "Trojans",
     "conference": "Big Ten",
     "primaryColor": "##9e2237",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/30.png",
-    "stadiumName": "Los Angeles Memorial Coliseum",
+    "stadiumName": "Sunset Coliseum",
     "city": "Los Angeles",
     "state": "CA",
-    "capacity": 77500,
     "ratings": {
       "overall": 88,
       "passOff": 91,
@@ -2659,21 +2702,21 @@
       "passDef": 85,
       "runDef": 85,
       "specialTeams": 60
-    }
+    },
+    "projected": true
   },
   {
     "id": 254,
-    "name": "Utah",
-    "abbreviation": "UTAH",
+    "name": "Ute Canyon University",
+    "abbreviation": "UCY",
     "mascot": "Utes",
     "conference": "Big 12",
     "primaryColor": "##ea002a",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/254.png",
-    "stadiumName": "Rice-Eccles Stadium",
+    "stadiumName": "Canyon Rim Stadium",
     "city": "Salt Lake City",
     "state": "UT",
-    "capacity": 51444,
     "ratings": {
       "overall": 91,
       "passOff": 90,
@@ -2681,21 +2724,21 @@
       "passDef": 89,
       "runDef": 86,
       "specialTeams": 83
-    }
+    },
+    "projected": true
   },
   {
     "id": 328,
-    "name": "Utah State",
-    "abbreviation": "USU",
+    "name": "Aggie Cache University",
+    "abbreviation": "ACU",
     "mascot": "Aggies",
-    "conference": "Mountain West",
+    "conference": "Pac-12",
     "primaryColor": "##00263a",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/328.png",
-    "stadiumName": "Maverik Stadium",
+    "stadiumName": "Cache Valley Stadium",
     "city": "Logan",
     "state": "UT",
-    "capacity": 25513,
     "ratings": {
       "overall": 78,
       "passOff": 82,
@@ -2703,21 +2746,21 @@
       "passDef": 73,
       "runDef": 74,
       "specialTeams": 82
-    }
+    },
+    "projected": true
   },
   {
     "id": 2638,
-    "name": "UTEP",
-    "abbreviation": "UTEP",
+    "name": "Miner Borderland University",
+    "abbreviation": "MBU",
     "mascot": "Miners",
-    "conference": "Conference USA",
+    "conference": "Mountain West",
     "primaryColor": "##ff8200",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2638.png",
     "stadiumName": "Sun Bowl",
     "city": "El Paso",
     "state": "TX",
-    "capacity": 51500,
     "ratings": {
       "overall": 68,
       "passOff": 69,
@@ -2725,21 +2768,21 @@
       "passDef": 75,
       "runDef": 75,
       "specialTeams": 63
-    }
+    },
+    "projected": true
   },
   {
     "id": 2636,
-    "name": "UTSA",
-    "abbreviation": "UTSA",
+    "name": "Roadrunner Alamo University",
+    "abbreviation": "RAU",
     "mascot": "Roadrunners",
     "conference": "American Athletic",
     "primaryColor": "##002A5C",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2636.png",
-    "stadiumName": "Alamodome",
+    "stadiumName": "Alamo Stadium",
     "city": "San Antonio",
     "state": "TX",
-    "capacity": 36582,
     "ratings": {
       "overall": 80,
       "passOff": 85,
@@ -2747,21 +2790,21 @@
       "passDef": 77,
       "runDef": 78,
       "specialTeams": 83
-    }
+    },
+    "projected": true
   },
   {
     "id": 238,
-    "name": "Vanderbilt",
-    "abbreviation": "VAN",
+    "name": "Commodore Gold University",
+    "abbreviation": "CGU",
     "mascot": "Commodores",
     "conference": "SEC",
     "primaryColor": "##866d4b",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/238.png",
-    "stadiumName": "FirstBank Stadium",
+    "stadiumName": "Gold Star Stadium",
     "city": "Nashville",
     "state": "TN",
-    "capacity": 40351,
     "ratings": {
       "overall": 89,
       "passOff": 92,
@@ -2769,21 +2812,21 @@
       "passDef": 82,
       "runDef": 86,
       "specialTeams": 82
-    }
+    },
+    "projected": true
   },
   {
     "id": 258,
-    "name": "Virginia",
-    "abbreviation": "UVA",
+    "name": "Cavalier Blue Ridge University",
+    "abbreviation": "CBR",
     "mascot": "Cavaliers",
     "conference": "ACC",
     "primaryColor": "##232d4b",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/258.png",
-    "stadiumName": "Scott Stadium",
+    "stadiumName": "Blue Ridge Bowl",
     "city": "Charlottesville",
     "state": "VA",
-    "capacity": 61500,
     "ratings": {
       "overall": 86,
       "passOff": 85,
@@ -2791,21 +2834,21 @@
       "passDef": 87,
       "runDef": 87,
       "specialTeams": 87
-    }
+    },
+    "projected": true
   },
   {
     "id": 259,
-    "name": "Virginia Tech",
-    "abbreviation": "VT",
+    "name": "Hokie New River University",
+    "abbreviation": "HNR",
     "mascot": "Hokies",
     "conference": "ACC",
     "primaryColor": "##630031",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/259.png",
-    "stadiumName": "Lane Stadium",
+    "stadiumName": "Lane Mountain Stadium",
     "city": "Blacksburg",
     "state": "VA",
-    "capacity": 65632,
     "ratings": {
       "overall": 76,
       "passOff": 72,
@@ -2813,21 +2856,21 @@
       "passDef": 76,
       "runDef": 77,
       "specialTeams": 82
-    }
+    },
+    "projected": true
   },
   {
     "id": 154,
-    "name": "Wake Forest",
-    "abbreviation": "WAKE",
+    "name": "Demon Deacon Triad University",
+    "abbreviation": "DDT",
     "mascot": "Demon Deacons",
     "conference": "ACC",
     "primaryColor": "##9E7E38",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/154.png",
-    "stadiumName": "Allegacy Federal Credit Union Stadium",
+    "stadiumName": "Triad Stadium",
     "city": "Winston-Salem",
     "state": "NC",
-    "capacity": 31500,
     "ratings": {
       "overall": 85,
       "passOff": 79,
@@ -2835,21 +2878,21 @@
       "passDef": 86,
       "runDef": 86,
       "specialTeams": 85
-    }
+    },
+    "projected": true
   },
   {
     "id": 264,
-    "name": "Washington",
-    "abbreviation": "WASH",
+    "name": "Husky Sound University",
+    "abbreviation": "HSU",
     "mascot": "Huskies",
     "conference": "Big Ten",
     "primaryColor": "##33006f",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/264.png",
-    "stadiumName": "Husky Stadium",
+    "stadiumName": "Puget Sound Stadium",
     "city": "Seattle",
     "state": "WA",
-    "capacity": 70138,
     "ratings": {
       "overall": 89,
       "passOff": 87,
@@ -2857,11 +2900,12 @@
       "passDef": 87,
       "runDef": 88,
       "specialTeams": 76
-    }
+    },
+    "projected": true
   },
   {
     "id": 265,
-    "name": "Washington State",
+    "name": "Washington State University",
     "abbreviation": "WSU",
     "mascot": "Cougars",
     "conference": "Pac-12",
@@ -2871,7 +2915,6 @@
     "stadiumName": "Gesa Field",
     "city": "Pullman",
     "state": "WA",
-    "capacity": 32952,
     "ratings": {
       "overall": 81,
       "passOff": 78,
@@ -2879,21 +2922,21 @@
       "passDef": 86,
       "runDef": 86,
       "specialTeams": 71
-    }
+    },
+    "projected": true
   },
   {
     "id": 98,
-    "name": "Western Kentucky",
-    "abbreviation": "WKU",
+    "name": "Hilltoppers Red River University",
+    "abbreviation": "HRR",
     "mascot": "Hilltoppers",
     "conference": "Conference USA",
     "primaryColor": "##F32026",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/98.png",
-    "stadiumName": "Houchens Industries-L.T. Smith Stadium",
+    "stadiumName": "Red River Stadium",
     "city": "Bowling Green",
     "state": "KY",
-    "capacity": 22113,
     "ratings": {
       "overall": 81,
       "passOff": 84,
@@ -2901,21 +2944,21 @@
       "passDef": 78,
       "runDef": 78,
       "specialTeams": 83
-    }
+    },
+    "projected": true
   },
   {
     "id": 2711,
-    "name": "Western Michigan",
-    "abbreviation": "WMU",
+    "name": "Bronco Kalamazoo University",
+    "abbreviation": "BKZ",
     "mascot": "Broncos",
     "conference": "Mid-American",
     "primaryColor": "##532e1f",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2711.png",
-    "stadiumName": "Waldo Stadium",
+    "stadiumName": "Kalamazoo Bowl",
     "city": "Kalamazoo",
     "state": "MI",
-    "capacity": 30200,
     "ratings": {
       "overall": 81,
       "passOff": 75,
@@ -2923,21 +2966,21 @@
       "passDef": 85,
       "runDef": 85,
       "specialTeams": 78
-    }
+    },
+    "projected": true
   },
   {
     "id": 277,
-    "name": "West Virginia",
-    "abbreviation": "WVU",
+    "name": "Mountaineer Monongalia University",
+    "abbreviation": "MMU",
     "mascot": "Mountaineers",
     "conference": "Big 12",
     "primaryColor": "##002855",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/277.png",
-    "stadiumName": "Milan Puskar Stadium",
+    "stadiumName": "Mountaineer Field",
     "city": "Morgantown",
     "state": "WV",
-    "capacity": 60000,
     "ratings": {
       "overall": 76,
       "passOff": 72,
@@ -2945,21 +2988,21 @@
       "passDef": 76,
       "runDef": 79,
       "specialTeams": 84
-    }
+    },
+    "projected": true
   },
   {
     "id": 275,
-    "name": "Wisconsin",
-    "abbreviation": "WIS",
+    "name": "Badger Lakeshore University",
+    "abbreviation": "BLU",
     "mascot": "Badgers",
     "conference": "Big Ten",
     "primaryColor": "##c4012f",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/275.png",
-    "stadiumName": "Camp Randall Stadium",
+    "stadiumName": "Camp Randall North",
     "city": "Madison",
     "state": "WI",
-    "capacity": 80321,
     "ratings": {
       "overall": 76,
       "passOff": 65,
@@ -2967,21 +3010,21 @@
       "passDef": 83,
       "runDef": 85,
       "specialTeams": 71
-    }
+    },
+    "projected": true
   },
   {
     "id": 2751,
-    "name": "Wyoming",
-    "abbreviation": "WYO",
+    "name": "Cowboy High Plains University",
+    "abbreviation": "CHP",
     "mascot": "Cowboys",
     "conference": "Mountain West",
     "primaryColor": "##492f24",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2751.png",
-    "stadiumName": "War Memorial Stadium",
+    "stadiumName": "High Plains Stadium",
     "city": "Laramie",
     "state": "WY",
-    "capacity": 29181,
     "ratings": {
       "overall": 71,
       "passOff": 66,
@@ -2989,6 +3032,7 @@
       "passDef": 83,
       "runDef": 81,
       "specialTeams": 58
-    }
+    },
+    "projected": true
   }
 ]

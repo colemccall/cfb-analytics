@@ -108,20 +108,23 @@ def fetch_player_usage(api_key, year):
     return _get(api_key, "/player/usage", {"year": year, "seasonType": "regular"})
 
 
-def fetch_awards(api_key, year):
-    """Fetch player awards/honors. Returns [] if endpoint unavailable."""
+def _fetch_safe(api_key, path, params):
+    """Call _get() and return [] on any error or non-list response."""
     try:
-        result = _get(api_key, "/awards", {"year": year})
+        result = _get(api_key, path, params)
         return result if isinstance(result, list) else []
-    except Exception:
+    except Exception as e:
+        print(f"    WARNING: {path} {params} failed: {e}")
         return []
 
 
+def fetch_awards(api_key, year):
+    return _fetch_safe(api_key, "/awards", {"year": year})
+
+
 def fetch_games(api_key, year):
-    """Fetch game results for the regular season."""
-    return _get(api_key, "/games", {"year": year, "seasonType": "regular"})
+    return _fetch_safe(api_key, "/games", {"year": year, "seasonType": "regular"})
 
 
 def fetch_game_player_stats(api_key, year):
-    """Fetch per-game player stats for every game in a regular season."""
-    return _get(api_key, "/games/players", {"year": year, "seasonType": "regular"})
+    return _fetch_safe(api_key, "/games/players", {"year": year, "seasonType": "regular"})

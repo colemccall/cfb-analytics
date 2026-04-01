@@ -13,7 +13,7 @@ from api_client import (
 from rating_engine import get_position_group, compute_raw_ratings, normalize_all_ratings, compute_overall, SKILL_ATTRS
 
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "app", "assets", "data")
-YEARS = [2022, 2023, 2024, 2025]
+YEARS = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
 
 FIRST_NAMES = [
     "James", "John", "Robert", "Michael", "David", "Chris", "Daniel", "Marcus",
@@ -829,6 +829,30 @@ def build_player_gamelogs(game_stats_raw, games_raw):
     return gamelogs
 
 
+def build_public_versions(players_private, teams_private, team_name_map):
+    """Generate public (anonymized) players and teams from their private counterparts."""
+    players_public = []
+    used_per_team = {}
+    for p in players_private:
+        tid = p["teamId"]
+        if tid not in used_per_team:
+            used_per_team[tid] = set()
+        first, last = generate_public_name(p["id"], used_per_team[tid])
+        players_public.append({**p, "firstName": first, "lastName": last})
+
+    teams_public = []
+    for t in teams_private:
+        mapping = team_name_map.get(t["name"], {})
+        teams_public.append({
+            **t,
+            "name": mapping.get("publicName", f"{t['name']} University"),
+            "abbreviation": mapping.get("publicAbbreviation", t["abbreviation"]),
+            "mascot": mapping.get("publicMascot", t["mascot"]),
+            "stadiumName": mapping.get("publicStadiumName", t["stadiumName"]),
+        })
+    return players_public, teams_public
+
+
 def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids=None, prior_player_teams=None):
     """Process a single year and return all data dicts."""
     print(f"\n{'='*60}")
@@ -907,20 +931,7 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
         roster = rosters.get(school, [])
         tq = team_quality.get(school.lower(), 0.3)
 
-        teams_private.append({
-            "id": team_id,
-            "name": school,
-            "abbreviation": team.get("abbreviation", ""),
-            "mascot": team.get("mascot", ""),
-            "conference": team.get("conference", ""),
-            "primaryColor": f"#{team.get('color', '333333')}",
-            "secondaryColor": f"#{team.get('alt_color', '666666')}",
-            "logoUrl": (team.get("logos") or [""])[0] if team.get("logos") else "",
-            "stadiumName": team.get("location", {}).get("name", "") if team.get("location") else "",
-            "city": team.get("location", {}).get("city", "") if team.get("location") else "",
-            "state": team.get("location", {}).get("state", "") if team.get("location") else "",
-            "capacity": team.get("location", {}).get("capacity", 0) if team.get("location") else 0,
-        })
+        teams_private.append(_team_dict(team))
 
         t_stats = team_stats_lookup.get(school.lower(), {})
 
@@ -1086,25 +1097,7 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
 
     # Public versions
     print("Generating public names...")
-    teams_public = []
-    for t in teams_private:
-        mapping = team_name_map.get(t["name"], {})
-        teams_public.append({
-            **t,
-            "name": mapping.get("publicName", f"{t['name']} University"),
-            "abbreviation": mapping.get("publicAbbreviation", t["abbreviation"]),
-            "mascot": mapping.get("publicMascot", t["mascot"]),
-            "stadiumName": mapping.get("publicStadiumName", t["stadiumName"]),
-        })
-
-    players_public = []
-    used_per_team = {}
-    for p in players_private:
-        tid = p["teamId"]
-        if tid not in used_per_team:
-            used_per_team[tid] = set()
-        first, last = generate_public_name(p["id"], used_per_team[tid])
-        players_public.append({**p, "firstName": first, "lastName": last})
+    players_public, teams_public = build_public_versions(players_private, teams_private, team_name_map)
 
     # Rating distribution
     ovrs = [r["overall"] for r in ratings]
@@ -1196,6 +1189,128 @@ def write_year(year, data, output_dir):
     print(f"  {year}/player_gamelog.json: {len(gamelogs)} players")
 
 
+def _team_dict(team, extra=None):
+    """Build the standard team dict from a raw API team object."""
+    loc = team.get("location") or {}
+    d = {
+        "id": team.get("id", hash(team["school"])),
+        "name": team["school"],
+        "abbreviation": team.get("abbreviation", ""),
+        "mascot": team.get("mascot", ""),
+        "conference": team.get("conference", ""),
+        "primaryColor": f"#{team.get('color', '333333')}",
+        "secondaryColor": f"#{team.get('alt_color', '666666')}",
+        "logoUrl": (team.get("logos") or [""])[0] if team.get("logos") else "",
+        "stadiumName": loc.get("name", ""),
+        "city": loc.get("city", ""),
+        "state": loc.get("state", ""),
+        "capacity": loc.get("capacity", 0),
+    }
+    if extra:
+        d.update(extra)
+    return d
+
+
+def build_projected_year(api_key, proj_year, base_year, output_dir, team_name_map):
+    """Build a projected roster for proj_year using base_year ratings.
+
+    Returning players carry forward their trajectory (or OVR+1).
+    New players are rated from a star-based floor only.
+    """
+    print(f"  Fetching {proj_year} teams...")
+    teams_raw = fetch_teams(api_key, proj_year)
+    team_names = [t["school"] for t in teams_raw]
+    print(f"    {len(team_names)} teams")
+
+    print(f"  Fetching {proj_year} rosters...")
+    rosters = fetch_all_rosters(api_key, team_names, proj_year)
+
+    base_dir = os.path.join(output_dir, str(base_year))
+    with open(os.path.join(base_dir, "ratings.json")) as f:
+        base_ratings = {r["playerId"]: r for r in json.load(f)}
+    with open(os.path.join(base_dir, "teams_private.json")) as f:
+        base_teams = {t["name"]: t for t in json.load(f)}
+
+    try:
+        sp_ratings = fetch_sp_ratings(api_key, proj_year)
+        talent_data = fetch_talent(api_key, proj_year)
+    except Exception:
+        sp_ratings = fetch_sp_ratings(api_key, base_year)
+        talent_data = fetch_talent(api_key, base_year)
+
+    # Recruiting lookup keyed by (name_lower, team_lower) — same as build_recruit_lookup
+    recruit_lookup = build_recruit_lookup(api_key, proj_year)
+
+    teams_private = []
+    players_private = []
+    ratings = []
+
+    for team in teams_raw:
+        school = team["school"]
+        team_id = team.get("id", hash(school))
+        roster = rosters.get(school, [])
+
+        teams_private.append(_team_dict(team, {"ratings": {}, "projected": True}))
+
+        for player in roster:
+            pid = player.get("id")
+            if not pid:
+                continue
+            position = player.get("position", "")
+            pos_group = get_position_group(position)
+
+            players_private.append({
+                "id": pid,
+                "teamId": team_id,
+                "firstName": player.get("firstName", ""),
+                "lastName": player.get("lastName", ""),
+                "position": position,
+                "positionGroup": pos_group,
+                "jersey": player.get("jersey", ""),
+                "year": player.get("year", 1),
+                "height": player.get("height", ""),
+                "weight": player.get("weight", ""),
+                "projected": True,
+            })
+
+            if pid in base_ratings:
+                prev = base_ratings[pid]
+                new_ovr = prev.get("trajectory") or min(99, prev.get("overall", 55) + 1)
+                r_entry = {k: v for k, v in prev.items() if k not in ("playerId", "overall", "trajectory", "stats")}
+                r_entry.update({"playerId": pid, "overall": new_ovr, "stats": {}, "projected": True})
+            else:
+                # New player: look up stars by (name, team) — recruit_lookup key format
+                name_key = (
+                    f"{player.get('firstName', '')} {player.get('lastName', '')}".strip().lower(),
+                    school.lower(),
+                )
+                stars = recruit_lookup.get(name_key, 0)
+                base_ovr = max(45, min(72, 45 + stars * 5))
+                r_entry = {"playerId": pid, "overall": base_ovr, "stats": {}, "projected": True}
+                for attr in SKILL_ATTRS.get(pos_group, ["runBlock", "passBlock"]):
+                    r_entry[attr] = base_ovr
+            ratings.append(r_entry)
+
+    for t in teams_private:
+        base_t = base_teams.get(t["name"], {})
+        t["ratings"] = base_t.get("ratings", {
+            "overall": 70, "passOff": 70, "runOff": 70, "passDef": 70, "runDef": 70, "specialTeams": 70
+        })
+
+    players_public, teams_public = build_public_versions(players_private, teams_private, team_name_map)
+
+    print(f"  Writing {proj_year} projected data ({len(players_private)} players)...")
+    write_year(proj_year, {
+        "teams_private": teams_private,
+        "teams_public": teams_public,
+        "players_private": players_private,
+        "players_public": players_public,
+        "ratings": ratings,
+        "team_schedule": [],
+        "player_gamelogs": {},
+    }, output_dir)
+
+
 def main():
     print("=== CFB Data Pipeline (Multi-Year) ===")
     api_key = load_api_key()
@@ -1244,14 +1359,42 @@ def main():
         print(f"\nWriting to {os.path.abspath(OUTPUT_DIR)}/")
         write_year(year, data, OUTPUT_DIR)
 
+    # Build 2026 projected roster (if 2025 data is available and 2026 was not explicitly requested)
+    if 2025 in years_to_run or os.path.exists(os.path.join(OUTPUT_DIR, "2025", "players_private.json")):
+        if 2026 not in years_to_run:
+            print("\nBuilding 2026 projected roster...")
+            try:
+                build_projected_year(api_key, 2026, 2025, OUTPUT_DIR, team_name_map)
+            except Exception as e:
+                print(f"  WARNING: 2026 projection failed: {e}")
+
     # Update years index with all available years
     existing_years = set()
     for d in os.listdir(OUTPUT_DIR):
         if d.isdigit() and os.path.isdir(os.path.join(OUTPUT_DIR, d)):
             existing_years.add(int(d))
     all_years = sorted(existing_years)
+
+    # Write main index — separate projected years so UI can label them differently.
+    # A year is projected if its teams_private.json contains any team with "projected": True.
+    projected_years = set()
+    for y in all_years:
+        tp_path = os.path.join(OUTPUT_DIR, str(y), "teams_private.json")
+        if os.path.exists(tp_path):
+            with open(tp_path) as f:
+                try:
+                    if any(t.get("projected") for t in json.load(f)):
+                        projected_years.add(y)
+                except Exception:
+                    pass
+    years_index = {
+        "seasons": [y for y in all_years if y not in projected_years],
+        "projected": [y for y in all_years if y in projected_years],
+    }
     with open(os.path.join(OUTPUT_DIR, "years.json"), "w") as f:
-        json.dump(all_years, f)
+        json.dump(all_years, f)  # keep flat list for backwards compat
+    with open(os.path.join(OUTPUT_DIR, "years_meta.json"), "w") as f:
+        json.dump(years_index, f)
 
     print(f"\nDone! Processed {len(years_to_run)} season(s). Available: {all_years}")
 

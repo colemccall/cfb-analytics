@@ -465,11 +465,20 @@ const tierBadge = v => {
 // ── Data loading ───────────────────────────────────────────────────────────
 async function loadData() {
   const base = 'app/assets/data/';
-  try { years = await fetch(base + 'years.json').then(r => r.json()); }
-  catch { years = [2024]; }
+  let projectedYears = new Set();
+  try {
+    const meta = await fetch(base + 'years_meta.json').then(r => r.json());
+    years = [...(meta.seasons || []), ...(meta.projected || [])].sort((a, b) => a - b);
+    projectedYears = new Set(meta.projected || []);
+  } catch {
+    try { years = await fetch(base + 'years.json').then(r => r.json()); }
+    catch { years = [2024]; }
+  }
 
   const yearSel = document.getElementById('year-select');
-  yearSel.innerHTML = years.map(y => `<option value="${y}">${y} Season</option>`).join('');
+  yearSel.innerHTML = years.map(y =>
+    `<option value="${y}">${y}${projectedYears.has(y) ? ' (Projected)' : ' Season'}</option>`
+  ).join('');
   yearSel.value = years[years.length - 1];
   yearSel.onchange = e => { currentYear = parseInt(e.target.value); onDataReady(); };
 

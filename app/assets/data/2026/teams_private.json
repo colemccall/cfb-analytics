@@ -11,7 +11,6 @@
     "stadiumName": "Falcon Stadium",
     "city": "Colorado Springs",
     "state": "CO",
-    "capacity": 46692,
     "ratings": {
       "overall": 76,
       "passOff": 78,
@@ -19,7 +18,8 @@
       "passDef": 63,
       "runDef": 68,
       "specialTeams": 67
-    }
+    },
+    "projected": true
   },
   {
     "id": 2006,
@@ -33,7 +33,6 @@
     "stadiumName": "InfoCision Stadium",
     "city": "Akron",
     "state": "OH",
-    "capacity": 30000,
     "ratings": {
       "overall": 68,
       "passOff": 67,
@@ -41,7 +40,8 @@
       "passDef": 78,
       "runDef": 78,
       "specialTeams": 72
-    }
+    },
+    "projected": true
   },
   {
     "id": 333,
@@ -55,7 +55,6 @@
     "stadiumName": "Bryant-Denny Stadium",
     "city": "Tuscaloosa",
     "state": "AL",
-    "capacity": 101821,
     "ratings": {
       "overall": 87,
       "passOff": 87,
@@ -63,7 +62,8 @@
       "passDef": 88,
       "runDef": 86,
       "specialTeams": 86
-    }
+    },
+    "projected": true
   },
   {
     "id": 2026,
@@ -77,7 +77,6 @@
     "stadiumName": "Kidd Brewer Stadium",
     "city": "Boone",
     "state": "NC",
-    "capacity": 30000,
     "ratings": {
       "overall": 71,
       "passOff": 76,
@@ -85,7 +84,8 @@
       "passDef": 68,
       "runDef": 75,
       "specialTeams": 78
-    }
+    },
+    "projected": true
   },
   {
     "id": 12,
@@ -99,7 +99,6 @@
     "stadiumName": "Arizona Stadium",
     "city": "Tucson",
     "state": "AZ",
-    "capacity": 50782,
     "ratings": {
       "overall": 86,
       "passOff": 84,
@@ -107,7 +106,8 @@
       "passDef": 88,
       "runDef": 85,
       "specialTeams": 79
-    }
+    },
+    "projected": true
   },
   {
     "id": 9,
@@ -121,7 +121,6 @@
     "stadiumName": "Mountain America Stadium",
     "city": "Tempe",
     "state": "AZ",
-    "capacity": 65870,
     "ratings": {
       "overall": 81,
       "passOff": 78,
@@ -129,7 +128,8 @@
       "passDef": 82,
       "runDef": 83,
       "specialTeams": 79
-    }
+    },
+    "projected": true
   },
   {
     "id": 8,
@@ -143,7 +143,6 @@
     "stadiumName": "Razorback Stadium",
     "city": "Fayetteville",
     "state": "AR",
-    "capacity": 80000,
     "ratings": {
       "overall": 81,
       "passOff": 87,
@@ -151,7 +150,8 @@
       "passDef": 76,
       "runDef": 76,
       "specialTeams": 79
-    }
+    },
+    "projected": true
   },
   {
     "id": 2032,
@@ -165,7 +165,6 @@
     "stadiumName": "Centennial Bank Stadium",
     "city": "Jonesboro",
     "state": "AR",
-    "capacity": 30382,
     "ratings": {
       "overall": 76,
       "passOff": 77,
@@ -173,7 +172,8 @@
       "passDef": 70,
       "runDef": 75,
       "specialTeams": 79
-    }
+    },
+    "projected": true
   },
   {
     "id": 349,
@@ -187,7 +187,6 @@
     "stadiumName": "Michie Stadium",
     "city": "West Point",
     "state": "NY",
-    "capacity": 38000,
     "ratings": {
       "overall": 77,
       "passOff": 70,
@@ -195,7 +194,8 @@
       "passDef": 80,
       "runDef": 78,
       "specialTeams": 65
-    }
+    },
+    "projected": true
   },
   {
     "id": 2,
@@ -209,7 +209,6 @@
     "stadiumName": "Jordan-Hare Stadium",
     "city": "Auburn",
     "state": "AL",
-    "capacity": 87451,
     "ratings": {
       "overall": 85,
       "passOff": 79,
@@ -217,7 +216,8 @@
       "passDef": 86,
       "runDef": 89,
       "specialTeams": 90
-    }
+    },
+    "projected": true
   },
   {
     "id": 2050,
@@ -231,7 +231,6 @@
     "stadiumName": "Scheumann Stadium",
     "city": "Muncie",
     "state": "IN",
-    "capacity": 22500,
     "ratings": {
       "overall": 61,
       "passOff": 60,
@@ -239,7 +238,8 @@
       "passDef": 68,
       "runDef": 68,
       "specialTeams": 73
-    }
+    },
+    "projected": true
   },
   {
     "id": 239,
@@ -253,7 +253,6 @@
     "stadiumName": "McLane Stadium",
     "city": "Waco",
     "state": "TX",
-    "capacity": 45140,
     "ratings": {
       "overall": 78,
       "passOff": 85,
@@ -261,21 +260,21 @@
       "passDef": 75,
       "runDef": 68,
       "specialTeams": 79
-    }
+    },
+    "projected": true
   },
   {
     "id": 68,
     "name": "Boise State",
     "abbreviation": "BOIS",
     "mascot": "Broncos",
-    "conference": "Mountain West",
+    "conference": "Pac-12",
     "primaryColor": "##0033a0",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/68.png",
     "stadiumName": "Albertsons Stadium",
     "city": "Boise",
     "state": "ID",
-    "capacity": 36387,
     "ratings": {
       "overall": 83,
       "passOff": 82,
@@ -283,7 +282,8 @@
       "passDef": 83,
       "runDef": 79,
       "specialTeams": 78
-    }
+    },
+    "projected": true
   },
   {
     "id": 103,
@@ -297,7 +297,6 @@
     "stadiumName": "Alumni Stadium (Chestnut Hill, MA)",
     "city": "Chestnut Hill",
     "state": "MA",
-    "capacity": 44500,
     "ratings": {
       "overall": 72,
       "passOff": 78,
@@ -305,7 +304,8 @@
       "passDef": 68,
       "runDef": 69,
       "specialTeams": 68
-    }
+    },
+    "projected": true
   },
   {
     "id": 189,
@@ -319,7 +319,6 @@
     "stadiumName": "Doyt L. Perry Stadium",
     "city": "Bowling Green",
     "state": "OH",
-    "capacity": 24000,
     "ratings": {
       "overall": 72,
       "passOff": 63,
@@ -327,7 +326,8 @@
       "passDef": 78,
       "runDef": 79,
       "specialTeams": 79
-    }
+    },
+    "projected": true
   },
   {
     "id": 2084,
@@ -341,7 +341,6 @@
     "stadiumName": "UB Stadium",
     "city": "Amherst",
     "state": "NY",
-    "capacity": 30270,
     "ratings": {
       "overall": 77,
       "passOff": 68,
@@ -349,7 +348,8 @@
       "passDef": 82,
       "runDef": 80,
       "specialTeams": 84
-    }
+    },
+    "projected": true
   },
   {
     "id": 252,
@@ -363,7 +363,6 @@
     "stadiumName": "LaVell Edwards Stadium",
     "city": "Provo",
     "state": "UT",
-    "capacity": 63470,
     "ratings": {
       "overall": 86,
       "passOff": 86,
@@ -371,7 +370,8 @@
       "passDef": 86,
       "runDef": 86,
       "specialTeams": 86
-    }
+    },
+    "projected": true
   },
   {
     "id": 25,
@@ -385,7 +385,6 @@
     "stadiumName": "California Memorial Stadium",
     "city": "Berkeley",
     "state": "CA",
-    "capacity": 62467,
     "ratings": {
       "overall": 77,
       "passOff": 80,
@@ -393,7 +392,8 @@
       "passDef": 78,
       "runDef": 77,
       "specialTeams": 73
-    }
+    },
+    "projected": true
   },
   {
     "id": 2117,
@@ -407,7 +407,6 @@
     "stadiumName": "Kelly/Shorts Stadium",
     "city": "Mount Pleasant",
     "state": "MI",
-    "capacity": 30255,
     "ratings": {
       "overall": 76,
       "passOff": 67,
@@ -415,7 +414,8 @@
       "passDef": 80,
       "runDef": 80,
       "specialTeams": 74
-    }
+    },
+    "projected": true
   },
   {
     "id": 2429,
@@ -429,7 +429,6 @@
     "stadiumName": "Jerry Richardson Stadium",
     "city": "Charlotte",
     "state": "NC",
-    "capacity": 15300,
     "ratings": {
       "overall": 59,
       "passOff": 64,
@@ -437,7 +436,8 @@
       "passDef": 59,
       "runDef": 61,
       "specialTeams": 61
-    }
+    },
+    "projected": true
   },
   {
     "id": 2132,
@@ -451,7 +451,6 @@
     "stadiumName": "Nippert Stadium",
     "city": "Cincinnati",
     "state": "OH",
-    "capacity": 40000,
     "ratings": {
       "overall": 79,
       "passOff": 83,
@@ -459,7 +458,8 @@
       "passDef": 78,
       "runDef": 77,
       "specialTeams": 77
-    }
+    },
+    "projected": true
   },
   {
     "id": 228,
@@ -473,7 +473,6 @@
     "stadiumName": "Memorial Stadium (Clemson, SC)",
     "city": "Clemson",
     "state": "SC",
-    "capacity": 81500,
     "ratings": {
       "overall": 85,
       "passOff": 81,
@@ -481,7 +480,8 @@
       "passDef": 84,
       "runDef": 87,
       "specialTeams": 86
-    }
+    },
+    "projected": true
   },
   {
     "id": 324,
@@ -495,7 +495,6 @@
     "stadiumName": "Brooks Stadium (SC)",
     "city": "Conway",
     "state": "SC",
-    "capacity": 21000,
     "ratings": {
       "overall": 66,
       "passOff": 72,
@@ -503,7 +502,8 @@
       "passDef": 65,
       "runDef": 65,
       "specialTeams": 77
-    }
+    },
+    "projected": true
   },
   {
     "id": 38,
@@ -517,7 +517,6 @@
     "stadiumName": "Folsom Field",
     "city": "Boulder",
     "state": "CO",
-    "capacity": 50183,
     "ratings": {
       "overall": 76,
       "passOff": 76,
@@ -525,21 +524,21 @@
       "passDef": 78,
       "runDef": 75,
       "specialTeams": 84
-    }
+    },
+    "projected": true
   },
   {
     "id": 36,
     "name": "Colorado State",
     "abbreviation": "CSU",
     "mascot": "Rams",
-    "conference": "Mountain West",
+    "conference": "Pac-12",
     "primaryColor": "##1e4d2b",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/36.png",
     "stadiumName": "Canvas Stadium",
     "city": "Fort Collins",
     "state": "CO",
-    "capacity": 36500,
     "ratings": {
       "overall": 64,
       "passOff": 68,
@@ -547,7 +546,8 @@
       "passDef": 70,
       "runDef": 65,
       "specialTeams": 64
-    }
+    },
+    "projected": true
   },
   {
     "id": 48,
@@ -561,7 +561,6 @@
     "stadiumName": "Delaware Stadium",
     "city": "Newark",
     "state": "DE",
-    "capacity": 22000,
     "ratings": {
       "overall": 72,
       "passOff": 80,
@@ -569,7 +568,8 @@
       "passDef": 65,
       "runDef": 69,
       "specialTeams": 65
-    }
+    },
+    "projected": true
   },
   {
     "id": 150,
@@ -583,7 +583,6 @@
     "stadiumName": "Wallace Wade Stadium",
     "city": "Durham",
     "state": "NC",
-    "capacity": 40004,
     "ratings": {
       "overall": 82,
       "passOff": 87,
@@ -591,7 +590,8 @@
       "passDef": 74,
       "runDef": 78,
       "specialTeams": 78
-    }
+    },
+    "projected": true
   },
   {
     "id": 151,
@@ -605,7 +605,6 @@
     "stadiumName": "Dowdy-Ficklen Stadium",
     "city": "Greenville",
     "state": "NC",
-    "capacity": 50000,
     "ratings": {
       "overall": 85,
       "passOff": 86,
@@ -613,7 +612,8 @@
       "passDef": 80,
       "runDef": 84,
       "specialTeams": 74
-    }
+    },
+    "projected": true
   },
   {
     "id": 2199,
@@ -627,7 +627,6 @@
     "stadiumName": "Rynearson Stadium",
     "city": "Ypsilanti",
     "state": "MI",
-    "capacity": 30200,
     "ratings": {
       "overall": 66,
       "passOff": 70,
@@ -635,7 +634,8 @@
       "passDef": 74,
       "runDef": 64,
       "specialTeams": 74
-    }
+    },
+    "projected": true
   },
   {
     "id": 57,
@@ -649,7 +649,6 @@
     "stadiumName": "Ben Hill Griffin Stadium",
     "city": "Gainesville",
     "state": "FL",
-    "capacity": 88548,
     "ratings": {
       "overall": 78,
       "passOff": 75,
@@ -657,7 +656,8 @@
       "passDef": 83,
       "runDef": 82,
       "specialTeams": 90
-    }
+    },
+    "projected": true
   },
   {
     "id": 2226,
@@ -671,7 +671,6 @@
     "stadiumName": "FAU Stadium",
     "city": "Boca Raton",
     "state": "FL",
-    "capacity": 29419,
     "ratings": {
       "overall": 73,
       "passOff": 81,
@@ -679,7 +678,8 @@
       "passDef": 64,
       "runDef": 64,
       "specialTeams": 68
-    }
+    },
+    "projected": true
   },
   {
     "id": 2229,
@@ -693,7 +693,6 @@
     "stadiumName": "Pitbull Stadium",
     "city": "Miami",
     "state": "FL",
-    "capacity": null,
     "ratings": {
       "overall": 73,
       "passOff": 77,
@@ -701,7 +700,8 @@
       "passDef": 65,
       "runDef": 70,
       "specialTeams": 75
-    }
+    },
+    "projected": true
   },
   {
     "id": 52,
@@ -715,7 +715,6 @@
     "stadiumName": "Doak Campbell Stadium",
     "city": "Tallahassee",
     "state": "FL",
-    "capacity": 67277,
     "ratings": {
       "overall": 85,
       "passOff": 84,
@@ -723,21 +722,21 @@
       "passDef": 84,
       "runDef": 84,
       "specialTeams": 75
-    }
+    },
+    "projected": true
   },
   {
     "id": 278,
     "name": "Fresno State",
     "abbreviation": "FRES",
     "mascot": "Bulldogs",
-    "conference": "Mountain West",
+    "conference": "Pac-12",
     "primaryColor": "##db0032",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/278.png",
     "stadiumName": "Valley Children's Stadium",
     "city": "Fresno",
     "state": "CA",
-    "capacity": 41031,
     "ratings": {
       "overall": 79,
       "passOff": 73,
@@ -745,7 +744,8 @@
       "passDef": 86,
       "runDef": 84,
       "specialTeams": 77
-    }
+    },
+    "projected": true
   },
   {
     "id": 61,
@@ -759,7 +759,6 @@
     "stadiumName": "Sanford Stadium",
     "city": "Athens",
     "state": "GA",
-    "capacity": 92746,
     "ratings": {
       "overall": 89,
       "passOff": 87,
@@ -767,7 +766,8 @@
       "passDef": 86,
       "runDef": 89,
       "specialTeams": 93
-    }
+    },
+    "projected": true
   },
   {
     "id": 290,
@@ -781,7 +781,6 @@
     "stadiumName": "Allen E. Paulson Stadium",
     "city": "Statesboro",
     "state": "GA",
-    "capacity": 25000,
     "ratings": {
       "overall": 74,
       "passOff": 80,
@@ -789,7 +788,8 @@
       "passDef": 64,
       "runDef": 63,
       "specialTeams": 75
-    }
+    },
+    "projected": true
   },
   {
     "id": 2247,
@@ -803,7 +803,6 @@
     "stadiumName": "Center Parc Stadium",
     "city": "Atlanta",
     "state": "GA",
-    "capacity": 25000,
     "ratings": {
       "overall": 62,
       "passOff": 73,
@@ -811,7 +810,8 @@
       "passDef": 60,
       "runDef": 59,
       "specialTeams": 68
-    }
+    },
+    "projected": true
   },
   {
     "id": 59,
@@ -825,7 +825,6 @@
     "stadiumName": "Bobby Dodd Stadium",
     "city": "Atlanta",
     "state": "GA",
-    "capacity": 55000,
     "ratings": {
       "overall": 83,
       "passOff": 86,
@@ -833,7 +832,8 @@
       "passDef": 79,
       "runDef": 79,
       "specialTeams": 87
-    }
+    },
+    "projected": true
   },
   {
     "id": 62,
@@ -847,7 +847,6 @@
     "stadiumName": "Clarence T.C. Ching Athletics Complex",
     "city": "Honolulu",
     "state": "HI",
-    "capacity": 9000,
     "ratings": {
       "overall": 78,
       "passOff": 81,
@@ -855,7 +854,8 @@
       "passDef": 79,
       "runDef": 80,
       "specialTeams": 86
-    }
+    },
+    "projected": true
   },
   {
     "id": 248,
@@ -869,7 +869,6 @@
     "stadiumName": "TDECU Stadium",
     "city": "Houston",
     "state": "TX",
-    "capacity": 40000,
     "ratings": {
       "overall": 83,
       "passOff": 83,
@@ -877,7 +876,8 @@
       "passDef": 81,
       "runDef": 82,
       "specialTeams": 87
-    }
+    },
+    "projected": true
   },
   {
     "id": 356,
@@ -891,7 +891,6 @@
     "stadiumName": "Memorial Stadium (Champaign, IL)",
     "city": "Champaign",
     "state": "IL",
-    "capacity": 60670,
     "ratings": {
       "overall": 84,
       "passOff": 84,
@@ -899,7 +898,8 @@
       "passDef": 81,
       "runDef": 82,
       "specialTeams": 83
-    }
+    },
+    "projected": true
   },
   {
     "id": 84,
@@ -913,7 +913,6 @@
     "stadiumName": "Memorial Stadium (Bloomington, IN)",
     "city": "Bloomington",
     "state": "IN",
-    "capacity": 52656,
     "ratings": {
       "overall": 94,
       "passOff": 93,
@@ -921,7 +920,8 @@
       "passDef": 93,
       "runDef": 94,
       "specialTeams": 84
-    }
+    },
+    "projected": true
   },
   {
     "id": 2294,
@@ -935,7 +935,6 @@
     "stadiumName": "Kinnick Stadium",
     "city": "Iowa City",
     "state": "IA",
-    "capacity": 69250,
     "ratings": {
       "overall": 86,
       "passOff": 80,
@@ -943,7 +942,8 @@
       "passDef": 90,
       "runDef": 89,
       "specialTeams": 87
-    }
+    },
+    "projected": true
   },
   {
     "id": 66,
@@ -957,7 +957,6 @@
     "stadiumName": "Jack Trice Stadium",
     "city": "Ames",
     "state": "IA",
-    "capacity": 61500,
     "ratings": {
       "overall": 84,
       "passOff": 79,
@@ -965,7 +964,8 @@
       "passDef": 84,
       "runDef": 84,
       "specialTeams": 84
-    }
+    },
+    "projected": true
   },
   {
     "id": 55,
@@ -979,7 +979,6 @@
     "stadiumName": "AmFirst Stadium",
     "city": "Jacksonville",
     "state": "AL",
-    "capacity": 24000,
     "ratings": {
       "overall": 78,
       "passOff": 78,
@@ -987,7 +986,8 @@
       "passDef": 74,
       "runDef": 76,
       "specialTeams": 76
-    }
+    },
+    "projected": true
   },
   {
     "id": 256,
@@ -1001,7 +1001,6 @@
     "stadiumName": "Bridgeforth Stadium",
     "city": "Harrisonburg",
     "state": "VA",
-    "capacity": 24877,
     "ratings": {
       "overall": 86,
       "passOff": 85,
@@ -1009,7 +1008,8 @@
       "passDef": 86,
       "runDef": 86,
       "specialTeams": 76
-    }
+    },
+    "projected": true
   },
   {
     "id": 2305,
@@ -1023,7 +1023,6 @@
     "stadiumName": "Memorial Stadium",
     "city": "Lawrence",
     "state": "KS",
-    "capacity": 47000,
     "ratings": {
       "overall": 79,
       "passOff": 82,
@@ -1031,7 +1030,8 @@
       "passDef": 79,
       "runDef": 78,
       "specialTeams": 79
-    }
+    },
+    "projected": true
   },
   {
     "id": 2306,
@@ -1045,7 +1045,6 @@
     "stadiumName": "Bill Snyder Family Stadium",
     "city": "Manhattan",
     "state": "KS",
-    "capacity": 50000,
     "ratings": {
       "overall": 82,
       "passOff": 80,
@@ -1053,7 +1052,8 @@
       "passDef": 83,
       "runDef": 81,
       "specialTeams": 84
-    }
+    },
+    "projected": true
   },
   {
     "id": 338,
@@ -1067,7 +1067,6 @@
     "stadiumName": "Fifth Third Stadium",
     "city": "Kennesaw",
     "state": "GA",
-    "capacity": 8318,
     "ratings": {
       "overall": 78,
       "passOff": 80,
@@ -1075,7 +1074,8 @@
       "passDef": 76,
       "runDef": 76,
       "specialTeams": 75
-    }
+    },
+    "projected": true
   },
   {
     "id": 2309,
@@ -1089,7 +1089,6 @@
     "stadiumName": "Dix Stadium",
     "city": "Kent",
     "state": "OH",
-    "capacity": 25319,
     "ratings": {
       "overall": 63,
       "passOff": 66,
@@ -1097,7 +1096,8 @@
       "passDef": 69,
       "runDef": 66,
       "specialTeams": 66
-    }
+    },
+    "projected": true
   },
   {
     "id": 96,
@@ -1111,7 +1111,6 @@
     "stadiumName": "Kroger Field",
     "city": "Lexington",
     "state": "KY",
-    "capacity": 61000,
     "ratings": {
       "overall": 80,
       "passOff": 77,
@@ -1119,7 +1118,8 @@
       "passDef": 81,
       "runDef": 82,
       "specialTeams": 85
-    }
+    },
+    "projected": true
   },
   {
     "id": 2335,
@@ -1133,7 +1133,6 @@
     "stadiumName": "Williams Stadium (VA)",
     "city": "Lynchburg",
     "state": "VA",
-    "capacity": 25000,
     "ratings": {
       "overall": 74,
       "passOff": 75,
@@ -1141,7 +1140,8 @@
       "passDef": 76,
       "runDef": 70,
       "specialTeams": 75
-    }
+    },
+    "projected": true
   },
   {
     "id": 309,
@@ -1155,7 +1155,6 @@
     "stadiumName": "Cajun Field",
     "city": "Lafayette",
     "state": "LA",
-    "capacity": 41426,
     "ratings": {
       "overall": 74,
       "passOff": 75,
@@ -1163,7 +1162,8 @@
       "passDef": 71,
       "runDef": 70,
       "specialTeams": 77
-    }
+    },
+    "projected": true
   },
   {
     "id": 2348,
@@ -1177,7 +1177,6 @@
     "stadiumName": "Joe Aillet Stadium",
     "city": "Ruston",
     "state": "LA",
-    "capacity": 28019,
     "ratings": {
       "overall": 78,
       "passOff": 77,
@@ -1185,7 +1184,8 @@
       "passDef": 78,
       "runDef": 79,
       "specialTeams": 80
-    }
+    },
+    "projected": true
   },
   {
     "id": 97,
@@ -1199,7 +1199,6 @@
     "stadiumName": "L&N Federal Credit Union Stadium",
     "city": "Louisville",
     "state": "KY",
-    "capacity": 60000,
     "ratings": {
       "overall": 85,
       "passOff": 81,
@@ -1207,7 +1206,8 @@
       "passDef": 86,
       "runDef": 86,
       "specialTeams": 85
-    }
+    },
+    "projected": true
   },
   {
     "id": 99,
@@ -1221,7 +1221,6 @@
     "stadiumName": "Tiger Stadium (LA)",
     "city": "Baton Rouge",
     "state": "LA",
-    "capacity": 102321,
     "ratings": {
       "overall": 85,
       "passOff": 79,
@@ -1229,7 +1228,8 @@
       "passDef": 87,
       "runDef": 87,
       "specialTeams": 94
-    }
+    },
+    "projected": true
   },
   {
     "id": 276,
@@ -1243,7 +1243,6 @@
     "stadiumName": "Joan C. Edwards Stadium",
     "city": "Huntington",
     "state": "WV",
-    "capacity": 38016,
     "ratings": {
       "overall": 77,
       "passOff": 81,
@@ -1251,7 +1250,8 @@
       "passDef": 69,
       "runDef": 75,
       "specialTeams": 72
-    }
+    },
+    "projected": true
   },
   {
     "id": 120,
@@ -1265,7 +1265,6 @@
     "stadiumName": "SECU Stadium",
     "city": "College Park",
     "state": "MD",
-    "capacity": 51802,
     "ratings": {
       "overall": 78,
       "passOff": 78,
@@ -1273,7 +1272,8 @@
       "passDef": 81,
       "runDef": 80,
       "specialTeams": 88
-    }
+    },
+    "projected": true
   },
   {
     "id": 113,
@@ -1287,7 +1287,6 @@
     "stadiumName": "Warren McGuirk Alumni Stadium",
     "city": "Hadley",
     "state": "MA",
-    "capacity": 17000,
     "ratings": {
       "overall": 58,
       "passOff": 58,
@@ -1295,7 +1294,8 @@
       "passDef": 58,
       "runDef": 58,
       "specialTeams": 72
-    }
+    },
+    "projected": true
   },
   {
     "id": 235,
@@ -1309,7 +1309,6 @@
     "stadiumName": "Simmons Bank Liberty Stadium",
     "city": "Memphis",
     "state": "TN",
-    "capacity": 58325,
     "ratings": {
       "overall": 84,
       "passOff": 85,
@@ -1317,7 +1316,8 @@
       "passDef": 79,
       "runDef": 80,
       "specialTeams": 80
-    }
+    },
+    "projected": true
   },
   {
     "id": 2390,
@@ -1331,7 +1331,6 @@
     "stadiumName": "Hard Rock Stadium",
     "city": "Miami Gardens",
     "state": "FL",
-    "capacity": 64767,
     "ratings": {
       "overall": 90,
       "passOff": 88,
@@ -1339,7 +1338,8 @@
       "passDef": 89,
       "runDef": 91,
       "specialTeams": 90
-    }
+    },
+    "projected": true
   },
   {
     "id": 193,
@@ -1353,7 +1353,6 @@
     "stadiumName": "Yager Stadium",
     "city": "Oxford",
     "state": "OH",
-    "capacity": 24286,
     "ratings": {
       "overall": 78,
       "passOff": 74,
@@ -1361,7 +1360,8 @@
       "passDef": 81,
       "runDef": 82,
       "specialTeams": 85
-    }
+    },
+    "projected": true
   },
   {
     "id": 130,
@@ -1375,7 +1375,6 @@
     "stadiumName": "Michigan Stadium",
     "city": "Ann Arbor",
     "state": "MI",
-    "capacity": 107601,
     "ratings": {
       "overall": 86,
       "passOff": 82,
@@ -1383,7 +1382,8 @@
       "passDef": 86,
       "runDef": 87,
       "specialTeams": 86
-    }
+    },
+    "projected": true
   },
   {
     "id": 127,
@@ -1397,7 +1397,6 @@
     "stadiumName": "Spartan Stadium",
     "city": "East Lansing",
     "state": "MI",
-    "capacity": 75005,
     "ratings": {
       "overall": 77,
       "passOff": 78,
@@ -1405,7 +1404,8 @@
       "passDef": 77,
       "runDef": 77,
       "specialTeams": 80
-    }
+    },
+    "projected": true
   },
   {
     "id": 2393,
@@ -1419,7 +1419,6 @@
     "stadiumName": "Johnny \"Red\" Floyd Stadium",
     "city": "Murfreesboro",
     "state": "TN",
-    "capacity": 30788,
     "ratings": {
       "overall": 67,
       "passOff": 74,
@@ -1427,7 +1426,8 @@
       "passDef": 66,
       "runDef": 72,
       "specialTeams": 77
-    }
+    },
+    "projected": true
   },
   {
     "id": 135,
@@ -1441,7 +1441,6 @@
     "stadiumName": "Huntington Bank Stadium",
     "city": "Minneapolis",
     "state": "MN",
-    "capacity": 50850,
     "ratings": {
       "overall": 80,
       "passOff": 77,
@@ -1449,7 +1448,8 @@
       "passDef": 85,
       "runDef": 85,
       "specialTeams": 85
-    }
+    },
+    "projected": true
   },
   {
     "id": 344,
@@ -1463,7 +1463,6 @@
     "stadiumName": "Davis Wade Stadium",
     "city": "Starkville",
     "state": "MS",
-    "capacity": 61337,
     "ratings": {
       "overall": 80,
       "passOff": 85,
@@ -1471,7 +1470,8 @@
       "passDef": 78,
       "runDef": 76,
       "specialTeams": 85
-    }
+    },
+    "projected": true
   },
   {
     "id": 142,
@@ -1485,7 +1485,6 @@
     "stadiumName": "Memorial Stadium",
     "city": "Columbia",
     "state": "MO",
-    "capacity": 71168,
     "ratings": {
       "overall": 87,
       "passOff": 83,
@@ -1493,7 +1492,8 @@
       "passDef": 90,
       "runDef": 90,
       "specialTeams": 80
-    }
+    },
+    "projected": true
   },
   {
     "id": 2623,
@@ -1507,7 +1507,6 @@
     "stadiumName": "Plaster Sports Complex",
     "city": "Springfield",
     "state": "MO",
-    "capacity": 17337,
     "ratings": {
       "overall": 75,
       "passOff": 79,
@@ -1515,7 +1514,8 @@
       "passDef": 70,
       "runDef": 72,
       "specialTeams": 62
-    }
+    },
+    "projected": true
   },
   {
     "id": 2426,
@@ -1529,7 +1529,6 @@
     "stadiumName": "Navy-Marine Corps Memorial Stadium",
     "city": "Annapolis",
     "state": "MD",
-    "capacity": 34000,
     "ratings": {
       "overall": 82,
       "passOff": 83,
@@ -1537,7 +1536,8 @@
       "passDef": 77,
       "runDef": 78,
       "specialTeams": 66
-    }
+    },
+    "projected": true
   },
   {
     "id": 152,
@@ -1551,7 +1551,6 @@
     "stadiumName": "Carter-Finley Stadium",
     "city": "Raleigh",
     "state": "NC",
-    "capacity": 58000,
     "ratings": {
       "overall": 80,
       "passOff": 85,
@@ -1559,7 +1558,8 @@
       "passDef": 77,
       "runDef": 81,
       "specialTeams": 78
-    }
+    },
+    "projected": true
   },
   {
     "id": 158,
@@ -1573,7 +1573,6 @@
     "stadiumName": "Memorial Stadium (Lincoln, NE)",
     "city": "Lincoln",
     "state": "NE",
-    "capacity": 85458,
     "ratings": {
       "overall": 84,
       "passOff": 83,
@@ -1581,7 +1580,8 @@
       "passDef": 85,
       "runDef": 80,
       "specialTeams": 78
-    }
+    },
+    "projected": true
   },
   {
     "id": 2440,
@@ -1595,7 +1595,6 @@
     "stadiumName": "Mackay Stadium",
     "city": "Reno",
     "state": "NV",
-    "capacity": 27000,
     "ratings": {
       "overall": 67,
       "passOff": 61,
@@ -1603,7 +1602,8 @@
       "passDef": 78,
       "runDef": 78,
       "specialTeams": 76
-    }
+    },
+    "projected": true
   },
   {
     "id": 167,
@@ -1617,7 +1617,6 @@
     "stadiumName": "University Stadium (NM)",
     "city": "Albuquerque",
     "state": "NM",
-    "capacity": 39224,
     "ratings": {
       "overall": 77,
       "passOff": 77,
@@ -1625,7 +1624,8 @@
       "passDef": 77,
       "runDef": 79,
       "specialTeams": 76
-    }
+    },
+    "projected": true
   },
   {
     "id": 166,
@@ -1639,7 +1639,6 @@
     "stadiumName": "Aggie Memorial Stadium",
     "city": "Las Cruces",
     "state": "NM",
-    "capacity": 28853,
     "ratings": {
       "overall": 68,
       "passOff": 70,
@@ -1647,7 +1646,8 @@
       "passDef": 71,
       "runDef": 72,
       "specialTeams": 76
-    }
+    },
+    "projected": true
   },
   {
     "id": 153,
@@ -1661,7 +1661,6 @@
     "stadiumName": "Kenan Stadium",
     "city": "Chapel Hill",
     "state": "NC",
-    "capacity": 50500,
     "ratings": {
       "overall": 76,
       "passOff": 68,
@@ -1669,21 +1668,43 @@
       "passDef": 82,
       "runDef": 82,
       "specialTeams": 86
-    }
+    },
+    "projected": true
+  },
+  {
+    "id": 2449,
+    "name": "North Dakota State",
+    "abbreviation": "NDSU",
+    "mascot": "Bison",
+    "conference": "Mountain West",
+    "primaryColor": "##01402A",
+    "secondaryColor": "#666666",
+    "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2449.png",
+    "stadiumName": "Fargodome",
+    "city": "Fargo",
+    "state": "ND",
+    "ratings": {
+      "overall": 70,
+      "passOff": 70,
+      "runOff": 70,
+      "passDef": 70,
+      "runDef": 70,
+      "specialTeams": 70
+    },
+    "projected": true
   },
   {
     "id": 2459,
     "name": "Northern Illinois",
     "abbreviation": "NIU",
     "mascot": "Huskies",
-    "conference": "Mid-American",
+    "conference": "Mountain West",
     "primaryColor": "##F1122C",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2459.png",
     "stadiumName": "Huskie Stadium",
     "city": "DeKalb",
     "state": "IL",
-    "capacity": 23595,
     "ratings": {
       "overall": 65,
       "passOff": 59,
@@ -1691,7 +1712,8 @@
       "passDef": 79,
       "runDef": 76,
       "specialTeams": 64
-    }
+    },
+    "projected": true
   },
   {
     "id": 249,
@@ -1705,7 +1727,6 @@
     "stadiumName": "DATCU Stadium",
     "city": "Denton",
     "state": "TX",
-    "capacity": 30850,
     "ratings": {
       "overall": 87,
       "passOff": 93,
@@ -1713,7 +1734,8 @@
       "passDef": 82,
       "runDef": 76,
       "specialTeams": 76
-    }
+    },
+    "projected": true
   },
   {
     "id": 77,
@@ -1727,7 +1749,6 @@
     "stadiumName": "Lanny and Sharon Martin Stadium",
     "city": "Evanston",
     "state": "IL",
-    "capacity": null,
     "ratings": {
       "overall": 80,
       "passOff": 76,
@@ -1735,7 +1756,8 @@
       "passDef": 85,
       "runDef": 84,
       "specialTeams": 80
-    }
+    },
+    "projected": true
   },
   {
     "id": 87,
@@ -1749,7 +1771,6 @@
     "stadiumName": "Notre Dame Stadium",
     "city": "Notre Dame",
     "state": "IN",
-    "capacity": 80795,
     "ratings": {
       "overall": 91,
       "passOff": 89,
@@ -1757,7 +1778,8 @@
       "passDef": 89,
       "runDef": 90,
       "specialTeams": 80
-    }
+    },
+    "projected": true
   },
   {
     "id": 195,
@@ -1771,7 +1793,6 @@
     "stadiumName": "Peden Stadium",
     "city": "Athens",
     "state": "OH",
-    "capacity": 24000,
     "ratings": {
       "overall": 79,
       "passOff": 76,
@@ -1779,7 +1800,8 @@
       "passDef": 82,
       "runDef": 81,
       "specialTeams": 67
-    }
+    },
+    "projected": true
   },
   {
     "id": 194,
@@ -1793,7 +1815,6 @@
     "stadiumName": "Ohio Stadium",
     "city": "Columbus",
     "state": "OH",
-    "capacity": 102780,
     "ratings": {
       "overall": 93,
       "passOff": 90,
@@ -1801,7 +1822,8 @@
       "passDef": 94,
       "runDef": 93,
       "specialTeams": 88
-    }
+    },
+    "projected": true
   },
   {
     "id": 201,
@@ -1815,7 +1837,6 @@
     "stadiumName": "Memorial Stadium (Norman, OK)",
     "city": "Norman",
     "state": "OK",
-    "capacity": 86112,
     "ratings": {
       "overall": 87,
       "passOff": 82,
@@ -1823,7 +1844,8 @@
       "passDef": 92,
       "runDef": 92,
       "specialTeams": 86
-    }
+    },
+    "projected": true
   },
   {
     "id": 197,
@@ -1837,7 +1859,6 @@
     "stadiumName": "Boone Pickens Stadium",
     "city": "Stillwater",
     "state": "OK",
-    "capacity": 55509,
     "ratings": {
       "overall": 65,
       "passOff": 64,
@@ -1845,7 +1866,8 @@
       "passDef": 72,
       "runDef": 73,
       "specialTeams": 85
-    }
+    },
+    "projected": true
   },
   {
     "id": 295,
@@ -1859,7 +1881,6 @@
     "stadiumName": "S.B. Ballard Stadium",
     "city": "Norfolk",
     "state": "VA",
-    "capacity": 20118,
     "ratings": {
       "overall": 85,
       "passOff": 82,
@@ -1867,7 +1888,8 @@
       "passDef": 85,
       "runDef": 83,
       "specialTeams": 76
-    }
+    },
+    "projected": true
   },
   {
     "id": 145,
@@ -1881,7 +1903,6 @@
     "stadiumName": "Vaught-Hemingway Stadium",
     "city": "Oxford",
     "state": "MS",
-    "capacity": 64038,
     "ratings": {
       "overall": 90,
       "passOff": 94,
@@ -1889,7 +1910,8 @@
       "passDef": 85,
       "runDef": 84,
       "specialTeams": 91
-    }
+    },
+    "projected": true
   },
   {
     "id": 2483,
@@ -1903,7 +1925,6 @@
     "stadiumName": "Autzen Stadium",
     "city": "Eugene",
     "state": "OR",
-    "capacity": 54000,
     "ratings": {
       "overall": 92,
       "passOff": 89,
@@ -1911,7 +1932,8 @@
       "passDef": 91,
       "runDef": 90,
       "specialTeams": 89
-    }
+    },
+    "projected": true
   },
   {
     "id": 204,
@@ -1925,7 +1947,6 @@
     "stadiumName": "Reser Stadium",
     "city": "Corvallis",
     "state": "OR",
-    "capacity": 43363,
     "ratings": {
       "overall": 69,
       "passOff": 69,
@@ -1933,7 +1954,8 @@
       "passDef": 77,
       "runDef": 77,
       "specialTeams": 77
-    }
+    },
+    "projected": true
   },
   {
     "id": 213,
@@ -1947,7 +1969,6 @@
     "stadiumName": "Beaver Stadium",
     "city": "University Park",
     "state": "PA",
-    "capacity": 106572,
     "ratings": {
       "overall": 87,
       "passOff": 86,
@@ -1955,7 +1976,8 @@
       "passDef": 87,
       "runDef": 85,
       "specialTeams": 89
-    }
+    },
+    "projected": true
   },
   {
     "id": 221,
@@ -1969,7 +1991,6 @@
     "stadiumName": "Acrisure Stadium",
     "city": "Pittsburgh",
     "state": "PA",
-    "capacity": 68400,
     "ratings": {
       "overall": 86,
       "passOff": 84,
@@ -1977,7 +1998,8 @@
       "passDef": 84,
       "runDef": 86,
       "specialTeams": 86
-    }
+    },
+    "projected": true
   },
   {
     "id": 2509,
@@ -1991,7 +2013,6 @@
     "stadiumName": "Ross-Ade Stadium",
     "city": "West Lafayette",
     "state": "IN",
-    "capacity": 57282,
     "ratings": {
       "overall": 75,
       "passOff": 76,
@@ -1999,7 +2020,8 @@
       "passDef": 76,
       "runDef": 76,
       "specialTeams": 81
-    }
+    },
+    "projected": true
   },
   {
     "id": 242,
@@ -2013,7 +2035,6 @@
     "stadiumName": "Rice Stadium",
     "city": "Houston",
     "state": "TX",
-    "capacity": 47000,
     "ratings": {
       "overall": 65,
       "passOff": 65,
@@ -2021,7 +2042,8 @@
       "passDef": 66,
       "runDef": 71,
       "specialTeams": 77
-    }
+    },
+    "projected": true
   },
   {
     "id": 164,
@@ -2035,7 +2057,6 @@
     "stadiumName": "SHI Stadium",
     "city": "Piscataway",
     "state": "NJ",
-    "capacity": 52454,
     "ratings": {
       "overall": 79,
       "passOff": 84,
@@ -2043,7 +2064,30 @@
       "passDef": 77,
       "runDef": 73,
       "specialTeams": 77
-    }
+    },
+    "projected": true
+  },
+  {
+    "id": 16,
+    "name": "Sacramento State",
+    "abbreviation": "SAC",
+    "mascot": "Hornets",
+    "conference": "Mid-American",
+    "primaryColor": "##00573C",
+    "secondaryColor": "#666666",
+    "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/16.png",
+    "stadiumName": "Hornet Stadium",
+    "city": "Sacramento",
+    "state": "CA",
+    "ratings": {
+      "overall": 70,
+      "passOff": 70,
+      "runOff": 70,
+      "passDef": 70,
+      "runDef": 70,
+      "specialTeams": 70
+    },
+    "projected": true
   },
   {
     "id": 2534,
@@ -2057,7 +2101,6 @@
     "stadiumName": "Elliott T. Bowers Stadium",
     "city": "Huntsville",
     "state": "TX",
-    "capacity": 14000,
     "ratings": {
       "overall": 60,
       "passOff": 62,
@@ -2065,21 +2108,21 @@
       "passDef": 61,
       "runDef": 60,
       "specialTeams": 76
-    }
+    },
+    "projected": true
   },
   {
     "id": 21,
     "name": "San Diego State",
     "abbreviation": "SDSU",
     "mascot": "Aztecs",
-    "conference": "Mountain West",
+    "conference": "Pac-12",
     "primaryColor": "##c41230",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/21.png",
     "stadiumName": "Snapdragon Stadium",
     "city": "San Diego",
     "state": "CA",
-    "capacity": 35000,
     "ratings": {
       "overall": 82,
       "passOff": 74,
@@ -2087,7 +2130,8 @@
       "passDef": 87,
       "runDef": 85,
       "specialTeams": 91
-    }
+    },
+    "projected": true
   },
   {
     "id": 23,
@@ -2101,7 +2145,6 @@
     "stadiumName": "CEFCU Stadium",
     "city": "San Jose",
     "state": "CA",
-    "capacity": 30456,
     "ratings": {
       "overall": 69,
       "passOff": 77,
@@ -2109,7 +2152,8 @@
       "passDef": 67,
       "runDef": 65,
       "specialTeams": 69
-    }
+    },
+    "projected": true
   },
   {
     "id": 2567,
@@ -2123,7 +2167,6 @@
     "stadiumName": "Gerald J. Ford Stadium",
     "city": "University Park",
     "state": "TX",
-    "capacity": 32000,
     "ratings": {
       "overall": 86,
       "passOff": 86,
@@ -2131,7 +2174,8 @@
       "passDef": 84,
       "runDef": 87,
       "specialTeams": 86
-    }
+    },
+    "projected": true
   },
   {
     "id": 6,
@@ -2145,7 +2189,6 @@
     "stadiumName": "Hancock Whitney Stadium",
     "city": "Mobile",
     "state": "AL",
-    "capacity": 25450,
     "ratings": {
       "overall": 75,
       "passOff": 76,
@@ -2153,7 +2196,8 @@
       "passDef": 72,
       "runDef": 66,
       "specialTeams": 69
-    }
+    },
+    "projected": true
   },
   {
     "id": 2579,
@@ -2167,7 +2211,6 @@
     "stadiumName": "Williams-Brice Stadium",
     "city": "Columbia",
     "state": "SC",
-    "capacity": 80250,
     "ratings": {
       "overall": 79,
       "passOff": 76,
@@ -2175,7 +2218,8 @@
       "passDef": 85,
       "runDef": 85,
       "specialTeams": 70
-    }
+    },
+    "projected": true
   },
   {
     "id": 2572,
@@ -2189,7 +2233,6 @@
     "stadiumName": "M. M. Roberts Stadium",
     "city": "Hattiesburg",
     "state": "MS",
-    "capacity": 36000,
     "ratings": {
       "overall": 77,
       "passOff": 79,
@@ -2197,7 +2240,8 @@
       "passDef": 76,
       "runDef": 76,
       "specialTeams": 70
-    }
+    },
+    "projected": true
   },
   {
     "id": 58,
@@ -2211,7 +2255,6 @@
     "stadiumName": "Raymond James Stadium",
     "city": "Tampa",
     "state": "FL",
-    "capacity": 65828,
     "ratings": {
       "overall": 86,
       "passOff": 89,
@@ -2219,7 +2262,8 @@
       "passDef": 80,
       "runDef": 81,
       "specialTeams": 81
-    }
+    },
+    "projected": true
   },
   {
     "id": 24,
@@ -2233,7 +2277,6 @@
     "stadiumName": "Stanford Stadium",
     "city": "Stanford",
     "state": "CA",
-    "capacity": 50424,
     "ratings": {
       "overall": 70,
       "passOff": 71,
@@ -2241,7 +2284,8 @@
       "passDef": 72,
       "runDef": 78,
       "specialTeams": 81
-    }
+    },
+    "projected": true
   },
   {
     "id": 183,
@@ -2255,7 +2299,6 @@
     "stadiumName": "JMA Wireless Dome",
     "city": "Syracuse",
     "state": "NY",
-    "capacity": 49057,
     "ratings": {
       "overall": 70,
       "passOff": 71,
@@ -2263,7 +2306,8 @@
       "passDef": 73,
       "runDef": 74,
       "specialTeams": 81
-    }
+    },
+    "projected": true
   },
   {
     "id": 2628,
@@ -2277,7 +2321,6 @@
     "stadiumName": "Amon G. Carter Stadium",
     "city": "Fort Worth",
     "state": "TX",
-    "capacity": 46000,
     "ratings": {
       "overall": 84,
       "passOff": 86,
@@ -2285,7 +2328,8 @@
       "passDef": 80,
       "runDef": 83,
       "specialTeams": 78
-    }
+    },
+    "projected": true
   },
   {
     "id": 218,
@@ -2299,7 +2343,6 @@
     "stadiumName": "Lincoln Financial Field",
     "city": "Philadelphia",
     "state": "PA",
-    "capacity": 69879,
     "ratings": {
       "overall": 76,
       "passOff": 78,
@@ -2307,7 +2350,8 @@
       "passDef": 75,
       "runDef": 67,
       "specialTeams": 81
-    }
+    },
+    "projected": true
   },
   {
     "id": 2633,
@@ -2321,7 +2365,6 @@
     "stadiumName": "Neyland Stadium",
     "city": "Knoxville",
     "state": "TN",
-    "capacity": 102455,
     "ratings": {
       "overall": 87,
       "passOff": 91,
@@ -2329,7 +2372,8 @@
       "passDef": 80,
       "runDef": 83,
       "specialTeams": 85
-    }
+    },
+    "projected": true
   },
   {
     "id": 251,
@@ -2343,7 +2387,6 @@
     "stadiumName": "DKR-Texas Memorial Stadium",
     "city": "Austin",
     "state": "TX",
-    "capacity": 100119,
     "ratings": {
       "overall": 88,
       "passOff": 86,
@@ -2351,7 +2394,8 @@
       "passDef": 87,
       "runDef": 87,
       "specialTeams": 93
-    }
+    },
+    "projected": true
   },
   {
     "id": 245,
@@ -2365,7 +2409,6 @@
     "stadiumName": "Kyle Field",
     "city": "College Station",
     "state": "TX",
-    "capacity": 102733,
     "ratings": {
       "overall": 90,
       "passOff": 88,
@@ -2373,21 +2416,21 @@
       "passDef": 91,
       "runDef": 91,
       "specialTeams": 87
-    }
+    },
+    "projected": true
   },
   {
     "id": 326,
     "name": "Texas State",
     "abbreviation": "TXST",
     "mascot": "Bobcats",
-    "conference": "Sun Belt",
+    "conference": "Pac-12",
     "primaryColor": "##4e1719",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/326.png",
     "stadiumName": "Bobcat Stadium (TX)",
     "city": "San Marcos",
     "state": "TX",
-    "capacity": 30000,
     "ratings": {
       "overall": 82,
       "passOff": 87,
@@ -2395,7 +2438,8 @@
       "passDef": 75,
       "runDef": 76,
       "specialTeams": 78
-    }
+    },
+    "projected": true
   },
   {
     "id": 2641,
@@ -2409,7 +2453,6 @@
     "stadiumName": "Jones AT&T Stadium",
     "city": "Lubbock",
     "state": "TX",
-    "capacity": 60454,
     "ratings": {
       "overall": 93,
       "passOff": 90,
@@ -2417,7 +2460,8 @@
       "passDef": 93,
       "runDef": 93,
       "specialTeams": 92
-    }
+    },
+    "projected": true
   },
   {
     "id": 2649,
@@ -2431,7 +2475,6 @@
     "stadiumName": "Glass Bowl",
     "city": "Toledo",
     "state": "OH",
-    "capacity": 26038,
     "ratings": {
       "overall": 84,
       "passOff": 79,
@@ -2439,7 +2482,8 @@
       "passDef": 90,
       "runDef": 88,
       "specialTeams": 59
-    }
+    },
+    "projected": true
   },
   {
     "id": 2653,
@@ -2453,7 +2497,6 @@
     "stadiumName": "Veterans Memorial Stadium (AL)",
     "city": "Troy",
     "state": "AL",
-    "capacity": 30000,
     "ratings": {
       "overall": 77,
       "passOff": 76,
@@ -2461,7 +2504,8 @@
       "passDef": 79,
       "runDef": 77,
       "specialTeams": 82
-    }
+    },
+    "projected": true
   },
   {
     "id": 2655,
@@ -2475,7 +2519,6 @@
     "stadiumName": "Yulman Stadium",
     "city": "New Orleans",
     "state": "LA",
-    "capacity": 30000,
     "ratings": {
       "overall": 82,
       "passOff": 85,
@@ -2483,7 +2526,8 @@
       "passDef": 76,
       "runDef": 79,
       "specialTeams": 89
-    }
+    },
+    "projected": true
   },
   {
     "id": 202,
@@ -2497,7 +2541,6 @@
     "stadiumName": "Chapman Stadium",
     "city": "Tulsa",
     "state": "OK",
-    "capacity": 30000,
     "ratings": {
       "overall": 75,
       "passOff": 76,
@@ -2505,7 +2548,8 @@
       "passDef": 75,
       "runDef": 74,
       "specialTeams": 78
-    }
+    },
+    "projected": true
   },
   {
     "id": 5,
@@ -2519,7 +2563,6 @@
     "stadiumName": "Protective Stadium",
     "city": "Birmingham",
     "state": "AL",
-    "capacity": 0,
     "ratings": {
       "overall": 70,
       "passOff": 78,
@@ -2527,7 +2570,8 @@
       "passDef": 62,
       "runDef": 62,
       "specialTeams": 65
-    }
+    },
+    "projected": true
   },
   {
     "id": 2116,
@@ -2541,7 +2585,6 @@
     "stadiumName": "FBC Mortgage Stadium",
     "city": "Orlando",
     "state": "FL",
-    "capacity": 44206,
     "ratings": {
       "overall": 79,
       "passOff": 77,
@@ -2549,7 +2592,8 @@
       "passDef": 84,
       "runDef": 83,
       "specialTeams": 82
-    }
+    },
+    "projected": true
   },
   {
     "id": 26,
@@ -2563,7 +2607,6 @@
     "stadiumName": "Rose Bowl",
     "city": "Pasadena",
     "state": "CA",
-    "capacity": 88565,
     "ratings": {
       "overall": 75,
       "passOff": 75,
@@ -2571,7 +2614,8 @@
       "passDef": 76,
       "runDef": 71,
       "specialTeams": 82
-    }
+    },
+    "projected": true
   },
   {
     "id": 41,
@@ -2585,7 +2629,6 @@
     "stadiumName": "Pratt & Whitney Stadium",
     "city": "East Hartford",
     "state": "CT",
-    "capacity": 40000,
     "ratings": {
       "overall": 83,
       "passOff": 86,
@@ -2593,7 +2636,8 @@
       "passDef": 79,
       "runDef": 77,
       "specialTeams": 87
-    }
+    },
+    "projected": true
   },
   {
     "id": 2433,
@@ -2607,7 +2651,6 @@
     "stadiumName": "Malone Stadium",
     "city": "Monroe",
     "state": "LA",
-    "capacity": 27617,
     "ratings": {
       "overall": 64,
       "passOff": 65,
@@ -2615,7 +2658,8 @@
       "passDef": 67,
       "runDef": 67,
       "specialTeams": 70
-    }
+    },
+    "projected": true
   },
   {
     "id": 2439,
@@ -2629,7 +2673,6 @@
     "stadiumName": "Allegiant Stadium",
     "city": "Las Vegas",
     "state": "NV",
-    "capacity": 65000,
     "ratings": {
       "overall": 83,
       "passOff": 86,
@@ -2637,7 +2680,8 @@
       "passDef": 77,
       "runDef": 77,
       "specialTeams": 83
-    }
+    },
+    "projected": true
   },
   {
     "id": 30,
@@ -2651,7 +2695,6 @@
     "stadiumName": "Los Angeles Memorial Coliseum",
     "city": "Los Angeles",
     "state": "CA",
-    "capacity": 77500,
     "ratings": {
       "overall": 88,
       "passOff": 91,
@@ -2659,7 +2702,8 @@
       "passDef": 85,
       "runDef": 85,
       "specialTeams": 60
-    }
+    },
+    "projected": true
   },
   {
     "id": 254,
@@ -2673,7 +2717,6 @@
     "stadiumName": "Rice-Eccles Stadium",
     "city": "Salt Lake City",
     "state": "UT",
-    "capacity": 51444,
     "ratings": {
       "overall": 91,
       "passOff": 90,
@@ -2681,21 +2724,21 @@
       "passDef": 89,
       "runDef": 86,
       "specialTeams": 83
-    }
+    },
+    "projected": true
   },
   {
     "id": 328,
     "name": "Utah State",
     "abbreviation": "USU",
     "mascot": "Aggies",
-    "conference": "Mountain West",
+    "conference": "Pac-12",
     "primaryColor": "##00263a",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/328.png",
     "stadiumName": "Maverik Stadium",
     "city": "Logan",
     "state": "UT",
-    "capacity": 25513,
     "ratings": {
       "overall": 78,
       "passOff": 82,
@@ -2703,21 +2746,21 @@
       "passDef": 73,
       "runDef": 74,
       "specialTeams": 82
-    }
+    },
+    "projected": true
   },
   {
     "id": 2638,
     "name": "UTEP",
     "abbreviation": "UTEP",
     "mascot": "Miners",
-    "conference": "Conference USA",
+    "conference": "Mountain West",
     "primaryColor": "##ff8200",
     "secondaryColor": "#666666",
     "logoUrl": "http://a.espncdn.com/i/teamlogos/ncaa/500/2638.png",
     "stadiumName": "Sun Bowl",
     "city": "El Paso",
     "state": "TX",
-    "capacity": 51500,
     "ratings": {
       "overall": 68,
       "passOff": 69,
@@ -2725,7 +2768,8 @@
       "passDef": 75,
       "runDef": 75,
       "specialTeams": 63
-    }
+    },
+    "projected": true
   },
   {
     "id": 2636,
@@ -2739,7 +2783,6 @@
     "stadiumName": "Alamodome",
     "city": "San Antonio",
     "state": "TX",
-    "capacity": 36582,
     "ratings": {
       "overall": 80,
       "passOff": 85,
@@ -2747,7 +2790,8 @@
       "passDef": 77,
       "runDef": 78,
       "specialTeams": 83
-    }
+    },
+    "projected": true
   },
   {
     "id": 238,
@@ -2761,7 +2805,6 @@
     "stadiumName": "FirstBank Stadium",
     "city": "Nashville",
     "state": "TN",
-    "capacity": 40351,
     "ratings": {
       "overall": 89,
       "passOff": 92,
@@ -2769,7 +2812,8 @@
       "passDef": 82,
       "runDef": 86,
       "specialTeams": 82
-    }
+    },
+    "projected": true
   },
   {
     "id": 258,
@@ -2783,7 +2827,6 @@
     "stadiumName": "Scott Stadium",
     "city": "Charlottesville",
     "state": "VA",
-    "capacity": 61500,
     "ratings": {
       "overall": 86,
       "passOff": 85,
@@ -2791,7 +2834,8 @@
       "passDef": 87,
       "runDef": 87,
       "specialTeams": 87
-    }
+    },
+    "projected": true
   },
   {
     "id": 259,
@@ -2805,7 +2849,6 @@
     "stadiumName": "Lane Stadium",
     "city": "Blacksburg",
     "state": "VA",
-    "capacity": 65632,
     "ratings": {
       "overall": 76,
       "passOff": 72,
@@ -2813,7 +2856,8 @@
       "passDef": 76,
       "runDef": 77,
       "specialTeams": 82
-    }
+    },
+    "projected": true
   },
   {
     "id": 154,
@@ -2827,7 +2871,6 @@
     "stadiumName": "Allegacy Federal Credit Union Stadium",
     "city": "Winston-Salem",
     "state": "NC",
-    "capacity": 31500,
     "ratings": {
       "overall": 85,
       "passOff": 79,
@@ -2835,7 +2878,8 @@
       "passDef": 86,
       "runDef": 86,
       "specialTeams": 85
-    }
+    },
+    "projected": true
   },
   {
     "id": 264,
@@ -2849,7 +2893,6 @@
     "stadiumName": "Husky Stadium",
     "city": "Seattle",
     "state": "WA",
-    "capacity": 70138,
     "ratings": {
       "overall": 89,
       "passOff": 87,
@@ -2857,7 +2900,8 @@
       "passDef": 87,
       "runDef": 88,
       "specialTeams": 76
-    }
+    },
+    "projected": true
   },
   {
     "id": 265,
@@ -2871,7 +2915,6 @@
     "stadiumName": "Gesa Field",
     "city": "Pullman",
     "state": "WA",
-    "capacity": 32952,
     "ratings": {
       "overall": 81,
       "passOff": 78,
@@ -2879,7 +2922,8 @@
       "passDef": 86,
       "runDef": 86,
       "specialTeams": 71
-    }
+    },
+    "projected": true
   },
   {
     "id": 98,
@@ -2893,7 +2937,6 @@
     "stadiumName": "Houchens Industries-L.T. Smith Stadium",
     "city": "Bowling Green",
     "state": "KY",
-    "capacity": 22113,
     "ratings": {
       "overall": 81,
       "passOff": 84,
@@ -2901,7 +2944,8 @@
       "passDef": 78,
       "runDef": 78,
       "specialTeams": 83
-    }
+    },
+    "projected": true
   },
   {
     "id": 2711,
@@ -2915,7 +2959,6 @@
     "stadiumName": "Waldo Stadium",
     "city": "Kalamazoo",
     "state": "MI",
-    "capacity": 30200,
     "ratings": {
       "overall": 81,
       "passOff": 75,
@@ -2923,7 +2966,8 @@
       "passDef": 85,
       "runDef": 85,
       "specialTeams": 78
-    }
+    },
+    "projected": true
   },
   {
     "id": 277,
@@ -2937,7 +2981,6 @@
     "stadiumName": "Milan Puskar Stadium",
     "city": "Morgantown",
     "state": "WV",
-    "capacity": 60000,
     "ratings": {
       "overall": 76,
       "passOff": 72,
@@ -2945,7 +2988,8 @@
       "passDef": 76,
       "runDef": 79,
       "specialTeams": 84
-    }
+    },
+    "projected": true
   },
   {
     "id": 275,
@@ -2959,7 +3003,6 @@
     "stadiumName": "Camp Randall Stadium",
     "city": "Madison",
     "state": "WI",
-    "capacity": 80321,
     "ratings": {
       "overall": 76,
       "passOff": 65,
@@ -2967,7 +3010,8 @@
       "passDef": 83,
       "runDef": 85,
       "specialTeams": 71
-    }
+    },
+    "projected": true
   },
   {
     "id": 2751,
@@ -2981,7 +3025,6 @@
     "stadiumName": "War Memorial Stadium",
     "city": "Laramie",
     "state": "WY",
-    "capacity": 29181,
     "ratings": {
       "overall": 71,
       "passOff": 66,
@@ -2989,6 +3032,7 @@
       "passDef": 83,
       "runDef": 81,
       "specialTeams": 58
-    }
+    },
+    "projected": true
   }
 ]
