@@ -97,12 +97,12 @@
   .pos-chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
   /* ── Tables ── */
-  table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  th { text-align: left; padding: 7px 8px; background: var(--surface); color: var(--text-muted); font-weight: 600; position: sticky; top: 0; z-index: 1; cursor: pointer; user-select: none; border-bottom: 1px solid var(--border); font-size: 13px; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th { text-align: left; padding: 8px 10px; background: var(--surface); color: var(--text-muted); font-weight: 600; position: sticky; top: 0; z-index: 1; cursor: pointer; user-select: none; border-bottom: 1px solid var(--border); font-size: 14px; }
   th:hover { color: var(--text); }
   th.sorted-asc::after { content: ' ▲'; }
   th.sorted-desc::after { content: ' ▼'; }
-  td { padding: 7px 8px; border-bottom: 1px solid var(--border); color: var(--text); }
+  td { padding: 8px 10px; border-bottom: 1px solid var(--border); color: var(--text); }
   tr:hover td { background: var(--surface); }
   tr.clickable { cursor: pointer; }
   tr.status-transferred-out td { color: #e05555; }
@@ -122,6 +122,14 @@
   .tier-dynasty { background: #ffd700; color: #1a1a2e; }
   .tier-impact  { background: #a78bfa; color: #1a1a2e; }
   .archetype-badge { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 10px; font-weight: 700; letter-spacing: 0.3px; background: var(--surface-deep); color: var(--accent); margin-left: 4px; vertical-align: middle; border: 1px solid var(--border-mid); }
+  .ol-section { margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .ol-section-header { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 8px; }
+  .ol-names-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ol-name-chip { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 4px 10px; font-size: 13px; color: var(--text); cursor: pointer; }
+  .ol-name-chip:hover { border-color: var(--accent); }
+  .roster-split { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
+  .roster-split-col h3 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); padding: 8px 0 6px; border-bottom: 2px solid var(--border); margin: 0 0 4px; }
+  .roster-split-col h3 span { font-size: 15px; font-weight: 800; color: var(--text); margin-right: 6px; }
   .modal-tab-bar { display: flex; gap: 4px; margin: 12px 0 0; border-bottom: 1px solid var(--border); }
   .modal-tab-btn { padding: 6px 14px; font-size: 12px; font-weight: 600; cursor: pointer; border-radius: 4px 4px 0 0; color: var(--text-muted); background: transparent; border: 1px solid transparent; border-bottom: none; }
   .modal-tab-btn.active { color: var(--accent); background: var(--surface-deep); border-color: var(--border); }
@@ -786,7 +794,93 @@ function renderRoster(t) {
   const ps = getPlayers().filter(p => p.teamId === t.id);
   const rMap = buildRatingMap();
   const posGroups = ['ALL', ...new Set(ps.map(p => p.positionGroup).filter(g => g && g !== 'OL'))].sort();
-  const filtered = posFilter === 'ALL' ? ps : ps.filter(p => p.positionGroup === posFilter);
+
+  const yearLabels = ['','Fr','So','Jr','Sr','Gr'];
+  const yrLabel = yr => yearLabels[Math.min(yr || 0, 5)] || yr;
+
+  // OL players always go to the secondary block, never in main table
+  const olPlayers = ps.filter(p => p.positionGroup === 'OL')
+    .sort((a, b) => a.position.localeCompare(b.position) || `${a.lastName}${a.firstName}`.localeCompare(`${b.lastName}${b.firstName}`));
+
+  // For 2026, split into returning vs departing (likely_leaving = graduating seniors)
+  if (currentYear === 2026) {
+    const nonOl = ps.filter(p => p.positionGroup !== 'OL');
+    const returning = nonOl.filter(p => p.status !== 'likely_leaving');
+    const departing = nonOl.filter(p => p.status === 'likely_leaving');
+
+    const applyPos = arr => posFilter === 'ALL' ? arr : arr.filter(p => p.positionGroup === posFilter);
+    const sortArr = arr => [...arr].sort((a, b) => {
+      const ra = rMap[a.id] || {}, rb = rMap[b.id] || {};
+      return (rb.overall || 0) - (ra.overall || 0);
+    });
+
+    const retFiltered = sortArr(applyPos(returning));
+    const depFiltered = sortArr(applyPos(departing));
+
+    const makeRosterRow = (p, showOvr = true) => {
+      const r = rMap[p.id] || {};
+      const ovr = r.overall || 0;
+      const isDraftEligible = p.status !== 'transfer_in' && p.status !== 'recruit'
+        && p.positionGroup !== 'OL' && p.year >= 3 && ovr >= 85;
+      const draftPill = isDraftEligible ? '<span class="status-pill draft">Draft</span>' : '';
+      const statusPill = p.status === 'transfer_in' ? '<span class="status-pill in">Transfer</span>'
+        : p.status === 'recruit' ? '<span class="status-pill recruit">Recruit</span>' : '';
+      const yr = p.status === 'recruit' ? 'Fr'
+        : p.yearPrev != null ? `${yrLabel(p.yearPrev)}→${yrLabel(p.year)}`
+        : yrLabel(p.year);
+      return `<tr class="clickable" onclick="showPlayerModal('${p.id}')">
+        <td><span class="pos-badge">${p.position || '?'}</span></td>
+        <td>${p.firstName} ${p.lastName}${tierBadge(ovr)}${statusPill}${draftPill}</td>
+        <td>${yr}</td>
+        ${showOvr ? `<td><span class="ovr" style="background:${ratingColor(ovr)};color:#000">${ovr || '-'}</span></td>` : '<td></td>'}
+      </tr>`;
+    };
+
+    const retTable = retFiltered.length ? `<div class="table-scroll-wrap"><table>
+      <tr><th>Pos</th><th>Name</th><th>Yr</th><th>OVR</th></tr>
+      ${retFiltered.map(p => makeRosterRow(p, true)).join('')}
+    </table></div>` : '<div style="color:var(--text-dim);padding:12px;font-size:13px">No players</div>';
+
+    const depTable = depFiltered.length ? `<div class="table-scroll-wrap"><table>
+      <tr><th>Pos</th><th>Name</th><th>Yr</th><th></th></tr>
+      ${depFiltered.map(p => makeRosterRow(p, false)).join('')}
+    </table></div>` : '<div style="color:var(--text-dim);padding:12px;font-size:13px">No players</div>';
+
+    const olBlock = olPlayers.length ? `
+      <div class="ol-section">
+        <div class="ol-section-header">Offensive Line (${olPlayers.filter(p => p.status !== 'likely_leaving').length} returning)</div>
+        <div class="ol-names-grid">
+          ${olPlayers.filter(p => p.status !== 'likely_leaving').map(p =>
+            `<div class="ol-name-chip" onclick="showPlayerModal('${p.id}')">${p.firstName} ${p.lastName} <span style="color:var(--text-dim);font-size:11px">${p.position}</span></div>`
+          ).join('')}
+        </div>
+      </div>` : '';
+
+    document.getElementById('tab-content').innerHTML = `
+      ${teamHeaderHTML(t)}
+      <div class="filter-row">
+        ${posGroups.map(pg => `<span class="pos-chip ${pg === posFilter ? 'active' : ''}" onclick="filterPos('${pg}')">${pg}</span>`).join('')}
+      </div>
+      <div class="roster-split">
+        <div class="roster-split-col">
+          <h3><span>${retFiltered.length}</span> Returning</h3>
+          ${retTable}
+        </div>
+        <div class="roster-split-col">
+          <h3><span>${depFiltered.length}</span> Graduating / Leaving</h3>
+          ${depTable}
+        </div>
+      </div>
+      ${olBlock}
+      <div style="padding:8px;color:#666;font-size:11px">${ps.length} total players &bull; click a player for detail</div>
+    `;
+    requestAnimationFrame(() => initTeamRadar());
+    return;
+  }
+
+  // Normal (non-projected) year roster
+  const filtered = (posFilter === 'ALL' ? ps : ps.filter(p => p.positionGroup === posFilter))
+    .filter(p => p.positionGroup !== 'OL');
 
   filtered.sort((a, b) => {
     const ra = rMap[a.id] || {}, rb = rMap[b.id] || {};
@@ -803,6 +897,14 @@ function renderRoster(t) {
   const skillCols = posFilter === 'ALL' ? [] : (SKILL_COLS[posFilter] || []);
   const allCols = [['jersey','#'],['pos','Pos'],['name','Name'],['yr','Yr'],['overall','OVR'], ...skillCols];
 
+  const olBlock = olPlayers.length ? `
+    <div class="ol-section">
+      <div class="ol-section-header">Offensive Line</div>
+      <div class="ol-names-grid">
+        ${olPlayers.map(p => `<div class="ol-name-chip" onclick="showPlayerModal('${p.id}')">${p.firstName} ${p.lastName} <span style="color:var(--text-dim);font-size:11px">${p.position}</span></div>`).join('')}
+      </div>
+    </div>` : '';
+
   document.getElementById('tab-content').innerHTML = `
     ${teamHeaderHTML(t)}
     <div class="filter-row">
@@ -817,37 +919,19 @@ function renderRoster(t) {
       </tr>
       ${filtered.map(p => {
         const r = rMap[p.id] || {};
-        const statusCls = p.status === 'transferred_out' ? 'status-transferred-out'
-          : p.status === 'likely_leaving' ? 'status-likely-leaving'
-          : p.status === 'transfer_in' ? 'status-transfer-in'
-          : p.status === 'recruit' ? 'status-recruit' : '';
-        const yearLabels = ['','Fr','So','Jr','Sr','Gr'];
-        const yrLabel = yr => yearLabels[Math.min(yr || 0, 5)] || yr;
-        const yearDisplay = p.status === 'recruit' ? 'Fr'
-          : p.yearPrev != null ? `${yrLabel(p.yearPrev)}→${yrLabel(p.year)}`
-          : yrLabel(p.year);
-        const statusPill = p.status === 'transferred_out' ? '<span class="status-pill out">Out</span>'
-          : p.status === 'likely_leaving' ? '<span class="status-pill leaving">Sr?</span>'
-          : p.status === 'transfer_in' ? '<span class="status-pill in">Transfer</span>'
-          : p.status === 'recruit' ? '<span class="status-pill recruit">Recruit</span>' : '';
-        const ovr = r.overall || 0;
-        const isReturning = p.status !== 'transfer_in' && p.status !== 'recruit';
-        const isDraftEligible = currentYear === 2026 && isReturning
-          && p.positionGroup !== 'OL' && p.year >= 3 && ovr >= 85;
-        const draftPill = isDraftEligible ? '<span class="status-pill draft">Draft</span>' : '';
-        return `<tr class="clickable ${statusCls}" onclick="showPlayerModal('${p.id}')">
+        return `<tr class="clickable" onclick="showPlayerModal('${p.id}')">
           <td>${p.jersey != null && p.jersey !== '' ? p.jersey : '-'}</td>
           <td><span class="pos-badge">${p.position || '?'}</span></td>
-          <td>${p.firstName} ${p.lastName}${tierBadge(r.overall || 0)}${statusPill}${draftPill}</td>
-          <td>${yearDisplay}</td>
+          <td>${p.firstName} ${p.lastName}${tierBadge(r.overall || 0)}</td>
+          <td>${yrLabel(p.year)}</td>
           <td>
             <span class="ovr" style="background:${ratingColor(r.overall || 0)};color:#000">${r.overall || '-'}</span>
-            ${r.projected && r.overallLow != null ? `<span style="font-size:10px;color:#666;display:block;line-height:1">${r.overallLow}–${r.overallHigh}</span>` : ''}
           </td>
           ${skillCols.map(([a]) => `<td>${r[a] != null ? r[a] : '-'}</td>`).join('')}
         </tr>`;
       }).join('')}
     </table></div>
+    ${posFilter === 'ALL' ? olBlock : ''}
     <div style="padding:8px;color:#666;font-size:11px">${filtered.length} players${posFilter !== 'ALL' ? ` (${posFilter})` : ''} &bull; ${ps.length} total &bull; click a player for detail</div>
   `;
   requestAnimationFrame(() => initTeamRadar());
