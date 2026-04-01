@@ -165,6 +165,71 @@
 
   #loading { text-align: center; padding: 60px; font-size: 14px; color: #666; }
 
+  /* ── Mobile / Responsive ── */
+  #sidebar-toggle {
+    display: none; position: fixed; top: 10px; left: 10px; z-index: 200;
+    background: #e94560; border: none; color: #fff; font-size: 20px; line-height: 1;
+    width: 40px; height: 40px; border-radius: 6px; cursor: pointer; align-items: center; justify-content: center;
+  }
+
+  /* ── Tablet (601–900px): narrower sidebar, smaller type ── */
+  @media (max-width: 900px) {
+    #sidebar { width: 220px; }
+    .tab-btn { padding: 10px 12px; font-size: 12px; }
+    .team-header img { width: 44px; height: 44px; }
+    .team-header-info h1 { font-size: 17px; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .depth-skills { display: none; }
+  }
+
+  /* ── Phone (≤600px): sidebar overlay, single-column everything ── */
+  @media (max-width: 600px) {
+    body { overflow: auto; }
+    #sidebar-toggle { display: flex; }
+
+    #sidebar {
+      position: fixed; top: 0; left: 0; bottom: 0; z-index: 150;
+      width: 80vw; max-width: 300px;
+      transform: translateX(-100%); transition: transform 0.25s ease;
+      box-shadow: 4px 0 20px rgba(0,0,0,0.5);
+    }
+    #sidebar.open { transform: translateX(0); }
+    #sidebar-backdrop {
+      display: none; position: fixed; inset: 0; z-index: 140; background: rgba(0,0,0,0.5);
+    }
+    #sidebar-backdrop.open { display: block; }
+
+    #main { width: 100%; padding-top: 52px; }
+    .tab-bar { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .tab-btn { padding: 10px 10px; font-size: 11px; }
+    .tab-content { padding: 12px; }
+
+    .team-header { flex-wrap: wrap; gap: 10px; }
+    .team-header img { width: 40px; height: 40px; }
+    .team-header-info h1 { font-size: 16px; }
+    .team-header-actions { width: 100%; }
+
+    .rating-cards { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .rating-card .value { font-size: 18px; }
+
+    .compare-grid { grid-template-columns: 1fr; }
+    .compare-controls { flex-direction: column; align-items: stretch; }
+    .compare-controls select { min-width: unset; }
+
+    .depth-skills { display: none; }
+
+    /* Tables: horizontal scroll wrapper added via JS */
+    .table-scroll-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    .modal { padding: 16px; }
+    .modal-player-info h2 { font-size: 17px; }
+    .modal-ovr-badge { width: 46px; height: 46px; font-size: 24px; }
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .explain-pipeline { flex-direction: column; }
+    .explain-arrow { transform: rotate(90deg); }
+  }
+
   /* ── Explainability tab ── */
   .explain-section { margin-bottom: 32px; }
   .explain-section h2 { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 4px; padding-bottom: 8px; border-bottom: 2px solid #e94560; display: inline-block; }
@@ -193,6 +258,8 @@
 </style>
 </head>
 <body>
+<button id="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle team list">☰</button>
+<div id="sidebar-backdrop" onclick="toggleSidebar()"></div>
 <div id="sidebar">
   <div class="sidebar-controls">
     <div class="controls-row">
@@ -546,6 +613,11 @@ function renderTeamList() {
 function selectTeam(id, switchToRoster = true) {
   selectedTeamId = id;
   posFilter = 'ALL';
+  // Close sidebar overlay on mobile after selection
+  if (window.innerWidth <= 600) {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebar-backdrop').classList.remove('open');
+  }
   const teamTabs = ['roster','depth','schedule'];
   if (switchToRoster && !teamTabs.includes(activeTab)) switchTab('roster', false);
   const t = getTeams().find(t => t.id === id);
@@ -626,7 +698,7 @@ function renderRoster(t) {
     <div class="filter-row">
       ${posGroups.map(pg => `<span class="pos-chip ${pg === posFilter ? 'active' : ''}" onclick="filterPos('${pg}')">${pg}</span>`).join('')}
     </div>
-    <table>
+    <div class="table-scroll-wrap"><table>
       <tr>
         ${allCols.map(([col,lbl]) => {
           const cls = sortCol === col ? (sortAsc ? 'sorted-asc' : 'sorted-desc') : '';
@@ -647,7 +719,7 @@ function renderRoster(t) {
           ${skillCols.map(([a]) => `<td>${r[a] != null ? r[a] : '-'}</td>`).join('')}
         </tr>`;
       }).join('')}
-    </table>
+    </table></div>
     <div style="padding:8px;color:#666;font-size:11px">${filtered.length} players${posFilter !== 'ALL' ? ` (${posFilter})` : ''} &bull; ${ps.length} total &bull; click a player for detail</div>
   `;
 }
@@ -754,7 +826,7 @@ async function renderSchedule(t) {
 
   document.getElementById('tab-content').innerHTML = `
     ${teamHeaderHTML(t)}
-    <div style="padding:12px 0">
+    <div style="padding:12px 0" class="table-scroll-wrap">
       <table class="roster-table" style="width:100%">
         <thead><tr>
           <th onclick="void(0)">Wk</th>
@@ -868,7 +940,7 @@ function renderTopPlayers() {
         ${allPositions.map(p => `<option value="${p}" ${p === topPosFilter ? 'selected' : ''}>${p}</option>`).join('')}
       </select>
     </div>
-    <table>
+    <div class="table-scroll-wrap"><table>
       <tr>
         <th style="width:28px">#</th>
         ${headCols.map(([col,lbl]) => {
@@ -890,7 +962,7 @@ function renderTopPlayers() {
           ${skillCols.map(([a]) => `<td>${r[a] != null ? r[a] : '-'}</td>`).join('')}
         </tr>`;
       }).join('')}
-    </table>
+    </table></div>
     <div style="padding:8px;color:#666;font-size:11px">
       ${topSearch ? `${filtered.length} results` : `Top ${displayList.length} of ${filtered.length}`} &bull; click a player for detail
     </div>`;
@@ -1359,6 +1431,12 @@ function closeModal() {
 
 function handleModalClick(e) {
   if (e.target === document.getElementById('player-modal')) closeModal();
+}
+
+// ── Mobile sidebar toggle ──────────────────────────────────────────────────
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-backdrop').classList.toggle('open');
 }
 
 // ── Helpers ────────────────────────────────────────────────────────────────
