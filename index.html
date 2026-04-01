@@ -69,6 +69,9 @@
   .tier-dynasty { background: #ffd700; color: #1a1a2e; }
   .tier-impact  { background: #a78bfa; color: #1a1a2e; }
   .archetype-badge { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 10px; font-weight: 700; letter-spacing: 0.3px; background: #1a3a5c; color: #7ec8e3; margin-left: 4px; vertical-align: middle; border: 1px solid #2a5080; }
+  .modal-tab-bar { display: flex; gap: 4px; margin: 12px 0 0; border-bottom: 1px solid #0f3460; }
+  .modal-tab-btn { padding: 6px 14px; font-size: 12px; font-weight: 600; cursor: pointer; border-radius: 4px 4px 0 0; color: #aaa; background: transparent; border: 1px solid transparent; border-bottom: none; }
+  .modal-tab-btn.active { color: #e94560; background: #0f1b2d; border-color: #0f3460; }
 
   /* ── Depth chart ── */
   .depth-section { margin-bottom: 20px; }
@@ -206,6 +209,7 @@
   <div class="tab-bar">
     <div class="tab-btn active"  onclick="switchTab('roster')">Roster</div>
     <div class="tab-btn"         onclick="switchTab('depth')">Depth Chart</div>
+    <div class="tab-btn"         onclick="switchTab('schedule')">Schedule</div>
     <div class="tab-btn"         onclick="switchTab('top-players')">Top Players</div>
     <div class="tab-btn"         onclick="switchTab('conferences')">Conferences</div>
     <div class="tab-btn"         onclick="switchTab('compare')">Compare</div>
@@ -533,17 +537,19 @@ function renderTeamList() {
 function selectTeam(id, switchToRoster = true) {
   selectedTeamId = id;
   posFilter = 'ALL';
-  if (switchToRoster && activeTab !== 'roster' && activeTab !== 'depth') switchTab('roster', false);
+  const teamTabs = ['roster','depth','schedule'];
+  if (switchToRoster && !teamTabs.includes(activeTab)) switchTab('roster', false);
   const t = getTeams().find(t => t.id === id);
   if (!t) return;
   if (activeTab === 'roster') renderRoster(t);
   else if (activeTab === 'depth') renderDepth(t);
+  else if (activeTab === 'schedule') renderSchedule(t);
   renderTeamList();
 }
 
 function switchTab(tab, render = true) {
   activeTab = tab;
-  const tabs = ['roster','depth','top-players','conferences','compare','explain'];
+  const tabs = ['roster','depth','schedule','top-players','conferences','compare','explain'];
   document.querySelectorAll('.tab-btn').forEach((btn, i) => {
     btn.classList.toggle('active', tabs[i] === tab);
   });
@@ -554,6 +560,7 @@ function renderActiveTab() {
   const t = getTeams().find(t => t.id === selectedTeamId);
   if (activeTab === 'roster') { if (t) renderRoster(t); }
   else if (activeTab === 'depth') { if (t) renderDepth(t); else document.getElementById('tab-content').innerHTML = '<div id="loading">Select a team from the sidebar.</div>'; }
+  else if (activeTab === 'schedule') { if (t) renderSchedule(t); else document.getElementById('tab-content').innerHTML = '<div id="loading">Select a team from the sidebar.</div>'; }
   else if (activeTab === 'top-players') renderTopPlayers();
   else if (activeTab === 'conferences') renderConferences();
   else if (activeTab === 'compare') renderCompare();
@@ -672,6 +679,146 @@ function renderDepth(t) {
     ${teamHeaderHTML(t)}
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 32px">
       ${sections}
+    </div>`;
+}
+
+// ── Phase 2: Lazy-load caches ──────────────────────────────────────────────
+const _scheduleCache = {};
+const _gamelogCache  = {};
+
+async function loadSchedule(year) {
+  if (_scheduleCache[year]) return _scheduleCache[year];
+  try {
+    const data = await fetch(`app/assets/data/${year}/team_schedule.json`).then(r => r.json());
+    _scheduleCache[year] = data;
+    return data;
+  } catch { return []; }
+}
+
+async function loadGamelog(year) {
+  if (_gamelogCache[year]) return _gamelogCache[year];
+  try {
+    const data = await fetch(`app/assets/data/${year}/player_gamelog.json`).then(r => r.json());
+    _gamelogCache[year] = data;
+    return data;
+  } catch { return {}; }
+}
+
+// ── Schedule Tab ───────────────────────────────────────────────────────────
+async function renderSchedule(t) {
+  document.getElementById('tab-content').innerHTML = `${teamHeaderHTML(t)}<div id="loading">Loading schedule...</div>`;
+  const schedule = await loadSchedule(currentYear);
+  const games = schedule.filter(g => g.homeTeam === t.name || g.awayTeam === t.name)
+                        .sort((a, b) => (a.week || 0) - (b.week || 0));
+
+  if (!games.length) {
+    document.getElementById('tab-content').innerHTML = `${teamHeaderHTML(t)}<div style="color:#666;padding:20px">No schedule data available for ${currentYear}.</div>`;
+    return;
+  }
+
+  const rows = games.map(g => {
+    const isHome = g.homeTeam === t.name;
+    const opponent = isHome ? g.awayTeam : g.homeTeam;
+    const myScore  = isHome ? g.homeScore : g.awayScore;
+    const oppScore = isHome ? g.awayScore : g.homeScore;
+    const oppSp    = isHome ? g.awaySpRank : g.homeSpRank;
+    const loc = g.neutralSite ? 'N' : (isHome ? 'vs' : '@');
+    let result = '-', resultColor = '#aaa';
+    if (myScore != null && oppScore != null) {
+      const win = myScore > oppScore;
+      result = `${win ? 'W' : 'L'} ${myScore}-${oppScore}`;
+      resultColor = win ? '#00c853' : '#f44336';
+    }
+    const margin = (myScore != null && oppScore != null) ? (myScore - oppScore) : null;
+    return `<tr class="clickable" onclick="showGameDetail(${g.gameId}, '${t.name.replace(/'/g,"\\'")}')">
+      <td>${g.week ?? '-'}</td>
+      <td style="color:#aaa;font-size:11px">${loc}</td>
+      <td>${opponent}</td>
+      <td style="color:${resultColor};font-weight:700">${result}</td>
+      <td style="color:${margin != null ? (margin > 0 ? '#8bc34a' : '#f44336') : '#aaa'}">${margin != null ? (margin > 0 ? `+${margin}` : margin) : '-'}</td>
+      <td style="color:#aaa;font-size:11px">${oppSp != null ? `SP+ ${oppSp}` : '-'}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('tab-content').innerHTML = `
+    ${teamHeaderHTML(t)}
+    <div style="padding:12px 0">
+      <table class="roster-table" style="width:100%">
+        <thead><tr>
+          <th onclick="void(0)">Wk</th>
+          <th></th>
+          <th onclick="void(0)">Opponent</th>
+          <th onclick="void(0)">Result</th>
+          <th onclick="void(0)">Margin</th>
+          <th onclick="void(0)">Opp SP+</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    <div id="game-detail-panel"></div>`;
+}
+
+async function showGameDetail(gameId, teamName) {
+  const schedule = await loadSchedule(currentYear);
+  const game = schedule.find(g => g.gameId === gameId);
+  if (!game) return;
+
+  const gamelog = await loadGamelog(currentYear);
+  const rMap = buildRatingMap();
+  const players = getPlayers();
+
+  // Find top performers for both teams in this game
+  function topPerformers(squadName) {
+    const squad = players.filter(p => {
+      const t = getTeams().find(t => t.id === p.teamId);
+      return t && t.name === squadName;
+    });
+    const perf = [];
+    for (const p of squad) {
+      const lg = gamelog[p.id] || gamelog[String(p.id)];
+      if (!lg) continue;
+      const entry = lg.find(e => e.gameId === gameId);
+      if (!entry || !entry.stats) continue;
+      const r = rMap[p.id] || rMap[String(p.id)] || {};
+      perf.push({ p, stats: entry.stats, ovr: r.overall || 0 });
+    }
+    perf.sort((a, b) => b.ovr - a.ovr);
+    return perf.slice(0, 5);
+  }
+
+  function perfRows(performers) {
+    return performers.map(({ p, stats, ovr }) => {
+      const statStr = Object.entries(stats).slice(0, 4)
+        .map(([k, v]) => `${k}: ${v}`).join(' · ');
+      return `<div class="depth-row" onclick="showPlayerModal('${p.id}')" style="cursor:pointer">
+        <span class="pos-badge" style="flex-shrink:0">${p.position || p.positionGroup}</span>
+        <span style="flex:1;padding:0 8px">${p.firstName} ${p.lastName}</span>
+        <span class="ovr" style="background:${ratingColor(ovr)};color:#000;flex-shrink:0">${ovr}</span>
+        <span style="font-size:11px;color:#aaa;flex-shrink:0;padding-left:8px">${statStr}</span>
+      </div>`;
+    }).join('') || '<div style="color:#555;font-size:12px;padding:8px">No game log data</div>';
+  }
+
+  const homePerf = topPerformers(game.homeTeam);
+  const awayPerf = topPerformers(game.awayTeam);
+  const panel = document.getElementById('game-detail-panel');
+  if (!panel) return;
+  panel.innerHTML = `
+    <div style="margin-top:20px;border:1px solid #0f3460;border-radius:8px;padding:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h3 style="margin:0;font-size:14px;color:#e94560">Week ${game.week} — ${game.awayTeam} @ ${game.homeTeam}</h3>
+        <span style="font-size:13px;color:#aaa">${game.awayScore ?? '?'} – ${game.homeScore ?? '?'}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;margin-bottom:6px">${game.awayTeam}</div>
+          ${perfRows(awayPerf)}
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;margin-bottom:6px">${game.homeTeam}</div>
+          ${perfRows(homePerf)}
+        </div>
+      </div>
     </div>`;
 }
 
@@ -1047,6 +1194,20 @@ function showPlayerModal(playerId) {
   const classYear = ['Fr','So','Jr','Sr','Gr'][Math.max(0, Math.min(4, (p.year||1) - 1))];
   const archetype = computeArchetype(posGroup, r);
   const archetypeHTML = archetype ? `<span class="archetype-badge">${archetype}</span>` : '';
+  const trajectoryHTML = r.trajectory
+    ? `<div style="margin-top:6px;font-size:12px;color:#aaa">Trajectory: <span style="color:${ratingColor(r.trajectory)};font-weight:700">${r.trajectory}</span> <span style="font-size:10px;color:#555">(projected)</span></div>`
+    : '';
+
+  const overviewHTML = `
+    <div class="modal-section">
+      <div class="modal-section-title">Skill Ratings</div>
+      ${skillBarsHTML || '<div style="color:#666;font-size:12px">No skill data available</div>'}
+    </div>
+    ${statsHTML}
+    ${careerHTML}
+    ${yoyHTML}
+    ${similarHTML}`;
+
   document.getElementById('modal-body').innerHTML = `
     <div class="modal-player-header">
       <div class="modal-ovr-badge" style="background:${ratingColor(ovr)};color:#000">${ovr}</div>
@@ -1060,18 +1221,71 @@ function showPlayerModal(playerId) {
           ${p.height ? ` &bull; ${p.height}` : ''} ${p.weight ? `/ ${p.weight} lbs` : ''}
         </div>
         ${rankHTML}
+        ${trajectoryHTML}
       </div>
     </div>
-    <div class="modal-section">
-      <div class="modal-section-title">Skill Ratings</div>
-      ${skillBarsHTML || '<div style="color:#666;font-size:12px">No skill data available</div>'}
+    <div class="modal-tab-bar">
+      <div class="modal-tab-btn active" data-mtab="overview" onclick="switchModalTab('overview')">Overview</div>
+      <div class="modal-tab-btn" data-mtab="gamelog" onclick="switchModalTab('gamelog', '${pid}')">Game Log</div>
     </div>
-    ${statsHTML}
-    ${careerHTML}
-    ${yoyHTML}
-    ${similarHTML}
+    <div id="modal-tab-overview">${overviewHTML}</div>
+    <div id="modal-tab-gamelog" style="display:none"><div style="color:#666;padding:20px;font-size:13px">Loading game log...</div></div>
   `;
   document.getElementById('player-modal').classList.add('open');
+}
+
+function switchModalTab(tab, pid) {
+  document.querySelectorAll('.modal-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.mtab === tab));
+  document.querySelectorAll('[id^="modal-tab-"]').forEach(el => { el.style.display = el.id === `modal-tab-${tab}` ? 'block' : 'none'; });
+  if (tab === 'gamelog' && pid) renderModalGamelog(pid);
+}
+
+async function renderModalGamelog(pid) {
+  const el = document.getElementById('modal-tab-gamelog');
+  if (!el) return;
+  const gamelog = await loadGamelog(currentYear);
+  const entries = gamelog[pid] || gamelog[String(pid)] || [];
+  if (!entries.length) {
+    el.innerHTML = '<div style="color:#555;padding:20px;font-size:13px">No game log data available for this season.</div>';
+    return;
+  }
+
+  const p = getPlayers().find(pl => String(pl.id) === String(pid));
+  const posGroup = p ? p.positionGroup : 'QB';
+  const statDefs = STAT_LABELS[posGroup] || [];
+
+  // Determine which stat keys actually appear
+  const usedKeys = new Set();
+  entries.forEach(e => Object.keys(e.stats || {}).forEach(k => usedKeys.add(k)));
+  const cols = statDefs.filter(([k]) => usedKeys.has(k));
+
+  const header = `<tr><th>Wk</th><th>Opponent</th><th>Result</th>${cols.map(([,l]) => `<th>${l}</th>`).join('')}</tr>`;
+
+  // Compute per-stat max for highlight threshold
+  const maxes = {};
+  cols.forEach(([k]) => { maxes[k] = Math.max(...entries.map(e => Number(e.stats?.[k] ?? 0))); });
+
+  const rows = entries.map(e => {
+    const resultColor = e.result ? (e.result.startsWith('W') ? '#00c853' : '#f44336') : '#aaa';
+    const statCells = cols.map(([k, l]) => {
+      const v = e.stats?.[k] ?? '-';
+      const isTop = maxes[k] > 0 && Number(v) >= maxes[k] * 0.75;
+      return `<td style="${isTop ? 'color:#00c853;font-weight:700' : ''}">${v}</td>`;
+    }).join('');
+    return `<tr>
+      <td>${e.week ?? '-'}</td>
+      <td style="font-size:11px">${e.homeGame ? 'vs ' : '@ '}${e.opponent || '-'}</td>
+      <td style="color:${resultColor};font-weight:700;font-size:11px">${e.result || '-'}</td>
+      ${statCells}
+    </tr>`;
+  }).join('');
+
+  el.innerHTML = `<div style="overflow-x:auto">
+    <table class="roster-table" style="width:100%;margin-top:8px">
+      <thead>${header}</thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>`;
 }
 
 // ── Similarity Score ───────────────────────────────────────────────────────
