@@ -95,7 +95,7 @@ def _has_meaningful_stats(player_stats):
 
 
 def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
-                        team_stats, team_quality, recruit_stars, player_usage=None):
+                        team_stats, team_quality, recruit_stars, player_usage=None, position=None):
     """Compute raw skill ratings. No physical attributes — stats only.
 
     Each position gets its own skill categories derived from what the stats
@@ -135,8 +135,29 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
     # players on no-stat proxy positions (OL/DL), reducing G5 starter inflation
     tq_mult = 0.50 + 0.50 * team_quality
 
-    # Combined: quality × snap context × sample size
-    combined_mult = tq_mult * snap_mult * sample_mult
+    # Stat volume multiplier: penalizes low-volume performances beyond the games-played penalty.
+    # A QB with 30 attempts should not rate the same as one with 300 attempts, even in 12 games.
+    # Only applied to stat-based skill positions with sufficient game counts.
+    volume_mult = 1.0
+    if has_stats and pos_group == "QB":
+        attempts = _safe_float(player_stats.get("passingATT", player_stats.get("passingAttempts", 0)))
+        if attempts < 50:
+            volume_mult = max(0.60, attempts / 50)
+    elif has_stats and pos_group in ("RB", "FB"):
+        carries = _safe_float(player_stats.get("rushingCAR", player_stats.get("rushingATT", 0)))
+        if carries == 0:
+            # Estimate from yards if carry count not available
+            rush_yds_est = _safe_float(player_stats.get("rushingYDS", player_stats.get("rushingYards", 0)))
+            carries = max(rush_yds_est / 5.0, 1.0)
+        if carries < 50:
+            volume_mult = max(0.65, carries / 50)
+    elif has_stats and pos_group in ("WR", "TE"):
+        receptions = _safe_float(player_stats.get("receivingREC", player_stats.get("receptions", 0)))
+        if receptions < 15:
+            volume_mult = max(0.60, receptions / 15)
+
+    # Combined: quality × snap context × sample size × volume
+    combined_mult = tq_mult * snap_mult * sample_mult * volume_mult
 
     # DL with individual defensive stats should use stat-based formulas
     has_defensive_stats = has_stats and any(
@@ -174,9 +195,13 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
         rush_tds = _safe_float(player_stats.get("rushingTD", player_stats.get("rushingTDs", 0)))
         ypc = _safe_float(player_stats.get("rushingYPC", player_stats.get("yardsPerRushAttempt", 0)))
         rec_yds = _safe_float(player_stats.get("receivingYDS", player_stats.get("receivingYards", 0)))
+        rec_tds = _safe_float(player_stats.get("receivingTD", player_stats.get("receivingTDs", 0)))
+        receptions = _safe_float(player_stats.get("receivingREC", player_stats.get("receptions", 0)))
 
         raw["rushing"] = (rush_yds * 0.010 + rush_tds * 2.0 + ypc * 1.5) * combined_mult
-        raw["receiving"] = rec_yds * 0.025 * combined_mult
+        # Receiving: blends yards + TDs + catch volume — pass-catching backs rate separately from
+        # pure power backs who have zero receiving stats
+        raw["receiving"] = (rec_yds * 0.012 + rec_tds * 2.0 + receptions * 0.15) * combined_mult
         # powerRunning: TD volume + yardage bulk — measures yards-earned, not just YPC
         raw["powerRunning"] = (rush_yds * 0.006 + rush_tds * 2.0) * combined_mult
         if pos_group == "FB":
@@ -223,10 +248,24 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
 
         elif pos_group == "LB":
             # LB: three-way — coverage, run stop, pass rush
-            # INTs are rare for LBs but very telling; PDs are more common
-            raw["coverage"] = (ints * 5.0 + pds * 1.2 + ppa_val * 2.5) * combined_mult
-            raw["runStop"] = (tackles * 0.10 + tfl * 2.0) * combined_mult
-            raw["passRush"] = (sacks * 2.5 + qbh * 1.0 + ff * 1.2) * combined_mult
+            # MLB/ILB: primary run defenders, middle-zone coverage; boost runStop/coverage
+            # OLB: edge setting + pass rush; boost passRush
+            lb_pos = (position or "LB").upper()
+            if lb_pos in ("OLB",):
+                # Outside LB: edge rusher / hybrid — more pass rush, still can cover
+                raw["coverage"] = (ints * 4.0 + pds * 1.0 + ppa_val * 2.0) * combined_mult
+                raw["runStop"] = (tackles * 0.08 + tfl * 1.5) * combined_mult
+                raw["passRush"] = (sacks * 3.5 + qbh * 1.5 + ff * 1.5) * combined_mult
+            elif lb_pos in ("MLB", "ILB"):
+                # Middle/inside LB: run stopper, zone anchor — boost tackles and TFL
+                raw["coverage"] = (ints * 5.0 + pds * 1.2 + ppa_val * 2.5) * combined_mult
+                raw["runStop"] = (tackles * 0.14 + tfl * 2.5) * combined_mult
+                raw["passRush"] = (sacks * 1.8 + qbh * 0.8 + ff * 1.0) * combined_mult
+            else:
+                # Generic LB — balanced weights
+                raw["coverage"] = (ints * 5.0 + pds * 1.2 + ppa_val * 2.5) * combined_mult
+                raw["runStop"] = (tackles * 0.10 + tfl * 2.0) * combined_mult
+                raw["passRush"] = (sacks * 2.5 + qbh * 1.0 + ff * 1.2) * combined_mult
 
         elif pos_group == "DB":
             # DB: coverage primary, ball hawking (turnovers), tackling
@@ -247,8 +286,10 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
         fg_pct = fgm / max(fga, 1)
         xp_pct = xpm / max(xpa, 1)
 
-        raw["power"] = (longest * 0.45 + fgm * 1.2 + fga * 0.25) * combined_mult
-        raw["accuracy"] = (fg_pct * 10.0 + xp_pct * 4.0 + fgm * 0.4) * combined_mult
+        # power: longest FG is the clearest range signal; FGM rewards consistency; fg_pct bonus
+        raw["power"] = (longest * 0.60 + fgm * 1.5 + fg_pct * 5.0) * combined_mult
+        # accuracy: FG% is dominant; XP% is table stakes but still differentiates; penalize misses
+        raw["accuracy"] = (fg_pct * 15.0 + xp_pct * 5.0 - (1.0 - fg_pct) * 3.0 + fgm * 0.3) * combined_mult
 
     # ── P ─────────────────────────────────────────────────────────────────
     elif pos_group == "P" and has_stats:
@@ -259,8 +300,10 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
         punt_avg = punt_yds / max(punt_no, 1)
         in20_rate = punt_in20 / max(punt_no, 1)
 
-        raw["distance"] = (punt_avg * 0.45 + punt_long * 0.12) * combined_mult
-        raw["placement"] = (in20_rate * 9.0 + punt_no * 0.08) * combined_mult
+        # distance: avg is the core signal; longest shows ceiling; volume shows dependability
+        raw["distance"] = (punt_avg * 0.65 + punt_long * 0.15 + punt_no * 0.05) * combined_mult
+        # placement: inside-20 rate is the elite punter differentiator; volume confirms workload
+        raw["placement"] = (in20_rate * 18.0 + punt_no * 0.10) * combined_mult
 
     # ── Long snappers: fixed specialist range, not rated as OL ───────────
     if pos_group == "LS":
@@ -291,12 +334,46 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
                 ol_usage_mult = max(0.30, min(1.20, overall_usage / 0.65))
 
         if pos_group == "OL":
-            # runBlock: team rushing quality + usage (starter vs backup) + star signal + jitter
+            # Position-specific value multipliers:
+            # - Tackles (LT especially) face premier edge rushers → highest passBlock value
+            # - Guards/C drive run blocking via pulling, double-teams, zone combos → higher runBlock
+            # - LT left side = blind side → premium over RT in pass protection
+            ol_pos = (position or "OL").upper()
+            OL_PASS_VALUE = {
+                "LT": 1.25, "RT": 1.10, "OT": 1.17, "T": 1.17,
+                "OG": 0.88, "G": 0.88,
+                "C": 0.94,
+                "OL": 1.0,
+            }
+            OL_RUN_VALUE = {
+                "LT": 0.93, "RT": 0.95, "OT": 0.94, "T": 0.94,
+                "OG": 1.12, "G": 1.12,  # guards key in zone/gap run schemes
+                "C": 1.10,               # center controls combo blocks, line calls
+                "OL": 1.0,
+            }
+            # Sack attribution: each position bears a different share of total sacks allowed.
+            # Tackles face edge rushers (primary sack source); guards/center face interior.
+            # LT bears more than RT since elite pass rushers align to the blind side.
+            OL_SACK_SHARE = {
+                "LT": 0.30, "RT": 0.22, "OT": 0.26, "T": 0.26,
+                "OG": 0.13, "G": 0.13,
+                "C": 0.09,
+                "OL": 0.20,
+            }
+            pass_value = OL_PASS_VALUE.get(ol_pos, 1.0)
+            run_value  = OL_RUN_VALUE.get(ol_pos, 1.0)
+            sack_share = OL_SACK_SHARE.get(ol_pos, 0.20)
+
+            # Attributed sacks: rescaled so total attribution ≈ team sacks for typical line
+            attributed_sacks = team_sacks_allowed * sack_share * 5
+
+            # runBlock: team rushing quality + usage + star signal + position run value + jitter
             run_base = team_rush * 0.0012 * tq_mult * ol_usage_mult + stars_signal
-            raw["runBlock"] = run_base + _hash_jitter(player_id, "runBlock", jitter_mag)
-            # passBlock: sacks-allowed quality + usage + star signal + jitter
-            pass_base = max(0, 5 - team_sacks_allowed * 0.035) * tq_mult * ol_usage_mult + stars_signal
-            raw["passBlock"] = pass_base + _hash_jitter(player_id, "passBlock", jitter_mag)
+            raw["runBlock"] = (run_base + _hash_jitter(player_id, "runBlock", jitter_mag)) * run_value
+
+            # passBlock: attributed sacks penalize the player's position share; lower = better
+            pass_base = max(0, 5 - attributed_sacks * 0.035) * tq_mult * ol_usage_mult + stars_signal
+            raw["passBlock"] = (pass_base + _hash_jitter(player_id, "passBlock", jitter_mag)) * pass_value
 
         elif pos_group == "DL":
             base = (team_sacks * 0.08 + 2) * tq_mult * ol_usage_mult + stars_signal

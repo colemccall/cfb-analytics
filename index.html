@@ -193,7 +193,6 @@
   <div class="sidebar-controls">
     <div class="controls-row">
       <select id="year-select"></select>
-      <button id="mode-btn" onclick="toggleMode()">Private</button>
     </div>
     <input type="text" id="search" placeholder="Search teams...">
     <select id="conf-filter">
@@ -229,7 +228,6 @@
 let dataByYear = {};
 let years = [];
 let currentYear = null;
-let mode = 'private';
 let selectedTeamId = null;
 let sortCol = 'overall';
 let sortAsc = false;
@@ -285,21 +283,81 @@ const STAT_LABELS = {
   P:   [['punts','Punts'],['puntAvg','Avg'],['longPunt','Long'],['in20','Inside 20']],
 };
 
-const DEPTH_POSITIONS = [
-  { group:'QB', label:'Quarterbacks',   slots:3 },
-  { group:'RB', label:'Running Backs',  slots:4 },
-  { group:'FB', label:'Fullbacks',      slots:2 },
-  { group:'WR', label:'Wide Receivers', slots:5 },
-  { group:'TE', label:'Tight Ends',     slots:3 },
-  { group:'OL', label:'Offensive Line', slots:7 },
-  { group:'DL', label:'Edge Rushers',   slots:4, positions:['DE','EDGE'] },
-  { group:'DL', label:'Interior DL',    slots:3, positions:['DT','NT'] },
-  { group:'LB', label:'Linebackers',    slots:5 },
-  { group:'DB', label:'Cornerbacks',    slots:4, positions:['CB'] },
-  { group:'DB', label:'Safeties',       slots:3, positions:['S','FS','SS'] },
-  { group:'K',  label:'Kickers',        slots:2 },
-  { group:'P',  label:'Punters',        slots:2 },
-];
+// buildDepthPositions: generates the depth chart section config dynamically based on
+// what specific positions are actually present on a given team's roster.
+// Falls back to generic group labels when only generic positions exist (e.g., "DL" not "DE"/"DT").
+function buildDepthPositions(teamPlayers) {
+  const hasAny = (group, posList) => {
+    const s = new Set(teamPlayers.filter(p => p.positionGroup === group).map(p => p.position));
+    return posList ? posList.some(pos => s.has(pos)) : s.size > 0;
+  };
+
+  const sections = [
+    { group:'QB', label:'Quarterbacks',   slots:3 },
+    { group:'RB', label:'Running Backs',  slots:4 },
+    { group:'FB', label:'Fullbacks',      slots:2 },
+    { group:'WR', label:'Wide Receivers', slots:5 },
+    { group:'TE', label:'Tight Ends',     slots:3 },
+  ];
+
+  // ── Offensive Line: split by specific position if available ────────────
+  const hasOT = hasAny('OL', ['OT','LT','RT','T']);
+  const hasOG = hasAny('OL', ['OG','G']);
+  const hasC  = hasAny('OL', ['C']);
+  if (hasOT || hasOG || hasC) {
+    if (hasOT) sections.push({ group:'OL', label:'Offensive Tackles', slots:4, positions:['OT','LT','RT','T'] });
+    if (hasOG) sections.push({ group:'OL', label:'Offensive Guards',  slots:4, positions:['OG','G'] });
+    if (hasC)  sections.push({ group:'OL', label:'Centers',           slots:2, positions:['C'] });
+  } else {
+    sections.push({ group:'OL', label:'Offensive Line', slots:8 });
+  }
+
+  // ── Defensive Line: split edge vs interior if available ────────────────
+  const hasEdge     = hasAny('DL', ['DE','EDGE']);
+  const hasInterior = hasAny('DL', ['DT','NT']);
+  if (hasEdge && hasInterior) {
+    sections.push({ group:'DL', label:'Edge Rushers', slots:4, positions:['DE','EDGE'] });
+    sections.push({ group:'DL', label:'Interior DL',  slots:3, positions:['DT','NT'] });
+  } else if (hasEdge) {
+    sections.push({ group:'DL', label:'Edge Rushers', slots:6, positions:['DE','EDGE'] });
+  } else if (hasInterior) {
+    sections.push({ group:'DL', label:'Defensive Tackles', slots:5, positions:['DT','NT'] });
+  } else {
+    sections.push({ group:'DL', label:'Defensive Line', slots:7 });
+  }
+
+  // ── Linebackers: split MLB/ILB vs OLB if available ────────────────────
+  const hasOLB = hasAny('LB', ['OLB']);
+  const hasMLB = hasAny('LB', ['MLB','ILB']);
+  if (hasOLB && hasMLB) {
+    sections.push({ group:'LB', label:'Outside Linebackers', slots:3, positions:['OLB'] });
+    sections.push({ group:'LB', label:'Middle Linebackers',  slots:3, positions:['MLB','ILB'] });
+  } else if (hasOLB) {
+    sections.push({ group:'LB', label:'Outside Linebackers', slots:5, positions:['OLB'] });
+  } else if (hasMLB) {
+    sections.push({ group:'LB', label:'Middle Linebackers',  slots:5, positions:['MLB','ILB'] });
+  } else {
+    sections.push({ group:'LB', label:'Linebackers', slots:5 });
+  }
+
+  // ── Defensive Backs: split CB vs Safeties if available ────────────────
+  const hasCB  = hasAny('DB', ['CB']);
+  const hasSaf = hasAny('DB', ['S','FS','SS']);
+  if (hasCB && hasSaf) {
+    sections.push({ group:'DB', label:'Cornerbacks', slots:4, positions:['CB'] });
+    sections.push({ group:'DB', label:'Safeties',    slots:3, positions:['S','FS','SS'] });
+  } else if (hasCB) {
+    sections.push({ group:'DB', label:'Cornerbacks',    slots:6, positions:['CB'] });
+  } else if (hasSaf) {
+    sections.push({ group:'DB', label:'Safeties',       slots:5, positions:['S','FS','SS'] });
+  } else {
+    sections.push({ group:'DB', label:'Defensive Backs', slots:7 });
+  }
+
+  sections.push({ group:'K', label:'Kickers', slots:2 });
+  sections.push({ group:'P', label:'Punters',  slots:2 });
+  return sections;
+}
 
 // ── Color helpers ──────────────────────────────────────────────────────────
 const ratingColor = v => {
@@ -332,14 +390,12 @@ async function loadData() {
   for (const y of years) {
     const yb = base + y + '/';
     try {
-      const [tp, tpub, pp, ppub, rat] = await Promise.all([
+      const [tp, pp, rat] = await Promise.all([
         fetch(yb + 'teams_private.json').then(r => r.json()),
-        fetch(yb + 'teams_public.json').then(r => r.json()),
         fetch(yb + 'players_private.json').then(r => r.json()),
-        fetch(yb + 'players_public.json').then(r => r.json()),
         fetch(yb + 'ratings.json').then(r => r.json()),
       ]);
-      dataByYear[y] = { teams: tp, teamsPublic: tpub, players: pp, playersPublic: ppub, ratings: rat };
+      dataByYear[y] = { teams: tp, players: pp, ratings: rat };
     } catch (e) { console.warn(`Failed to load ${y}:`, e); }
   }
 
@@ -348,8 +404,8 @@ async function loadData() {
 }
 
 function getData() { return dataByYear[currentYear] || {}; }
-function getTeams() { return mode === 'private' ? (getData().teams || []) : (getData().teamsPublic || []); }
-function getPlayers() { return mode === 'private' ? (getData().players || []) : (getData().playersPublic || []); }
+function getTeams() { return getData().teams || []; }
+function getPlayers() { return getData().players || []; }
 function getRatings() { return getData().ratings || []; }
 
 function onDataReady() {
@@ -500,7 +556,7 @@ function renderDepth(t) {
   const ps = getPlayers().filter(p => p.teamId === t.id);
   const rMap = buildRatingMap();
 
-  const sections = DEPTH_POSITIONS.map(({ group, label, slots, positions }) => {
+  const sections = buildDepthPositions(ps).map(({ group, label, slots, positions }) => {
     const groupPlayers = ps
       .filter(p => p.positionGroup === group && (!positions || positions.includes(p.position)))
       .map(p => ({ p, r: rMap[p.id] || {} }))
@@ -796,8 +852,8 @@ function showPlayerModal(playerId) {
   const yoyRows = years.map(y => {
     const yData = dataByYear[y];
     if (!yData) return null;
-    const yPlayers = mode === 'private' ? yData.players : yData.playersPublic;
-    const yTeams = mode === 'private' ? yData.teams : yData.teamsPublic;
+    const yPlayers = yData.players;
+    const yTeams = yData.teams;
     const yRatings = yData.ratings;
     if (!yPlayers || !yRatings) return null;
     const yp = yPlayers.find(pl => String(pl.id) === pid);
@@ -1006,12 +1062,6 @@ function filterPos(pg) {
   if (t) renderRoster(t);
 }
 
-function toggleMode() {
-  mode = mode === 'private' ? 'public' : 'private';
-  document.getElementById('mode-btn').textContent = mode === 'private' ? 'Private' : 'Public';
-  document.getElementById('mode-btn').classList.toggle('active', mode === 'public');
-  onDataReady();
-}
 
 // ── Explainability Tab ─────────────────────────────────────────────────────
 function renderExplain() {
@@ -1175,9 +1225,9 @@ function renderExplain() {
       <ul>
         <li><strong>collegefootballdata.com API</strong> — rosters, player stats, team stats, SP+ ratings, recruiting rankings, PPA (predicted points added), player usage rates</li>
         <li><strong>nfl_draft.json</strong> — manually maintained NFL Draft OL picks (2023–2025 drafts) used as OL quality signal</li>
-        <li><strong>team_name_map.json</strong> — mapping real school names to fictional public names for the public-mode view</li>
+        <li><strong>team_name_map.json</strong> — mapping real school names used for pipeline team lookups</li>
       </ul>
-      <div class="explain-note"><strong>Private mode</strong> shows real team and player names from the API. <strong>Public mode</strong> replaces them with fictional names — use this for gameplay to avoid IP issues.</div>
+      <div class="explain-note">All data is sourced directly from the College Football Data API and displays real team and player names.</div>
     </div>
 
     <div class="explain-section">

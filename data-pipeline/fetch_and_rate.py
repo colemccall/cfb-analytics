@@ -653,7 +653,7 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
             stars = recruit_lookup.get((full_lower, school.lower()), 0)
 
             usage = usage_lookup.get(pid, {})
-            raw = compute_raw_ratings(pid, pos_group, p_stats, ppa_val, t_stats, tq, stars, usage)
+            raw = compute_raw_ratings(pid, pos_group, p_stats, ppa_val, t_stats, tq, stars, usage, position=pos)
             raw_ratings_all[pid] = {"pos": pos_group, "raw": raw, "stats": capture_display_stats(pos_group, p_stats)}
 
             # Collect OL boost signals: draft, awards, cross-year continuity
@@ -689,6 +689,71 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
 
     print("Normalizing ratings...")
     normalized = normalize_all_ratings(raw_ratings_all)
+
+    # ── Backup/freshman OVR ceiling ────────────────────────────────────────────────────
+    # For low-snap players with no individual stats, cap their rating at the starter's
+    # rating for that position group on the same team. A freshman with no stats should
+    # never outrate the proven starter he sits behind, regardless of recruiting ranking.
+    # Conditions to apply: snap% < 0.25 AND no meaningful individual stats.
+    # Does NOT apply to K/P/LS (specialists) or if no starter data exists.
+    print("Applying backup/freshman OVR ceilings...")
+    prelim_ovr = {}
+    for p in players_private:
+        pid = p["id"]
+        attrs = normalized.get(pid, {})
+        if attrs:
+            prelim_ovr[pid] = compute_overall(attrs, p["positionGroup"])
+
+    # Find the "starter" per (team_id, pos_group) = player with highest snap% usage
+    starter_ovr_map = {}  # (team_id, pos_group) -> {"snap": float, "ovr": int}
+    for p in players_private:
+        if p["positionGroup"] in ("K", "P", "LS"):
+            continue
+        pid = p["id"]
+        key = (p["teamId"], p["positionGroup"])
+        snap = float(usage_lookup.get(pid, {}).get("overall") or 0)
+        ovr = prelim_ovr.get(pid, 0)
+        if key not in starter_ovr_map or snap > starter_ovr_map[key]["snap"]:
+            starter_ovr_map[key] = {"snap": snap, "ovr": ovr}
+
+    ceiling_count = 0
+    for p in players_private:
+        if p["positionGroup"] in ("K", "P", "LS"):
+            continue
+        pid = p["id"]
+        snap = float(usage_lookup.get(pid, {}).get("overall") or 0)
+        if snap >= 0.25:
+            continue  # starter or significant contributor — no ceiling needed
+
+        # Check for meaningful individual stats in display_stats
+        display_stats = raw_ratings_all.get(pid, {}).get("stats", {})
+        has_any_stats = any(
+            isinstance(v, (int, float)) and v != 0
+            for v in display_stats.values()
+        )
+        if has_any_stats:
+            continue  # they have real production — rate them on it
+
+        key = (p["teamId"], p["positionGroup"])
+        starter_info = starter_ovr_map.get(key)
+        if not starter_info or starter_info["snap"] < 0.35:
+            continue  # no clear starter on this team — skip
+
+        starter_ovr = starter_info["ovr"]
+        current_ovr = prelim_ovr.get(pid, 0)
+        if current_ovr <= starter_ovr:
+            continue  # already at or below starter — no cap needed
+
+        # Scale normalized skills down proportionally so OVR matches the ceiling
+        attrs = normalized.get(pid)
+        if attrs:
+            scale = starter_ovr / current_ovr
+            for skill in list(attrs.keys()):
+                attrs[skill] = max(40, int(round(attrs[skill] * scale)))
+            prelim_ovr[pid] = compute_overall(attrs, p["positionGroup"])
+            ceiling_count += 1
+    if ceiling_count:
+        print(f"  Backup/freshman OVR ceilings applied to {ceiling_count} player(s)")
 
     # ── OL boost: apply floor ratings driven by draft status, awards, and continuity ──
     # These three signals are the best proxies we have for OL quality with no individual stats.
