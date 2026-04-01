@@ -206,8 +206,8 @@
   .yoy-table td { padding: 5px 8px; border-bottom: 1px solid var(--border); color: var(--text); }
   .yoy-table tr.current-year td { background: var(--accent-dim); }
 
-  /* ── Radar chart ── */
-  .radar-wrap { position: relative; width: 100%; max-width: 280px; margin: 0 auto 4px; }
+  /* ── Team radar chart ── */
+  .team-radar-wrap { width: 160px; height: 140px; flex-shrink: 0; }
 
   /* ── Similarity ── */
   .sim-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
@@ -260,6 +260,7 @@
     .team-hero-logo { width: 44px; height: 44px; }
     .team-hero-name { font-size: 18px; }
     .team-hero-actions { width: 100%; }
+    .team-radar-wrap { display: none; }
     .rating-cards { display: grid; grid-template-columns: repeat(3, 1fr); }
     .rating-card .value { font-size: 18px; }
     .compare-grid { grid-template-columns: 1fr; }
@@ -696,8 +697,8 @@ function setTheme(t) {
   document.querySelectorAll('.theme-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.t === t);
   });
-  // Destroy and redraw any open radar chart so it picks up new colors
-  if (window._radarChart) { window._radarChart.destroy(); window._radarChart = null; }
+  // Redraw team radar so it picks up new theme colors
+  if (window._teamRadarChart) { window._teamRadarChart.destroy(); window._teamRadarChart = null; requestAnimationFrame(() => initTeamRadar()); }
 }
 
 function renderActiveTab() {
@@ -717,24 +718,67 @@ function renderActiveTab() {
 function teamHeaderHTML(t) {
   const r = t.ratings || {};
   const accentStyle = t.primaryColor ? `border-color:${t.primaryColor}` : '';
+  const radarKeys = ['passOff','runOff','passDef','runDef','specialTeams'];
+  const radarLabels = {passOff:'Pass Off',runOff:'Run Off',passDef:'Pass Def',runDef:'Run Def',specialTeams:'Spec'};
+  const radarData = JSON.stringify(radarKeys.map(k => ({ k, v: r[k] || 0 })));
   return `
     <div class="team-hero" ${accentStyle ? `style="${accentStyle}"` : ''}>
       ${t.logoUrl ? `<img class="team-hero-logo" src="${t.logoUrl}" onerror="this.style.display='none'">` : ''}
       <div class="team-hero-info">
         <div class="team-hero-name">${t.name}${t.mascot ? ' ' + t.mascot : ''}</div>
         <div class="team-hero-meta">${[t.conference, t.stadiumName, t.city && t.state ? `${t.city}, ${t.state}` : ''].filter(Boolean).join(' · ')}</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap">
+          <span style="font-size:28px;font-weight:900;color:${ratingColor(r.overall||0)}">${r.overall || '—'}</span>
+          <span style="font-size:12px;color:var(--text-muted);font-weight:600">Overall</span>
+          ${radarKeys.map(k => `<span style="font-size:12px;color:var(--text-muted)">${radarLabels[k]}: <span style="color:${ratingColor(r[k]||0)};font-weight:700">${r[k]||'—'}</span></span>`).join('')}
+        </div>
       </div>
-      <div class="team-hero-actions">
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
         <button class="btn-compare" onclick="startCompare(${t.id})">⚖ Compare</button>
+        <div class="team-radar-wrap"><canvas id="team-radar" width="160" height="140"></canvas></div>
+        <div id="team-radar-data" style="display:none">${radarData.replace(/</g,'&lt;')}</div>
       </div>
-    </div>
-    <div class="rating-cards">
-      ${['overall','passOff','runOff','passDef','runDef','specialTeams'].map(k => {
-        const labels = {overall:'Overall',passOff:'Pass Off',runOff:'Run Off',passDef:'Pass Def',runDef:'Run Def',specialTeams:'Spec Teams'};
-        const v = r[k] || 0;
-        return `<div class="rating-card"><div class="label">${labels[k]}</div><div class="value" style="color:${ratingColor(v)}">${v}</div></div>`;
-      }).join('')}
     </div>`;
+}
+
+function initTeamRadar() {
+  const canvas = document.getElementById('team-radar');
+  if (!canvas || typeof Chart === 'undefined') return;
+  const dataEl = document.getElementById('team-radar-data');
+  if (!dataEl) return;
+  const data = JSON.parse(dataEl.textContent);
+  if (window._teamRadarChart) { window._teamRadarChart.destroy(); window._teamRadarChart = null; }
+  const style = getComputedStyle(document.documentElement);
+  const accent = style.getPropertyValue('--accent').trim() || '#4f9cf9';
+  const textMuted = style.getPropertyValue('--text-muted').trim() || '#aaa';
+  const surfaceDeep = style.getPropertyValue('--surface-deep').trim() || '#0f1b2e';
+  window._teamRadarChart = new Chart(canvas, {
+    type: 'radar',
+    data: {
+      labels: data.map(d => d.k === 'passOff' ? 'Pass Off' : d.k === 'runOff' ? 'Run Off' : d.k === 'passDef' ? 'Pass Def' : d.k === 'runDef' ? 'Run Def' : 'Spec'),
+      datasets: [{
+        data: data.map(d => d.v),
+        backgroundColor: accent + '28',
+        borderColor: accent,
+        borderWidth: 2,
+        pointBackgroundColor: accent,
+        pointRadius: 3,
+      }]
+    },
+    options: {
+      responsive: false,
+      scales: {
+        r: {
+          min: 55, max: 99,
+          ticks: { display: false },
+          grid: { color: surfaceDeep },
+          angleLines: { color: surfaceDeep },
+          pointLabels: { color: textMuted, font: { family: "'Barlow Condensed', sans-serif", size: 10, weight: '600' } }
+        }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
 }
 
 // ── Roster Tab ─────────────────────────────────────────────────────────────
@@ -787,8 +831,9 @@ function renderRoster(t) {
           : p.status === 'transfer_in' ? '<span class="status-pill in">Transfer</span>'
           : p.status === 'recruit' ? '<span class="status-pill recruit">Recruit</span>' : '';
         const ovr = r.overall || 0;
-        const isDraftEligible = currentYear === 2026 && p.positionGroup !== 'OL'
-          && ((p.year >= 4) || (p.year === 3 && ovr >= 80));
+        const isReturning = p.status !== 'transfer_in' && p.status !== 'recruit';
+        const isDraftEligible = currentYear === 2026 && isReturning
+          && p.positionGroup !== 'OL' && p.year >= 3 && ovr >= 85;
         const draftPill = isDraftEligible ? '<span class="status-pill draft">Draft</span>' : '';
         return `<tr class="clickable ${statusCls}" onclick="showPlayerModal('${p.id}')">
           <td>${p.jersey != null && p.jersey !== '' ? p.jersey : '-'}</td>
@@ -805,6 +850,7 @@ function renderRoster(t) {
     </table></div>
     <div style="padding:8px;color:#666;font-size:11px">${filtered.length} players${posFilter !== 'ALL' ? ` (${posFilter})` : ''} &bull; ${ps.length} total &bull; click a player for detail</div>
   `;
+  requestAnimationFrame(() => initTeamRadar());
 }
 
 // ── Depth Chart Tab ────────────────────────────────────────────────────────
@@ -847,6 +893,7 @@ function renderDepth(t) {
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 32px">
       ${sections}
     </div>`;
+  requestAnimationFrame(() => initTeamRadar());
 }
 
 // ── Phase 2: Lazy-load caches ──────────────────────────────────────────────
@@ -1472,7 +1519,7 @@ function showPlayerModal(playerId) {
     : p.status === 'likely_leaving' ? '<span class="status-pill leaving" style="margin-left:6px">Likely Leaving</span>'
     : p.status === 'transfer_in' ? '<span class="status-pill in" style="margin-left:6px">Transfer In</span>'
     : p.status === 'recruit' ? '<span class="status-pill recruit" style="margin-left:6px">Recruit</span>' : '';
-  const archetype = computeArchetype(posGroup, r);
+  const archetype = ovr >= 80 ? computeArchetype(posGroup, r) : null;
   const archetypeHTML = archetype ? `<span class="archetype-badge">${archetype}</span>` : '';
   const projTypeLabels = { returning: 'Returning', transfer: 'Transfer', recruit: 'Recruit', unknown: 'New Player' };
   const projRangeHTML = r.projected && r.overallLow != null && r.overallHigh != null
@@ -1491,12 +1538,10 @@ function showPlayerModal(playerId) {
     ? `<div style="margin-top:6px;font-size:12px;color:#aaa">Trajectory: <span style="color:${ratingColor(r.trajectory)};font-weight:700">${r.trajectory}</span> <span style="font-size:10px;color:#555">(projected)</span></div>`
     : '';
 
-  const skillDataJSON = JSON.stringify(skills.map(([key, label]) => ({ key, label, val: r[key] || 0 })));
   const overviewHTML = `
     <div class="modal-section">
       <div class="modal-section-title">Skill Ratings</div>
-      ${skills.length ? `<div class="radar-wrap"><canvas id="skill-radar" height="240"></canvas></div>` : '<div style="color:var(--text-dim);font-size:12px">No skill data available</div>'}
-      <div id="skill-radar-data" style="display:none">${skillDataJSON.replace(/</g,'&lt;')}</div>
+      ${skills.length ? skillBarsHTML : '<div style="color:var(--text-dim);font-size:12px">No skill data available</div>'}
     </div>
     ${statsHTML}
     ${careerHTML}
@@ -1528,55 +1573,8 @@ function showPlayerModal(playerId) {
     <div id="modal-tab-gamelog" style="display:none"><div style="color:#666;padding:20px;font-size:13px">Loading game log...</div></div>
   `;
   document.getElementById('player-modal').classList.add('open');
-  // Render radar chart after DOM is painted
-  requestAnimationFrame(() => initRadarChart());
 }
 
-function initRadarChart() {
-  const canvas = document.getElementById('skill-radar');
-  if (!canvas || typeof Chart === 'undefined') return;
-  const dataEl = document.getElementById('skill-radar-data');
-  if (!dataEl) return;
-  const skills = JSON.parse(dataEl.textContent);
-  if (!skills.length) return;
-  if (window._radarChart) { window._radarChart.destroy(); window._radarChart = null; }
-  const style = getComputedStyle(document.documentElement);
-  const accent = style.getPropertyValue('--accent').trim() || '#e94560';
-  const textMuted = style.getPropertyValue('--text-muted').trim() || '#aaa';
-  const surfaceDeep = style.getPropertyValue('--surface-deep').trim() || '#0f1b2e';
-  window._radarChart = new Chart(canvas, {
-    type: 'radar',
-    data: {
-      labels: skills.map(s => s.label),
-      datasets: [{
-        data: skills.map(s => s.val),
-        backgroundColor: accent + '28',
-        borderColor: accent,
-        borderWidth: 2,
-        pointBackgroundColor: accent,
-        pointRadius: 3,
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      scales: {
-        r: {
-          min: 40, max: 99,
-          ticks: { display: false, stepSize: 20 },
-          grid: { color: surfaceDeep },
-          angleLines: { color: surfaceDeep },
-          pointLabels: {
-            color: textMuted,
-            font: { family: "'Barlow Condensed', sans-serif", size: 11, weight: '600' },
-            callback: (label, i) => `${label}: ${skills[i].val}`
-          }
-        }
-      },
-      plugins: { legend: { display: false } }
-    }
-  });
-}
 
 function switchModalTab(tab, pid) {
   document.querySelectorAll('.modal-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.mtab === tab));
