@@ -5,3 +5,5 @@ node_modules/
 .expo/
 dist/
 .cache/
+# Play-by-play data is too large for GitHub (70–125 MB per year)
+**/team_plays.json
