@@ -124,7 +124,7 @@
     "capacity": 65870,
     "ratings": {
       "overall": 71,
-      "passOff": 70,
+      "passOff": 71,
       "runOff": 69,
       "passDef": 75,
       "runDef": 77,
@@ -652,7 +652,7 @@
     "capacity": 29419,
     "ratings": {
       "overall": 75,
-      "passOff": 71,
+      "passOff": 70,
       "runOff": 69,
       "passDef": 78,
       "runDef": 79,
@@ -762,7 +762,7 @@
     "capacity": 25000,
     "ratings": {
       "overall": 78,
-      "passOff": 85,
+      "passOff": 84,
       "runOff": 82,
       "passDef": 72,
       "runDef": 75,
@@ -1291,7 +1291,7 @@
     "ratings": {
       "overall": 86,
       "passOff": 85,
-      "runOff": 86,
+      "runOff": 85,
       "passDef": 85,
       "runDef": 85,
       "specialTeams": 88
@@ -1400,7 +1400,7 @@
     "capacity": 50850,
     "ratings": {
       "overall": 78,
-      "passOff": 69,
+      "passOff": 68,
       "runOff": 75,
       "passDef": 83,
       "runDef": 82,
@@ -1487,7 +1487,7 @@
     "state": "NC",
     "capacity": 58000,
     "ratings": {
-      "overall": 86,
+      "overall": 85,
       "passOff": 79,
       "runOff": 79,
       "passDef": 87,
@@ -1643,7 +1643,7 @@
     "ratings": {
       "overall": 76,
       "passOff": 86,
-      "runOff": 85,
+      "runOff": 86,
       "passDef": 58,
       "runDef": 58,
       "specialTeams": 75
@@ -2081,8 +2081,8 @@
     "state": "AL",
     "capacity": 25450,
     "ratings": {
-      "overall": 84,
-      "passOff": 84,
+      "overall": 86,
+      "passOff": 85,
       "runOff": 85,
       "passDef": 84,
       "runDef": 83,
@@ -2522,7 +2522,7 @@
     "capacity": 40000,
     "ratings": {
       "overall": 70,
-      "passOff": 70,
+      "passOff": 69,
       "runOff": 71,
       "passDef": 74,
       "runDef": 76,
@@ -2654,7 +2654,7 @@
     "capacity": 51500,
     "ratings": {
       "overall": 67,
-      "passOff": 68,
+      "passOff": 70,
       "runOff": 68,
       "passDef": 76,
       "runDef": 68,
@@ -2675,7 +2675,7 @@
     "state": "TX",
     "capacity": 36582,
     "ratings": {
-      "overall": 85,
+      "overall": 84,
       "passOff": 85,
       "runOff": 85,
       "passDef": 82,

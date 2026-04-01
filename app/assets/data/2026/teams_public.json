@@ -11,6 +11,7 @@
     "stadiumName": "Peak Stadium",
     "city": "Colorado Springs",
     "state": "CO",
+    "capacity": 46692,
     "ratings": {
       "overall": 76,
       "passOff": 78,
@@ -33,6 +34,7 @@
     "stadiumName": "Rubber City Stadium",
     "city": "Akron",
     "state": "OH",
+    "capacity": 30000,
     "ratings": {
       "overall": 68,
       "passOff": 67,
@@ -55,6 +57,7 @@
     "stadiumName": "Crimson Thunder Stadium",
     "city": "Tuscaloosa",
     "state": "AL",
+    "capacity": 101821,
     "ratings": {
       "overall": 87,
       "passOff": 87,
@@ -77,6 +80,7 @@
     "stadiumName": "Kidd Brewer Stadium",
     "city": "Boone",
     "state": "NC",
+    "capacity": 30000,
     "ratings": {
       "overall": 71,
       "passOff": 76,
@@ -99,6 +103,7 @@
     "stadiumName": "Desert Bowl",
     "city": "Tucson",
     "state": "AZ",
+    "capacity": 50782,
     "ratings": {
       "overall": 86,
       "passOff": 84,
@@ -121,6 +126,7 @@
     "stadiumName": "Sun Devil Stadium",
     "city": "Tempe",
     "state": "AZ",
+    "capacity": 65870,
     "ratings": {
       "overall": 81,
       "passOff": 78,
@@ -143,6 +149,7 @@
     "stadiumName": "Hog Ridge Stadium",
     "city": "Fayetteville",
     "state": "AR",
+    "capacity": 80000,
     "ratings": {
       "overall": 81,
       "passOff": 87,
@@ -165,6 +172,7 @@
     "stadiumName": "Delta Bowl",
     "city": "Jonesboro",
     "state": "AR",
+    "capacity": 30382,
     "ratings": {
       "overall": 76,
       "passOff": 77,
@@ -187,6 +195,7 @@
     "stadiumName": "Highlands Stadium",
     "city": "West Point",
     "state": "NY",
+    "capacity": 38000,
     "ratings": {
       "overall": 77,
       "passOff": 70,
@@ -209,6 +218,7 @@
     "stadiumName": "Plains Stadium",
     "city": "Auburn",
     "state": "AL",
+    "capacity": 87451,
     "ratings": {
       "overall": 85,
       "passOff": 79,
@@ -231,6 +241,7 @@
     "stadiumName": "Muncie Bowl",
     "city": "Muncie",
     "state": "IN",
+    "capacity": 22500,
     "ratings": {
       "overall": 61,
       "passOff": 60,
@@ -253,6 +264,7 @@
     "stadiumName": "River Bears Stadium",
     "city": "Waco",
     "state": "TX",
+    "capacity": 45140,
     "ratings": {
       "overall": 78,
       "passOff": 85,
@@ -275,6 +287,7 @@
     "stadiumName": "Blue Thunder Stadium",
     "city": "Boise",
     "state": "ID",
+    "capacity": 36387,
     "ratings": {
       "overall": 83,
       "passOff": 82,
@@ -297,6 +310,7 @@
     "stadiumName": "Atlantic Heights Stadium",
     "city": "Chestnut Hill",
     "state": "MA",
+    "capacity": 44500,
     "ratings": {
       "overall": 72,
       "passOff": 78,
@@ -319,6 +333,7 @@
     "stadiumName": "Wood County Stadium",
     "city": "Bowling Green",
     "state": "OH",
+    "capacity": 24000,
     "ratings": {
       "overall": 72,
       "passOff": 63,
@@ -341,6 +356,7 @@
     "stadiumName": "Lake Erie Stadium",
     "city": "Amherst",
     "state": "NY",
+    "capacity": 30270,
     "ratings": {
       "overall": 77,
       "passOff": 68,
@@ -363,6 +379,7 @@
     "stadiumName": "Mountain Bowl",
     "city": "Provo",
     "state": "UT",
+    "capacity": 63470,
     "ratings": {
       "overall": 86,
       "passOff": 86,
@@ -385,6 +402,7 @@
     "stadiumName": "California Memorial Stadium",
     "city": "Berkeley",
     "state": "CA",
+    "capacity": 62467,
     "ratings": {
       "overall": 77,
       "passOff": 80,
@@ -407,6 +425,7 @@
     "stadiumName": "River City Stadium",
     "city": "Mount Pleasant",
     "state": "MI",
+    "capacity": 30255,
     "ratings": {
       "overall": 76,
       "passOff": 67,
@@ -429,6 +448,7 @@
     "stadiumName": "Queen City Stadium",
     "city": "Charlotte",
     "state": "NC",
+    "capacity": 15300,
     "ratings": {
       "overall": 59,
       "passOff": 64,
@@ -451,6 +471,7 @@
     "stadiumName": "River Bend Stadium",
     "city": "Cincinnati",
     "state": "OH",
+    "capacity": 40000,
     "ratings": {
       "overall": 79,
       "passOff": 83,
@@ -473,6 +494,7 @@
     "stadiumName": "Death Valley North",
     "city": "Clemson",
     "state": "SC",
+    "capacity": 81500,
     "ratings": {
       "overall": 85,
       "passOff": 81,
@@ -495,6 +517,7 @@
     "stadiumName": "Shore Stadium",
     "city": "Conway",
     "state": "SC",
+    "capacity": 21000,
     "ratings": {
       "overall": 66,
       "passOff": 72,
@@ -517,6 +540,7 @@
     "stadiumName": "Summit Stadium",
     "city": "Boulder",
     "state": "CO",
+    "capacity": 50183,
     "ratings": {
       "overall": 76,
       "passOff": 76,
@@ -539,6 +563,7 @@
     "stadiumName": "Front Range Stadium",
     "city": "Fort Collins",
     "state": "CO",
+    "capacity": 36500,
     "ratings": {
       "overall": 64,
       "passOff": 68,
@@ -561,6 +586,7 @@
     "stadiumName": "Delaware Stadium",
     "city": "Newark",
     "state": "DE",
+    "capacity": 22000,
     "ratings": {
       "overall": 72,
       "passOff": 80,
@@ -583,6 +609,7 @@
     "stadiumName": "Durham Stadium",
     "city": "Durham",
     "state": "NC",
+    "capacity": 40004,
     "ratings": {
       "overall": 82,
       "passOff": 87,
@@ -605,6 +632,7 @@
     "stadiumName": "Coastal Stadium",
     "city": "Greenville",
     "state": "NC",
+    "capacity": 50000,
     "ratings": {
       "overall": 85,
       "passOff": 86,
@@ -627,6 +655,7 @@
     "stadiumName": "Ypsilanti Stadium",
     "city": "Ypsilanti",
     "state": "MI",
+    "capacity": 30200,
     "ratings": {
       "overall": 66,
       "passOff": 70,
@@ -649,6 +678,7 @@
     "stadiumName": "The Swamp",
     "city": "Gainesville",
     "state": "FL",
+    "capacity": 88548,
     "ratings": {
       "overall": 78,
       "passOff": 75,
@@ -671,6 +701,7 @@
     "stadiumName": "Atlantic Stadium",
     "city": "Boca Raton",
     "state": "FL",
+    "capacity": 29419,
     "ratings": {
       "overall": 73,
       "passOff": 81,
@@ -693,6 +724,7 @@
     "stadiumName": "Pitbull Stadium",
     "city": "Miami",
     "state": "FL",
+    "capacity": null,
     "ratings": {
       "overall": 73,
       "passOff": 77,
@@ -715,6 +747,7 @@
     "stadiumName": "Capitol Stadium",
     "city": "Tallahassee",
     "state": "FL",
+    "capacity": 67277,
     "ratings": {
       "overall": 85,
       "passOff": 84,
@@ -737,6 +770,7 @@
     "stadiumName": "Central Valley Stadium",
     "city": "Fresno",
     "state": "CA",
+    "capacity": 41031,
     "ratings": {
       "overall": 79,
       "passOff": 73,
@@ -759,6 +793,7 @@
     "stadiumName": "Athens Stadium",
     "city": "Athens",
     "state": "GA",
+    "capacity": 92746,
     "ratings": {
       "overall": 89,
       "passOff": 87,
@@ -781,6 +816,7 @@
     "stadiumName": "Savannah Stadium",
     "city": "Statesboro",
     "state": "GA",
+    "capacity": 25000,
     "ratings": {
       "overall": 74,
       "passOff": 80,
@@ -803,6 +839,7 @@
     "stadiumName": "Atlanta Bowl",
     "city": "Atlanta",
     "state": "GA",
+    "capacity": 25000,
     "ratings": {
       "overall": 62,
       "passOff": 73,
@@ -825,6 +862,7 @@
     "stadiumName": "Metro Bowl",
     "city": "Atlanta",
     "state": "GA",
+    "capacity": 55000,
     "ratings": {
       "overall": 83,
       "passOff": 86,
@@ -847,6 +885,7 @@
     "stadiumName": "Clarence T.C. Ching Athletics Complex",
     "city": "Honolulu",
     "state": "HI",
+    "capacity": 9000,
     "ratings": {
       "overall": 78,
       "passOff": 81,
@@ -869,6 +908,7 @@
     "stadiumName": "Bayou Stadium",
     "city": "Houston",
     "state": "TX",
+    "capacity": 40000,
     "ratings": {
       "overall": 83,
       "passOff": 83,
@@ -891,6 +931,7 @@
     "stadiumName": "Prairie Memorial Stadium",
     "city": "Champaign",
     "state": "IL",
+    "capacity": 60670,
     "ratings": {
       "overall": 84,
       "passOff": 84,
@@ -913,6 +954,7 @@
     "stadiumName": "Heartland Stadium",
     "city": "Bloomington",
     "state": "IN",
+    "capacity": 52656,
     "ratings": {
       "overall": 94,
       "passOff": 93,
@@ -935,6 +977,7 @@
     "stadiumName": "River City Stadium",
     "city": "Iowa City",
     "state": "IA",
+    "capacity": 69250,
     "ratings": {
       "overall": 86,
       "passOff": 80,
@@ -957,6 +1000,7 @@
     "stadiumName": "Cyclone Stadium",
     "city": "Ames",
     "state": "IA",
+    "capacity": 61500,
     "ratings": {
       "overall": 84,
       "passOff": 79,
@@ -979,6 +1023,7 @@
     "stadiumName": "Anniston Stadium",
     "city": "Jacksonville",
     "state": "AL",
+    "capacity": 24000,
     "ratings": {
       "overall": 78,
       "passOff": 78,
@@ -1001,6 +1046,7 @@
     "stadiumName": "Shenandoah Valley Stadium",
     "city": "Harrisonburg",
     "state": "VA",
+    "capacity": 24877,
     "ratings": {
       "overall": 86,
       "passOff": 85,
@@ -1023,6 +1069,7 @@
     "stadiumName": "Sunflower Stadium",
     "city": "Lawrence",
     "state": "KS",
+    "capacity": 47000,
     "ratings": {
       "overall": 79,
       "passOff": 82,
@@ -1045,6 +1092,7 @@
     "stadiumName": "Flint Hills Stadium",
     "city": "Manhattan",
     "state": "KS",
+    "capacity": 50000,
     "ratings": {
       "overall": 82,
       "passOff": 80,
@@ -1067,6 +1115,7 @@
     "stadiumName": "North Atlanta Stadium",
     "city": "Kennesaw",
     "state": "GA",
+    "capacity": 8318,
     "ratings": {
       "overall": 78,
       "passOff": 80,
@@ -1089,6 +1138,7 @@
     "stadiumName": "Dix Stadium",
     "city": "Kent",
     "state": "OH",
+    "capacity": 25319,
     "ratings": {
       "overall": 63,
       "passOff": 66,
@@ -1111,6 +1161,7 @@
     "stadiumName": "Bluegrass Stadium",
     "city": "Lexington",
     "state": "KY",
+    "capacity": 61000,
     "ratings": {
       "overall": 80,
       "passOff": 77,
@@ -1133,6 +1184,7 @@
     "stadiumName": "Blue Ridge Stadium",
     "city": "Lynchburg",
     "state": "VA",
+    "capacity": 25000,
     "ratings": {
       "overall": 74,
       "passOff": 75,
@@ -1155,6 +1207,7 @@
     "stadiumName": "Prairie Stadium",
     "city": "Lafayette",
     "state": "LA",
+    "capacity": 41426,
     "ratings": {
       "overall": 74,
       "passOff": 75,
@@ -1177,6 +1230,7 @@
     "stadiumName": "Ark-La-Tex Stadium",
     "city": "Ruston",
     "state": "LA",
+    "capacity": 28019,
     "ratings": {
       "overall": 78,
       "passOff": 77,
@@ -1199,6 +1253,7 @@
     "stadiumName": "Falls City Stadium",
     "city": "Louisville",
     "state": "KY",
+    "capacity": 60000,
     "ratings": {
       "overall": 85,
       "passOff": 81,
@@ -1221,6 +1276,7 @@
     "stadiumName": "Death Valley South",
     "city": "Baton Rouge",
     "state": "LA",
+    "capacity": 102321,
     "ratings": {
       "overall": 85,
       "passOff": 79,
@@ -1243,6 +1299,7 @@
     "stadiumName": "River Stadium",
     "city": "Huntington",
     "state": "WV",
+    "capacity": 38016,
     "ratings": {
       "overall": 77,
       "passOff": 81,
@@ -1265,6 +1322,7 @@
     "stadiumName": "Chesapeake Stadium",
     "city": "College Park",
     "state": "MD",
+    "capacity": 51802,
     "ratings": {
       "overall": 78,
       "passOff": 78,
@@ -1287,6 +1345,7 @@
     "stadiumName": "Pioneer Stadium",
     "city": "Hadley",
     "state": "MA",
+    "capacity": 17000,
     "ratings": {
       "overall": 58,
       "passOff": 58,
@@ -1309,6 +1368,7 @@
     "stadiumName": "Bluff City Stadium",
     "city": "Memphis",
     "state": "TN",
+    "capacity": 58325,
     "ratings": {
       "overall": 84,
       "passOff": 85,
@@ -1331,6 +1391,7 @@
     "stadiumName": "Coral Gables Stadium",
     "city": "Miami Gardens",
     "state": "FL",
+    "capacity": 64767,
     "ratings": {
       "overall": 90,
       "passOff": 88,
@@ -1353,6 +1414,7 @@
     "stadiumName": "Oxford Bowl",
     "city": "Oxford",
     "state": "OH",
+    "capacity": 24286,
     "ratings": {
       "overall": 78,
       "passOff": 74,
@@ -1375,6 +1437,7 @@
     "stadiumName": "The Big House",
     "city": "Ann Arbor",
     "state": "MI",
+    "capacity": 107601,
     "ratings": {
       "overall": 86,
       "passOff": 82,
@@ -1397,6 +1460,7 @@
     "stadiumName": "Spartan Stadium",
     "city": "East Lansing",
     "state": "MI",
+    "capacity": 75005,
     "ratings": {
       "overall": 77,
       "passOff": 78,
@@ -1419,6 +1483,7 @@
     "stadiumName": "Limestone Stadium",
     "city": "Murfreesboro",
     "state": "TN",
+    "capacity": 30788,
     "ratings": {
       "overall": 67,
       "passOff": 74,
@@ -1441,6 +1506,7 @@
     "stadiumName": "Twin Cities Stadium",
     "city": "Minneapolis",
     "state": "MN",
+    "capacity": 50850,
     "ratings": {
       "overall": 80,
       "passOff": 77,
@@ -1463,6 +1529,7 @@
     "stadiumName": "Delta Stadium",
     "city": "Starkville",
     "state": "MS",
+    "capacity": 61337,
     "ratings": {
       "overall": 80,
       "passOff": 85,
@@ -1485,6 +1552,7 @@
     "stadiumName": "River Stadium",
     "city": "Columbia",
     "state": "MO",
+    "capacity": 71168,
     "ratings": {
       "overall": 87,
       "passOff": 83,
@@ -1507,6 +1575,7 @@
     "stadiumName": "Plaster Sports Complex",
     "city": "Springfield",
     "state": "MO",
+    "capacity": 17337,
     "ratings": {
       "overall": 75,
       "passOff": 79,
@@ -1529,6 +1598,7 @@
     "stadiumName": "Navy-Marine Corps Memorial",
     "city": "Annapolis",
     "state": "MD",
+    "capacity": 34000,
     "ratings": {
       "overall": 82,
       "passOff": 83,
@@ -1551,6 +1621,7 @@
     "stadiumName": "Red Wolf Stadium",
     "city": "Raleigh",
     "state": "NC",
+    "capacity": 58000,
     "ratings": {
       "overall": 80,
       "passOff": 85,
@@ -1573,6 +1644,7 @@
     "stadiumName": "Sea of Red Stadium",
     "city": "Lincoln",
     "state": "NE",
+    "capacity": 85458,
     "ratings": {
       "overall": 84,
       "passOff": 83,
@@ -1595,6 +1667,7 @@
     "stadiumName": "Basin Bowl",
     "city": "Reno",
     "state": "NV",
+    "capacity": 27000,
     "ratings": {
       "overall": 67,
       "passOff": 61,
@@ -1617,6 +1690,7 @@
     "stadiumName": "High Desert Stadium",
     "city": "Albuquerque",
     "state": "NM",
+    "capacity": 39224,
     "ratings": {
       "overall": 77,
       "passOff": 77,
@@ -1639,6 +1713,7 @@
     "stadiumName": "Desert South Stadium",
     "city": "Las Cruces",
     "state": "NM",
+    "capacity": 28853,
     "ratings": {
       "overall": 68,
       "passOff": 70,
@@ -1661,6 +1736,7 @@
     "stadiumName": "Blue Ridge Stadium",
     "city": "Chapel Hill",
     "state": "NC",
+    "capacity": 50500,
     "ratings": {
       "overall": 76,
       "passOff": 68,
@@ -1683,6 +1759,7 @@
     "stadiumName": "Fargodome",
     "city": "Fargo",
     "state": "ND",
+    "capacity": 18700,
     "ratings": {
       "overall": 70,
       "passOff": 70,
@@ -1705,6 +1782,7 @@
     "stadiumName": "DeKalb Stadium",
     "city": "DeKalb",
     "state": "IL",
+    "capacity": 23595,
     "ratings": {
       "overall": 65,
       "passOff": 59,
@@ -1727,6 +1805,7 @@
     "stadiumName": "Apogee Stadium",
     "city": "Denton",
     "state": "TX",
+    "capacity": 30850,
     "ratings": {
       "overall": 87,
       "passOff": 93,
@@ -1749,6 +1828,7 @@
     "stadiumName": "Lakefront Stadium",
     "city": "Evanston",
     "state": "IL",
+    "capacity": null,
     "ratings": {
       "overall": 80,
       "passOff": 76,
@@ -1771,6 +1851,7 @@
     "stadiumName": "Golden Dome Stadium",
     "city": "Notre Dame",
     "state": "IN",
+    "capacity": 80795,
     "ratings": {
       "overall": 91,
       "passOff": 89,
@@ -1793,6 +1874,7 @@
     "stadiumName": "Hocking Hills Stadium",
     "city": "Athens",
     "state": "OH",
+    "capacity": 24000,
     "ratings": {
       "overall": 79,
       "passOff": 76,
@@ -1815,6 +1897,7 @@
     "stadiumName": "Horseshoe Stadium",
     "city": "Columbus",
     "state": "OH",
+    "capacity": 102780,
     "ratings": {
       "overall": 93,
       "passOff": 90,
@@ -1837,6 +1920,7 @@
     "stadiumName": "Prairie Memorial Stadium",
     "city": "Norman",
     "state": "OK",
+    "capacity": 86112,
     "ratings": {
       "overall": 87,
       "passOff": 82,
@@ -1859,6 +1943,7 @@
     "stadiumName": "Boone Pickens Field",
     "city": "Stillwater",
     "state": "OK",
+    "capacity": 55509,
     "ratings": {
       "overall": 65,
       "passOff": 64,
@@ -1881,6 +1966,7 @@
     "stadiumName": "Tidewater Stadium",
     "city": "Norfolk",
     "state": "VA",
+    "capacity": 20118,
     "ratings": {
       "overall": 85,
       "passOff": 82,
@@ -1903,6 +1989,7 @@
     "stadiumName": "The Grove Stadium",
     "city": "Oxford",
     "state": "MS",
+    "capacity": 64038,
     "ratings": {
       "overall": 90,
       "passOff": 94,
@@ -1925,6 +2012,7 @@
     "stadiumName": "Cascade Stadium",
     "city": "Eugene",
     "state": "OR",
+    "capacity": 54000,
     "ratings": {
       "overall": 92,
       "passOff": 89,
@@ -1947,6 +2035,7 @@
     "stadiumName": "Reser Stadium",
     "city": "Corvallis",
     "state": "OR",
+    "capacity": 43363,
     "ratings": {
       "overall": 69,
       "passOff": 69,
@@ -1969,6 +2058,7 @@
     "stadiumName": "Happy Valley Stadium",
     "city": "University Park",
     "state": "PA",
+    "capacity": 106572,
     "ratings": {
       "overall": 87,
       "passOff": 86,
@@ -1991,6 +2081,7 @@
     "stadiumName": "Steel City Stadium",
     "city": "Pittsburgh",
     "state": "PA",
+    "capacity": 68400,
     "ratings": {
       "overall": 86,
       "passOff": 84,
@@ -2013,6 +2104,7 @@
     "stadiumName": "Rail City Stadium",
     "city": "West Lafayette",
     "state": "IN",
+    "capacity": 57282,
     "ratings": {
       "overall": 75,
       "passOff": 76,
@@ -2035,6 +2127,7 @@
     "stadiumName": "Bayou Stadium",
     "city": "Houston",
     "state": "TX",
+    "capacity": 47000,
     "ratings": {
       "overall": 65,
       "passOff": 65,
@@ -2057,6 +2150,7 @@
     "stadiumName": "Scarlet Stadium",
     "city": "Piscataway",
     "state": "NJ",
+    "capacity": 52454,
     "ratings": {
       "overall": 79,
       "passOff": 84,
@@ -2079,6 +2173,7 @@
     "stadiumName": "Hornet Stadium",
     "city": "Sacramento",
     "state": "CA",
+    "capacity": 21195,
     "ratings": {
       "overall": 70,
       "passOff": 70,
@@ -2101,6 +2196,7 @@
     "stadiumName": "Piney Woods Stadium",
     "city": "Huntsville",
     "state": "TX",
+    "capacity": 14000,
     "ratings": {
       "overall": 60,
       "passOff": 62,
@@ -2123,6 +2219,7 @@
     "stadiumName": "Pacific Mesa Stadium",
     "city": "San Diego",
     "state": "CA",
+    "capacity": 35000,
     "ratings": {
       "overall": 82,
       "passOff": 74,
@@ -2145,6 +2242,7 @@
     "stadiumName": "CEFCU Stadium",
     "city": "San Jose",
     "state": "CA",
+    "capacity": 30456,
     "ratings": {
       "overall": 69,
       "passOff": 77,
@@ -2167,6 +2265,7 @@
     "stadiumName": "Lone Star Stadium",
     "city": "University Park",
     "state": "TX",
+    "capacity": 32000,
     "ratings": {
       "overall": 86,
       "passOff": 86,
@@ -2189,6 +2288,7 @@
     "stadiumName": "Gulf Coast Stadium",
     "city": "Mobile",
     "state": "AL",
+    "capacity": 25450,
     "ratings": {
       "overall": 75,
       "passOff": 76,
@@ -2211,6 +2311,7 @@
     "stadiumName": "Lowcountry Stadium",
     "city": "Columbia",
     "state": "SC",
+    "capacity": 80250,
     "ratings": {
       "overall": 79,
       "passOff": 76,
@@ -2233,6 +2334,7 @@
     "stadiumName": "Gulf Stadium",
     "city": "Hattiesburg",
     "state": "MS",
+    "capacity": 36000,
     "ratings": {
       "overall": 77,
       "passOff": 79,
@@ -2255,6 +2357,7 @@
     "stadiumName": "Bull Bay Stadium",
     "city": "Tampa",
     "state": "FL",
+    "capacity": 65828,
     "ratings": {
       "overall": 86,
       "passOff": 89,
@@ -2277,6 +2380,7 @@
     "stadiumName": "Redwood Stadium",
     "city": "Stanford",
     "state": "CA",
+    "capacity": 50424,
     "ratings": {
       "overall": 70,
       "passOff": 71,
@@ -2299,6 +2403,7 @@
     "stadiumName": "Carrier Dome North",
     "city": "Syracuse",
     "state": "NY",
+    "capacity": 49057,
     "ratings": {
       "overall": 70,
       "passOff": 71,
@@ -2321,6 +2426,7 @@
     "stadiumName": "Metroplex Stadium",
     "city": "Fort Worth",
     "state": "TX",
+    "capacity": 46000,
     "ratings": {
       "overall": 84,
       "passOff": 86,
@@ -2343,6 +2449,7 @@
     "stadiumName": "Keystone Stadium",
     "city": "Philadelphia",
     "state": "PA",
+    "capacity": 69879,
     "ratings": {
       "overall": 76,
       "passOff": 78,
@@ -2365,6 +2472,7 @@
     "stadiumName": "Rocky Top Stadium",
     "city": "Knoxville",
     "state": "TN",
+    "capacity": 102455,
     "ratings": {
       "overall": 87,
       "passOff": 91,
@@ -2387,6 +2495,7 @@
     "stadiumName": "Capitol Stadium",
     "city": "Austin",
     "state": "TX",
+    "capacity": 100119,
     "ratings": {
       "overall": 88,
       "passOff": 86,
@@ -2409,6 +2518,7 @@
     "stadiumName": "12th Man Stadium",
     "city": "College Station",
     "state": "TX",
+    "capacity": 102733,
     "ratings": {
       "overall": 90,
       "passOff": 88,
@@ -2431,6 +2541,7 @@
     "stadiumName": "Hill Country Stadium",
     "city": "San Marcos",
     "state": "TX",
+    "capacity": 30000,
     "ratings": {
       "overall": 82,
       "passOff": 87,
@@ -2453,6 +2564,7 @@
     "stadiumName": "Llano Estacado Stadium",
     "city": "Lubbock",
     "state": "TX",
+    "capacity": 60454,
     "ratings": {
       "overall": 93,
       "passOff": 90,
@@ -2475,6 +2587,7 @@
     "stadiumName": "Glass Bowl",
     "city": "Toledo",
     "state": "OH",
+    "capacity": 26038,
     "ratings": {
       "overall": 84,
       "passOff": 79,
@@ -2497,6 +2610,7 @@
     "stadiumName": "Wiregrass Stadium",
     "city": "Troy",
     "state": "AL",
+    "capacity": 30000,
     "ratings": {
       "overall": 77,
       "passOff": 76,
@@ -2519,6 +2633,7 @@
     "stadiumName": "Crescent City Stadium",
     "city": "New Orleans",
     "state": "LA",
+    "capacity": 30000,
     "ratings": {
       "overall": 82,
       "passOff": 85,
@@ -2541,6 +2656,7 @@
     "stadiumName": "Oil Capital Stadium",
     "city": "Tulsa",
     "state": "OK",
+    "capacity": 30000,
     "ratings": {
       "overall": 75,
       "passOff": 76,
@@ -2563,6 +2679,7 @@
     "stadiumName": "Iron Bowl South",
     "city": "Birmingham",
     "state": "AL",
+    "capacity": 0,
     "ratings": {
       "overall": 70,
       "passOff": 78,
@@ -2585,6 +2702,7 @@
     "stadiumName": "Citrus Bowl",
     "city": "Orlando",
     "state": "FL",
+    "capacity": 44206,
     "ratings": {
       "overall": 79,
       "passOff": 77,
@@ -2607,6 +2725,7 @@
     "stadiumName": "Rose Bowl West",
     "city": "Pasadena",
     "state": "CA",
+    "capacity": 88565,
     "ratings": {
       "overall": 75,
       "passOff": 75,
@@ -2629,6 +2748,7 @@
     "stadiumName": "Pratt & Whitney Stadium",
     "city": "East Hartford",
     "state": "CT",
+    "capacity": 40000,
     "ratings": {
       "overall": 83,
       "passOff": 86,
@@ -2651,6 +2771,7 @@
     "stadiumName": "Malone Stadium",
     "city": "Monroe",
     "state": "LA",
+    "capacity": 27617,
     "ratings": {
       "overall": 64,
       "passOff": 65,
@@ -2673,6 +2794,7 @@
     "stadiumName": "Neon Bowl",
     "city": "Las Vegas",
     "state": "NV",
+    "capacity": 65000,
     "ratings": {
       "overall": 83,
       "passOff": 86,
@@ -2695,6 +2817,7 @@
     "stadiumName": "Sunset Coliseum",
     "city": "Los Angeles",
     "state": "CA",
+    "capacity": 77500,
     "ratings": {
       "overall": 88,
       "passOff": 91,
@@ -2717,6 +2840,7 @@
     "stadiumName": "Canyon Rim Stadium",
     "city": "Salt Lake City",
     "state": "UT",
+    "capacity": 51444,
     "ratings": {
       "overall": 91,
       "passOff": 90,
@@ -2739,6 +2863,7 @@
     "stadiumName": "Cache Valley Stadium",
     "city": "Logan",
     "state": "UT",
+    "capacity": 25513,
     "ratings": {
       "overall": 78,
       "passOff": 82,
@@ -2761,6 +2886,7 @@
     "stadiumName": "Sun Bowl",
     "city": "El Paso",
     "state": "TX",
+    "capacity": 51500,
     "ratings": {
       "overall": 68,
       "passOff": 69,
@@ -2783,6 +2909,7 @@
     "stadiumName": "Alamo Stadium",
     "city": "San Antonio",
     "state": "TX",
+    "capacity": 36582,
     "ratings": {
       "overall": 80,
       "passOff": 85,
@@ -2805,6 +2932,7 @@
     "stadiumName": "Gold Star Stadium",
     "city": "Nashville",
     "state": "TN",
+    "capacity": 40351,
     "ratings": {
       "overall": 89,
       "passOff": 92,
@@ -2827,6 +2955,7 @@
     "stadiumName": "Blue Ridge Bowl",
     "city": "Charlottesville",
     "state": "VA",
+    "capacity": 61500,
     "ratings": {
       "overall": 86,
       "passOff": 85,
@@ -2849,6 +2978,7 @@
     "stadiumName": "Lane Mountain Stadium",
     "city": "Blacksburg",
     "state": "VA",
+    "capacity": 65632,
     "ratings": {
       "overall": 76,
       "passOff": 72,
@@ -2871,6 +3001,7 @@
     "stadiumName": "Triad Stadium",
     "city": "Winston-Salem",
     "state": "NC",
+    "capacity": 31500,
     "ratings": {
       "overall": 85,
       "passOff": 79,
@@ -2893,6 +3024,7 @@
     "stadiumName": "Puget Sound Stadium",
     "city": "Seattle",
     "state": "WA",
+    "capacity": 70138,
     "ratings": {
       "overall": 89,
       "passOff": 87,
@@ -2915,6 +3047,7 @@
     "stadiumName": "Gesa Field",
     "city": "Pullman",
     "state": "WA",
+    "capacity": 32952,
     "ratings": {
       "overall": 81,
       "passOff": 78,
@@ -2937,6 +3070,7 @@
     "stadiumName": "Red River Stadium",
     "city": "Bowling Green",
     "state": "KY",
+    "capacity": 22113,
     "ratings": {
       "overall": 81,
       "passOff": 84,
@@ -2959,6 +3093,7 @@
     "stadiumName": "Kalamazoo Bowl",
     "city": "Kalamazoo",
     "state": "MI",
+    "capacity": 30200,
     "ratings": {
       "overall": 81,
       "passOff": 75,
@@ -2981,6 +3116,7 @@
     "stadiumName": "Mountaineer Field",
     "city": "Morgantown",
     "state": "WV",
+    "capacity": 60000,
     "ratings": {
       "overall": 76,
       "passOff": 72,
@@ -3003,6 +3139,7 @@
     "stadiumName": "Camp Randall North",
     "city": "Madison",
     "state": "WI",
+    "capacity": 80321,
     "ratings": {
       "overall": 76,
       "passOff": 65,
@@ -3025,6 +3162,7 @@
     "stadiumName": "High Plains Stadium",
     "city": "Laramie",
     "state": "WY",
+    "capacity": 29181,
     "ratings": {
       "overall": 71,
       "passOff": 66,
