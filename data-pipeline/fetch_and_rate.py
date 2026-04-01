@@ -1241,6 +1241,20 @@ def build_projected_year(api_key, proj_year, base_year, output_dir, team_name_ma
     # Recruiting lookup keyed by (name_lower, team_lower) — same as build_recruit_lookup
     recruit_lookup = build_recruit_lookup(api_key, proj_year)
 
+    # Build pid → school for base year (to detect transfers into new team)
+    base_players_path = os.path.join(output_dir, str(base_year), "players_private.json")
+    prev_team_map = {}
+    if os.path.exists(base_players_path):
+        base_teams_path = os.path.join(output_dir, str(base_year), "teams_private.json")
+        tid_to_name = {}
+        if os.path.exists(base_teams_path):
+            with open(base_teams_path) as f:
+                for t in json.load(f):
+                    tid_to_name[t["id"]] = t["name"]
+        with open(base_players_path) as f:
+            for p in json.load(f):
+                prev_team_map[p["id"]] = tid_to_name.get(p["teamId"], "")
+
     teams_private = []
     players_private = []
     ratings = []
@@ -1275,9 +1289,26 @@ def build_projected_year(api_key, proj_year, base_year, output_dir, team_name_ma
 
             if pid in base_ratings:
                 prev = base_ratings[pid]
+                prev_school = prev_team_map.get(pid)
+                transferred = prev_school is not None and prev_school != school
                 new_ovr = prev.get("trajectory") or min(99, prev.get("overall", 55) + 1)
                 r_entry = {k: v for k, v in prev.items() if k not in ("playerId", "overall", "trajectory", "stats")}
-                r_entry.update({"playerId": pid, "overall": new_ovr, "stats": {}, "projected": True})
+                if transferred:
+                    # Transfer uncertainty: wider range, outcome unknown in new system
+                    proj_type = "transfer"
+                    low = max(40, new_ovr - 8)
+                    high = min(99, new_ovr + 5)
+                else:
+                    # Returning player: tighter range based on trajectory confidence
+                    proj_type = "returning"
+                    low = max(40, new_ovr - 3)
+                    high = min(99, new_ovr + 5)
+                r_entry.update({
+                    "playerId": pid, "overall": new_ovr,
+                    "overallLow": low, "overallHigh": high,
+                    "projectionType": proj_type,
+                    "stats": {}, "projected": True,
+                })
             else:
                 # New player: look up stars by (name, team) — recruit_lookup key format
                 name_key = (
@@ -1286,7 +1317,16 @@ def build_projected_year(api_key, proj_year, base_year, output_dir, team_name_ma
                 )
                 stars = recruit_lookup.get(name_key, 0)
                 base_ovr = max(45, min(72, 45 + stars * 5))
-                r_entry = {"playerId": pid, "overall": base_ovr, "stats": {}, "projected": True}
+                # Recruits: wide range — could bust or exceed expectations
+                proj_type = "recruit" if stars > 0 else "unknown"
+                low = max(40, base_ovr - 5)
+                high = min(85, base_ovr + (stars * 4))  # higher star ceiling = higher upside
+                r_entry = {
+                    "playerId": pid, "overall": base_ovr,
+                    "overallLow": low, "overallHigh": high,
+                    "projectionType": proj_type,
+                    "stats": {}, "projected": True,
+                }
                 for attr in SKILL_ATTRS.get(pos_group, ["runBlock", "passBlock"]):
                     r_entry[attr] = base_ovr
             ratings.append(r_entry)

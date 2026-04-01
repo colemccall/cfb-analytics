@@ -640,7 +640,10 @@ function renderRoster(t) {
           <td><span class="pos-badge">${p.position || '?'}</span></td>
           <td>${p.firstName} ${p.lastName}${tierBadge(r.overall || 0)}</td>
           <td>${p.year || ''}</td>
-          <td><span class="ovr" style="background:${ratingColor(r.overall || 0)};color:#000">${r.overall || '-'}</span></td>
+          <td>
+            <span class="ovr" style="background:${ratingColor(r.overall || 0)};color:#000">${r.overall || '-'}</span>
+            ${r.projected && r.overallLow != null ? `<span style="font-size:10px;color:#666;display:block;line-height:1">${r.overallLow}–${r.overallHigh}</span>` : ''}
+          </td>
           ${skillCols.map(([a]) => `<td>${r[a] != null ? r[a] : '-'}</td>`).join('')}
         </tr>`;
       }).join('')}
@@ -1203,7 +1206,20 @@ function showPlayerModal(playerId) {
   const classYear = ['Fr','So','Jr','Sr','Gr'][Math.max(0, Math.min(4, (p.year||1) - 1))];
   const archetype = computeArchetype(posGroup, r);
   const archetypeHTML = archetype ? `<span class="archetype-badge">${archetype}</span>` : '';
-  const trajectoryHTML = r.trajectory
+  const projTypeLabels = { returning: 'Returning', transfer: 'Transfer', recruit: 'Recruit', unknown: 'New Player' };
+  const projRangeHTML = r.projected && r.overallLow != null && r.overallHigh != null
+    ? (() => {
+        const label = projTypeLabels[r.projectionType] || 'Projected';
+        const rangeColor = r.projectionType === 'transfer' ? '#f5a623'
+          : r.projectionType === 'recruit' ? '#a8d8a8' : '#a0c4ff';
+        return `<div style="margin-top:6px;font-size:12px;color:#aaa">
+          <span style="color:${rangeColor};font-weight:600">${label}</span>
+          &bull; Range: <span style="color:#ddd;font-weight:700">${r.overallLow}–${r.overallHigh}</span>
+          <span style="font-size:10px;color:#555"> (projected season)</span>
+        </div>`;
+      })()
+    : '';
+  const trajectoryHTML = r.trajectory && !r.projected
     ? `<div style="margin-top:6px;font-size:12px;color:#aaa">Trajectory: <span style="color:${ratingColor(r.trajectory)};font-weight:700">${r.trajectory}</span> <span style="font-size:10px;color:#555">(projected)</span></div>`
     : '';
 
@@ -1231,6 +1247,7 @@ function showPlayerModal(playerId) {
         </div>
         ${rankHTML}
         ${trajectoryHTML}
+        ${projRangeHTML}
       </div>
     </div>
     <div class="modal-tab-bar">
