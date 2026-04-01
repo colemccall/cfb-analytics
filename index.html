@@ -68,6 +68,7 @@
   .tier-badge { display: inline-block; padding: 1px 6px; border-radius: 10px; font-size: 9px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; margin-left: 4px; vertical-align: middle; }
   .tier-dynasty { background: #ffd700; color: #1a1a2e; }
   .tier-impact  { background: #a78bfa; color: #1a1a2e; }
+  .archetype-badge { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 10px; font-weight: 700; letter-spacing: 0.3px; background: #1a3a5c; color: #7ec8e3; margin-left: 4px; vertical-align: middle; border: 1px solid #2a5080; }
 
   /* ── Depth chart ── */
   .depth-section { margin-bottom: 20px; }
@@ -283,6 +284,85 @@ const STAT_LABELS = {
   P:   [['punts','Punts'],['puntAvg','Avg'],['longPunt','Long'],['in20','Inside 20']],
 };
 
+// ── Player Archetype ──────────────────────────────────────────────────────────
+// Assigns an archetype label based on the player's skill rating profile.
+// Archetypes are purely cosmetic/descriptive — they don't affect ratings.
+function computeArchetype(posGroup, r) {
+  const g = (k) => r[k] || 0;
+  switch (posGroup) {
+    case 'QB': {
+      const mob = g('mobility'), pass = g('passRating'), acc = g('accuracy'), deep = g('deepBall');
+      if (mob >= 82 && pass >= 78) return 'Dual Threat';
+      if (mob >= 82) return 'Scrambler';
+      if (deep >= 82 && acc >= 78) return 'Big Arm';
+      if (acc >= 82 && pass >= 80) return 'Precision Passer';
+      if (pass >= 78) return 'Pocket Passer';
+      return 'Game Manager';
+    }
+    case 'RB': {
+      const rush = g('rushing'), rec = g('receiving'), pwr = g('powerRunning');
+      if (rec >= 78 && rush >= 75) return 'All-Purpose Back';
+      if (rec >= 78) return 'Receiving Back';
+      if (pwr >= 82) return 'Power Back';
+      if (rush >= 80) return 'Speed Back';
+      return 'Backup Back';
+    }
+    case 'FB': return 'Fullback';
+    case 'WR': {
+      const rec = g('receiving'), rte = g('routeRunning'), yac = g('yac');
+      if (yac >= 82 && rec >= 78) return 'YAC Monster';
+      if (rte >= 82 && rec >= 78) return 'Route Runner';
+      if (rec >= 82) return 'No. 1 Receiver';
+      if (rte >= 75) return 'Slot Receiver';
+      return 'Role Player';
+    }
+    case 'TE': {
+      const rec = g('receiving'), blk = g('blocking'), rte = g('routeRunning');
+      if (rec >= 78 && blk >= 72) return 'Complete TE';
+      if (rec >= 78) return 'Pass Catcher';
+      if (blk >= 78) return 'Blocking TE';
+      return 'H-Back';
+    }
+    case 'OL': {
+      const rb = g('runBlock'), pb = g('passBlock');
+      if (rb >= 80 && pb >= 80) return 'Complete Lineman';
+      if (pb >= rb + 5) return 'Pass Blocker';
+      if (rb >= pb + 5) return 'Run Blocker';
+      return 'Lineman';
+    }
+    case 'DL': {
+      const pr = g('passRush'), rs = g('runStop');
+      if (pr >= 80 && rs >= 78) return 'Complete D-Lineman';
+      if (pr >= 80) return 'Pass Rusher';
+      if (rs >= 80) return 'Run Stuffer';
+      return 'Rotational';
+    }
+    case 'LB': {
+      const cov = g('coverage'), rs = g('runStop'), pr = g('passRush');
+      if (pr >= 78 && cov >= 72) return 'Hybrid LB';
+      if (pr >= 80) return 'Edge Rusher';
+      if (cov >= 80) return 'Coverage LB';
+      if (rs >= 80) return 'Run Stopper';
+      return 'Linebacker';
+    }
+    case 'DB': {
+      const cov = g('coverage'), hawk = g('ballHawking'), tkl = g('tackling');
+      if (hawk >= 82 && cov >= 78) return 'Ball Hawk';
+      if (tkl >= 82) return 'Hit Man';
+      if (cov >= 80) return 'Shutdown Corner';
+      return 'Cover DB';
+    }
+    case 'K': {
+      const pwr = g('power'), acc = g('accuracy');
+      if (pwr >= 82) return 'Big Leg';
+      if (acc >= 82) return 'Reliable Kicker';
+      return 'Kicker';
+    }
+    case 'P': return g('placement') >= 80 ? 'Coffin Corner Punter' : 'Punter';
+    default: return '';
+  }
+}
+
 // buildDepthPositions: generates the depth chart section config dynamically based on
 // what specific positions are actually present on a given team's roster.
 // Falls back to generic group labels when only generic positions exist (e.g., "DL" not "DE"/"DT").
@@ -305,9 +385,13 @@ function buildDepthPositions(teamPlayers) {
   const hasOG = hasAny('OL', ['OG','G']);
   const hasC  = hasAny('OL', ['C']);
   if (hasOT || hasOG || hasC) {
-    if (hasOT) sections.push({ group:'OL', label:'Offensive Tackles', slots:4, positions:['OT','LT','RT','T'] });
-    if (hasOG) sections.push({ group:'OL', label:'Offensive Guards',  slots:4, positions:['OG','G'] });
-    if (hasC)  sections.push({ group:'OL', label:'Centers',           slots:2, positions:['C'] });
+    const usedOL = [];
+    if (hasOT) { sections.push({ group:'OL', label:'Offensive Tackles', slots:4, positions:['OT','LT','RT','T'] }); usedOL.push('OT','LT','RT','T'); }
+    if (hasOG) { sections.push({ group:'OL', label:'Offensive Guards',  slots:4, positions:['OG','G'] }); usedOL.push('OG','G'); }
+    if (hasC)  { sections.push({ group:'OL', label:'Centers',           slots:2, positions:['C'] }); usedOL.push('C'); }
+    // Catch-all for generic 'OL' or other positions not matched above
+    const remainOL = [...new Set(teamPlayers.filter(p => p.positionGroup === 'OL' && !usedOL.includes(p.position)).map(p => p.position))];
+    if (remainOL.length) sections.push({ group:'OL', label:'Offensive Linemen', slots:5, positions: remainOL });
   } else {
     sections.push({ group:'OL', label:'Offensive Line', slots:8 });
   }
@@ -315,13 +399,13 @@ function buildDepthPositions(teamPlayers) {
   // ── Defensive Line: split edge vs interior if available ────────────────
   const hasEdge     = hasAny('DL', ['DE','EDGE']);
   const hasInterior = hasAny('DL', ['DT','NT']);
-  if (hasEdge && hasInterior) {
-    sections.push({ group:'DL', label:'Edge Rushers', slots:4, positions:['DE','EDGE'] });
-    sections.push({ group:'DL', label:'Interior DL',  slots:3, positions:['DT','NT'] });
-  } else if (hasEdge) {
-    sections.push({ group:'DL', label:'Edge Rushers', slots:6, positions:['DE','EDGE'] });
-  } else if (hasInterior) {
-    sections.push({ group:'DL', label:'Defensive Tackles', slots:5, positions:['DT','NT'] });
+  if (hasEdge || hasInterior) {
+    const usedDL = [];
+    if (hasEdge)     { sections.push({ group:'DL', label:'Edge Rushers',      slots:4, positions:['DE','EDGE'] }); usedDL.push('DE','EDGE'); }
+    if (hasInterior) { sections.push({ group:'DL', label:'Interior DL',       slots:3, positions:['DT','NT'] });   usedDL.push('DT','NT'); }
+    // Catch-all for generic 'DL' players not matched above
+    const remainDL = [...new Set(teamPlayers.filter(p => p.positionGroup === 'DL' && !usedDL.includes(p.position)).map(p => p.position))];
+    if (remainDL.length) sections.push({ group:'DL', label:'Defensive Linemen', slots:5, positions: remainDL });
   } else {
     sections.push({ group:'DL', label:'Defensive Line', slots:7 });
   }
@@ -329,13 +413,12 @@ function buildDepthPositions(teamPlayers) {
   // ── Linebackers: split MLB/ILB vs OLB if available ────────────────────
   const hasOLB = hasAny('LB', ['OLB']);
   const hasMLB = hasAny('LB', ['MLB','ILB']);
-  if (hasOLB && hasMLB) {
-    sections.push({ group:'LB', label:'Outside Linebackers', slots:3, positions:['OLB'] });
-    sections.push({ group:'LB', label:'Middle Linebackers',  slots:3, positions:['MLB','ILB'] });
-  } else if (hasOLB) {
-    sections.push({ group:'LB', label:'Outside Linebackers', slots:5, positions:['OLB'] });
-  } else if (hasMLB) {
-    sections.push({ group:'LB', label:'Middle Linebackers',  slots:5, positions:['MLB','ILB'] });
+  if (hasOLB || hasMLB) {
+    const usedLB = [];
+    if (hasOLB) { sections.push({ group:'LB', label:'Outside Linebackers', slots:3, positions:['OLB'] }); usedLB.push('OLB'); }
+    if (hasMLB) { sections.push({ group:'LB', label:'Middle Linebackers',  slots:3, positions:['MLB','ILB'] }); usedLB.push('MLB','ILB'); }
+    const remainLB = [...new Set(teamPlayers.filter(p => p.positionGroup === 'LB' && !usedLB.includes(p.position)).map(p => p.position))];
+    if (remainLB.length) sections.push({ group:'LB', label:'Linebackers', slots:4, positions: remainLB });
   } else {
     sections.push({ group:'LB', label:'Linebackers', slots:5 });
   }
@@ -343,13 +426,12 @@ function buildDepthPositions(teamPlayers) {
   // ── Defensive Backs: split CB vs Safeties if available ────────────────
   const hasCB  = hasAny('DB', ['CB']);
   const hasSaf = hasAny('DB', ['S','FS','SS']);
-  if (hasCB && hasSaf) {
-    sections.push({ group:'DB', label:'Cornerbacks', slots:4, positions:['CB'] });
-    sections.push({ group:'DB', label:'Safeties',    slots:3, positions:['S','FS','SS'] });
-  } else if (hasCB) {
-    sections.push({ group:'DB', label:'Cornerbacks',    slots:6, positions:['CB'] });
-  } else if (hasSaf) {
-    sections.push({ group:'DB', label:'Safeties',       slots:5, positions:['S','FS','SS'] });
+  if (hasCB || hasSaf) {
+    const usedDB = [];
+    if (hasCB)  { sections.push({ group:'DB', label:'Cornerbacks', slots:4, positions:['CB'] }); usedDB.push('CB'); }
+    if (hasSaf) { sections.push({ group:'DB', label:'Safeties',    slots:3, positions:['S','FS','SS'] }); usedDB.push('S','FS','SS'); }
+    const remainDB = [...new Set(teamPlayers.filter(p => p.positionGroup === 'DB' && !usedDB.includes(p.position)).map(p => p.position))];
+    if (remainDB.length) sections.push({ group:'DB', label:'Defensive Backs', slots:5, positions: remainDB });
   } else {
     sections.push({ group:'DB', label:'Defensive Backs', slots:7 });
   }
@@ -963,6 +1045,8 @@ function showPlayerModal(playerId) {
   </div>` : '';
 
   const classYear = ['Fr','So','Jr','Sr','Gr'][Math.max(0, Math.min(4, (p.year||1) - 1))];
+  const archetype = computeArchetype(posGroup, r);
+  const archetypeHTML = archetype ? `<span class="archetype-badge">${archetype}</span>` : '';
   document.getElementById('modal-body').innerHTML = `
     <div class="modal-player-header">
       <div class="modal-ovr-badge" style="background:${ratingColor(ovr)};color:#000">${ovr}</div>
@@ -970,6 +1054,7 @@ function showPlayerModal(playerId) {
         <h2>${p.firstName} ${p.lastName}${tierBadge(ovr)}</h2>
         <div class="sub">
           <span class="pos-badge">${p.position || posGroup}</span>
+          ${archetypeHTML}
           &nbsp;${classYear} &bull; #${p.jersey || '?'} &bull;
           <span style="cursor:pointer;color:#a0c4ff" onclick="closeModal();goToTeam(${p.teamId})">${team.name || ''}</span>
           ${p.height ? ` &bull; ${p.height}` : ''} ${p.weight ? `/ ${p.weight} lbs` : ''}

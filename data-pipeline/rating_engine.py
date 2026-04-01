@@ -453,7 +453,12 @@ def compute_overall(ratings, pos_group):
     weight_sum = 0
     for attr, w in weights.items():
         if w > 0 and attr in ratings:
-            total += ratings[attr] * w
+            v = ratings[attr]
+            # QB mobility: pocket passers should not be penalized for low rush production.
+            # Mobile QBs get a bonus above the neutral baseline (65); immobile QBs are neutral.
+            if pos_group == "QB" and attr == "mobility":
+                v = max(v, 65)
+            total += v * w
             weight_sum += w
     if weight_sum == 0:
         return 55

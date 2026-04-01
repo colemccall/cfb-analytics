@@ -115,3 +115,13 @@ def fetch_awards(api_key, year):
         return result if isinstance(result, list) else []
     except Exception:
         return []
+
+
+def fetch_games(api_key, year):
+    """Fetch game results for the regular season."""
+    return _get(api_key, "/games", {"year": year, "seasonType": "regular"})
+
+
+def fetch_game_player_stats(api_key, year):
+    """Fetch per-game player stats for every game in a regular season."""
+    return _get(api_key, "/games/players", {"year": year, "seasonType": "regular"})
