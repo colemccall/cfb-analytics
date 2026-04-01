@@ -35,24 +35,27 @@
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Barlow Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; transition: background 0.15s, color 0.15s; }
+  body { font-family: 'Barlow Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; height: 100vh; overflow: hidden; transition: background 0.15s, color 0.15s; }
 
-  /* ── Sidebar ── */
-  #sidebar { width: 290px; background: var(--sidebar-bg); display: flex; flex-direction: column; border-right: 1px solid var(--border); flex-shrink: 0; transition: background 0.15s; }
-  .sidebar-controls { padding: 8px; display: flex; flex-direction: column; gap: 6px; border-bottom: 1px solid var(--border); }
-  .sidebar-controls input, .sidebar-controls select { width: 100%; padding: 8px 10px; background: var(--input-bg); border: none; color: var(--text); font-size: 13px; outline: none; border-radius: 4px; }
-  .sidebar-controls input::placeholder { color: var(--text-dim); }
-  .controls-row { display: flex; gap: 6px; }
-  .controls-row select, .controls-row button { flex: 1; padding: 6px 8px; background: var(--input-bg); border: 1px solid var(--border-mid); color: var(--text); font-size: 12px; border-radius: 4px; cursor: pointer; }
-  .controls-row button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-  #team-list { flex: 1; overflow-y: auto; }
-  .team-item { padding: 8px 10px; cursor: pointer; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
-  .team-item:hover, .team-item.active { background: var(--surface-deep); }
-  .team-logo { width: 26px; height: 26px; object-fit: contain; flex-shrink: 0; }
-  .team-info { flex: 1; min-width: 0; }
-  .team-name { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); }
-  .team-conf { font-size: 10px; color: var(--text-muted); }
-  .team-ovr { font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 3px; flex-shrink: 0; }
+  /* ── Top bar ── */
+  #top-bar { background: var(--sidebar-bg); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; padding: 6px 12px; flex-shrink: 0; flex-wrap: wrap; }
+  #top-bar .app-title { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 800; color: var(--accent); letter-spacing: 0.5px; white-space: nowrap; margin-right: 4px; }
+  #top-bar select, #top-bar input { padding: 6px 10px; background: var(--input-bg); border: 1px solid var(--border-mid); color: var(--text); font-size: 13px; outline: none; border-radius: 4px; font-family: inherit; }
+  #top-bar input { flex: 1; min-width: 120px; max-width: 220px; }
+  #top-bar input::placeholder { color: var(--text-dim); }
+  #top-bar select { cursor: pointer; }
+  #year-select { min-width: 130px; }
+
+  /* ── Team grid (Teams tab) ── */
+  .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+  .team-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: border-color 0.15s, background 0.15s; }
+  .team-card:hover { border-color: var(--accent); background: var(--surface-deep); }
+  .team-card.active { border-color: var(--accent); }
+  .team-card-logo { width: 36px; height: 36px; object-fit: contain; flex-shrink: 0; }
+  .team-card-info { flex: 1; min-width: 0; }
+  .team-card-name { font-size: 14px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .team-card-conf { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+  .team-card-ovr { font-size: 13px; font-weight: 800; padding: 3px 7px; border-radius: 4px; flex-shrink: 0; }
 
   /* ── Main area ── */
   #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
@@ -94,12 +97,12 @@
   .pos-chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
   /* ── Tables ── */
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { text-align: left; padding: 7px 8px; background: var(--surface); color: var(--text-muted); font-weight: 600; position: sticky; top: 0; z-index: 1; cursor: pointer; user-select: none; border-bottom: 1px solid var(--border); font-size: 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; padding: 7px 8px; background: var(--surface); color: var(--text-muted); font-weight: 600; position: sticky; top: 0; z-index: 1; cursor: pointer; user-select: none; border-bottom: 1px solid var(--border); font-size: 13px; }
   th:hover { color: var(--text); }
   th.sorted-asc::after { content: ' ▲'; }
   th.sorted-desc::after { content: ' ▼'; }
-  td { padding: 6px 8px; border-bottom: 1px solid var(--border); color: var(--text); }
+  td { padding: 7px 8px; border-bottom: 1px solid var(--border); color: var(--text); }
   tr:hover td { background: var(--surface); }
   tr.clickable { cursor: pointer; }
   tr.status-transferred-out td { color: #e05555; }
@@ -112,6 +115,7 @@
   .status-pill.leaving { background: #e0994033; color: #e09940; border: 1px solid #e0994066; }
   .status-pill.in { background: #4caf7d33; color: #4caf7d; border: 1px solid #4caf7d66; }
   .status-pill.recruit { background: #64b5f633; color: #64b5f6; border: 1px solid #64b5f666; }
+  .status-pill.draft { background: #ffd70033; color: #ffd700; border: 1px solid #ffd70066; }
   .ovr { display: inline-block; width: 30px; text-align: center; padding: 2px 4px; border-radius: 4px; font-weight: 700; font-size: 11px; }
   .pos-badge { display: inline-block; background: var(--surface-deep); padding: 1px 5px; border-radius: 3px; font-size: 10px; font-weight: 600; min-width: 28px; text-align: center; color: var(--text); }
   .tier-badge { display: inline-block; padding: 1px 6px; border-radius: 10px; font-size: 9px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; margin-left: 4px; vertical-align: middle; }
@@ -129,7 +133,7 @@
   .depth-row:hover { background: var(--surface); }
   .depth-slot { font-size: 11px; font-weight: 700; color: var(--text-dim); width: 18px; text-align: right; flex-shrink: 0; }
   .depth-slot.starter { color: #ffd700; }
-  .depth-name { flex: 1; font-size: 13px; color: var(--text); }
+  .depth-name { flex: 1; font-size: 14px; color: var(--text); }
   .depth-skills { display: flex; gap: 6px; flex-shrink: 0; }
   .depth-skill { font-size: 10px; background: var(--surface-deep); padding: 2px 6px; border-radius: 3px; white-space: nowrap; color: var(--text); }
 
@@ -141,7 +145,7 @@
   .conf-rank { font-size: 12px; font-weight: 700; color: var(--text-dim); width: 22px; text-align: right; flex-shrink: 0; }
   .conf-rank.top3 { color: #ffd700; }
   .conf-team-logo { width: 24px; height: 24px; object-fit: contain; flex-shrink: 0; }
-  .conf-team-name { flex: 1; font-size: 13px; font-weight: 600; color: var(--text); }
+  .conf-team-name { flex: 1; font-size: 14px; font-weight: 600; color: var(--text); }
   .conf-ovr { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
 
   /* ── Top players view ── */
@@ -232,39 +236,23 @@
   .bottom-tab-bar button.active { color: var(--accent); }
   .btab-icon { font-size: 15px; line-height: 1; }
 
-  /* ── Mobile / Responsive ── */
-  #sidebar-toggle {
-    display: none; position: fixed; top: 10px; left: 10px; z-index: 200;
-    background: var(--accent); border: none; color: #fff; font-size: 20px; line-height: 1;
-    width: 40px; height: 40px; border-radius: 6px; cursor: pointer; align-items: center; justify-content: center;
-  }
-
-  /* ── Tablet (601–900px): narrower sidebar, smaller type ── */
+/* ── Tablet (601–900px) ── */
   @media (max-width: 900px) {
-    #sidebar { width: 220px; }
     .tab-btn { padding: 10px 12px; font-size: 12px; }
     .team-hero-logo { width: 52px; height: 52px; }
     .team-hero-name { font-size: 22px; }
     .compare-grid { grid-template-columns: 1fr; }
     .depth-skills { display: none; }
+    .team-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
   }
 
-  /* ── Phone (≤600px): sidebar overlay, single-column everything ── */
+  /* ── Phone (≤600px): single-column everything ── */
   @media (max-width: 600px) {
     body { overflow: auto; }
-    #sidebar-toggle { display: flex; }
-    #sidebar {
-      position: fixed; top: 0; left: 0; bottom: 0; z-index: 150;
-      width: 80vw; max-width: 300px;
-      transform: translateX(-100%); transition: transform 0.25s ease;
-      box-shadow: 4px 0 20px rgba(0,0,0,0.5);
-    }
-    #sidebar.open { transform: translateX(0); }
-    #sidebar-backdrop {
-      display: none; position: fixed; inset: 0; z-index: 140; background: rgba(0,0,0,0.5);
-    }
-    #sidebar-backdrop.open { display: block; }
-    #main { width: 100%; padding-top: 52px; padding-bottom: 58px; }
+    #top-bar { padding: 5px 8px; gap: 5px; }
+    #top-bar .app-title { font-size: 14px; }
+    #top-bar input { max-width: 140px; }
+    #main { width: 100%; padding-bottom: 58px; }
     .tab-bar { display: none; }
     .bottom-tab-bar { display: flex; }
     .tab-content { padding: 12px; }
@@ -285,12 +273,13 @@
     .stat-grid { grid-template-columns: repeat(2, 1fr); }
     .explain-pipeline { flex-direction: column; }
     .explain-arrow { transform: rotate(90deg); }
+    .team-grid { grid-template-columns: 1fr 1fr; }
   }
 
   /* ── Explainability tab ── */
   .explain-section { margin-bottom: 32px; }
   .explain-section h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 4px; padding-bottom: 8px; border-bottom: 2px solid var(--accent); display: inline-block; }
-  .explain-section p, .explain-section li { font-size: 13px; color: var(--text-muted); line-height: 1.65; margin-bottom: 6px; }
+  .explain-section p, .explain-section li { font-size: 14px; color: var(--text-muted); line-height: 1.65; margin-bottom: 6px; }
   .explain-section ul { padding-left: 18px; margin-top: 6px; }
   .explain-section li { margin-bottom: 3px; }
   .explain-section strong { color: var(--text); }
@@ -315,23 +304,23 @@
 </style>
 </head>
 <body>
-<button id="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle team list">☰</button>
-<div id="sidebar-backdrop" onclick="toggleSidebar()"></div>
-<div id="sidebar">
-  <div class="sidebar-controls">
-    <div class="controls-row">
-      <select id="year-select"></select>
-    </div>
-    <input type="text" id="search" placeholder="Search teams...">
-    <select id="conf-filter">
-      <option value="">All Conferences</option>
-    </select>
+<div id="top-bar">
+  <span class="app-title">CFB Analytics</span>
+  <select id="year-select"></select>
+  <input type="text" id="search" placeholder="Search teams...">
+  <select id="conf-filter">
+    <option value="">All Conferences</option>
+  </select>
+  <div class="theme-switcher">
+    <button class="theme-btn" data-t="" title="Standard" onclick="setTheme('')"></button>
+    <button class="theme-btn active" data-t="dark" title="Dark" onclick="setTheme('dark')"></button>
+    <button class="theme-btn" data-t="vintage" title="Vintage" onclick="setTheme('vintage')"></button>
   </div>
-  <div id="team-list"></div>
 </div>
 <div id="main">
   <div class="tab-bar">
-    <div class="tab-btn active"  onclick="switchTab('roster')">Roster</div>
+    <div class="tab-btn active"  onclick="switchTab('teams')">Teams</div>
+    <div class="tab-btn"         onclick="switchTab('roster')">Roster</div>
     <div class="tab-btn"         onclick="switchTab('depth')">Depth Chart</div>
     <div class="tab-btn"         onclick="switchTab('schedule')">Schedule</div>
     <div class="tab-btn"         onclick="switchTab('top-players')">Top Players</div>
@@ -339,14 +328,10 @@
     <div class="tab-btn"         onclick="switchTab('compare')">Compare</div>
     <div class="tab-btn"         onclick="switchTab('map')">Map</div>
     <div class="tab-btn"         onclick="switchTab('explain')">How It Works</div>
-    <div class="theme-switcher">
-      <button class="theme-btn" data-t="" title="Standard" onclick="setTheme('')"></button>
-      <button class="theme-btn active" data-t="dark" title="Dark" onclick="setTheme('dark')"></button>
-      <button class="theme-btn" data-t="vintage" title="Vintage" onclick="setTheme('vintage')"></button>
-    </div>
   </div>
   <div class="bottom-tab-bar">
-    <button class="active" onclick="switchTab('roster')" data-btab="roster"><span class="btab-icon">📋</span>Roster</button>
+    <button class="active" onclick="switchTab('teams')" data-btab="teams"><span class="btab-icon">🏈</span>Teams</button>
+    <button onclick="switchTab('roster')" data-btab="roster"><span class="btab-icon">📋</span>Roster</button>
     <button onclick="switchTab('depth')" data-btab="depth"><span class="btab-icon">📊</span>Depth</button>
     <button onclick="switchTab('schedule')" data-btab="schedule"><span class="btab-icon">📅</span>Schedule</button>
     <button onclick="switchTab('top-players')" data-btab="top-players"><span class="btab-icon">⭐</span>Top</button>
@@ -377,7 +362,7 @@ let selectedTeamId = null;
 let sortCol = 'overall';
 let sortAsc = false;
 let posFilter = 'ALL';
-let activeTab = 'roster';
+let activeTab = 'teams';
 let topSortCol = 'overall';
 let topSortAsc = false;
 let topSearch = '';
@@ -631,13 +616,13 @@ function getRatings() { return getData().ratings || []; }
 
 function onDataReady() {
   buildConfFilter();
-  renderTeamList();
   const teams = getTeams();
   if (teams.length) {
     const prev = teams.find(t => t.id === selectedTeamId);
-    selectTeam(prev ? prev.id : teams[0].id, false);
+    if (prev) selectedTeamId = prev.id;
+    else selectedTeamId = teams[0].id;
   }
-  if (activeTab !== 'roster') renderActiveTab();
+  renderActiveTab();
 }
 
 function buildConfFilter() {
@@ -656,41 +641,47 @@ function renderTeamList() {
     return t.name.toLowerCase().includes(search) && (!conf || t.conference === conf);
   });
   teams.sort((a, b) => (b.ratings?.overall || 0) - (a.ratings?.overall || 0));
-  document.getElementById('team-list').innerHTML = teams.map(t => {
-    const ovr = t.ratings?.overall || 0;
-    return `<div class="team-item ${t.id === selectedTeamId ? 'active' : ''}" onclick="selectTeam(${t.id})">
-      ${t.logoUrl ? `<img class="team-logo" src="${t.logoUrl}" onerror="this.style.display='none'">` : ''}
-      <div class="team-info">
-        <div class="team-name">${t.name}</div>
-        <div class="team-conf">${t.conference || ''}</div>
-      </div>
-      <span class="team-ovr" style="background:${ratingColor(ovr)};color:#000">${ovr}</span>
-    </div>`;
-  }).join('');
+  if (activeTab === 'teams') renderTeams(teams);
 }
 
-function selectTeam(id, switchToRoster = true) {
+function renderTeams(filteredTeams) {
+  if (!filteredTeams) {
+    const search = document.getElementById('search').value.toLowerCase();
+    const conf = document.getElementById('conf-filter').value;
+    filteredTeams = getTeams().filter(t =>
+      t.name.toLowerCase().includes(search) && (!conf || t.conference === conf)
+    );
+    filteredTeams.sort((a, b) => (b.ratings?.overall || 0) - (a.ratings?.overall || 0));
+  }
+  document.getElementById('tab-content').innerHTML = `
+    <div style="margin-bottom:12px;font-size:13px;color:var(--text-muted)">${filteredTeams.length} teams — click to view roster</div>
+    <div class="team-grid">
+      ${filteredTeams.map(t => {
+        const ovr = t.ratings?.overall || 0;
+        return `<div class="team-card ${t.id === selectedTeamId ? 'active' : ''}" onclick="selectTeam(${t.id})">
+          ${t.logoUrl ? `<img class="team-card-logo" src="${t.logoUrl}" onerror="this.style.display='none'">` : '<div style="width:36px"></div>'}
+          <div class="team-card-info">
+            <div class="team-card-name">${t.name}</div>
+            <div class="team-card-conf">${t.conference || ''}</div>
+          </div>
+          <span class="team-card-ovr" style="background:${ratingColor(ovr)};color:#000">${ovr}</span>
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+function selectTeam(id) {
   selectedTeamId = id;
   posFilter = 'ALL';
-  // Close sidebar overlay on mobile after selection
-  if (window.innerWidth <= 600) {
-    document.getElementById('sidebar').classList.remove('open');
-    document.getElementById('sidebar-backdrop').classList.remove('open');
-  }
-  const teamTabs = ['roster','depth','schedule'];
-  if (switchToRoster && !teamTabs.includes(activeTab)) switchTab('roster', false);
+  switchTab('roster', false);
   const t = getTeams().find(t => t.id === id);
-  if (!t) return;
-  if (activeTab === 'roster') renderRoster(t);
-  else if (activeTab === 'depth') renderDepth(t);
-  else if (activeTab === 'schedule') renderSchedule(t);
-  renderTeamList();
+  if (t) renderRoster(t);
 }
 
 function switchTab(tab, render = true) {
   activeTab = tab;
   document.getElementById('tab-content').classList.toggle('map-mode', tab === 'map');
-  const tabs = ['roster','depth','schedule','top-players','conferences','compare','map','explain'];
+  const tabs = ['teams','roster','depth','schedule','top-players','conferences','compare','map','explain'];
   document.querySelectorAll('.tab-btn').forEach((btn, i) => {
     btn.classList.toggle('active', tabs[i] === tab);
   });
@@ -711,9 +702,10 @@ function setTheme(t) {
 
 function renderActiveTab() {
   const t = getTeams().find(t => t.id === selectedTeamId);
-  if (activeTab === 'roster') { if (t) renderRoster(t); }
-  else if (activeTab === 'depth') { if (t) renderDepth(t); else document.getElementById('tab-content').innerHTML = '<div id="loading">Select a team from the sidebar.</div>'; }
-  else if (activeTab === 'schedule') { if (t) renderSchedule(t); else document.getElementById('tab-content').innerHTML = '<div id="loading">Select a team from the sidebar.</div>'; }
+  if (activeTab === 'teams') renderTeams();
+  else if (activeTab === 'roster') { if (t) renderRoster(t); else switchTab('teams'); }
+  else if (activeTab === 'depth') { if (t) renderDepth(t); else switchTab('teams'); }
+  else if (activeTab === 'schedule') { if (t) renderSchedule(t); else switchTab('teams'); }
   else if (activeTab === 'top-players') renderTopPlayers();
   else if (activeTab === 'conferences') renderConferences();
   else if (activeTab === 'compare') renderCompare();
@@ -794,10 +786,14 @@ function renderRoster(t) {
           : p.status === 'likely_leaving' ? '<span class="status-pill leaving">Sr?</span>'
           : p.status === 'transfer_in' ? '<span class="status-pill in">Transfer</span>'
           : p.status === 'recruit' ? '<span class="status-pill recruit">Recruit</span>' : '';
+        const ovr = r.overall || 0;
+        const isDraftEligible = currentYear === 2026 && p.positionGroup !== 'OL'
+          && ((p.year >= 4) || (p.year === 3 && ovr >= 80));
+        const draftPill = isDraftEligible ? '<span class="status-pill draft">Draft</span>' : '';
         return `<tr class="clickable ${statusCls}" onclick="showPlayerModal('${p.id}')">
           <td>${p.jersey != null && p.jersey !== '' ? p.jersey : '-'}</td>
           <td><span class="pos-badge">${p.position || '?'}</span></td>
-          <td>${p.firstName} ${p.lastName}${tierBadge(r.overall || 0)}${statusPill}</td>
+          <td>${p.firstName} ${p.lastName}${tierBadge(r.overall || 0)}${statusPill}${draftPill}</td>
           <td>${yearDisplay}</td>
           <td>
             <span class="ovr" style="background:${ratingColor(r.overall || 0)};color:#000">${r.overall || '-'}</span>
@@ -1684,12 +1680,6 @@ function handleModalClick(e) {
   if (e.target === document.getElementById('player-modal')) closeModal();
 }
 
-// ── Mobile sidebar toggle ──────────────────────────────────────────────────
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('sidebar-backdrop').classList.toggle('open');
-}
-
 // ── Helpers ────────────────────────────────────────────────────────────────
 function buildRatingMap() {
   const rMap = {};
@@ -1793,6 +1783,7 @@ function _renderMapSidebar() {
       <div style="font-size:22px;font-weight:800;letter-spacing:0"><span style="color:var(--text)">Portal</span><span style="color:var(--accent)">Flow</span></div>
       <div style="width:32px;height:3px;background:var(--accent);border-radius:2px;margin:6px 0 4px"></div>
       <div style="font-size:11px;color:var(--text-muted);letter-spacing:1.5px;font-weight:700;text-transform:uppercase">CFB Recruiting &amp; Portal · 2026</div>
+      <div style="margin-top:6px;font-size:10px;color:var(--text-dim)">Map data currently available for 2026 only. Multi-year support coming when pipeline generates geocoded data per season.</div>
     </div>
     ${sec(lbl('School') + sel('map-school', _mapSchool, schoolList, '_mapSetSchool(this.value)'))}
     ${sec(lbl('Position') + sel('map-pos', _mapPos, MAP_POSITIONS, '_mapSetPos(this.value)'))}
@@ -1907,10 +1898,6 @@ function renderExplain() {
       ['Blocking',      '0.28', 'Team proxy (no individual TE block stats)'],
       ['Route Running', '0.22', 'Target efficiency + PPA'],
     ]},
-    { pos: 'OL', color: '#6366f1', skills: [
-      ['Run Block', '0.50', 'Team rush yards × usage × team quality'],
-      ['Pass Block','0.50', 'Sacks allowed (inverted) × usage × team quality'],
-    ]},
     { pos: 'DL', color: '#8b5cf6', skills: [
       ['Pass Rush', '0.55', 'Sacks, TFL, QB hurries, forced fumbles'],
       ['Run Stop',  '0.45', 'Total tackles, TFL'],
@@ -1951,7 +1938,7 @@ function renderExplain() {
     ['2', 'Raw Scores', 'Position-specific formulas from real stats'],
     ['3', 'Team Quality', 'SP+ + talent blend scales raw scores'],
     ['4', 'Normalize', 'Percentile curve: median ~65, top 3% → 91+'],
-    ['5', 'OL Boosts', 'Draft round, awards, and continuity floors'],
+    ['5', 'Floors', 'Draft round, awards, and continuity floors for non-OL positions'],
     ['6', 'Overall', 'Weighted average of skill ratings (QB mobility = bonus only)'],
     ['7', 'Trajectory', 'YoY growth + momentum projected for returning players'],
     ['8', 'Team Ratings', 'Player ratings + SP+ + raw stats blend'],
@@ -1994,10 +1981,10 @@ function renderExplain() {
       <p>For players appearing in <strong>two or more consecutive seasons</strong>, a projected overall is shown alongside the current rating. It uses year-over-year OVR growth, skill momentum, and a regression dampener that prevents elite players from projecting unrealistically high.</p>
       <pre style="background:#0f1b2d;padding:12px;border-radius:6px;font-size:12px;color:#a0c4ff;overflow-x:auto">projected = current_ovr + clamp(
   (yoy_growth × 0.4 + momentum_bonus × 0.3) × dampener,
-  -5, +8
+  −5, max_gain   # max_gain = +3 if OVR≥85, else +5
 )
-dampener = max(0.20, 1.0 − (current_ovr − 60) / 100)</pre>
-      <div class="explain-note">Trajectory is a projection, not a guarantee. Players at 90+ OVR have a steep dampener and are unlikely to project above 99.</div>
+dampener = max(0.15, 1.0 − (current_ovr − 60) / 60)  # steeper at elite tier</pre>
+      <div class="explain-note">Trajectory is a projection, not a guarantee. Players at 85+ OVR are capped at +3 per year and face a steep dampener — a 90 OVR player will rarely project above 93.</div>
     </div>
 
     <div class="explain-section">
@@ -2022,7 +2009,7 @@ dampener = max(0.20, 1.0 − (current_ovr − 60) / 100)</pre>
         <li><strong>Top 3%</strong> → 91–95 (All-Conference caliber)</li>
         <li><strong>Top 0.5%</strong> → 95–99 (Heisman / All-American tier)</li>
       </ul>
-      <div class="explain-note">Normalization is applied <em>within each position group</em>, so OL ratings compare OL to OL — a 75 OVR OL means top-quartile among all FBS offensive linemen that year.</div>
+      <div class="explain-note">Normalization is applied <em>within each position group</em> — a 75 OVR QB means top-quartile among all FBS QBs that year. Ratings are not cross-position comparable.</div>
     </div>
 
     <div class="explain-section">
@@ -2039,19 +2026,18 @@ dampener = max(0.20, 1.0 − (current_ovr − 60) / 100)</pre>
     </div>
 
     <div class="explain-section">
-      <h2>Offensive Line — Special Case ⚠️ Known Limitations</h2>
-      <p>The CFB Data API has <strong>no individual OL blocking stats</strong>. This is the biggest unsolved problem in the rating system. OL ratings are currently built from a team proxy + external signals, which means teammates on the same OL will have similar ratings regardless of individual performance.</p>
-      <p>Current approach — ratings come from a <strong>team proxy</strong> + three external floors (a floor only raises, never lowers):</p>
+      <h2>Offensive Line — Not Shown (Yet)</h2>
+      <p>Offensive linemen are <strong>excluded from the roster and all player views</strong> in this version. This is an intentional choice, not an oversight.</p>
+      <p>The CFB Data API provides <strong>no individual OL blocking stats</strong> — no snap counts, no pressure rates, no grade-style metrics per lineman. Any OL rating we could generate would be almost entirely a team proxy (rushing yards + sacks allowed), which means all five linemen on the same team would have nearly identical ratings regardless of individual performance. That would be misleading rather than informative.</p>
+      <p>What the pipeline does compute internally (but doesn't display):</p>
       <ul>
-        <li><strong>Team proxy:</strong> rushing yards + sacks allowed, scaled by team quality × snap usage rate</li>
-        <li><strong>NFL Draft round:</strong> Round 1 → floor 88 | Round 2 → 82 | Round 3 → 77 | Rounds 4–6 → 69–73</li>
-        <li><strong>Award tiers:</strong> All-American / Outland / Rimington → floor 85 | 1st-team All-Conf → 78 | 2nd-team → 73</li>
-        <li><strong>Cross-year continuity:</strong> Returning same-team player → floor 68 (prevents proven starters from rating lower than freshmen)</li>
-        <li><strong>Position-specific weights:</strong> LT carries the highest pass protection value (blind side premium); guards/center have higher run blocking value</li>
-        <li><strong>Sack attribution by position:</strong> LT bears 30% of team sacks allowed, RT 22%, guards/center the remainder</li>
+        <li>Team-level proxy scores scaled by SP+ and team talent composite</li>
+        <li>Position-specific sack attribution (LT bears ~30% of team sacks, RT ~22%, guards/center the rest)</li>
+        <li>NFL Draft round floors (Round 1 → 88, Round 2 → 82, etc.) — these signal draft-caliber linemen but are rare</li>
+        <li>All-American / Outland Trophy floors for decorated players</li>
       </ul>
-      <div class="explain-note" style="border-left-color:#f59e0b;background:#1a1200">
-        <strong>⚠️ Still needed:</strong> Individual OL differentiation within the same team remains the weakest part of the system. Future work may incorporate PFF-style grades, Pro Football Reference data, or pressure rate metrics to separate an elite LT from a backup on the same team. Right now, two OL on the same team are largely distinguished only by recruiting stars, usage rate, and a small deterministic jitter.
+      <div class="explain-note" style="border-left-color:#f59e0b">
+        <strong>Future:</strong> We plan to integrate individual OL data when better sources become available — PFF-style grades, pressure rate data, or college equivalent of Pro Football Reference snap/blocking metrics. When that data exists, OL will return to the roster view with meaningful individual differentiation.
       </div>
     </div>
 
@@ -2096,8 +2082,8 @@ dampener = max(0.20, 1.0 − (current_ovr − 60) / 100)</pre>
     <div class="explain-section">
       <h2>Known Limitations</h2>
       <ul>
-        <li><strong>OL individual differentiation:</strong> Two starting OL on the same team are largely identical in ratings — differentiated only by recruiting stars, usage, and a small deterministic jitter. This is the #1 open problem. See the OL section above.</li>
-        <li><strong>Awards API:</strong> The <code>/awards</code> endpoint currently returns empty data — award-tier floors for OL (All-American, All-Conference) are wired up but effectively inactive until the API improves.</li>
+        <li><strong>OL excluded:</strong> Offensive linemen are not shown in any player view. No individual OL blocking stats are available from the CFB Data API. See the "Offensive Line" section above for the full explanation and future roadmap.</li>
+        <li><strong>Awards API:</strong> The <code>/awards</code> endpoint currently returns empty data — award-tier floors (All-American, All-Conference) are wired up but effectively inactive until the API improves.</li>
         <li><strong>Sample size penalty:</strong> Small sample sizes are penalized (≥10 games = 1.0×, 3–5 games = 0.75×, &lt;3 games = 0.55×) but very short high-efficiency appearances can still inflate ratings.</li>
         <li><strong>Transfer continuity:</strong> The OL cross-year floor only applies to same-team returners — transfers enter a new system and do not receive the continuity floor.</li>
         <li><strong>Cross-year comparability:</strong> All ratings are relative within their season. A 99 OVR in 2022 and a 99 OVR in 2024 are not directly comparable — they both mean "best at their position that year."</li>
@@ -2110,8 +2096,8 @@ dampener = max(0.20, 1.0 − (current_ovr − 60) / 100)</pre>
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-document.getElementById('search').addEventListener('input', () => renderTeamList());
-document.getElementById('conf-filter').addEventListener('change', () => renderTeamList());
+document.getElementById('search').addEventListener('input', () => { if (activeTab === 'teams') renderTeams(); });
+document.getElementById('conf-filter').addEventListener('change', () => { if (activeTab === 'teams') renderTeams(); });
 loadData();
 </script>
 </body>
