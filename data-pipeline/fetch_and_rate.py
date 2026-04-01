@@ -2,6 +2,7 @@
 
 import os
 import json
+import gzip
 import hashlib
 import sys
 
@@ -16,7 +17,7 @@ from collections import defaultdict
 from rating_engine import get_position_group, compute_raw_ratings, normalize_all_ratings, compute_overall, SKILL_ATTRS
 
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "app", "assets", "data")
-YEARS = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
+YEARS = [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
 
 FIRST_NAMES = [
     "James", "John", "Robert", "Michael", "David", "Chris", "Daniel", "Marcus",
@@ -1121,8 +1122,17 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
     }
 
 
+def _write_json(path, data):
+    """Write JSON, always producing a .json.gz compressed file alongside."""
+    with open(path, "w") as f:
+        json.dump(data, f, indent=2)
+    gz_path = path + ".gz"
+    with open(path, "rb") as f_in, gzip.open(gz_path, "wb") as f_out:
+        f_out.write(f_in.read())
+
+
 def write_year(year, data, output_dir):
-    """Write one year's data to disk."""
+    """Write one year's data to disk. Plays are split into weekly .json.gz files."""
     year_dir = os.path.join(output_dir, str(year))
     os.makedirs(year_dir, exist_ok=True)
     for filename, key in [
@@ -1134,22 +1144,35 @@ def write_year(year, data, output_dir):
         ("team_schedule.json", "team_schedule"),
     ]:
         path = os.path.join(year_dir, filename)
-        with open(path, "w") as f:
-            json.dump(data[key], f, indent=2)
+        _write_json(path, data[key])
         print(f"  {year}/{filename}: {len(data[key])} entries")
 
-    # Dict-valued files (written separately since they don't have a simple len)
+    # Dict-valued files
     for filename, key in [
         ("player_gamelog.json", "player_gamelogs"),
         ("team_drives.json",    "team_drives"),
-        ("team_plays.json",     "team_plays"),
     ]:
         payload = data.get(key, {})
         path = os.path.join(year_dir, filename)
-        with open(path, "w") as f:
-            json.dump(payload, f, indent=2)
+        _write_json(path, payload)
         total = sum(len(v) for v in payload.values()) if payload else 0
         print(f"  {year}/{filename}: {len(payload)} keys, {total} entries")
+
+    # Plays: split by week into team_plays_wk{nn}.json.gz (no uncompressed big file)
+    team_plays = data.get("team_plays", {})
+    plays_by_week = {}
+    for team_name, plays in team_plays.items():
+        for play in plays:
+            wk = play.get("week") or 0
+            plays_by_week.setdefault(wk, {}).setdefault(team_name, []).append(play)
+    total_plays = sum(len(v) for v in team_plays.values())
+    for wk, wk_data in sorted(plays_by_week.items()):
+        fname = f"team_plays_wk{wk:02d}.json.gz"
+        gz_path = os.path.join(year_dir, fname)
+        raw = json.dumps(wk_data, indent=2).encode()
+        with gzip.open(gz_path, "wb") as f_out:
+            f_out.write(raw)
+    print(f"  {year}/team_plays_wk*.json.gz: {len(plays_by_week)} weeks, {total_plays} plays")
 
 
 def _team_dict(team, extra=None):

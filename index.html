@@ -18,11 +18,11 @@
     --input-bg: #ededf2; --sidebar-bg: #f0f0f5;
   }
   [data-theme="dark"] {
-    --bg: #0d0d0d; --surface: #16213e; --surface-deep: #0f1b2e;
-    --text: #e0e0e0; --text-muted: #aaa; --text-dim: #666;
-    --accent: #e94560; --accent-dim: rgba(233,69,96,0.12);
-    --border: rgba(15,52,96,0.6); --border-mid: #1a3a6e;
-    --input-bg: #0f3460; --sidebar-bg: #16213e;
+    --bg: #0f0f14; --surface: #1a1a2e; --surface-deep: #111120;
+    --text: #d8d8e8; --text-muted: #8888aa; --text-dim: #555568;
+    --accent: #4f9cf9; --accent-dim: rgba(79,156,249,0.12);
+    --border: rgba(60,60,100,0.4); --border-mid: rgba(60,60,100,0.65);
+    --input-bg: #0f0f22; --sidebar-bg: #131320;
   }
   [data-theme="vintage"] {
     --bg: #2a1f14; --surface: #3d2b1a; --surface-deep: #1f1409;
@@ -48,14 +48,14 @@
   .team-item:hover, .team-item.active { background: var(--surface-deep); }
   .team-logo { width: 26px; height: 26px; object-fit: contain; flex-shrink: 0; }
   .team-info { flex: 1; min-width: 0; }
-  .team-name { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); }
+  .team-name { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); }
   .team-conf { font-size: 10px; color: var(--text-muted); }
   .team-ovr { font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 3px; flex-shrink: 0; }
 
   /* ── Main area ── */
   #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
   .tab-bar { display: flex; background: var(--sidebar-bg); border-bottom: 1px solid var(--border); flex-shrink: 0; overflow-x: auto; align-items: center; }
-  .tab-btn { padding: 10px 18px; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--text-muted); border-bottom: 2px solid transparent; white-space: nowrap; transition: color 0.15s; }
+  .tab-btn { padding: 10px 18px; font-size: 14px; font-weight: 600; cursor: pointer; color: var(--text-muted); border-bottom: 2px solid transparent; white-space: nowrap; transition: color 0.15s; }
   .tab-btn:hover { color: var(--text); }
   .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
   .tab-content { flex: 1; overflow-y: auto; padding: 20px; background: var(--bg); }
@@ -66,15 +66,15 @@
   .theme-btn:hover { transform: scale(1.2); }
   .theme-btn.active { border-color: var(--text); }
   .theme-btn[data-t=""] { background: linear-gradient(135deg, #e85d04 50%, #f4f4f5 50%); }
-  .theme-btn[data-t="dark"] { background: linear-gradient(135deg, #e94560 50%, #0d0d0d 50%); }
+  .theme-btn[data-t="dark"] { background: linear-gradient(135deg, #4f9cf9 50%, #0f0f14 50%); }
   .theme-btn[data-t="vintage"] { background: linear-gradient(135deg, #c9a227 50%, #2a1f14 50%); }
 
   /* ── Hero banner ── */
   .team-hero { display: flex; align-items: center; gap: 16px; padding: 16px 20px; background: var(--surface); border-bottom: 3px solid var(--accent); margin-bottom: 16px; border-radius: 8px; flex-wrap: wrap; }
   .team-hero-logo { width: 68px; height: 68px; object-fit: contain; flex-shrink: 0; }
   .team-hero-info { flex: 1; min-width: 0; }
-  .team-hero-name { font-family: 'Barlow Condensed', sans-serif; font-size: 26px; font-weight: 700; color: var(--text); line-height: 1.1; letter-spacing: 0.5px; }
-  .team-hero-meta { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .team-hero-name { font-family: 'Barlow Condensed', sans-serif; font-size: 30px; font-weight: 700; color: var(--text); line-height: 1.1; letter-spacing: 0.5px; }
+  .team-hero-meta { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
   .team-hero-actions { display: flex; gap: 8px; }
   .btn-compare { padding: 6px 14px; background: var(--input-bg); border: 1px solid var(--border-mid); color: var(--accent); font-size: 12px; font-weight: 600; border-radius: 4px; cursor: pointer; }
   .btn-compare:hover { background: var(--surface-deep); }
@@ -91,12 +91,12 @@
   .pos-chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
   /* ── Tables ── */
-  table { width: 100%; border-collapse: collapse; font-size: 12px; }
-  th { text-align: left; padding: 6px 8px; background: var(--surface); color: var(--text-muted); font-weight: 600; position: sticky; top: 0; z-index: 1; cursor: pointer; user-select: none; border-bottom: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 7px 8px; background: var(--surface); color: var(--text-muted); font-weight: 600; position: sticky; top: 0; z-index: 1; cursor: pointer; user-select: none; border-bottom: 1px solid var(--border); font-size: 12px; }
   th:hover { color: var(--text); }
   th.sorted-asc::after { content: ' ▲'; }
   th.sorted-desc::after { content: ' ▼'; }
-  td { padding: 5px 8px; border-bottom: 1px solid var(--border); color: var(--text); }
+  td { padding: 6px 8px; border-bottom: 1px solid var(--border); color: var(--text); }
   tr:hover td { background: var(--surface); }
   tr.clickable { cursor: pointer; }
   tr.status-transferred-out td { color: #e05555; }
@@ -519,21 +519,7 @@ function buildDepthPositions(teamPlayers) {
     { group:'TE', label:'Tight Ends',     slots:3 },
   ];
 
-  // ── Offensive Line: split by specific position if available ────────────
-  const hasOT = hasAny('OL', ['OT','LT','RT','T']);
-  const hasOG = hasAny('OL', ['OG','G']);
-  const hasC  = hasAny('OL', ['C']);
-  if (hasOT || hasOG || hasC) {
-    const usedOL = [];
-    if (hasOT) { sections.push({ group:'OL', label:'Offensive Tackles', slots:4, positions:['OT','LT','RT','T'] }); usedOL.push('OT','LT','RT','T'); }
-    if (hasOG) { sections.push({ group:'OL', label:'Offensive Guards',  slots:4, positions:['OG','G'] }); usedOL.push('OG','G'); }
-    if (hasC)  { sections.push({ group:'OL', label:'Centers',           slots:2, positions:['C'] }); usedOL.push('C'); }
-    // Catch-all for generic 'OL' or other positions not matched above
-    const remainOL = [...new Set(teamPlayers.filter(p => p.positionGroup === 'OL' && !usedOL.includes(p.position)).map(p => p.position))];
-    if (remainOL.length) sections.push({ group:'OL', label:'Offensive Linemen', slots:5, positions: remainOL });
-  } else {
-    sections.push({ group:'OL', label:'Offensive Line', slots:8 });
-  }
+  // OL excluded — no reliable individual stats available
 
   // ── Defensive Line: split edge vs interior if available ────────────────
   const hasEdge     = hasAny('DL', ['DE','EDGE']);
@@ -756,7 +742,7 @@ function teamHeaderHTML(t) {
 function renderRoster(t) {
   const ps = getPlayers().filter(p => p.teamId === t.id);
   const rMap = buildRatingMap();
-  const posGroups = ['ALL', ...new Set(ps.map(p => p.positionGroup).filter(Boolean))].sort();
+  const posGroups = ['ALL', ...new Set(ps.map(p => p.positionGroup).filter(g => g && g !== 'OL'))].sort();
   const filtered = posFilter === 'ALL' ? ps : ps.filter(p => p.positionGroup === posFilter);
 
   filtered.sort((a, b) => {
@@ -765,7 +751,7 @@ function renderRoster(t) {
     if (sortCol === 'name') { va = a.lastName; vb = b.lastName; }
     else if (sortCol === 'pos') { va = a.position; vb = b.position; }
     else if (sortCol === 'yr') { va = a.year || 0; vb = b.year || 0; }
-    else if (sortCol === 'jersey') { va = parseInt(a.jersey) || 99; vb = parseInt(b.jersey) || 99; }
+    else if (sortCol === 'jersey') { va = (a.jersey != null && a.jersey !== '') ? parseInt(a.jersey) : 99; vb = (b.jersey != null && b.jersey !== '') ? parseInt(b.jersey) : 99; }
     else { va = ra[sortCol] || 0; vb = rb[sortCol] || 0; }
     if (typeof va === 'string') return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
     return sortAsc ? va - vb : vb - va;
@@ -802,7 +788,7 @@ function renderRoster(t) {
           : p.status === 'transfer_in' ? '<span class="status-pill in">Transfer</span>'
           : p.status === 'recruit' ? '<span class="status-pill recruit">Recruit</span>' : '';
         return `<tr class="clickable ${statusCls}" onclick="showPlayerModal('${p.id}')">
-          <td>${p.jersey || '-'}</td>
+          <td>${p.jersey != null && p.jersey !== '' ? p.jersey : '-'}</td>
           <td><span class="pos-badge">${p.position || '?'}</span></td>
           <td>${p.firstName} ${p.lastName}${tierBadge(r.overall || 0)}${statusPill}</td>
           <td>${yearDisplay}</td>
@@ -864,12 +850,26 @@ function renderDepth(t) {
 const _scheduleCache = {};
 const _gamelogCache  = {};
 const _drivesCache   = {};
-const _playsCache    = {};
+const _playsCache    = {};  // keyed by `${year}_wk${week}`
+
+// Fetch JSON, preferring .json.gz (browser-native decompression) then .json fallback
+async function _fetchJson(base) {
+  const gz = base + '.gz';
+  try {
+    const r = await fetch(gz);
+    if (r.ok && typeof DecompressionStream !== 'undefined') {
+      const ds = new DecompressionStream('gzip');
+      const blob = await new Response(r.body.pipeThrough(ds)).blob();
+      return JSON.parse(await blob.text());
+    }
+  } catch { /* fall through */ }
+  return fetch(base).then(r => r.json());
+}
 
 async function loadSchedule(year) {
   if (_scheduleCache[year]) return _scheduleCache[year];
   try {
-    const data = await fetch(`app/assets/data/${year}/team_schedule.json`).then(r => r.json());
+    const data = await _fetchJson(`app/assets/data/${year}/team_schedule.json`);
     _scheduleCache[year] = data;
     return data;
   } catch { return []; }
@@ -878,7 +878,7 @@ async function loadSchedule(year) {
 async function loadGamelog(year) {
   if (_gamelogCache[year]) return _gamelogCache[year];
   try {
-    const data = await fetch(`app/assets/data/${year}/player_gamelog.json`).then(r => r.json());
+    const data = await _fetchJson(`app/assets/data/${year}/player_gamelog.json`);
     _gamelogCache[year] = data;
     return data;
   } catch { return {}; }
@@ -887,17 +887,19 @@ async function loadGamelog(year) {
 async function loadDrives(year) {
   if (_drivesCache[year]) return _drivesCache[year];
   try {
-    const data = await fetch(`app/assets/data/${year}/team_drives.json`).then(r => r.json());
+    const data = await _fetchJson(`app/assets/data/${year}/team_drives.json`);
     _drivesCache[year] = data;
     return data;
   } catch { return {}; }
 }
 
-async function loadPlays(year) {
-  if (_playsCache[year]) return _playsCache[year];
+async function loadPlaysForWeek(year, week) {
+  const key = `${year}_wk${week}`;
+  if (_playsCache[key]) return _playsCache[key];
   try {
-    const data = await fetch(`app/assets/data/${year}/team_plays.json`).then(r => r.json());
-    _playsCache[year] = data;
+    const wk = String(week || 0).padStart(2, '0');
+    const data = await _fetchJson(`app/assets/data/${year}/team_plays_wk${wk}.json`);
+    _playsCache[key] = data;
     return data;
   } catch { return {}; }
 }
@@ -1002,9 +1004,9 @@ async function showGameDetail(gameId, teamName) {
   const panel = document.getElementById('game-detail-panel');
   if (!panel) return;
   panel.innerHTML = `
-    <div style="margin-top:20px;border:1px solid #0f3460;border-radius:8px;padding:16px">
+    <div style="margin-top:20px;border:1px solid var(--border-mid);border-radius:8px;padding:16px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-        <h3 style="margin:0;font-size:14px;color:#e94560">Week ${game.week} — ${game.awayTeam} @ ${game.homeTeam}</h3>
+        <h3 style="margin:0;font-size:14px;color:var(--accent)">Week ${game.week} — ${game.awayTeam} @ ${game.homeTeam}</h3>
         <span style="font-size:13px;color:#aaa">${game.awayScore ?? '?'} – ${game.homeScore ?? '?'}</span>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
@@ -1020,7 +1022,7 @@ async function showGameDetail(gameId, teamName) {
     </div>`;
 
   // Append drive-level breakdown (lazy — only fetched on game click)
-  const [drivesData, playsData] = await Promise.all([loadDrives(currentYear), loadPlays(currentYear)]);
+  const [drivesData, playsData] = await Promise.all([loadDrives(currentYear), loadPlaysForWeek(currentYear, game.week)]);
   const driveTeam = game.homeTeam; // show home team drives
   const teamDrives = (drivesData[driveTeam] || []).filter(d => d.gameId === gameId);
   const teamPlays  = (playsData[driveTeam]  || []).filter(p => p.gameId === gameId);
@@ -1032,7 +1034,7 @@ async function showGameDetail(gameId, teamName) {
     const drivePlays = teamPlays.filter(p => p.driveNumber === d.driveNumber);
     const playRows = drivePlays.map(pl => {
       const epaColor = pl.ppa > 0 ? '#8bc34a' : pl.ppa < 0 ? '#f44336' : '#aaa';
-      return `<tr style="background:#0a1a2e;font-size:11px">
+      return `<tr style="background:var(--surface-deep);font-size:11px">
         <td style="padding:4px 8px;color:#aaa">${pl.down ? `${pl.down}&amp;${pl.distance}` : '-'}</td>
         <td style="padding:4px 8px">${pl.playType || '-'}</td>
         <td style="padding:4px 8px;color:#ccc;max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${pl.playText || ''}</td>
@@ -1055,7 +1057,7 @@ async function showGameDetail(gameId, teamName) {
         </table>
       </td></tr>` : '';
 
-    return `<tr class="clickable" onclick="toggleDrivePlays(${idx})" style="border-top:1px solid #0f346044">
+    return `<tr class="clickable" onclick="toggleDrivePlays(${idx})" style="border-top:1px solid var(--border)">
       <td style="padding:6px 8px;color:#aaa;font-size:11px">#${d.driveNumber ?? idx+1}</td>
       <td style="padding:6px 8px;font-weight:700;color:${d.scoring ? '#00c853' : '#ccc'}">${d.result || '-'}${scoreDot}</td>
       <td style="padding:6px 8px;color:#aaa">${d.plays ?? '-'} plays</td>
@@ -1067,7 +1069,7 @@ async function showGameDetail(gameId, teamName) {
 
   const drivesPanel = document.getElementById('game-detail-panel');
   if (drivesPanel) drivesPanel.innerHTML += `
-    <div style="margin-top:12px;border:1px solid #0f3460;border-radius:8px;padding:16px">
+    <div style="margin-top:12px;border:1px solid var(--border-mid);border-radius:8px;padding:16px">
       <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;margin-bottom:8px">${driveTeam} Drives</div>
       <div class="table-scroll-wrap"><table style="width:100%;border-collapse:collapse;font-size:12px">
         <thead><tr style="font-size:10px;color:#666">
@@ -1093,9 +1095,10 @@ function renderTopPlayers() {
   const rMap = buildRatingMap();
   const teamMap = buildTeamMap();
   const players = getPlayers();
-  const allPositions = ['ALL', ...new Set(players.map(p => p.positionGroup).filter(Boolean))].sort();
+  const allPositions = ['ALL', ...new Set(players.map(p => p.positionGroup).filter(g => g && g !== 'OL'))].sort();
 
   let filtered = players.filter(p => {
+    if (p.positionGroup === 'OL') return false;
     const matchPos = topPosFilter === 'ALL' || p.positionGroup === topPosFilter;
     const name = `${p.firstName} ${p.lastName}`.toLowerCase();
     const teamName = (teamMap[p.teamId]?.name || '').toLowerCase();
@@ -1253,7 +1256,7 @@ function renderCompare() {
             <div style="font-size:11px;color:#888">${leftTeam.conference||''}</div>
           </div>` : '<span style="color:#666">Select a team from sidebar</span>'}
         <span style="color:#444;font-size:20px;margin:0 8px">vs</span>
-        <select onchange="compareTeamId=parseInt(this.value);renderCompare()" style="padding:8px 12px;background:#0f3460;border:1px solid #1a3a6e;color:#fff;font-size:13px;border-radius:4px;cursor:pointer;min-width:200px">
+        <select onchange="compareTeamId=parseInt(this.value);renderCompare()" style="padding:8px 12px;background:var(--input-bg);border:1px solid var(--border-mid);color:var(--text);font-size:13px;border-radius:4px;cursor:pointer;min-width:200px">
           <option value="">-- Select opponent --</option>
           ${teamOptions}
         </select>
@@ -1274,7 +1277,7 @@ function renderPositionGroupComparison(leftTeam, rightTeam) {
 
   const groups = [
     { group:'QB', label:'QB' }, { group:'RB', label:'RB' }, { group:'WR', label:'WR' },
-    { group:'TE', label:'TE' }, { group:'OL', label:'OL' }, { group:'DL', label:'DL' },
+    { group:'TE', label:'TE' }, { group:'DL', label:'DL' },
     { group:'LB', label:'LB' }, { group:'DB', label:'DB' },
   ];
 
@@ -1505,7 +1508,7 @@ function showPlayerModal(playerId) {
         <div class="sub">
           <span class="pos-badge">${p.position || posGroup}</span>
           ${archetypeHTML}
-          &nbsp;${classYearDisplay}${statusBadgeHTML} &bull; #${p.jersey || '?'} &bull;
+          &nbsp;${classYearDisplay}${statusBadgeHTML} &bull; #${p.jersey != null && p.jersey !== '' ? p.jersey : '?'} &bull;
           <span style="cursor:pointer;color:#a0c4ff" onclick="closeModal();goToTeam(${p.teamId})">${team.name || ''}</span>
           ${p.height ? ` &bull; ${p.height}` : ''} ${p.weight ? `/ ${p.weight} lbs` : ''}
         </div>
