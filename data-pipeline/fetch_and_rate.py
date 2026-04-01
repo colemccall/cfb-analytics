@@ -1093,10 +1093,11 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
                     momentum += r[sk] - prior_ratings[pid][sk]
                     skill_count += 1
             momentum_bonus = (momentum / skill_count) if skill_count > 0 else 0
-            # dampener: elite players improve less (regression to the mean)
-            dampener = max(0.20, 1.0 - (curr_ovr - 60) / 100)
+            # dampener: elite players improve less (steeper falloff above 60)
+            dampener = max(0.15, 1.0 - (curr_ovr - 60) / 60)
             raw_delta = (yoy_growth * 0.4 + momentum_bonus * 0.3) * dampener
-            delta = max(-5, min(8, round(raw_delta)))
+            max_gain = 3 if curr_ovr >= 85 else 5
+            delta = max(-5, min(max_gain, round(raw_delta)))
             r["trajectory"] = max(40, min(99, curr_ovr + delta))
             trajectory_count += 1
         print(f"  Trajectory ratings computed for {trajectory_count} returning players")
@@ -1286,6 +1287,17 @@ def build_projected_year(api_key, proj_year, base_year, output_dir, team_name_ma
             for p in json.load(f):
                 prev_team_map[p["id"]] = tid_to_name.get(p["teamId"], "")
 
+    # Name-based lookup so incoming transfers can carry their real rating forward
+    base_name_lookup = {}  # (fn_lower, ln_lower) -> pid
+    base_players_path2 = os.path.join(output_dir, str(base_year), "players_private.json")
+    if os.path.exists(base_players_path2):
+        with open(base_players_path2) as f:
+            for p in json.load(f):
+                fn = (p.get("firstName") or "").lower().strip()
+                ln = (p.get("lastName") or "").lower().strip()
+                if fn and ln:
+                    base_name_lookup[(fn, ln)] = p["id"]
+
     teams_private = []
     players_private = []
     ratings = []
@@ -1428,7 +1440,10 @@ def build_projected_year(api_key, proj_year, base_year, output_dir, team_name_ma
                 "weight": "",
                 "jersey": "",
             }
-            _add_player(_next_syn_id(), team_id, school, portal_player, "transfer_in")
+            # Use real base-year pid if we can match by name — carries rating forward
+            real_pid = base_name_lookup.get((fn, ln))
+            portal_pid = real_pid if (real_pid and real_pid in base_ratings) else _next_syn_id()
+            _add_player(portal_pid, team_id, school, portal_player, "transfer_in")
 
         # Add incoming recruits from signing class
         for recruit in recruits_by_team.get(school_norm, []):

@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
   /* ── Theme variables ── */
   :root {
@@ -59,6 +61,7 @@
   .tab-btn:hover { color: var(--text); }
   .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
   .tab-content { flex: 1; overflow-y: auto; padding: 20px; background: var(--bg); }
+  .tab-content.map-mode { padding: 0; overflow: hidden; }
 
   /* ── Theme switcher ── */
   .theme-switcher { display: flex; gap: 6px; align-items: center; margin-left: auto; padding: 0 12px; flex-shrink: 0; }
@@ -334,6 +337,7 @@
     <div class="tab-btn"         onclick="switchTab('top-players')">Top Players</div>
     <div class="tab-btn"         onclick="switchTab('conferences')">Conferences</div>
     <div class="tab-btn"         onclick="switchTab('compare')">Compare</div>
+    <div class="tab-btn"         onclick="switchTab('map')">Map</div>
     <div class="tab-btn"         onclick="switchTab('explain')">How It Works</div>
     <div class="theme-switcher">
       <button class="theme-btn" data-t="" title="Standard" onclick="setTheme('')"></button>
@@ -348,6 +352,7 @@
     <button onclick="switchTab('top-players')" data-btab="top-players"><span class="btab-icon">⭐</span>Top</button>
     <button onclick="switchTab('conferences')" data-btab="conferences"><span class="btab-icon">🏆</span>Conf</button>
     <button onclick="switchTab('compare')" data-btab="compare"><span class="btab-icon">⚖</span>Compare</button>
+    <button onclick="switchTab('map')" data-btab="map"><span class="btab-icon">🗺</span>Map</button>
     <button onclick="switchTab('explain')" data-btab="explain"><span class="btab-icon">ℹ</span>Info</button>
   </div>
   <div class="tab-content" id="tab-content">
@@ -684,7 +689,8 @@ function selectTeam(id, switchToRoster = true) {
 
 function switchTab(tab, render = true) {
   activeTab = tab;
-  const tabs = ['roster','depth','schedule','top-players','conferences','compare','explain'];
+  document.getElementById('tab-content').classList.toggle('map-mode', tab === 'map');
+  const tabs = ['roster','depth','schedule','top-players','conferences','compare','map','explain'];
   document.querySelectorAll('.tab-btn').forEach((btn, i) => {
     btn.classList.toggle('active', tabs[i] === tab);
   });
@@ -711,6 +717,7 @@ function renderActiveTab() {
   else if (activeTab === 'top-players') renderTopPlayers();
   else if (activeTab === 'conferences') renderConferences();
   else if (activeTab === 'compare') renderCompare();
+  else if (activeTab === 'map') renderMap();
   else if (activeTab === 'explain') renderExplain();
 }
 
@@ -1709,6 +1716,172 @@ function filterPos(pg) {
   if (t) renderRoster(t);
 }
 
+
+// ── Portal Map Tab ─────────────────────────────────────────────────────────
+let _mapInstance = null;
+let _mapData = null;
+let _mapMarkerLayer = null;
+let _mapSchool = 'All';
+let _mapPos = 'All';
+let _mapShowR = true;
+let _mapShowT = true;
+
+const MAP_COLORS = {
+  recruit: '#E8A800',
+  xferIn:  '#3db87a',
+  xferOut: '#e03b2e',
+  xferAll: '#6da8d8',
+};
+const MAP_POSITIONS = ['All','QB','RB','WR','TE','DL','EDGE','LB','CB','S','ATH','K','P','IOL','OT','OG','OC'];
+
+async function renderMap() {
+  const el = document.getElementById('tab-content');
+  el.innerHTML = `<div id="portal-map-wrap" style="display:flex;height:100%;position:relative;overflow:hidden">
+    <div id="portal-map-sidebar" style="width:260px;flex-shrink:0;background:var(--sidebar-bg);border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column;font-size:13px"></div>
+    <div style="flex:1;position:relative">
+      <div id="portal-map" style="width:100%;height:100%"></div>
+      <div id="portal-map-card" style="display:none;position:absolute;bottom:20px;right:20px;width:270px;background:var(--surface);border:1px solid var(--border-mid);border-radius:6px;padding:14px 16px;z-index:1000;box-shadow:0 8px 32px rgba(0,0,0,.5)"></div>
+    </div>
+  </div>`;
+
+  if (!_mapData) {
+    const [recruits, transfers] = await Promise.all([
+      fetch('app/assets/data/map/recruits.json').then(r=>r.json()),
+      fetch('app/assets/data/map/transfers.json').then(r=>r.json()),
+    ]);
+    _mapData = { recruits, transfers };
+  }
+
+  if (!_mapInstance) {
+    const theme = document.documentElement.getAttribute('data-theme') || '';
+    const tileUrl = theme === 'dark' || theme === ''
+      ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+      : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+    _mapInstance = L.map('portal-map', {center:[38.5,-96], zoom:4, zoomControl:false, preferCanvas:true});
+    L.tileLayer(tileUrl, {attribution:'© OpenStreetMap © CARTO', maxZoom:19}).addTo(_mapInstance);
+    L.control.zoom({position:'bottomright'}).addTo(_mapInstance);
+    _mapMarkerLayer = L.layerGroup().addTo(_mapInstance);
+  } else {
+    setTimeout(() => _mapInstance.invalidateSize(), 60);
+  }
+
+  _renderMapSidebar();
+  _renderMapMarkers();
+}
+
+function _renderMapSidebar() {
+  const { recruits, transfers } = _mapData;
+  const schools = new Set(['All']);
+  recruits.forEach(r => { if (r.committedTo) schools.add(r.committedTo); });
+  transfers.forEach(t => { if (t.origin) schools.add(t.origin); if (t.dest) schools.add(t.dest); });
+  const schoolList = Array.from(schools).sort((a,b) => a==='All'?-1:a.localeCompare(b));
+
+  const fR = _mapFilteredRecruits();
+  const fT = _mapFilteredTransfers();
+  const tIn  = _mapSchool === 'All' ? fT : fT.filter(t => t.dest === _mapSchool);
+  const tOut = _mapSchool === 'All' ? [] : fT.filter(t => t.origin === _mapSchool && t.dest !== _mapSchool);
+  const net  = tIn.length - tOut.length;
+
+  const sel = (id, val, opts, onch) => `<select id="${id}" style="width:100%;padding:8px 10px;background:var(--input-bg);border:1px solid var(--border-mid);color:var(--text);font-size:13px;border-radius:4px;outline:none" onchange="${onch}">${opts.map(o=>`<option value="${o}"${o===val?' selected':''}>${o}</option>`).join('')}</select>`;
+  const lbl = t => `<div style="font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px">${t}</div>`;
+  const sec = c => `<div style="padding:12px 14px;border-bottom:1px solid var(--border)">${c}</div>`;
+  const tog = (id, active, color, label, count, fn) => `<div onclick="${fn}" style="display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:4px;cursor:pointer;border:1px solid ${active?'var(--border)':'transparent'};background:${active?'rgba(255,255,255,0.04)':'transparent'}"><div style="width:9px;height:9px;border-radius:50%;background:${active?color:'var(--border-mid)'};flex-shrink:0"></div><span style="flex:1;font-weight:600;color:${active?'var(--text)':'var(--text-muted)'}">${label}</span><span style="font-size:12px;font-weight:700;color:${active?color:'var(--text-muted)'}">${count}</span></div>`;
+  const stat = (val, label, color) => `<div style="background:var(--surface-deep);border-left:3px solid ${color};border-radius:4px;padding:10px 12px"><div style="font-size:26px;font-weight:800;color:${color};line-height:1">${val}</div><div style="font-size:11px;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase;margin-top:5px;font-weight:600">${label}</div></div>`;
+
+  document.getElementById('portal-map-sidebar').innerHTML = `
+    <div style="padding:16px 14px 12px;border-bottom:1px solid var(--border)">
+      <div style="font-size:22px;font-weight:800;letter-spacing:0"><span style="color:var(--text)">Portal</span><span style="color:var(--accent)">Flow</span></div>
+      <div style="width:32px;height:3px;background:var(--accent);border-radius:2px;margin:6px 0 4px"></div>
+      <div style="font-size:11px;color:var(--text-muted);letter-spacing:1.5px;font-weight:700;text-transform:uppercase">CFB Recruiting &amp; Portal · 2026</div>
+    </div>
+    ${sec(lbl('School') + sel('map-school', _mapSchool, schoolList, '_mapSetSchool(this.value)'))}
+    ${sec(lbl('Position') + sel('map-pos', _mapPos, MAP_POSITIONS, '_mapSetPos(this.value)'))}
+    ${sec(lbl('Layers') + tog('r', _mapShowR, MAP_COLORS.recruit, '2026 Recruits', fR.length, '_mapToggleR()') + tog('t', _mapShowT, MAP_COLORS.xferAll, 'Transfers', fT.length, '_mapToggleT()'))}
+    <div style="padding:12px 14px">
+      ${lbl(_mapSchool === 'All' ? 'All Schools' : _mapSchool)}
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px">
+        ${stat(fR.length.toLocaleString(), '2026 Recruits', MAP_COLORS.recruit)}
+        ${stat(fT.length.toLocaleString(), 'Total Transfers', MAP_COLORS.xferAll)}
+        ${stat(tIn.length.toLocaleString(), 'Transfers In', MAP_COLORS.xferIn)}
+        ${stat(tOut.length.toLocaleString(), 'Transfers Out', MAP_COLORS.xferOut)}
+        ${_mapSchool !== 'All' ? `<div style="grid-column:span 2">${stat((net>0?'+':'')+net, 'Net Portal', net>0?MAP_COLORS.xferIn:net<0?MAP_COLORS.xferOut:'var(--text-muted)')}</div>` : ''}
+      </div>
+    </div>`;
+}
+
+function _mapFilteredRecruits() {
+  if (!_mapData || !_mapShowR) return [];
+  return _mapData.recruits.filter(r =>
+    (_mapSchool === 'All' || r.committedTo === _mapSchool) &&
+    (_mapPos === 'All' || r.pos === _mapPos) &&
+    r.lat && r.lon
+  );
+}
+
+function _mapFilteredTransfers() {
+  if (!_mapData || !_mapShowT) return [];
+  return _mapData.transfers.filter(t =>
+    (_mapSchool === 'All' || t.origin === _mapSchool || t.dest === _mapSchool) &&
+    (_mapPos === 'All' || t.pos === _mapPos) &&
+    t.lat && t.lon
+  );
+}
+
+function _renderMapMarkers() {
+  if (!_mapInstance || !_mapMarkerLayer) return;
+  _mapMarkerLayer.clearLayers();
+  const renderer = L.canvas({ padding: 0.5 });
+
+  _mapFilteredRecruits().forEach(r => {
+    const m = L.circleMarker([r.lat, r.lon], {renderer, radius:5, fillColor:MAP_COLORS.recruit, color:'rgba(255,255,255,0.15)', weight:1, fillOpacity:0.85});
+    m.on('click', () => _showMapCard(r));
+    _mapMarkerLayer.addLayer(m);
+  });
+  _mapFilteredTransfers().forEach(t => {
+    let col = MAP_COLORS.xferAll;
+    if (_mapSchool !== 'All') col = t.dest === _mapSchool ? MAP_COLORS.xferIn : MAP_COLORS.xferOut;
+    const m = L.circleMarker([t.lat, t.lon], {renderer, radius:5, fillColor:col, color:'rgba(255,255,255,0.15)', weight:1, fillOpacity:0.85});
+    m.on('click', () => _showMapCard(t));
+    _mapMarkerLayer.addLayer(m);
+  });
+}
+
+function _showMapCard(p) {
+  const card = document.getElementById('portal-map-card');
+  if (!card) return;
+  const isT = p.type === 'transfer';
+  const stars = '★'.repeat(p.stars || 0) + '☆'.repeat(5 - (p.stars || 0));
+  card.style.display = 'block';
+  card.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+      <div>
+        <div style="font-size:17px;font-weight:800;color:var(--text)">${p.name}</div>
+        <div style="font-size:11px;letter-spacing:1.5px;color:var(--text-muted);margin-top:3px;text-transform:uppercase;font-weight:600">${p.pos} · ${isT?'Transfer':'2026 Recruit'}</div>
+      </div>
+      <button onclick="document.getElementById('portal-map-card').style.display='none'" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--text-muted)">×</button>
+    </div>
+    <div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)">
+      <span style="color:${MAP_COLORS.recruit};font-size:14px">${stars}</span>
+      ${p.rating>0?`<span style="font-size:12px;color:var(--text-muted);margin-left:6px">${p.rating.toFixed(4)}</span>`:''}
+    </div>
+    ${isT ? `
+      <div style="font-size:13px;line-height:1.9">
+        <div style="display:flex;gap:8px"><span style="color:${MAP_COLORS.xferOut};font-weight:800;width:40px;flex-shrink:0">FROM</span><span style="color:var(--text)">${p.origin||'—'}</span></div>
+        <div style="display:flex;gap:8px"><span style="color:${MAP_COLORS.xferIn};font-weight:800;width:40px;flex-shrink:0">TO</span><span style="color:var(--text)">${p.dest||'Undecided'}</span></div>
+      </div>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:6px">${p.city||''}${p.state?', '+p.state:''}${p.date?' · '+p.date:''}</div>
+    ` : `
+      <div style="font-size:13px;line-height:1.9">
+        <div style="display:flex;gap:8px"><span style="color:${MAP_COLORS.recruit};font-weight:800;width:52px;flex-shrink:0">COMMIT</span><span style="color:var(--text)">${p.committedTo||'Uncommitted'}</span></div>
+      </div>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:6px">${p.city||''}${p.state?', '+p.state:''} · Class of ${p.year||2026}</div>
+    `}`;
+}
+
+function _mapSetSchool(v) { _mapSchool = v; _renderMapSidebar(); _renderMapMarkers(); }
+function _mapSetPos(v)    { _mapPos    = v; _renderMapSidebar(); _renderMapMarkers(); }
+function _mapToggleR()    { _mapShowR  = !_mapShowR; _renderMapSidebar(); _renderMapMarkers(); }
+function _mapToggleT()    { _mapShowT  = !_mapShowT; _renderMapSidebar(); _renderMapMarkers(); }
 
 // ── Explainability Tab ─────────────────────────────────────────────────────
 function renderExplain() {
