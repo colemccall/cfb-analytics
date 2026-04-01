@@ -63,6 +63,16 @@
   td { padding: 5px 8px; border-bottom: 1px solid #16213e22; }
   tr:hover td { background: #16213e55; }
   tr.clickable { cursor: pointer; }
+  tr.status-transferred-out td { color: #e05555; }
+  tr.status-transferred-out td .pos-badge { opacity: 0.7; }
+  tr.status-likely-leaving td { color: #e09940; }
+  tr.status-transfer-in td { color: #4caf7d; }
+  tr.status-recruit td { color: #64b5f6; }
+  .status-pill { display: inline-block; font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 8px; margin-left: 4px; vertical-align: middle; letter-spacing: 0.3px; text-transform: uppercase; }
+  .status-pill.out { background: #e0555533; color: #e05555; border: 1px solid #e0555566; }
+  .status-pill.leaving { background: #e0994033; color: #e09940; border: 1px solid #e0994066; }
+  .status-pill.in { background: #4caf7d33; color: #4caf7d; border: 1px solid #4caf7d66; }
+  .status-pill.recruit { background: #64b5f633; color: #64b5f6; border: 1px solid #64b5f666; }
   .ovr { display: inline-block; width: 30px; text-align: center; padding: 2px 4px; border-radius: 4px; font-weight: 700; font-size: 11px; }
   .pos-badge { display: inline-block; background: #0f3460; padding: 1px 5px; border-radius: 3px; font-size: 10px; font-weight: 600; min-width: 28px; text-align: center; }
   .tier-badge { display: inline-block; padding: 1px 6px; border-radius: 10px; font-size: 9px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; margin-left: 4px; vertical-align: middle; }
@@ -707,11 +717,24 @@ function renderRoster(t) {
       </tr>
       ${filtered.map(p => {
         const r = rMap[p.id] || {};
-        return `<tr class="clickable" onclick="showPlayerModal('${p.id}')">
+        const statusCls = p.status === 'transferred_out' ? 'status-transferred-out'
+          : p.status === 'likely_leaving' ? 'status-likely-leaving'
+          : p.status === 'transfer_in' ? 'status-transfer-in'
+          : p.status === 'recruit' ? 'status-recruit' : '';
+        const yearLabels = ['','Fr','So','Jr','Sr','Gr'];
+        const yrLabel = yr => yearLabels[Math.min(yr || 0, 5)] || yr;
+        const yearDisplay = p.status === 'recruit' ? 'Fr'
+          : p.yearPrev != null ? `${yrLabel(p.yearPrev)}→${yrLabel(p.year)}`
+          : yrLabel(p.year);
+        const statusPill = p.status === 'transferred_out' ? '<span class="status-pill out">Out</span>'
+          : p.status === 'likely_leaving' ? '<span class="status-pill leaving">Sr?</span>'
+          : p.status === 'transfer_in' ? '<span class="status-pill in">Transfer</span>'
+          : p.status === 'recruit' ? '<span class="status-pill recruit">Recruit</span>' : '';
+        return `<tr class="clickable ${statusCls}" onclick="showPlayerModal('${p.id}')">
           <td>${p.jersey || '-'}</td>
           <td><span class="pos-badge">${p.position || '?'}</span></td>
-          <td>${p.firstName} ${p.lastName}${tierBadge(r.overall || 0)}</td>
-          <td>${p.year || ''}</td>
+          <td>${p.firstName} ${p.lastName}${tierBadge(r.overall || 0)}${statusPill}</td>
+          <td>${yearDisplay}</td>
           <td>
             <span class="ovr" style="background:${ratingColor(r.overall || 0)};color:#000">${r.overall || '-'}</span>
             ${r.projected && r.overallLow != null ? `<span style="font-size:10px;color:#666;display:block;line-height:1">${r.overallLow}–${r.overallHigh}</span>` : ''}
@@ -1363,7 +1386,15 @@ function showPlayerModal(playerId) {
       </div>`).join('')}
   </div>` : '';
 
-  const classYear = ['Fr','So','Jr','Sr','Gr'][Math.max(0, Math.min(4, (p.year||1) - 1))];
+  const _yearLabels = ['','Fr','So','Jr','Sr','Gr'];
+  const classYear = _yearLabels[Math.min(p.year || 1, 5)] || (p.year || 'Fr');
+  const classYearDisplay = p.yearPrev != null
+    ? `${_yearLabels[Math.min(p.yearPrev, 5)] || p.yearPrev} → ${classYear}`
+    : classYear;
+  const statusBadgeHTML = p.status === 'transferred_out' ? '<span class="status-pill out" style="margin-left:6px">Transferred Out</span>'
+    : p.status === 'likely_leaving' ? '<span class="status-pill leaving" style="margin-left:6px">Likely Leaving</span>'
+    : p.status === 'transfer_in' ? '<span class="status-pill in" style="margin-left:6px">Transfer In</span>'
+    : p.status === 'recruit' ? '<span class="status-pill recruit" style="margin-left:6px">Recruit</span>' : '';
   const archetype = computeArchetype(posGroup, r);
   const archetypeHTML = archetype ? `<span class="archetype-badge">${archetype}</span>` : '';
   const projTypeLabels = { returning: 'Returning', transfer: 'Transfer', recruit: 'Recruit', unknown: 'New Player' };
@@ -1401,7 +1432,7 @@ function showPlayerModal(playerId) {
         <div class="sub">
           <span class="pos-badge">${p.position || posGroup}</span>
           ${archetypeHTML}
-          &nbsp;${classYear} &bull; #${p.jersey || '?'} &bull;
+          &nbsp;${classYearDisplay}${statusBadgeHTML} &bull; #${p.jersey || '?'} &bull;
           <span style="cursor:pointer;color:#a0c4ff" onclick="closeModal();goToTeam(${p.teamId})">${team.name || ''}</span>
           ${p.height ? ` &bull; ${p.height}` : ''} ${p.weight ? `/ ${p.weight} lbs` : ''}
         </div>

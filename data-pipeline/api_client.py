@@ -162,6 +162,11 @@ def fetch_drives_for_year(api_key, year):
     return all_drives
 
 
+def fetch_transfer_portal(api_key, year):
+    """Fetch all transfer portal entries for a given year."""
+    return _fetch_safe(api_key, "/player/portal", {"year": year})
+
+
 def fetch_plays_for_year(api_key, year):
     """Fetch all plays for all teams by iterating weeks 1-16. Returns flat list."""
     all_plays = []

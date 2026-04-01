@@ -10,6 +10,7 @@ from api_client import (
     fetch_ppa, fetch_team_stats, fetch_sp_ratings, fetch_talent, fetch_recruiting,
     fetch_player_usage, fetch_awards, fetch_games,
     fetch_all_game_player_stats, fetch_drives_for_year, fetch_plays_for_year,
+    fetch_transfer_portal,
 )
 from collections import defaultdict
 from rating_engine import get_position_group, compute_raw_ratings, normalize_all_ratings, compute_overall, SKILL_ATTRS
@@ -1173,11 +1174,21 @@ def _team_dict(team, extra=None):
     return d
 
 
-def build_projected_year(api_key, proj_year, base_year, output_dir, team_name_map):
-    """Build a projected roster for proj_year using base_year ratings.
+def _norm_school(name):
+    """Normalize school name for fuzzy matching."""
+    return (name or "").lower().strip()
 
-    Returning players carry forward their trajectory (or OVR+1).
-    New players are rated from a star-based floor only.
+
+def build_projected_year(api_key, proj_year, base_year, output_dir, team_name_map):
+    """Build a projected roster for proj_year using base_year data.
+
+    Uses transfer portal and recruiting class to construct roster when API
+    roster data is unavailable. Statuses:
+      returning      — on base roster, not in portal, year < 4
+      likely_leaving — on base roster, year >= 4 (SR/Gr), may graduate or go pro
+      transferred_out — confirmed in transfer portal (origin = this team)
+      transfer_in    — incoming via portal (destination = this team)
+      recruit        — incoming from proj_year signing class
     """
     print(f"  Fetching {proj_year} teams...")
     teams_raw = fetch_teams(api_key, proj_year)
@@ -1190,6 +1201,37 @@ def build_projected_year(api_key, proj_year, base_year, output_dir, team_name_ma
     if total_players == 0:
         print(f"  No {proj_year} roster data found — falling back to {base_year} rosters")
         rosters = fetch_all_rosters(api_key, team_names, base_year)
+
+    # Transfer portal for proj_year: who left and where they went
+    print(f"  Fetching {proj_year} transfer portal...")
+    portal_entries = fetch_transfer_portal(api_key, proj_year)
+    print(f"    {len(portal_entries)} portal entries")
+
+    # Sets for fast lookup — keyed by (firstname_lower, lastname_lower, school_lower)
+    # Players who left a school (regardless of destination — they're gone from origin)
+    portal_out = set()
+    # Map from (firstname, lastname, dest_school) → portal entry for incoming players
+    portal_in = {}  # key: (fn, ln, dest_norm) → entry
+    for e in portal_entries:
+        fn = (e.get("firstName") or "").lower().strip()
+        ln = (e.get("lastName") or "").lower().strip()
+        origin = _norm_school(e.get("origin"))
+        dest = _norm_school(e.get("destination"))
+        if fn and ln and origin:
+            portal_out.add((fn, ln, origin))
+        if fn and ln and dest:
+            portal_in[(fn, ln, dest)] = e
+
+    # Fetch 2026 recruiting class
+    print(f"  Fetching {proj_year} recruiting class...")
+    recruits_raw = fetch_recruiting(api_key, proj_year)
+    print(f"    {len(recruits_raw)} recruits")
+    # Map by (name_lower, team_lower) for lookup, and group by committed team
+    recruits_by_team = defaultdict(list)
+    for r in recruits_raw:
+        dest = r.get("committedTo", "")
+        if dest:
+            recruits_by_team[_norm_school(dest)].append(r)
 
     base_dir = os.path.join(output_dir, str(base_year))
     with open(os.path.join(base_dir, "ratings.json")) as f:
@@ -1225,77 +1267,162 @@ def build_projected_year(api_key, proj_year, base_year, output_dir, team_name_ma
     players_private = []
     ratings = []
 
+    # Synthetic ID counter for new players (recruits/portal who have no prior API id)
+    _syn_id_counter = [0]
+
+    def _next_syn_id():
+        _syn_id_counter[0] += 1
+        return f"proj_{proj_year}_{_syn_id_counter[0]}"
+
+    def _add_player(pid, team_id, school, player_data, status, prev_year=None):
+        """Append player + rating entry; returns nothing."""
+        position = player_data.get("position", "")
+        pos_group = get_position_group(position)
+        cur_year = player_data.get("year", 1)
+
+        p_entry = {
+            "id": pid,
+            "teamId": team_id,
+            "firstName": player_data.get("firstName", ""),
+            "lastName": player_data.get("lastName", ""),
+            "position": position,
+            "positionGroup": pos_group,
+            "jersey": player_data.get("jersey", ""),
+            "year": cur_year,
+            "height": player_data.get("height", ""),
+            "weight": player_data.get("weight", ""),
+            "projected": True,
+            "status": status,
+        }
+        if prev_year is not None:
+            p_entry["yearPrev"] = prev_year
+        players_private.append(p_entry)
+
+        if pid in base_ratings:
+            prev = base_ratings[pid]
+            prev_school = prev_team_map.get(pid)
+            is_transfer = prev_school is not None and prev_school != school
+            new_ovr = prev.get("trajectory") or min(99, prev.get("overall", 55) + 1)
+            r_entry = {k: v for k, v in prev.items() if k not in ("playerId", "overall", "trajectory", "stats")}
+            if is_transfer or status == "transfer_in":
+                proj_type = "transfer"
+                low = max(40, new_ovr - 8)
+                high = min(99, new_ovr + 5)
+            else:
+                proj_type = "returning"
+                low = max(40, new_ovr - 3)
+                high = min(99, new_ovr + 5)
+            r_entry.update({
+                "playerId": pid, "overall": new_ovr,
+                "overallLow": low, "overallHigh": high,
+                "projectionType": proj_type,
+                "stats": {}, "projected": True,
+            })
+        else:
+            name_key = (
+                f"{player_data.get('firstName', '')} {player_data.get('lastName', '')}".strip().lower(),
+                school.lower(),
+            )
+            stars = recruit_lookup.get(name_key, 0)
+            if stars == 0 and status in ("transfer_in",):
+                # Try portal entry for stars
+                portal_e = portal_in.get(
+                    (player_data.get("firstName", "").lower(),
+                     player_data.get("lastName", "").lower(),
+                     _norm_school(school)), {}
+                )
+                stars = portal_e.get("stars") or 0
+            base_ovr = max(45, min(72, 45 + stars * 5))
+            proj_type = "recruit" if status == "recruit" else ("transfer" if status == "transfer_in" else "unknown")
+            low = max(40, base_ovr - 5)
+            high = min(85, base_ovr + (stars * 4))
+            r_entry = {
+                "playerId": pid, "overall": base_ovr,
+                "overallLow": low, "overallHigh": high,
+                "projectionType": proj_type,
+                "stats": {}, "projected": True,
+            }
+            for attr in SKILL_ATTRS.get(pos_group, ["runBlock", "passBlock"]):
+                r_entry[attr] = base_ovr
+        ratings.append(r_entry)
+
     for team in teams_raw:
         school = team["school"]
+        school_norm = _norm_school(school)
         team_id = team.get("id", hash(school))
         roster = rosters.get(school, [])
 
         teams_private.append(_team_dict(team, {"ratings": {}, "projected": True}))
 
+        # Track which incoming portal players we've already added (avoid duplicates)
+        added_portal_in = set()
+
         for player in roster:
             pid = player.get("id")
             if not pid:
                 continue
-            position = player.get("position", "")
-            pos_group = get_position_group(position)
+            fn = (player.get("firstName") or "").lower().strip()
+            ln = (player.get("lastName") or "").lower().strip()
+            prev_year = player.get("year", 1)
 
-            players_private.append({
-                "id": pid,
-                "teamId": team_id,
-                "firstName": player.get("firstName", ""),
-                "lastName": player.get("lastName", ""),
-                "position": position,
-                "positionGroup": pos_group,
-                "jersey": player.get("jersey", ""),
-                "year": player.get("year", 1),
-                "height": player.get("height", ""),
-                "weight": player.get("weight", ""),
-                "projected": True,
-            })
+            in_portal_out = (fn, ln, school_norm) in portal_out
 
-            if pid in base_ratings:
-                prev = base_ratings[pid]
-                prev_school = prev_team_map.get(pid)
-                transferred = prev_school is not None and prev_school != school
-                new_ovr = prev.get("trajectory") or min(99, prev.get("overall", 55) + 1)
-                r_entry = {k: v for k, v in prev.items() if k not in ("playerId", "overall", "trajectory", "stats")}
-                if transferred:
-                    # Transfer uncertainty: wider range, outcome unknown in new system
-                    proj_type = "transfer"
-                    low = max(40, new_ovr - 8)
-                    high = min(99, new_ovr + 5)
-                else:
-                    # Returning player: tighter range based on trajectory confidence
-                    proj_type = "returning"
-                    low = max(40, new_ovr - 3)
-                    high = min(99, new_ovr + 5)
-                r_entry.update({
-                    "playerId": pid, "overall": new_ovr,
-                    "overallLow": low, "overallHigh": high,
-                    "projectionType": proj_type,
-                    "stats": {}, "projected": True,
-                })
+            if in_portal_out:
+                # Player is in the transfer portal leaving this school — keep on
+                # roster but flag them; do NOT advance their year
+                status = "transferred_out"
+                _add_player(pid, team_id, school, player, status, prev_year=None)
             else:
-                # New player: look up stars by (name, team) — recruit_lookup key format
-                name_key = (
-                    f"{player.get('firstName', '')} {player.get('lastName', '')}".strip().lower(),
-                    school.lower(),
-                )
-                stars = recruit_lookup.get(name_key, 0)
-                base_ovr = max(45, min(72, 45 + stars * 5))
-                # Recruits: wide range — could bust or exceed expectations
-                proj_type = "recruit" if stars > 0 else "unknown"
-                low = max(40, base_ovr - 5)
-                high = min(85, base_ovr + (stars * 4))  # higher star ceiling = higher upside
-                r_entry = {
-                    "playerId": pid, "overall": base_ovr,
-                    "overallLow": low, "overallHigh": high,
-                    "projectionType": proj_type,
-                    "stats": {}, "projected": True,
-                }
-                for attr in SKILL_ATTRS.get(pos_group, ["runBlock", "passBlock"]):
-                    r_entry[attr] = base_ovr
-            ratings.append(r_entry)
+                # Advance year by 1
+                advanced_year = min((prev_year or 1) + 1, 6)
+                player_adv = dict(player)
+                player_adv["year"] = advanced_year
+                if prev_year and prev_year >= 4:
+                    status = "likely_leaving"
+                else:
+                    status = "returning"
+                _add_player(pid, team_id, school, player_adv, status, prev_year=prev_year)
+
+            # Check if this player is also an incoming transfer here (shouldn't happen
+            # but handles edge case of same player in portal to same team)
+            if (fn, ln, school_norm) in portal_in:
+                added_portal_in.add((fn, ln))
+
+        # Add incoming transfer portal players
+        for (fn, ln, dest), entry in portal_in.items():
+            if dest != school_norm:
+                continue
+            if (fn, ln) in added_portal_in:
+                continue
+            added_portal_in.add((fn, ln))
+            # Build a synthetic player record from the portal entry
+            portal_player = {
+                "firstName": entry.get("firstName", ""),
+                "lastName": entry.get("lastName", ""),
+                "position": entry.get("position", ""),
+                "year": None,  # unknown without roster lookup
+                "height": "",
+                "weight": "",
+                "jersey": "",
+            }
+            _add_player(_next_syn_id(), team_id, school, portal_player, "transfer_in")
+
+        # Add incoming recruits from signing class
+        for recruit in recruits_by_team.get(school_norm, []):
+            r_fn = (recruit.get("name") or "").split(" ")[0].lower()
+            r_ln = " ".join((recruit.get("name") or "").split(" ")[1:]).lower()
+            if (r_fn, r_ln) in added_portal_in:
+                continue
+            recruit_player = {
+                "firstName": (recruit.get("name") or "").split(" ")[0],
+                "lastName": " ".join((recruit.get("name") or "").split(" ")[1:]),
+                "position": recruit.get("position", ""),
+                "year": 1,
+                "height": recruit.get("height", ""),
+                "weight": recruit.get("weight", ""),
+                "jersey": "",
+            }
+            _add_player(_next_syn_id(), team_id, school, recruit_player, "recruit")
 
     for t in teams_private:
         base_t = base_teams.get(t["name"], {})
