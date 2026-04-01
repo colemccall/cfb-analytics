@@ -927,9 +927,9 @@ async function showGameDetail(gameId, teamName) {
 
   // Append drive-level breakdown (lazy — only fetched on game click)
   const [drivesData, playsData] = await Promise.all([loadDrives(currentYear), loadPlays(currentYear)]);
-  const teamName = game.homeTeam; // show home team drives (TODO: add toggle)
-  const teamDrives = (drivesData[teamName] || []).filter(d => d.gameId === gameId);
-  const teamPlays  = (playsData[teamName]  || []).filter(p => p.gameId === gameId);
+  const driveTeam = game.homeTeam; // show home team drives
+  const teamDrives = (drivesData[driveTeam] || []).filter(d => d.gameId === gameId);
+  const teamPlays  = (playsData[driveTeam]  || []).filter(p => p.gameId === gameId);
 
   if (!teamDrives.length) return;
 
@@ -974,7 +974,7 @@ async function showGameDetail(gameId, teamName) {
   const drivesPanel = document.getElementById('game-detail-panel');
   if (drivesPanel) drivesPanel.innerHTML += `
     <div style="margin-top:12px;border:1px solid #0f3460;border-radius:8px;padding:16px">
-      <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;margin-bottom:8px">${teamName} Drives</div>
+      <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;margin-bottom:8px">${driveTeam} Drives</div>
       <div class="table-scroll-wrap"><table style="width:100%;border-collapse:collapse;font-size:12px">
         <thead><tr style="font-size:10px;color:#666">
           <th style="padding:3px 8px;text-align:left">Drive</th>
