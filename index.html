@@ -769,6 +769,8 @@ function renderDepth(t) {
 // ── Phase 2: Lazy-load caches ──────────────────────────────────────────────
 const _scheduleCache = {};
 const _gamelogCache  = {};
+const _drivesCache   = {};
+const _playsCache    = {};
 
 async function loadSchedule(year) {
   if (_scheduleCache[year]) return _scheduleCache[year];
@@ -784,6 +786,24 @@ async function loadGamelog(year) {
   try {
     const data = await fetch(`app/assets/data/${year}/player_gamelog.json`).then(r => r.json());
     _gamelogCache[year] = data;
+    return data;
+  } catch { return {}; }
+}
+
+async function loadDrives(year) {
+  if (_drivesCache[year]) return _drivesCache[year];
+  try {
+    const data = await fetch(`app/assets/data/${year}/team_drives.json`).then(r => r.json());
+    _drivesCache[year] = data;
+    return data;
+  } catch { return {}; }
+}
+
+async function loadPlays(year) {
+  if (_playsCache[year]) return _playsCache[year];
+  try {
+    const data = await fetch(`app/assets/data/${year}/team_plays.json`).then(r => r.json());
+    _playsCache[year] = data;
     return data;
   } catch { return {}; }
 }
@@ -904,6 +924,74 @@ async function showGameDetail(gameId, teamName) {
         </div>
       </div>
     </div>`;
+
+  // Append drive-level breakdown (lazy — only fetched on game click)
+  const [drivesData, playsData] = await Promise.all([loadDrives(currentYear), loadPlays(currentYear)]);
+  const teamName = game.homeTeam; // show home team drives (TODO: add toggle)
+  const teamDrives = (drivesData[teamName] || []).filter(d => d.gameId === gameId);
+  const teamPlays  = (playsData[teamName]  || []).filter(p => p.gameId === gameId);
+
+  if (!teamDrives.length) return;
+
+  const driveRows = teamDrives.map((d, idx) => {
+    const scoreDot = d.scoring ? '<span style="color:#00c853"> ●</span>' : '';
+    const drivePlays = teamPlays.filter(p => p.driveNumber === d.driveNumber);
+    const playRows = drivePlays.map(pl => {
+      const epaColor = pl.ppa > 0 ? '#8bc34a' : pl.ppa < 0 ? '#f44336' : '#aaa';
+      return `<tr style="background:#0a1a2e;font-size:11px">
+        <td style="padding:4px 8px;color:#aaa">${pl.down ? `${pl.down}&amp;${pl.distance}` : '-'}</td>
+        <td style="padding:4px 8px">${pl.playType || '-'}</td>
+        <td style="padding:4px 8px;color:#ccc;max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${pl.playText || ''}</td>
+        <td style="padding:4px 8px;text-align:right">${pl.yardsGained ?? '-'}</td>
+        <td style="padding:4px 8px;text-align:right;color:${epaColor}">${pl.ppa != null ? pl.ppa.toFixed(2) : '-'}</td>
+      </tr>`;
+    }).join('');
+
+    const playsSection = drivePlays.length ? `
+      <tr id="drive-plays-${idx}" style="display:none"><td colspan="6" style="padding:0 0 4px 16px">
+        <table style="width:100%;border-collapse:collapse">
+          <thead><tr style="font-size:10px;color:#666">
+            <th style="padding:3px 8px;text-align:left">D&amp;D</th>
+            <th style="padding:3px 8px;text-align:left">Type</th>
+            <th style="padding:3px 8px;text-align:left">Play</th>
+            <th style="padding:3px 8px;text-align:right">Yds</th>
+            <th style="padding:3px 8px;text-align:right">EPA</th>
+          </tr></thead>
+          <tbody>${playRows}</tbody>
+        </table>
+      </td></tr>` : '';
+
+    return `<tr class="clickable" onclick="toggleDrivePlays(${idx})" style="border-top:1px solid #0f346044">
+      <td style="padding:6px 8px;color:#aaa;font-size:11px">#${d.driveNumber ?? idx+1}</td>
+      <td style="padding:6px 8px;font-weight:700;color:${d.scoring ? '#00c853' : '#ccc'}">${d.result || '-'}${scoreDot}</td>
+      <td style="padding:6px 8px;color:#aaa">${d.plays ?? '-'} plays</td>
+      <td style="padding:6px 8px;color:#aaa">${d.yards ?? '-'} yds</td>
+      <td style="padding:6px 8px;color:#aaa;font-size:11px">${d.startScore ?? '?'}→${d.endScore ?? '?'}</td>
+      <td style="padding:6px 8px;color:#555;font-size:10px">${drivePlays.length ? '▶' : ''}</td>
+    </tr>${playsSection}`;
+  }).join('');
+
+  const drivesPanel = document.getElementById('game-detail-panel');
+  if (drivesPanel) drivesPanel.innerHTML += `
+    <div style="margin-top:12px;border:1px solid #0f3460;border-radius:8px;padding:16px">
+      <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;margin-bottom:8px">${teamName} Drives</div>
+      <div class="table-scroll-wrap"><table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead><tr style="font-size:10px;color:#666">
+          <th style="padding:3px 8px;text-align:left">Drive</th>
+          <th style="padding:3px 8px;text-align:left">Result</th>
+          <th style="padding:3px 8px;text-align:left">Plays</th>
+          <th style="padding:3px 8px;text-align:left">Yards</th>
+          <th style="padding:3px 8px;text-align:left">Score</th>
+          <th></th>
+        </tr></thead>
+        <tbody>${driveRows}</tbody>
+      </table></div>
+    </div>`;
+}
+
+function toggleDrivePlays(idx) {
+  const row = document.getElementById(`drive-plays-${idx}`);
+  if (row) row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
 }
 
 // ── Top Players Tab ────────────────────────────────────────────────────────

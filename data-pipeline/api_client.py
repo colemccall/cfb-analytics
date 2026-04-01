@@ -126,5 +126,66 @@ def fetch_games(api_key, year):
     return _fetch_safe(api_key, "/games", {"year": year, "seasonType": "regular"})
 
 
-def fetch_game_player_stats(api_key, year):
-    return _fetch_safe(api_key, "/games/players", {"year": year, "seasonType": "regular"})
+def fetch_game_player_stats_for_team(api_key, team, year):
+    """Fetch per-game box score stats for one team. API requires team param."""
+    return _fetch_safe(api_key, "/games/players", {
+        "year": year, "seasonType": "regular", "team": team
+    })
+
+
+def fetch_all_game_player_stats(api_key, team_names, year):
+    """Fetch game player stats for all teams; deduplicates by gameId."""
+    seen_game_ids = set()
+    results = []
+    for i, team in enumerate(team_names):
+        print(f"  Fetching game stats {i+1}/{len(team_names)}: {team}")
+        entries = fetch_game_player_stats_for_team(api_key, team, year)
+        for entry in entries:
+            gid = entry.get("id")
+            if gid not in seen_game_ids:
+                seen_game_ids.add(gid)
+                results.append(entry)
+        time.sleep(0.5)
+    return results
+
+
+def fetch_drives_for_team(api_key, team, year):
+    """Fetch all drives for one team across weeks 1-16."""
+    all_drives = []
+    for week in range(1, 17):
+        drives = _fetch_safe(api_key, "/drives", {
+            "year": year, "week": week, "team": team, "seasonType": "regular"
+        })
+        all_drives.extend(drives)
+    return all_drives
+
+
+def fetch_plays_for_team(api_key, team, year):
+    """Fetch all plays for one team across weeks 1-16."""
+    all_plays = []
+    for week in range(1, 17):
+        plays = _fetch_safe(api_key, "/plays", {
+            "year": year, "week": week, "team": team, "seasonType": "regular"
+        })
+        all_plays.extend(plays)
+    return all_plays
+
+
+def fetch_all_drives(api_key, team_names, year):
+    """Fetch drives for all teams; returns dict keyed by team name."""
+    all_drives = {}
+    for i, team in enumerate(team_names):
+        print(f"  Fetching drives {i+1}/{len(team_names)}: {team}")
+        all_drives[team] = fetch_drives_for_team(api_key, team, year)
+        time.sleep(0.5)
+    return all_drives
+
+
+def fetch_all_plays(api_key, team_names, year):
+    """Fetch plays for all teams; returns dict keyed by team name."""
+    all_plays = {}
+    for i, team in enumerate(team_names):
+        print(f"  Fetching plays {i+1}/{len(team_names)}: {team}")
+        all_plays[team] = fetch_plays_for_team(api_key, team, year)
+        time.sleep(0.5)
+    return all_plays

@@ -8,7 +8,8 @@ import sys
 from api_client import (
     load_api_key, fetch_teams, fetch_all_rosters, fetch_player_stats,
     fetch_ppa, fetch_team_stats, fetch_sp_ratings, fetch_talent, fetch_recruiting,
-    fetch_player_usage, fetch_awards, fetch_games, fetch_game_player_stats,
+    fetch_player_usage, fetch_awards, fetch_games,
+    fetch_all_game_player_stats, fetch_all_drives, fetch_all_plays,
 )
 from rating_engine import get_position_group, compute_raw_ratings, normalize_all_ratings, compute_overall, SKILL_ATTRS
 
@@ -555,152 +556,6 @@ def normalize_team_ratings(teams_private):
 
 
 def build_team_schedule(games_raw, sp_detail):
-    """Build team_schedule.json: list of game results with SP+ context."""
-    schedule = []
-    for g in (games_raw or []):
-        home = (g.get("homeTeam") or g.get("home_team") or "").strip()
-        away = (g.get("awayTeam") or g.get("away_team") or "").strip()
-        home_pts = g.get("homePoints") or g.get("home_points")
-        away_pts = g.get("awayPoints") or g.get("away_points")
-        home_sp = sp_detail.get(home.lower(), {}).get("overall")
-        away_sp = sp_detail.get(away.lower(), {}).get("overall")
-        schedule.append({
-            "gameId":      g.get("id"),
-            "week":        g.get("week"),
-            "date":        (g.get("startDate") or g.get("start_date") or "")[:10],
-            "homeTeam":    home,
-            "awayTeam":    away,
-            "homeScore":   home_pts,
-            "awayScore":   away_pts,
-            "neutralSite": bool(g.get("neutralSite") or g.get("neutral_site")),
-            "homeSpRank":  home_sp,
-            "awaySpRank":  away_sp,
-        })
-    return schedule
-
-
-# Stat key normalizations for game player stats API response
-_GAME_STAT_MAP = {
-    # Passing
-    "YDS": "passYds", "TD": "passTDs", "INT": "ints",
-    "COMPLETIONS": "comp", "ATT": "att", "PCT": "compPct", "YPA": "ypa",
-    # Rushing (prefixed by category in actual response)
-    "CAR": "carries", "AVG": "ypc",
-    # Receiving
-    "REC": "receptions", "YPR": "ypr",
-    # Defensive
-    "TOT": "tackles", "SACKS": "sacks", "TFL": "tfl", "PD": "pds", "QB HUR": "qbh",
-    # Kicking/Punting
-    "FGM": "fgm", "FGA": "fga", "LONG": "long", "XPM": "xpm",
-    "NO": "punts", "AVG": "puntAvg",
-}
-
-
-def build_player_gamelogs(game_stats_raw, games_raw):
-    """Build player_gamelog.json: {playerId: [{week, gameId, opponent, homeGame, result, stats}]}."""
-    # Build game lookup: gameId → {week, homeTeam, awayTeam, homeScore, awayScore}
-    game_lookup = {}
-    for g in (games_raw or []):
-        gid = g.get("id")
-        if gid:
-            game_lookup[gid] = {
-                "week": g.get("week"),
-                "homeTeam": (g.get("homeTeam") or g.get("home_team") or "").strip(),
-                "awayTeam": (g.get("awayTeam") or g.get("away_team") or "").strip(),
-                "homeScore": g.get("homePoints") or g.get("home_points"),
-                "awayScore": g.get("awayPoints") or g.get("away_points"),
-            }
-
-    gamelogs = {}  # playerId → list of game entries
-
-    for game_entry in (game_stats_raw or []):
-        gid = game_entry.get("id")
-        game_info = game_lookup.get(gid, {})
-        week = game_info.get("week") or game_entry.get("week")
-        home_team = game_info.get("homeTeam", "")
-        away_team = game_info.get("awayTeam", "")
-        home_score = game_info.get("homeScore")
-        away_score = game_info.get("awayScore")
-
-        # game_stats_raw items have teams[] → players[]
-        for team_data in (game_entry.get("teams") or []):
-            team_name = (team_data.get("school") or team_data.get("team") or "").strip()
-            is_home = team_name.lower() == home_team.lower()
-            opponent = away_team if is_home else home_team
-            opp_score = away_score if is_home else home_score
-            my_score = home_score if is_home else away_score
-
-            if my_score is not None and opp_score is not None:
-                result = "W" if my_score > opp_score else ("L" if my_score < opp_score else "T")
-                result_str = f"{result} {my_score}-{opp_score}"
-            else:
-                result_str = None
-
-            for category_data in (team_data.get("categories") or []):
-                cat = category_data.get("name", "").upper()  # PASSING, RUSHING, RECEIVING, etc.
-                for player_data in (category_data.get("athletes") or []):
-                    pid = player_data.get("id")
-                    if not pid:
-                        continue
-                    pid = int(pid)
-
-                    # Build stats dict for this category
-                    stats = {}
-                    for stat_entry in (player_data.get("stats") or []):
-                        raw_name = stat_entry.get("name") or stat_entry.get("category", "")
-                        raw_val = stat_entry.get("stat")
-                        # Map to normalized key, prefixing by category to avoid collision
-                        if cat == "PASSING":
-                            key_map = {"YDS": "passYds", "TD": "passTDs", "INT": "ints",
-                                       "COMPLETIONS": "comp", "ATT": "att", "PCT": "compPct", "YPA": "ypa"}
-                        elif cat == "RUSHING":
-                            key_map = {"YDS": "rushYds", "TD": "rushTDs", "CAR": "carries", "AVG": "ypc"}
-                        elif cat == "RECEIVING":
-                            key_map = {"YDS": "recYds", "TD": "recTDs", "REC": "receptions", "AVG": "ypr", "YPR": "ypr"}
-                        elif cat == "DEFENSIVE":
-                            key_map = {"TOT": "tackles", "SACKS": "sacks", "TFL": "tfl", "PD": "pds", "QB HUR": "qbh", "INT": "dints"}
-                        elif cat == "KICKING":
-                            key_map = {"FGM": "fgm", "FGA": "fga", "LONG": "longFG", "XPM": "xpm"}
-                        elif cat == "PUNTING":
-                            key_map = {"NO": "punts", "YDS": "puntYds", "AVG": "puntAvg", "LONG": "longPunt", "IN 20": "in20"}
-                        else:
-                            key_map = {}
-
-                        norm_key = key_map.get(raw_name.upper())
-                        if norm_key and raw_val is not None:
-                            try:
-                                stats[norm_key] = round(float(raw_val), 1) if '.' in str(raw_val) else int(raw_val)
-                            except (ValueError, TypeError):
-                                stats[norm_key] = raw_val
-
-                    if not stats:
-                        continue
-
-                    entry = {
-                        "gameId": gid,
-                        "week": week,
-                        "opponent": opponent,
-                        "homeGame": is_home,
-                        "result": result_str,
-                        "stats": stats,
-                    }
-                    if pid not in gamelogs:
-                        gamelogs[pid] = []
-                    # Merge stats from multiple categories for the same game
-                    existing = next((e for e in gamelogs[pid] if e["gameId"] == gid), None)
-                    if existing:
-                        existing["stats"].update(stats)
-                    else:
-                        gamelogs[pid].append(entry)
-
-    # Sort each player's games by week
-    for pid in gamelogs:
-        gamelogs[pid].sort(key=lambda e: (e.get("week") or 0))
-
-    return gamelogs
-
-
-def build_team_schedule(games_raw, sp_detail):
     """Build team_schedule.json list of game results with SP+ context."""
     schedule = []
     for g in (games_raw or []):
@@ -764,6 +619,8 @@ def build_player_gamelogs(game_stats_raw, games_raw):
             else:
                 result_str = None
 
+            # API shape: categories[] → types[] → athletes[]
+            # Each type has a stat name (e.g. "YDS") and a list of athletes with one stat value each.
             for category_data in (team_data.get("categories") or []):
                 cat = category_data.get("name", "").upper()
                 if cat == "PASSING":
@@ -784,49 +641,126 @@ def build_player_gamelogs(game_stats_raw, games_raw):
                 else:
                     key_map = {}
 
-                for player_data in (category_data.get("athletes") or []):
-                    pid = player_data.get("id")
-                    if not pid:
-                        continue
-                    try:
-                        pid = int(pid)
-                    except (ValueError, TypeError):
+                for type_data in (category_data.get("types") or []):
+                    stat_name = (type_data.get("name") or "").upper()
+                    norm_key = key_map.get(stat_name)
+                    if not norm_key:
                         continue
 
-                    stats = {}
-                    for stat_entry in (player_data.get("stats") or []):
-                        raw_name = (stat_entry.get("name") or stat_entry.get("category") or "").upper()
-                        raw_val = stat_entry.get("stat")
-                        norm_key = key_map.get(raw_name)
-                        if norm_key and raw_val is not None:
-                            try:
-                                stats[norm_key] = round(float(raw_val), 1) if "." in str(raw_val) else int(raw_val)
-                            except (ValueError, TypeError):
-                                pass
+                    for athlete in (type_data.get("athletes") or []):
+                        pid_raw = athlete.get("id")
+                        if not pid_raw:
+                            continue
+                        try:
+                            pid = int(pid_raw)
+                        except (ValueError, TypeError):
+                            continue
 
-                    if not stats:
-                        continue
+                        raw_val = athlete.get("stat")
+                        if raw_val is None:
+                            continue
+                        try:
+                            stat_val = round(float(raw_val), 1) if "." in str(raw_val) else int(raw_val)
+                        except (ValueError, TypeError):
+                            continue
 
-                    if pid not in gamelogs:
-                        gamelogs[pid] = []
-                    # Merge stats from multiple categories for the same game
-                    existing = next((e for e in gamelogs[pid] if e["gameId"] == gid), None)
-                    if existing:
-                        existing["stats"].update(stats)
-                    else:
-                        gamelogs[pid].append({
-                            "gameId":   gid,
-                            "week":     week,
-                            "opponent": opponent,
-                            "homeGame": is_home,
-                            "result":   result_str,
-                            "stats":    stats,
-                        })
+                        if pid not in gamelogs:
+                            gamelogs[pid] = []
+                        existing = next((e for e in gamelogs[pid] if e["gameId"] == gid), None)
+                        if existing:
+                            existing["stats"][norm_key] = stat_val
+                        else:
+                            gamelogs[pid].append({
+                                "gameId":   gid,
+                                "week":     week,
+                                "opponent": opponent,
+                                "homeGame": is_home,
+                                "result":   result_str,
+                                "stats":    {norm_key: stat_val},
+                            })
 
     for pid in gamelogs:
         gamelogs[pid].sort(key=lambda e: (e.get("week") or 0))
 
     return gamelogs
+
+
+def _build_game_lookup(games_raw):
+    lookup = {}
+    for g in (games_raw or []):
+        gid = g.get("id")
+        if gid:
+            lookup[gid] = {
+                "week":      g.get("week"),
+                "homeTeam":  (g.get("homeTeam") or g.get("home_team") or "").strip(),
+                "awayTeam":  (g.get("awayTeam") or g.get("away_team") or "").strip(),
+            }
+    return lookup
+
+
+def build_team_drives(drives_by_team, games_raw):
+    """Build team_drives.json: {teamName: [drive_objects]}."""
+    game_lookup = _build_game_lookup(games_raw)
+    result = {}
+    for team_name, drives in drives_by_team.items():
+        team_drives = []
+        for d in drives:
+            gid = d.get("gameId")
+            g = game_lookup.get(gid, {})
+            is_home = team_name.lower() == g.get("homeTeam", "").lower()
+            opponent = g.get("awayTeam" if is_home else "homeTeam", "")
+            team_drives.append({
+                "gameId":        gid,
+                "week":          g.get("week"),
+                "opponent":      opponent,
+                "driveNumber":   d.get("driveNumber"),
+                "result":        d.get("driveResult"),
+                "plays":         d.get("plays"),
+                "yards":         d.get("yards"),
+                "startYardline": d.get("startYardline"),
+                "endYardline":   d.get("endYardline"),
+                "startScore":    d.get("startOffenseScore"),
+                "endScore":      d.get("endOffenseScore"),
+                "scoring":       bool(d.get("scoring")),
+            })
+        team_drives.sort(key=lambda x: (x.get("week") or 0, x.get("driveNumber") or 0))
+        result[team_name] = team_drives
+    return result
+
+
+def build_team_plays(plays_by_team, games_raw):
+    """Build team_plays.json: {teamName: [play_objects]}."""
+    game_lookup = _build_game_lookup(games_raw)
+    result = {}
+    for team_name, plays in plays_by_team.items():
+        team_plays = []
+        for pl in plays:
+            gid = pl.get("gameId")
+            g = game_lookup.get(gid, {})
+            clock = pl.get("clock")
+            clock_min = clock.get("minutes") if isinstance(clock, dict) else clock
+            team_plays.append({
+                "gameId":      gid,
+                "week":        g.get("week"),
+                "driveId":     pl.get("driveId"),
+                "driveNumber": pl.get("driveNumber"),
+                "playNumber":  pl.get("playNumber"),
+                "period":      pl.get("period"),
+                "clock":       clock_min,
+                "down":        pl.get("down"),
+                "distance":    pl.get("distance"),
+                "yardsToGoal": pl.get("yardsToGoal"),
+                "yardsGained": pl.get("yardsGained"),
+                "playType":    pl.get("playType"),
+                "playText":    pl.get("playText"),
+                "ppa":         pl.get("ppa"),
+                "scoring":     bool(pl.get("scoring")),
+                "offense":     pl.get("offense"),
+                "defense":     pl.get("defense"),
+            })
+        team_plays.sort(key=lambda x: (x.get("week") or 0, x.get("driveNumber") or 0, x.get("playNumber") or 0))
+        result[team_name] = team_plays
+    return result
 
 
 def build_public_versions(players_private, teams_private, team_name_map):
@@ -916,8 +850,18 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
     games_raw = fetch_games(api_key, year)
     print(f"  {len(games_raw)} games fetched")
     _time2.sleep(1)
-    game_stats_raw = fetch_game_player_stats(api_key, year)
-    print(f"  {len(game_stats_raw)} game-stat entries fetched")
+    game_stats_raw = fetch_all_game_player_stats(api_key, team_names, year)
+    print(f"  {len(game_stats_raw)} unique games with player stats fetched")
+
+    print(f"\n[6c] Fetching drives and plays per team (weeks 1-16)...")
+    _time2.sleep(1)
+    drives_by_team = fetch_all_drives(api_key, team_names, year)
+    total_drives = sum(len(v) for v in drives_by_team.values())
+    print(f"  {total_drives} total drives fetched")
+    _time2.sleep(1)
+    plays_by_team = fetch_all_plays(api_key, team_names, year)
+    total_plays = sum(len(v) for v in plays_by_team.values())
+    print(f"  {total_plays} total plays fetched")
 
     print(f"\n[7/7] Processing ratings...")
     teams_private = []
@@ -1148,10 +1092,13 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
             trajectory_count += 1
         print(f"  Trajectory ratings computed for {trajectory_count} returning players")
 
-    print("Building game logs and schedule...")
+    print("Building game logs, schedule, drives, and plays...")
     team_schedule = build_team_schedule(games_raw, sp_detail)
     player_gamelogs = build_player_gamelogs(game_stats_raw, games_raw)
-    print(f"  {len(team_schedule)} games in schedule, {len(player_gamelogs)} players with game logs")
+    team_drives = build_team_drives(drives_by_team, games_raw)
+    team_plays = build_team_plays(plays_by_team, games_raw)
+    print(f"  {len(team_schedule)} games, {len(player_gamelogs)} players with gamelogs")
+    print(f"  {sum(len(v) for v in team_drives.values())} drives, {sum(len(v) for v in team_plays.values())} plays")
 
     return {
         "teams_private": teams_private,
@@ -1161,6 +1108,8 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
         "ratings": ratings,
         "team_schedule": team_schedule,
         "player_gamelogs": player_gamelogs,
+        "team_drives": team_drives,
+        "team_plays": team_plays,
     }
 
 
@@ -1181,12 +1130,18 @@ def write_year(year, data, output_dir):
             json.dump(data[key], f, indent=2)
         print(f"  {year}/{filename}: {len(data[key])} entries")
 
-    # player_gamelogs is a dict (playerId → list), write separately
-    gamelogs = data.get("player_gamelogs", {})
-    path = os.path.join(year_dir, "player_gamelog.json")
-    with open(path, "w") as f:
-        json.dump(gamelogs, f, indent=2)
-    print(f"  {year}/player_gamelog.json: {len(gamelogs)} players")
+    # Dict-valued files (written separately since they don't have a simple len)
+    for filename, key in [
+        ("player_gamelog.json", "player_gamelogs"),
+        ("team_drives.json",    "team_drives"),
+        ("team_plays.json",     "team_plays"),
+    ]:
+        payload = data.get(key, {})
+        path = os.path.join(year_dir, filename)
+        with open(path, "w") as f:
+            json.dump(payload, f, indent=2)
+        total = sum(len(v) for v in payload.values()) if payload else 0
+        print(f"  {year}/{filename}: {len(payload)} keys, {total} entries")
 
 
 def _team_dict(team, extra=None):
@@ -1348,6 +1303,8 @@ def build_projected_year(api_key, proj_year, base_year, output_dir, team_name_ma
         "ratings": ratings,
         "team_schedule": [],
         "player_gamelogs": {},
+        "team_drives": {},
+        "team_plays": {},
     }, output_dir)
 
 
