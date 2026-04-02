@@ -1052,12 +1052,12 @@ async function loadDrives(year) {
 }
 
 async function loadPlaysForWeek(year, week) {
-  const key = `${year}_wk${week}`;
-  if (_playsCache[key]) return _playsCache[key];
+  // Plays are stored in a single team_plays.json keyed by team name.
+  // Cache the full file per year; the caller filters by week/gameId.
+  if (_playsCache[year]) return _playsCache[year];
   try {
-    const wk = String(week || 0).padStart(2, '0');
-    const data = await _fetchJson(`app/assets/data/${year}/team_plays_wk${wk}.json`);
-    _playsCache[key] = data;
+    const data = await _fetchJson(`app/assets/data/${year}/team_plays.json`);
+    _playsCache[year] = data;
     return data;
   } catch { return {}; }
 }
