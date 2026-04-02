@@ -802,11 +802,11 @@ function renderRoster(t) {
   const olPlayers = ps.filter(p => p.positionGroup === 'OL')
     .sort((a, b) => a.position.localeCompare(b.position) || `${a.lastName}${a.firstName}`.localeCompare(`${b.lastName}${b.firstName}`));
 
-  // For 2026, split into returning vs departing (likely_leaving = graduating seniors)
+  // For 2026, split into returning vs departing
   if (currentYear === 2026) {
     const nonOl = ps.filter(p => p.positionGroup !== 'OL');
-    const returning = nonOl.filter(p => p.status !== 'likely_leaving');
-    const departing = nonOl.filter(p => p.status === 'likely_leaving');
+    const returning = nonOl.filter(p => p.status !== 'likely_leaving' && p.status !== 'transferred_out');
+    const departing = nonOl.filter(p => p.status === 'likely_leaving' || p.status === 'transferred_out');
 
     const applyPos = arr => posFilter === 'ALL' ? arr : arr.filter(p => p.positionGroup === posFilter);
     const sortArr = arr => [...arr].sort((a, b) => {
@@ -823,11 +823,11 @@ function renderRoster(t) {
       const isDraftEligible = p.status !== 'transfer_in' && p.status !== 'recruit'
         && p.positionGroup !== 'OL' && p.year >= 3 && ovr >= 85;
       const draftPill = isDraftEligible ? '<span class="status-pill draft">Draft</span>' : '';
-      const statusPill = p.status === 'transfer_in' ? '<span class="status-pill in">Transfer</span>'
-        : p.status === 'recruit' ? '<span class="status-pill recruit">Recruit</span>' : '';
-      const yr = p.status === 'recruit' ? 'Fr'
-        : p.yearPrev != null ? `${yrLabel(p.yearPrev)}→${yrLabel(p.year)}`
-        : yrLabel(p.year);
+      const statusPill = p.status === 'transfer_in' ? '<span class="status-pill in">Transfer In</span>'
+        : p.status === 'recruit' ? '<span class="status-pill recruit">Recruit</span>'
+        : p.status === 'transferred_out' ? '<span class="status-pill out">Transfer Out</span>'
+        : p.status === 'likely_leaving' ? '<span class="status-pill leaving">Graduating</span>' : '';
+      const yr = yrLabel(p.year) || yrLabel(p.yearPrev) || '—';
       return `<tr class="clickable" onclick="showPlayerModal('${p.id}')">
         <td><span class="pos-badge">${p.position || '?'}</span></td>
         <td>${p.firstName} ${p.lastName}${tierBadge(ovr)}${statusPill}${draftPill}</td>
@@ -848,9 +848,9 @@ function renderRoster(t) {
 
     const olBlock = olPlayers.length ? `
       <div class="ol-section">
-        <div class="ol-section-header">Offensive Line (${olPlayers.filter(p => p.status !== 'likely_leaving').length} returning)</div>
+        <div class="ol-section-header">Offensive Line (${olPlayers.filter(p => p.status !== 'likely_leaving' && p.status !== 'transferred_out').length} returning)</div>
         <div class="ol-names-grid">
-          ${olPlayers.filter(p => p.status !== 'likely_leaving').map(p =>
+          ${olPlayers.filter(p => p.status !== 'likely_leaving' && p.status !== 'transferred_out').map(p =>
             `<div class="ol-name-chip" onclick="showPlayerModal('${p.id}')">${p.firstName} ${p.lastName} <span style="color:var(--text-dim);font-size:11px">${p.position}</span></div>`
           ).join('')}
         </div>

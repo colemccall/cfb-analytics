@@ -1403,7 +1403,8 @@ def build_projected_year(api_key, proj_year, base_year, output_dir, team_name_ma
             in_portal_out = (fn, ln, school_norm) in portal_out
 
             if in_portal_out:
-                # Player transferred out — remove from this roster entirely
+                # Player transferred out — keep on roster in leaving column (status = transferred_out)
+                _add_player(pid, team_id, school, player, "transferred_out", prev_year=None)
                 continue
             else:
                 # Advance year by 1
