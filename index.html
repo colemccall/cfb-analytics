@@ -215,7 +215,19 @@
   .yoy-table tr.current-year td { background: var(--accent-dim); }
 
   /* ── Team radar chart ── */
-  .team-radar-wrap { width: 160px; height: 140px; flex-shrink: 0; }
+  .team-rating-bars { display: flex; flex-direction: column; gap: 5px; min-width: 180px; }
+  .team-rating-bar-row { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+  .team-rating-bar-label { width: 58px; color: var(--text-muted); font-size: 11px; text-align: right; flex-shrink: 0; }
+  .team-rating-bar-track { flex: 1; height: 8px; background: var(--surface-deep); border-radius: 4px; overflow: hidden; min-width: 80px; }
+  .team-rating-bar-fill { height: 100%; border-radius: 4px; }
+  .team-rating-bar-val { width: 26px; font-weight: 700; font-size: 12px; text-align: right; flex-shrink: 0; }
+  .btn-switch-team { padding: 6px 14px; background: var(--input-bg); border: 1px solid var(--border-mid); color: var(--text-muted); font-size: 12px; font-weight: 600; border-radius: 4px; cursor: pointer; white-space: nowrap; }
+  .btn-switch-team:hover { color: var(--accent); border-color: var(--accent); }
+  .team-switch-panel { position: absolute; top: 100%; right: 0; z-index: 50; background: var(--surface); border: 1px solid var(--border-mid); border-radius: 6px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); padding: 8px; min-width: 220px; max-height: 320px; overflow-y: auto; }
+  .team-switch-panel input { width: 100%; box-sizing: border-box; padding: 6px 10px; background: var(--input-bg); border: 1px solid var(--border-mid); color: var(--text); border-radius: 4px; font-size: 13px; margin-bottom: 6px; outline: none; }
+  .team-switch-item { padding: 6px 10px; cursor: pointer; border-radius: 4px; font-size: 13px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .team-switch-item:hover { background: var(--surface-deep); color: var(--accent); }
+  .team-hero-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; position: relative; flex-shrink: 0; }
 
   /* ── Similarity ── */
   .sim-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
@@ -268,7 +280,8 @@
     .team-hero-logo { width: 44px; height: 44px; }
     .team-hero-name { font-size: 18px; }
     .team-hero-actions { width: 100%; }
-    .team-radar-wrap { display: none; }
+    .team-rating-bars { min-width: 140px; }
+    .team-switch-panel { right: auto; left: 0; }
     .rating-cards { display: grid; grid-template-columns: repeat(3, 1fr); }
     .rating-card .value { font-size: 18px; }
     .compare-grid { grid-template-columns: 1fr; }
@@ -723,70 +736,85 @@ function renderActiveTab() {
 }
 
 // ── Team header HTML (shared by Roster + Depth) ───────────────────────────
+function teamRatingBarsHTML(r) {
+  const bars = [
+    ['Pass Off', r.passOff || 0],
+    ['Run Off',  r.runOff  || 0],
+    ['Pass Def', r.passDef || 0],
+    ['Run Def',  r.runDef  || 0],
+    ['Spec',     r.specialTeams || 0],
+  ];
+  return `<div class="team-rating-bars">
+    ${bars.map(([label, val]) => {
+      const pct = val ? Math.round(((val - 55) / 44) * 100) : 0;
+      return `<div class="team-rating-bar-row">
+        <span class="team-rating-bar-label">${label}</span>
+        <div class="team-rating-bar-track"><div class="team-rating-bar-fill" style="width:${pct}%;background:${ratingColor(val)}"></div></div>
+        <span class="team-rating-bar-val" style="color:${ratingColor(val)}">${val || '—'}</span>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
 function teamHeaderHTML(t) {
   const r = t.ratings || {};
   const accentStyle = t.primaryColor ? `border-color:${t.primaryColor}` : '';
-  const radarKeys = ['passOff','runOff','passDef','runDef','specialTeams'];
-  const radarLabels = {passOff:'Pass Off',runOff:'Run Off',passDef:'Pass Def',runDef:'Run Def',specialTeams:'Spec'};
-  const radarData = JSON.stringify(radarKeys.map(k => ({ k, v: r[k] || 0 })));
   return `
     <div class="team-hero" ${accentStyle ? `style="${accentStyle}"` : ''}>
       ${t.logoUrl ? `<img class="team-hero-logo" src="${t.logoUrl}" onerror="this.style.display='none'">` : ''}
       <div class="team-hero-info">
         <div class="team-hero-name">${t.name}${t.mascot ? ' ' + t.mascot : ''}</div>
         <div class="team-hero-meta">${[t.conference, t.stadiumName, t.city && t.state ? `${t.city}, ${t.state}` : ''].filter(Boolean).join(' · ')}</div>
-        <div style="display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:6px;margin-top:6px">
           <span style="font-size:28px;font-weight:900;color:${ratingColor(r.overall||0)}">${r.overall || '—'}</span>
-          <span style="font-size:12px;color:var(--text-muted);font-weight:600">Overall</span>
-          ${radarKeys.map(k => `<span style="font-size:12px;color:var(--text-muted)">${radarLabels[k]}: <span style="color:${ratingColor(r[k]||0)};font-weight:700">${r[k]||'—'}</span></span>`).join('')}
+          <span style="font-size:12px;color:var(--text-muted);font-weight:600">OVR</span>
         </div>
       </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
-        <button class="btn-compare" onclick="startCompare(${t.id})">⚖ Compare</button>
-        <div class="team-radar-wrap"><canvas id="team-radar" width="160" height="140"></canvas></div>
-        <div id="team-radar-data" style="display:none">${radarData.replace(/</g,'&lt;')}</div>
+      <div class="team-hero-right">
+        <div style="display:flex;gap:6px">
+          <button class="btn-compare" onclick="startCompare(${t.id})">⚖ Compare</button>
+          <button class="btn-switch-team" onclick="toggleTeamSwitcher(event)">Switch Team ▾</button>
+        </div>
+        ${teamRatingBarsHTML(r)}
+        <div id="team-switcher-panel" class="team-switch-panel" style="display:none">
+          <input type="text" placeholder="Search teams..." id="team-switcher-search" oninput="renderTeamSwitcherList(this.value)" onclick="event.stopPropagation()">
+          <div id="team-switcher-list"></div>
+        </div>
       </div>
     </div>`;
 }
 
-function initTeamRadar() {
-  const canvas = document.getElementById('team-radar');
-  if (!canvas || typeof Chart === 'undefined') return;
-  const dataEl = document.getElementById('team-radar-data');
-  if (!dataEl) return;
-  const data = JSON.parse(dataEl.textContent);
-  if (window._teamRadarChart) { window._teamRadarChart.destroy(); window._teamRadarChart = null; }
-  const style = getComputedStyle(document.documentElement);
-  const accent = style.getPropertyValue('--accent').trim() || '#4f9cf9';
-  const textMuted = style.getPropertyValue('--text-muted').trim() || '#aaa';
-  const surfaceDeep = style.getPropertyValue('--surface-deep').trim() || '#0f1b2e';
-  window._teamRadarChart = new Chart(canvas, {
-    type: 'radar',
-    data: {
-      labels: data.map(d => d.k === 'passOff' ? 'Pass Off' : d.k === 'runOff' ? 'Run Off' : d.k === 'passDef' ? 'Pass Def' : d.k === 'runDef' ? 'Run Def' : 'Spec'),
-      datasets: [{
-        data: data.map(d => d.v),
-        backgroundColor: accent + '28',
-        borderColor: accent,
-        borderWidth: 2,
-        pointBackgroundColor: accent,
-        pointRadius: 3,
-      }]
-    },
-    options: {
-      responsive: false,
-      scales: {
-        r: {
-          min: 55, max: 99,
-          ticks: { display: false },
-          grid: { color: surfaceDeep },
-          angleLines: { color: surfaceDeep },
-          pointLabels: { color: textMuted, font: { family: "'Barlow Condensed', sans-serif", size: 10, weight: '600' } }
-        }
-      },
-      plugins: { legend: { display: false } }
-    }
-  });
+function initTeamRadar() { /* no-op: replaced by bar charts */ }
+
+function toggleTeamSwitcher(e) {
+  e.stopPropagation();
+  const panel = document.getElementById('team-switcher-panel');
+  if (!panel) return;
+  const open = panel.style.display !== 'none';
+  panel.style.display = open ? 'none' : 'block';
+  if (!open) {
+    renderTeamSwitcherList('');
+    setTimeout(() => { const inp = document.getElementById('team-switcher-search'); if (inp) inp.focus(); }, 50);
+    document.addEventListener('click', closeteamSwitcher, { once: true });
+  }
+}
+
+function closeteamSwitcher() {
+  const panel = document.getElementById('team-switcher-panel');
+  if (panel) panel.style.display = 'none';
+}
+
+function renderTeamSwitcherList(query) {
+  const list = document.getElementById('team-switcher-list');
+  if (!list) return;
+  const q = (query || '').toLowerCase();
+  const teams = getTeams()
+    .filter(t => !q || t.name.toLowerCase().includes(q))
+    .sort((a, b) => (b.ratings?.overall || 0) - (a.ratings?.overall || 0))
+    .slice(0, 30);
+  list.innerHTML = teams.map(t =>
+    `<div class="team-switch-item" onclick="selectTeam(${t.id});closeteamSwitcher()">${t.name}</div>`
+  ).join('');
 }
 
 // ── Roster Tab ─────────────────────────────────────────────────────────────
@@ -817,33 +845,29 @@ function renderRoster(t) {
     const retFiltered = sortArr(applyPos(returning));
     const depFiltered = sortArr(applyPos(departing));
 
-    const makeRosterRow = (p, showOvr = true) => {
+    const makeRosterRow = (p, isLeaving = false) => {
       const r = rMap[p.id] || {};
       const ovr = r.overall || 0;
-      const isDraftEligible = p.status !== 'transfer_in' && p.status !== 'recruit'
-        && p.positionGroup !== 'OL' && p.year >= 3 && ovr >= 85;
-      const draftPill = isDraftEligible ? '<span class="status-pill draft">Draft</span>' : '';
-      const statusPill = p.status === 'transfer_in' ? '<span class="status-pill in">Transfer In</span>'
-        : p.status === 'recruit' ? '<span class="status-pill recruit">Recruit</span>'
-        : p.status === 'transferred_out' ? '<span class="status-pill out">Transfer Out</span>'
-        : p.status === 'likely_leaving' ? '<span class="status-pill leaving">Graduating</span>' : '';
       const yr = yrLabel(p.year) || yrLabel(p.yearPrev) || '—';
+      const leavingPill = isLeaving
+        ? (p.status === 'transferred_out' ? '<span class="status-pill out">Transfer</span>' : '<span class="status-pill leaving">Grad</span>')
+        : (p.status === 'transfer_in' ? '<span class="status-pill in">New</span>' : p.status === 'recruit' ? '<span class="status-pill recruit">Recruit</span>' : '');
       return `<tr class="clickable" onclick="showPlayerModal('${p.id}')">
         <td><span class="pos-badge">${p.position || '?'}</span></td>
-        <td>${p.firstName} ${p.lastName}${tierBadge(ovr)}${statusPill}${draftPill}</td>
+        <td>${p.firstName} ${p.lastName}${tierBadge(ovr)}${leavingPill}</td>
         <td>${yr}</td>
-        ${showOvr ? `<td><span class="ovr" style="background:${ratingColor(ovr)};color:#000">${ovr || '-'}</span></td>` : '<td></td>'}
+        <td><span class="ovr" style="background:${ratingColor(ovr)};color:#000">${ovr || '-'}</span></td>
       </tr>`;
     };
 
     const retTable = retFiltered.length ? `<div class="table-scroll-wrap"><table>
       <tr><th>Pos</th><th>Name</th><th>Yr</th><th>OVR</th></tr>
-      ${retFiltered.map(p => makeRosterRow(p, true)).join('')}
+      ${retFiltered.map(p => makeRosterRow(p, false)).join('')}
     </table></div>` : '<div style="color:var(--text-dim);padding:12px;font-size:13px">No players</div>';
 
     const depTable = depFiltered.length ? `<div class="table-scroll-wrap"><table>
-      <tr><th>Pos</th><th>Name</th><th>Yr</th><th></th></tr>
-      ${depFiltered.map(p => makeRosterRow(p, false)).join('')}
+      <tr><th>Pos</th><th>Name</th><th>Yr</th><th>OVR</th></tr>
+      ${depFiltered.map(p => makeRosterRow(p, true)).join('')}
     </table></div>` : '<div style="color:var(--text-dim);padding:12px;font-size:13px">No players</div>';
 
     const olBlock = olPlayers.length ? `
@@ -1133,78 +1157,151 @@ async function showGameDetail(gameId, teamName) {
     }).join('') || '<div style="color:#555;font-size:12px;padding:8px">No game log data</div>';
   }
 
+  // Box score: aggregate team stats from player gamelogs
+  function teamBoxScore(squadName) {
+    const squad = players.filter(p => {
+      const t = getTeams().find(t => t.id === p.teamId);
+      return t && t.name === squadName;
+    });
+    const totals = {};
+    for (const p of squad) {
+      const lg = gamelog[p.id] || gamelog[String(p.id)];
+      if (!lg) continue;
+      const entry = lg.find(e => e.gameId === gameId);
+      if (!entry?.stats) continue;
+      for (const [k, v] of Object.entries(entry.stats)) {
+        if (typeof v === 'number') totals[k] = (totals[k] || 0) + v;
+      }
+    }
+    return totals;
+  }
+
+  const awayBox = teamBoxScore(game.awayTeam);
+  const homeBox = teamBoxScore(game.homeTeam);
+
+  const BOX_ROWS = [
+    ['passYds',  'Pass Yards'],
+    ['passTDs',  'Pass TDs'],
+    ['ints',     'Interceptions'],
+    ['rushYds',  'Rush Yards'],
+    ['rushTDs',  'Rush TDs'],
+    ['recYds',   'Rec Yards'],
+    ['tackles',  'Tackles'],
+    ['sacks',    'Sacks'],
+    ['tfl',      'TFL'],
+  ];
+
+  const usedBoxRows = BOX_ROWS.filter(([k]) => awayBox[k] != null || homeBox[k] != null);
+  const boxScoreHTML = usedBoxRows.length ? `
+    <div style="margin-top:12px">
+      <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px">Box Score</div>
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead><tr>
+          <th style="text-align:right;padding:4px 8px;color:var(--text-muted);font-size:11px">${game.awayTeam}</th>
+          <th style="text-align:center;padding:4px 8px;color:var(--text-muted);font-size:11px;width:120px"></th>
+          <th style="text-align:left;padding:4px 8px;color:var(--text-muted);font-size:11px">${game.homeTeam}</th>
+        </tr></thead>
+        <tbody>${usedBoxRows.map(([k, label]) => {
+          const av = awayBox[k] ?? 0, hv = homeBox[k] ?? 0;
+          const awayBetter = av > hv, homeBetter = hv > av;
+          return `<tr style="border-bottom:1px solid var(--border)">
+            <td style="text-align:right;padding:5px 8px;font-weight:700;color:${awayBetter ? ratingColor(75) : 'var(--text)'}">${av}</td>
+            <td style="text-align:center;padding:5px 8px;color:var(--text-muted);font-size:12px">${label}</td>
+            <td style="text-align:left;padding:5px 8px;font-weight:700;color:${homeBetter ? ratingColor(75) : 'var(--text)'}">${hv}</td>
+          </tr>`;
+        }).join('')}</tbody>
+      </table>
+    </div>` : '';
+
   const homePerf = topPerformers(game.homeTeam);
   const awayPerf = topPerformers(game.awayTeam);
   const panel = document.getElementById('game-detail-panel');
   if (!panel) return;
+
+  const awayWin = (game.awayScore ?? 0) > (game.homeScore ?? 0);
+  const scoreColor = (score, isWinner) => isWinner ? '#00c853' : 'var(--text-muted)';
+
   panel.innerHTML = `
     <div style="margin-top:20px;border:1px solid var(--border-mid);border-radius:8px;padding:16px">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-        <h3 style="margin:0;font-size:14px;color:var(--accent)">Week ${game.week} — ${game.awayTeam} @ ${game.homeTeam}</h3>
-        <span style="font-size:13px;color:#aaa">${game.awayScore ?? '?'} – ${game.homeScore ?? '?'}</span>
+      <div style="text-align:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px">Week ${game.week} · ${game.neutralSite ? 'Neutral' : (game.homeTeam + ' home')}</div>
+        <div style="display:flex;justify-content:center;align-items:center;gap:24px">
+          <div style="text-align:right">
+            <div style="font-size:16px;font-weight:700">${game.awayTeam}</div>
+            <div style="font-size:36px;font-weight:900;color:${scoreColor(game.awayScore, awayWin)}">${game.awayScore ?? '?'}</div>
+          </div>
+          <div style="font-size:20px;color:var(--text-dim);font-weight:300">@</div>
+          <div style="text-align:left">
+            <div style="font-size:16px;font-weight:700">${game.homeTeam}</div>
+            <div style="font-size:36px;font-weight:900;color:${scoreColor(game.homeScore, !awayWin)}">${game.homeScore ?? '?'}</div>
+          </div>
+        </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      ${boxScoreHTML}
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px">
         <div>
-          <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;margin-bottom:6px">${game.awayTeam}</div>
+          <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;margin-bottom:6px">Top Performers — ${game.awayTeam}</div>
           ${perfRows(awayPerf)}
         </div>
         <div>
-          <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;margin-bottom:6px">${game.homeTeam}</div>
+          <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;margin-bottom:6px">Top Performers — ${game.homeTeam}</div>
           ${perfRows(homePerf)}
         </div>
       </div>
     </div>`;
 
-  // Append drive-level breakdown (lazy — only fetched on game click)
+  // Append drive-level breakdown — show both teams' drives
   const [drivesData, playsData] = await Promise.all([loadDrives(currentYear), loadPlaysForWeek(currentYear, game.week)]);
-  const driveTeam = game.homeTeam; // show home team drives
-  const teamDrives = (drivesData[driveTeam] || []).filter(d => d.gameId === gameId);
-  const teamPlays  = (playsData[driveTeam]  || []).filter(p => p.gameId === gameId);
 
-  if (!teamDrives.length) return;
-
-  const driveRows = teamDrives.map((d, idx) => {
-    const scoreDot = d.scoring ? '<span style="color:#00c853"> ●</span>' : '';
-    const drivePlays = teamPlays.filter(p => p.driveNumber === d.driveNumber);
-    const playRows = drivePlays.map(pl => {
-      const epaColor = pl.ppa > 0 ? '#8bc34a' : pl.ppa < 0 ? '#f44336' : '#aaa';
-      return `<tr style="background:var(--surface-deep);font-size:11px">
-        <td style="padding:4px 8px;color:#aaa">${pl.down ? `${pl.down}&amp;${pl.distance}` : '-'}</td>
-        <td style="padding:4px 8px">${pl.playType || '-'}</td>
-        <td style="padding:4px 8px;color:#ccc;max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${pl.playText || ''}</td>
-        <td style="padding:4px 8px;text-align:right">${pl.yardsGained ?? '-'}</td>
-        <td style="padding:4px 8px;text-align:right;color:${epaColor}">${pl.ppa != null ? pl.ppa.toFixed(2) : '-'}</td>
-      </tr>`;
+  function buildDriveRows(driveTeam, driveIdPrefix) {
+    const drives = (drivesData[driveTeam] || []).filter(d => d.gameId === gameId);
+    const plays  = (playsData[driveTeam]  || []).filter(p => p.gameId === gameId);
+    if (!drives.length) return null;
+    return drives.map((d, idx) => {
+      const scoreDot = d.scoring ? '<span style="color:#00c853"> ●</span>' : '';
+      const drivePlays = plays.filter(p => p.driveNumber === d.driveNumber);
+      const playRows = drivePlays.map(pl => {
+        const epaColor = pl.ppa > 0 ? '#8bc34a' : pl.ppa < 0 ? '#f44336' : '#aaa';
+        return `<tr style="background:var(--surface-deep);font-size:11px">
+          <td style="padding:4px 8px;color:#aaa">${pl.down ? `${pl.down}&amp;${pl.distance}` : '-'}</td>
+          <td style="padding:4px 8px">${pl.playType || '-'}</td>
+          <td style="padding:4px 8px;color:#ccc;max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${pl.playText || ''}</td>
+          <td style="padding:4px 8px;text-align:right">${pl.yardsGained ?? '-'}</td>
+          <td style="padding:4px 8px;text-align:right;color:${epaColor}">${pl.ppa != null ? pl.ppa.toFixed(2) : '-'}</td>
+        </tr>`;
+      }).join('');
+      const playsSection = drivePlays.length ? `
+        <tr id="${driveIdPrefix}-drive-plays-${idx}" style="display:none"><td colspan="6" style="padding:0 0 4px 16px">
+          <table style="width:100%;border-collapse:collapse">
+            <thead><tr style="font-size:10px;color:#666">
+              <th style="padding:3px 8px;text-align:left">D&amp;D</th>
+              <th style="padding:3px 8px;text-align:left">Type</th>
+              <th style="padding:3px 8px;text-align:left">Play</th>
+              <th style="padding:3px 8px;text-align:right">Yds</th>
+              <th style="padding:3px 8px;text-align:right">EPA</th>
+            </tr></thead>
+            <tbody>${playRows}</tbody>
+          </table>
+        </td></tr>` : '';
+      return `<tr class="clickable" onclick="toggleDrivePlays('${driveIdPrefix}',${idx})" style="border-top:1px solid var(--border)">
+        <td style="padding:6px 8px;color:#aaa;font-size:11px">#${d.driveNumber ?? idx+1}</td>
+        <td style="padding:6px 8px;font-weight:700;color:${d.scoring ? '#00c853' : '#ccc'}">${d.result || '-'}${scoreDot}</td>
+        <td style="padding:6px 8px;color:#aaa">${d.plays ?? '-'} plays</td>
+        <td style="padding:6px 8px;color:#aaa">${d.yards ?? '-'} yds</td>
+        <td style="padding:6px 8px;color:#aaa;font-size:11px">${d.startScore ?? '?'}→${d.endScore ?? '?'}</td>
+        <td style="padding:6px 8px;color:#555;font-size:10px">${drivePlays.length ? '▶' : ''}</td>
+      </tr>${playsSection}`;
     }).join('');
+  }
 
-    const playsSection = drivePlays.length ? `
-      <tr id="drive-plays-${idx}" style="display:none"><td colspan="6" style="padding:0 0 4px 16px">
-        <table style="width:100%;border-collapse:collapse">
-          <thead><tr style="font-size:10px;color:#666">
-            <th style="padding:3px 8px;text-align:left">D&amp;D</th>
-            <th style="padding:3px 8px;text-align:left">Type</th>
-            <th style="padding:3px 8px;text-align:left">Play</th>
-            <th style="padding:3px 8px;text-align:right">Yds</th>
-            <th style="padding:3px 8px;text-align:right">EPA</th>
-          </tr></thead>
-          <tbody>${playRows}</tbody>
-        </table>
-      </td></tr>` : '';
+  const awayRows = buildDriveRows(game.awayTeam, 'away');
+  const homeRows = buildDriveRows(game.homeTeam, 'home');
+  if (!awayRows && !homeRows) return;
 
-    return `<tr class="clickable" onclick="toggleDrivePlays(${idx})" style="border-top:1px solid var(--border)">
-      <td style="padding:6px 8px;color:#aaa;font-size:11px">#${d.driveNumber ?? idx+1}</td>
-      <td style="padding:6px 8px;font-weight:700;color:${d.scoring ? '#00c853' : '#ccc'}">${d.result || '-'}${scoreDot}</td>
-      <td style="padding:6px 8px;color:#aaa">${d.plays ?? '-'} plays</td>
-      <td style="padding:6px 8px;color:#aaa">${d.yards ?? '-'} yds</td>
-      <td style="padding:6px 8px;color:#aaa;font-size:11px">${d.startScore ?? '?'}→${d.endScore ?? '?'}</td>
-      <td style="padding:6px 8px;color:#555;font-size:10px">${drivePlays.length ? '▶' : ''}</td>
-    </tr>${playsSection}`;
-  }).join('');
-
-  const drivesPanel = document.getElementById('game-detail-panel');
-  if (drivesPanel) drivesPanel.innerHTML += `
-    <div style="margin-top:12px;border:1px solid var(--border-mid);border-radius:8px;padding:16px">
-      <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;margin-bottom:8px">${driveTeam} Drives</div>
+  function driveTable(label, rows) {
+    if (!rows) return `<div style="color:var(--text-dim);font-size:12px;padding:8px">No drive data for ${label}</div>`;
+    return `<div>
+      <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;margin-bottom:6px">${label}</div>
       <div class="table-scroll-wrap"><table style="width:100%;border-collapse:collapse;font-size:12px">
         <thead><tr style="font-size:10px;color:#666">
           <th style="padding:3px 8px;text-align:left">Drive</th>
@@ -1214,13 +1311,23 @@ async function showGameDetail(gameId, teamName) {
           <th style="padding:3px 8px;text-align:left">Score</th>
           <th></th>
         </tr></thead>
-        <tbody>${driveRows}</tbody>
+        <tbody>${rows}</tbody>
       </table></div>
+    </div>`;
+  }
+
+  const drivesPanel = document.getElementById('game-detail-panel');
+  if (drivesPanel) drivesPanel.innerHTML += `
+    <div style="margin-top:12px;border:1px solid var(--border-mid);border-radius:8px;padding:16px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        ${driveTable(game.awayTeam, awayRows)}
+        ${driveTable(game.homeTeam, homeRows)}
+      </div>
     </div>`;
 }
 
-function toggleDrivePlays(idx) {
-  const row = document.getElementById(`drive-plays-${idx}`);
+function toggleDrivePlays(prefix, idx) {
+  const row = document.getElementById(`${prefix}-drive-plays-${idx}`);
   if (row) row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
 }
 
@@ -1295,6 +1402,17 @@ function sortTopBy(col) {
   renderTopPlayers();
 }
 function goToTeam(teamId) { selectTeam(teamId, true); }
+
+async function showGameDetailFromModal(gameId) {
+  // Navigate to schedule tab of current team and open the game detail
+  const t = getTeams().find(t => t.id === selectedTeamId);
+  if (!t) return;
+  await renderSchedule(t);
+  // Scroll to and open the game panel
+  const schedule = await loadSchedule(currentYear);
+  const game = schedule.find(g => g.gameId === gameId);
+  if (game) showGameDetail(gameId, t.name);
+}
 
 // ── Conferences Tab ────────────────────────────────────────────────────────
 function renderConferences() {
@@ -1698,7 +1816,8 @@ async function renderModalGamelog(pid) {
       const isTop = maxes[k] > 0 && Number(v) >= maxes[k] * 0.75;
       return `<td style="${isTop ? 'color:#00c853;font-weight:700' : ''}">${v}</td>`;
     }).join('');
-    return `<tr>
+    const clickable = e.gameId ? `class="clickable" onclick="closeModal();showGameDetailFromModal(${e.gameId})"` : '';
+    return `<tr ${clickable}>
       <td>${e.week ?? '-'}</td>
       <td style="font-size:11px">${e.homeGame ? 'vs ' : '@ '}${e.opponent || '-'}</td>
       <td style="color:${resultColor};font-weight:700;font-size:11px">${e.result || '-'}</td>
