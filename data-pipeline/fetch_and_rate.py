@@ -14,7 +14,7 @@ from api_client import (
     fetch_transfer_portal,
 )
 from collections import defaultdict
-from rating_engine import get_position_group, compute_raw_ratings, normalize_all_ratings, compute_overall, SKILL_ATTRS
+from rating_engine import get_position_group, compute_raw_ratings, normalize_all_ratings, compute_overall, compute_gamelog_skills, SKILL_ATTRS
 
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "app", "assets", "data")
 YEARS = [2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
@@ -902,7 +902,18 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
 
             usage = usage_lookup.get(pid, {})
             raw = compute_raw_ratings(pid, pos_group, p_stats, ppa_val, t_stats, tq, stars, usage, position=pos)
-            raw_ratings_all[pid] = {"pos": pos_group, "raw": raw, "stats": capture_display_stats(pos_group, p_stats)}
+            raw_ratings_all[pid] = {
+                "pos": pos_group,
+                "raw": raw,
+                "stats": capture_display_stats(pos_group, p_stats),
+                "ppa": round(ppa_val, 4),
+                "usage": {
+                    "snap": round(float(usage.get("overall") or 0), 3),
+                    "passSnap": round(float(usage.get("pass") or 0), 3),
+                    "rushSnap": round(float(usage.get("rush") or 0), 3),
+                    "games": int(usage.get("games") or 0),
+                },
+            }
 
             # Collect OL boost signals: draft, awards, cross-year continuity
             if pos_group == "OL":
@@ -934,6 +945,13 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
                 "height": p.get("height", ""),
                 "weight": p.get("weight", 0),
             })
+
+    # Build gamelogs early so gamelog-derived skills (clutch, explosiveness, consistency)
+    # can be computed before normalization.
+    print("Building player gamelogs (early pass for gamelog-derived skills)...")
+    player_gamelogs_early = build_player_gamelogs(game_stats_raw, games_raw)
+    compute_gamelog_skills(raw_ratings_all, player_gamelogs_early)
+    print(f"  Gamelog-derived skills computed for {len(player_gamelogs_early)} players")
 
     print("Normalizing ratings...")
     normalized = normalize_all_ratings(raw_ratings_all)
@@ -1038,8 +1056,16 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
         pid = p["id"]
         attrs = normalized.get(pid, {a: 55 for a in SKILL_ATTRS.get(p["positionGroup"], ["runBlock", "passBlock"])})
         ovr = compute_overall(attrs, p["positionGroup"])
-        display_stats = raw_ratings_all.get(pid, {}).get("stats", {})
-        ratings.append({"playerId": pid, "overall": ovr, **attrs, "stats": display_stats})
+        player_info = raw_ratings_all.get(pid, {})
+        display_stats = player_info.get("stats", {})
+        ratings.append({
+            "playerId": pid,
+            "overall": ovr,
+            **attrs,
+            "stats": display_stats,
+            "ppa": player_info.get("ppa", 0.0),
+            "usage": player_info.get("usage", {}),
+        })
 
     # Team ratings: compute then normalize distribution
     print("Computing team ratings...")
@@ -1085,7 +1111,7 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
                 continue
             yoy_growth = curr_ovr - prev_ovr
             # momentum_bonus: reward improvement in key efficiency skills
-            key_skills = ["passRating", "rushing", "receiving", "coverage", "passRush"]
+            key_skills = ["passVolume", "accuracy", "rushing", "efficiency", "receiving", "coverage", "passRush"]
             momentum = 0.0
             skill_count = 0
             for sk in key_skills:
@@ -1102,9 +1128,9 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
             trajectory_count += 1
         print(f"  Trajectory ratings computed for {trajectory_count} returning players")
 
-    print("Building game logs, schedule, drives, and plays...")
+    print("Building schedule, drives, and plays...")
     team_schedule = build_team_schedule(games_raw, sp_detail)
-    player_gamelogs = build_player_gamelogs(game_stats_raw, games_raw)
+    player_gamelogs = player_gamelogs_early  # already built above
     team_drives = build_team_drives(drives_by_team, games_raw)
     team_plays = build_team_plays(plays_by_team, games_raw)
     print(f"  {len(team_schedule)} games, {len(player_gamelogs)} players with gamelogs")

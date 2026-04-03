@@ -17,11 +17,12 @@ import hashlib
 # Position-specific skill categories — replaces the old generic 10-attribute system.
 # Each entry maps position group → list of skill attribute names meaningful to that position.
 SKILL_ATTRS = {
-    "QB":  ["passRating", "deepBall", "accuracy", "mobility"],
-    "RB":  ["rushing", "receiving", "powerRunning"],
+    # QB mobility is display-only — shown on card but excluded from POSITION_OVERALL_WEIGHTS
+    "QB":  ["passVolume", "accuracy", "deepBall", "decisionMaking", "clutch", "mobility"],
+    "RB":  ["rushing", "efficiency", "powerRunning", "receiving", "explosiveness"],
     "FB":  ["blocking", "rushing", "receiving"],
-    "WR":  ["receiving", "routeRunning", "yac"],
-    "TE":  ["receiving", "blocking", "routeRunning"],
+    "WR":  ["receiving", "routeRunning", "bigPlayAbility", "yac", "consistency"],
+    "TE":  ["receiving", "blocking", "routeRunning", "bigPlayAbility"],
     "OL":  ["runBlock", "passBlock"],
     "DL":  ["passRush", "runStop"],
     "LB":  ["coverage", "runStop", "passRush"],
@@ -31,12 +32,18 @@ SKILL_ATTRS = {
     "LS":  ["runBlock", "passBlock"],  # long snappers: rated as specialists, not true OL
 }
 
+# Skills listed here that are NOT in POSITION_OVERALL_WEIGHTS are display-only (e.g. QB mobility).
+DISPLAY_ONLY_SKILLS = {
+    "QB": {"mobility"},
+}
+
 POSITION_OVERALL_WEIGHTS = {
-    "QB":  {"passRating": 0.55, "accuracy": 0.22, "deepBall": 0.13, "mobility": 0.10},
-    "RB":  {"rushing": 0.65, "powerRunning": 0.22, "receiving": 0.13},
+    # QB: mobility intentionally excluded — it's display-only so pocket passers aren't penalized
+    "QB":  {"passVolume": 0.22, "accuracy": 0.28, "deepBall": 0.17, "decisionMaking": 0.22, "clutch": 0.11},
+    "RB":  {"rushing": 0.30, "efficiency": 0.25, "powerRunning": 0.20, "receiving": 0.15, "explosiveness": 0.10},
     "FB":  {"blocking": 0.55, "rushing": 0.30, "receiving": 0.15},
-    "WR":  {"receiving": 0.60, "routeRunning": 0.25, "yac": 0.15},
-    "TE":  {"receiving": 0.50, "blocking": 0.28, "routeRunning": 0.22},
+    "WR":  {"receiving": 0.30, "routeRunning": 0.25, "bigPlayAbility": 0.20, "yac": 0.15, "consistency": 0.10},
+    "TE":  {"receiving": 0.45, "blocking": 0.25, "routeRunning": 0.18, "bigPlayAbility": 0.12},
     "OL":  {"runBlock": 0.50, "passBlock": 0.50},
     "DL":  {"passRush": 0.55, "runStop": 0.45},
     "LB":  {"runStop": 0.40, "coverage": 0.38, "passRush": 0.22},
@@ -171,6 +178,7 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
         pass_yds = _safe_float(player_stats.get("passingYDS", player_stats.get("passingYards", 0)))
         pass_tds = _safe_float(player_stats.get("passingTD", player_stats.get("passingTDs", 0)))
         rush_yds = _safe_float(player_stats.get("rushingYDS", player_stats.get("rushingYards", 0)))
+        rush_tds = _safe_float(player_stats.get("rushingTD", player_stats.get("rushingTDs", 0)))
         completions = _safe_float(player_stats.get("passingCOMPLETIONS", player_stats.get("passingCOMP", player_stats.get("completions", 0))))
         attempts = _safe_float(player_stats.get("passingATT", player_stats.get("passingAttempts", player_stats.get("attempts", 0))))
         ints = _safe_float(player_stats.get("passingINT", player_stats.get("interceptions", 0)))
@@ -178,16 +186,20 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
         # Efficiency metrics — only meaningful with sufficient attempts
         comp_pct = completions / attempts if attempts >= 5 else 0.0
         ypa = pass_yds / attempts if attempts >= 5 else 0.0
+        int_rate = ints / attempts if attempts >= 5 else 0.0
 
-        # passRating: blends volume (yards, TDs) with efficiency (comp %, YPA)
-        # YPA is the single best predictor of QB quality in college football
-        raw["passRating"] = (pass_yds * 0.007 + pass_tds * 1.8 + completions * 0.02
-                             + ypa * 4.0 + comp_pct * 8.0 - ints * 1.5) * combined_mult
-        # deepBall: big-play ability — TD rate, YPA efficiency, PPA
-        raw["deepBall"] = (pass_tds * 2.0 + ypa * 2.0 + ppa_val * 4.0) * combined_mult
-        # accuracy: completion % and efficiency quality minus turnover penalty
-        raw["accuracy"] = (comp_pct * 14.0 + ypa * 2.5 - ints * 2.5 + ppa_val * 1.5) * combined_mult
-        raw["mobility"] = rush_yds * 0.025 * combined_mult
+        # passVolume: pure production signal — yards + TDs rewarded directly
+        raw["passVolume"] = (pass_yds * 0.008 + pass_tds * 2.5 + completions * 0.015) * combined_mult
+        # accuracy: completion % and YPA are the two best college passing efficiency markers
+        raw["accuracy"] = (comp_pct * 14.0 + ypa * 2.5 - int_rate * 25.0 + ppa_val * 1.5) * combined_mult
+        # deepBall: big-play ability — YPA separates chunk-play passers; PPA captures value-per-play
+        raw["deepBall"] = (ypa * 3.0 + pass_tds * 1.5 + ppa_val * 5.0) * combined_mult
+        # decisionMaking: ball security + efficiency under pressure; int_rate penalized heavily
+        raw["decisionMaking"] = (comp_pct * 10.0 - int_rate * 30.0 + ppa_val * 3.0 + 5.0) * combined_mult
+        # clutch: placeholder — filled in by compute_gamelog_skills() after gamelogs are built
+        raw["clutch"] = 0.0
+        # mobility: display-only bonus; excluded from overall weights so pocket passers aren't penalized
+        raw["mobility"] = (rush_yds * 0.025 + rush_tds * 1.5) * combined_mult
 
     # ── RB / FB ───────────────────────────────────────────────────────────
     elif pos_group in ("RB", "FB") and has_stats:
@@ -198,12 +210,19 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
         rec_tds = _safe_float(player_stats.get("receivingTD", player_stats.get("receivingTDs", 0)))
         receptions = _safe_float(player_stats.get("receivingREC", player_stats.get("receptions", 0)))
 
-        raw["rushing"] = (rush_yds * 0.010 + rush_tds * 2.0 + ypc * 1.5) * combined_mult
-        # Receiving: blends yards + TDs + catch volume — pass-catching backs rate separately from
-        # pure power backs who have zero receiving stats
-        raw["receiving"] = (rec_yds * 0.012 + rec_tds * 2.0 + receptions * 0.15) * combined_mult
-        # powerRunning: TD volume + yardage bulk — measures yards-earned, not just YPC
-        raw["powerRunning"] = (rush_yds * 0.006 + rush_tds * 2.0) * combined_mult
+        # TD rate proxy: TDs per 10 yards gained — rewards goal-line/short-yardage backs
+        td_rate = rush_tds / (rush_yds / 10.0) if rush_yds > 50 else 0.0
+
+        # rushing: volume production — yards and TDs rewarded directly
+        raw["rushing"] = (rush_yds * 0.010 + rush_tds * 2.0) * combined_mult
+        # efficiency: quality of each carry — YPC + PPA capture value-per-touch
+        raw["efficiency"] = (ypc * 2.5 + ppa_val * 4.0 + 3.0) * combined_mult
+        # powerRunning: TD conversion rate + goal-line bulk — separates bruisers from open-field backs
+        raw["powerRunning"] = (td_rate * 8.0 + rush_tds * 1.5) * combined_mult
+        # receiving: pass-catching backs rated on this; pure power backs get low score (not penalized overall)
+        raw["receiving"] = (rec_yds * 0.012 + rec_tds * 2.5 + receptions * 0.18) * combined_mult
+        # explosiveness: placeholder — filled in by compute_gamelog_skills() after gamelogs are built
+        raw["explosiveness"] = 0.0
         if pos_group == "FB":
             raw["blocking"] = 3.0 * combined_mult  # no individual blocking stats; team proxy
 
@@ -217,11 +236,16 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
         # Only meaningful with 3+ catches to avoid single-reception outliers
         ypr = rec_yds / receptions if receptions >= 3 else 0.0
 
+        # receiving: volume production — yards + TDs + catch frequency
         raw["receiving"] = (rec_yds * 0.010 + rec_tds * 2.0 + receptions * 0.10) * combined_mult
-        # routeRunning: efficiency — receptions per opportunity, YPR, and PPA signal
-        raw["routeRunning"] = (receptions * 0.10 + ypr * 0.15 + ppa_val * 2.5) * combined_mult
-        # yac: big-play ability — TD rate, YPR (separates YAC monsters from short-route receivers), PPA
-        raw["yac"] = (rec_tds * 2.5 + ypr * 0.20 + ppa_val * 2.0) * combined_mult
+        # routeRunning: separation / reliability — receptions volume + PPA (value-per-route)
+        raw["routeRunning"] = (receptions * 0.12 + ppa_val * 3.0 + 4.0) * combined_mult
+        # bigPlayAbility: deep-threat / chunk plays — YPR differentiates; PPA rewards explosiveness
+        raw["bigPlayAbility"] = (ypr * 0.25 + rec_tds * 2.0 + ppa_val * 3.0) * combined_mult
+        # yac: after-catch value — ypr and TDs reward yards-after-contact; PPA captures broken tackles
+        raw["yac"] = (ypr * 0.15 + rec_tds * 1.5 + ppa_val * 1.5) * combined_mult
+        # consistency: placeholder — filled in by compute_gamelog_skills() after gamelogs are built
+        raw["consistency"] = 0.0
         if pos_group == "TE":
             raw["blocking"] = 3.0 * combined_mult  # no individual TE blocking stats
 
@@ -396,6 +420,84 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
     return raw
 
 
+def compute_gamelog_skills(raw_by_player, player_gamelogs):
+    """Second pass: fill in gamelog-derived skill placeholders.
+
+    Must be called AFTER build_player_gamelogs() returns data, and BEFORE
+    normalize_all_ratings(). Modifies raw_by_player in place.
+
+    Skills filled in:
+    - QB  clutch:       Peak performance above season average (top-3 game passer rating vs season avg)
+    - RB  explosiveness: Big-play rate (max single-game YPC vs season avg YPC)
+    - WR  consistency:  Game-to-game reliability (inverse coefficient of variation of rec yards)
+    """
+    for pid_int, games in player_gamelogs.items():
+        pid = str(pid_int)
+        info = raw_by_player.get(pid)
+        if not info:
+            continue
+        pos = info["pos"]
+
+        if pos == "QB":
+            # Per-game passer rating proxy: comp_pct * 10 + ypa * 5 + passTDs * 1.5 - ints * 2
+            scores = []
+            for g in games:
+                st = g.get("stats", {})
+                comp = st.get("comp", 0) or 0
+                att = st.get("att", 0) or 0
+                pass_yds = st.get("passYds", 0) or 0
+                pass_tds = st.get("passTDs", 0) or 0
+                ints = st.get("ints", 0) or 0
+                if att >= 5:
+                    cp = comp / att
+                    ypa = pass_yds / att
+                    score = cp * 10.0 + ypa * 5.0 + pass_tds * 1.5 - ints * 2.0
+                    scores.append(score)
+            if len(scores) >= 2:
+                season_avg = sum(scores) / len(scores)
+                top_n = sorted(scores)[-min(3, len(scores)):]
+                top_avg = sum(top_n) / len(top_n)
+                # Peak-above-average signal: a 20% peak above avg scores ~10 raw clutch points
+                if season_avg > 0:
+                    raw_clutch = (top_avg / season_avg - 1.0) * 50.0 + season_avg * 0.3
+                else:
+                    raw_clutch = 0.0
+                info["raw"]["clutch"] = max(0.0, raw_clutch)
+
+        elif pos == "RB":
+            ypc_by_game = []
+            for g in games:
+                st = g.get("stats", {})
+                rush_yds = st.get("rushYds", 0) or 0
+                ypc = st.get("ypc", 0) or 0
+                if rush_yds >= 15 and ypc > 0:
+                    ypc_by_game.append(ypc)
+            if len(ypc_by_game) >= 2:
+                season_avg_ypc = sum(ypc_by_game) / len(ypc_by_game)
+                peak_ypc = max(ypc_by_game)
+                # Big-play signal: peak YPC + gap between peak and average
+                raw_expl = peak_ypc * 0.5 + (peak_ypc - season_avg_ypc) * 2.0
+                info["raw"]["explosiveness"] = max(0.0, raw_expl)
+
+        elif pos in ("WR", "TE"):
+            yds_by_game = []
+            for g in games:
+                st = g.get("stats", {})
+                rec = st.get("receptions", 0) or 0
+                rec_yds = st.get("recYds", 0) or 0
+                if rec >= 1:
+                    yds_by_game.append(rec_yds)
+            if len(yds_by_game) >= 3:
+                mean_yds = sum(yds_by_game) / len(yds_by_game)
+                if mean_yds > 0:
+                    variance = sum((y - mean_yds) ** 2 for y in yds_by_game) / len(yds_by_game)
+                    std_yds = variance ** 0.5
+                    cv = std_yds / mean_yds  # coefficient of variation; lower = more consistent
+                    # cv of 0 (perfect consistency) → raw 80; cv of 1.0 → raw 20
+                    raw_cons = (1.0 - min(cv, 1.0)) * 60.0 + 20.0
+                    info["raw"]["consistency"] = raw_cons
+
+
 def normalize_all_ratings(raw_by_player):
     """Normalize ratings. Curve targets: median ~70, top ~95-99, bottom ~45-55."""
     by_pos = {}
@@ -448,17 +550,19 @@ def normalize_all_ratings(raw_by_player):
 
 
 def compute_overall(ratings, pos_group):
+    """Compute overall rating from position weights.
+
+    Skills in DISPLAY_ONLY_SKILLS are excluded from the overall calculation —
+    they are shown on the player card but do not affect the overall rating.
+    This ensures pocket QBs are not penalized for low mobility scores.
+    """
     weights = POSITION_OVERALL_WEIGHTS.get(pos_group, POSITION_OVERALL_WEIGHTS["RB"])
+    display_only = DISPLAY_ONLY_SKILLS.get(pos_group, set())
     total = 0
     weight_sum = 0
     for attr, w in weights.items():
-        if w > 0 and attr in ratings:
-            v = ratings[attr]
-            # QB mobility: pocket passers should not be penalized for low rush production.
-            # Mobile QBs get a bonus above the neutral baseline (65); immobile QBs are neutral.
-            if pos_group == "QB" and attr == "mobility":
-                v = max(v, 65)
-            total += v * w
+        if w > 0 and attr in ratings and attr not in display_only:
+            total += ratings[attr] * w
             weight_sum += w
     if weight_sum == 0:
         return 55

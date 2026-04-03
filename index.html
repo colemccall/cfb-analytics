@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="dark"><!-- theme set by JS on load -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,26 +12,47 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
   /* ── Theme variables ── */
+  /* Analytics Dark (default): clean data dashboard, GitHub-inspired */
+  :root, [data-theme="dark"] {
+    --bg: #0d1117; --surface: #161b22; --surface-deep: #0d1117;
+    --text: #e6edf3; --text-muted: #7d8590; --text-dim: #484f58;
+    --accent: #58a6ff; --accent-dim: rgba(88,166,255,0.10);
+    --border: rgba(48,54,61,0.9); --border-mid: rgba(48,54,61,1);
+    --input-bg: #0d1117; --sidebar-bg: #010409;
+    --positive: #3fb950; --negative: #f85149; --warning: #d29922;
+  }
+  /* Analytics Light: newspaper / FiveThirtyEight style */
+  [data-theme="analytics-light"] {
+    --bg: #ffffff; --surface: #f6f8fa; --surface-deep: #eaeef2;
+    --text: #1f2328; --text-muted: #656d76; --text-dim: #9198a1;
+    --accent: #0969da; --accent-dim: rgba(9,105,218,0.08);
+    --border: rgba(208,215,222,1); --border-mid: rgba(175,184,193,1);
+    --input-bg: #f6f8fa; --sidebar-bg: #f6f8fa;
+    --positive: #1a7f37; --negative: #cf222e; --warning: #9a6700;
+  }
+  /* Dynasty Dark: NCAA/Madden energy — deep navy + gold */
+  [data-theme="dynasty-dark"] {
+    --bg: #080c14; --surface: #0f1923; --surface-deep: #060a10;
+    --text: #dce8f0; --text-muted: #7a9bb5; --text-dim: #3d5468;
+    --accent: #f0c040; --accent-dim: rgba(240,192,64,0.12);
+    --border: rgba(30,50,70,0.8); --border-mid: rgba(50,80,110,0.9);
+    --input-bg: #080c14; --sidebar-bg: #060a10;
+    --positive: #44cc88; --negative: #ee4455; --warning: #f0a020;
+  }
+  /* Dynasty Light: bright stadium feel — white + deep navy */
+  [data-theme="dynasty-light"] {
+    --bg: #f5f7fa; --surface: #ffffff; --surface-deep: #e8ecf2;
+    --text: #0a1628; --text-muted: #5a6880; --text-dim: #9aa8be;
+    --accent: #1a4fa0; --accent-dim: rgba(26,79,160,0.08);
+    --border: rgba(180,190,210,0.8); --border-mid: rgba(150,165,190,1);
+    --input-bg: #edf0f5; --sidebar-bg: #edf0f5;
+    --positive: #1a7f37; --negative: #c41a1a; --warning: #b06000;
+  }
+
+  /* ── Type scale ── */
   :root {
-    --bg: #f4f4f5; --surface: #ffffff; --surface-deep: #e8e8ec;
-    --text: #1a1a2e; --text-muted: #6b7280; --text-dim: #9ca3af;
-    --accent: #e85d04; --accent-dim: rgba(232,93,4,0.12);
-    --border: rgba(100,100,120,0.18); --border-mid: rgba(100,100,120,0.32);
-    --input-bg: #ededf2; --sidebar-bg: #f0f0f5;
-  }
-  [data-theme="dark"] {
-    --bg: #0f0f14; --surface: #1a1a2e; --surface-deep: #111120;
-    --text: #d8d8e8; --text-muted: #8888aa; --text-dim: #555568;
-    --accent: #4f9cf9; --accent-dim: rgba(79,156,249,0.12);
-    --border: rgba(60,60,100,0.4); --border-mid: rgba(60,60,100,0.65);
-    --input-bg: #0f0f22; --sidebar-bg: #131320;
-  }
-  [data-theme="vintage"] {
-    --bg: #2a1f14; --surface: #3d2b1a; --surface-deep: #1f1409;
-    --text: #f5e6c8; --text-muted: #b8956a; --text-dim: #8a6540;
-    --accent: #c9a227; --accent-dim: rgba(201,162,39,0.15);
-    --border: rgba(90,62,40,0.55); --border-mid: #7a5435;
-    --input-bg: #1f1409; --sidebar-bg: #341f0f;
+    --fs-xs: 11px; --fs-sm: 13px; --fs-md: 15px;
+    --fs-lg: 17px; --fs-xl: 22px; --fs-2xl: 28px;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -53,27 +74,28 @@
   .team-card.active { border-color: var(--accent); }
   .team-card-logo { width: 36px; height: 36px; object-fit: contain; flex-shrink: 0; }
   .team-card-info { flex: 1; min-width: 0; }
-  .team-card-name { font-size: 14px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .team-card-conf { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+  .team-card-name { font-size: var(--fs-sm); font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .team-card-conf { font-size: var(--fs-xs); color: var(--text-muted); margin-top: 1px; }
   .team-card-ovr { font-size: 13px; font-weight: 800; padding: 3px 7px; border-radius: 4px; flex-shrink: 0; }
 
   /* ── Main area ── */
   #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
   .tab-bar { display: flex; background: var(--sidebar-bg); border-bottom: 1px solid var(--border); flex-shrink: 0; overflow-x: auto; align-items: center; }
-  .tab-btn { padding: 10px 18px; font-size: 14px; font-weight: 600; cursor: pointer; color: var(--text-muted); border-bottom: 2px solid transparent; white-space: nowrap; transition: color 0.15s; }
+  .tab-btn { padding: 10px 18px; font-size: var(--fs-sm); font-weight: 600; cursor: pointer; color: var(--text-muted); border-bottom: 2px solid transparent; white-space: nowrap; transition: color 0.15s; }
   .tab-btn:hover { color: var(--text); }
   .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
   .tab-content { flex: 1; overflow-y: auto; padding: 20px; background: var(--bg); }
   .tab-content.map-mode { padding: 0; overflow: hidden; }
 
   /* ── Theme switcher ── */
-  .theme-switcher { display: flex; gap: 6px; align-items: center; margin-left: auto; padding: 0 12px; flex-shrink: 0; }
+  .theme-switcher { display: flex; gap: 5px; align-items: center; margin-left: auto; padding: 0 12px; flex-shrink: 0; }
   .theme-btn { width: 18px; height: 18px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: border-color 0.15s, transform 0.1s; }
   .theme-btn:hover { transform: scale(1.2); }
   .theme-btn.active { border-color: var(--text); }
-  .theme-btn[data-t=""] { background: linear-gradient(135deg, #e85d04 50%, #f4f4f5 50%); }
-  .theme-btn[data-t="dark"] { background: linear-gradient(135deg, #4f9cf9 50%, #0f0f14 50%); }
-  .theme-btn[data-t="vintage"] { background: linear-gradient(135deg, #c9a227 50%, #2a1f14 50%); }
+  .theme-btn[data-t="dark"]            { background: linear-gradient(135deg, #58a6ff 50%, #0d1117 50%); }
+  .theme-btn[data-t="analytics-light"] { background: linear-gradient(135deg, #0969da 50%, #ffffff 50%); }
+  .theme-btn[data-t="dynasty-dark"]    { background: linear-gradient(135deg, #f0c040 50%, #080c14 50%); }
+  .theme-btn[data-t="dynasty-light"]   { background: linear-gradient(135deg, #1a4fa0 50%, #f5f7fa 50%); }
 
   /* ── Hero banner ── */
   .team-hero { display: flex; align-items: center; gap: 16px; padding: 16px 20px; background: var(--surface); border-bottom: 3px solid var(--accent); margin-bottom: 16px; border-radius: 8px; flex-wrap: wrap; }
@@ -97,12 +119,12 @@
   .pos-chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
   /* ── Tables ── */
-  table { width: 100%; border-collapse: collapse; font-size: 15px; }
-  th { text-align: left; padding: 8px 10px; background: var(--surface); color: var(--text-muted); font-weight: 600; position: sticky; top: 0; z-index: 1; cursor: pointer; user-select: none; border-bottom: 1px solid var(--border); font-size: 14px; }
+  table { width: 100%; border-collapse: collapse; font-size: var(--fs-md); }
+  th { text-align: left; padding: 8px 10px; background: var(--surface); color: var(--text-muted); font-weight: 600; position: sticky; top: 0; z-index: 1; cursor: pointer; user-select: none; border-bottom: 1px solid var(--border); font-size: var(--fs-sm); }
   th:hover { color: var(--text); }
   th.sorted-asc::after { content: ' ▲'; }
   th.sorted-desc::after { content: ' ▼'; }
-  td { padding: 8px 10px; border-bottom: 1px solid var(--border); color: var(--text); }
+  td { padding: 8px 10px; border-bottom: 1px solid var(--border); color: var(--text); line-height: 1.5; }
   tr:hover td { background: var(--surface); }
   tr.clickable { cursor: pointer; }
   tr.status-transferred-out td { color: #e05555; }
@@ -110,18 +132,18 @@
   tr.status-likely-leaving td { color: #e09940; }
   tr.status-transfer-in td { color: #4caf7d; }
   tr.status-recruit td { color: #64b5f6; }
-  .status-pill { display: inline-block; font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 8px; margin-left: 4px; vertical-align: middle; letter-spacing: 0.3px; text-transform: uppercase; }
+  .status-pill { display: inline-block; font-size: var(--fs-xs); font-weight: 700; padding: 1px 5px; border-radius: 8px; margin-left: 4px; vertical-align: middle; letter-spacing: 0.3px; text-transform: uppercase; }
   .status-pill.out { background: #e0555533; color: #e05555; border: 1px solid #e0555566; }
   .status-pill.leaving { background: #e0994033; color: #e09940; border: 1px solid #e0994066; }
   .status-pill.in { background: #4caf7d33; color: #4caf7d; border: 1px solid #4caf7d66; }
   .status-pill.recruit { background: #64b5f633; color: #64b5f6; border: 1px solid #64b5f666; }
   .status-pill.draft { background: #ffd70033; color: #ffd700; border: 1px solid #ffd70066; }
   .ovr { display: inline-block; width: 30px; text-align: center; padding: 2px 4px; border-radius: 4px; font-weight: 700; font-size: 11px; }
-  .pos-badge { display: inline-block; background: var(--surface-deep); padding: 1px 5px; border-radius: 3px; font-size: 10px; font-weight: 600; min-width: 28px; text-align: center; color: var(--text); }
-  .tier-badge { display: inline-block; padding: 1px 6px; border-radius: 10px; font-size: 9px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; margin-left: 4px; vertical-align: middle; }
+  .pos-badge { display: inline-block; background: var(--surface-deep); padding: 1px 5px; border-radius: 3px; font-size: var(--fs-xs); font-weight: 600; min-width: 28px; text-align: center; color: var(--text); }
+  .tier-badge { display: inline-block; padding: 1px 6px; border-radius: 10px; font-size: var(--fs-xs); font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; margin-left: 4px; vertical-align: middle; }
   .tier-dynasty { background: #ffd700; color: #1a1a2e; }
   .tier-impact  { background: #a78bfa; color: #1a1a2e; }
-  .archetype-badge { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 10px; font-weight: 700; letter-spacing: 0.3px; background: var(--surface-deep); color: var(--accent); margin-left: 4px; vertical-align: middle; border: 1px solid var(--border-mid); }
+  .archetype-badge { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.3px; background: var(--surface-deep); color: var(--accent); margin-left: 4px; vertical-align: middle; border: 1px solid var(--border-mid); }
   .ol-section { margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--border); }
   .ol-section-header { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 8px; }
   .ol-names-grid { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -139,22 +161,34 @@
   .depth-pos-header { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; padding: 6px 0 4px; border-bottom: 1px solid var(--border); margin-bottom: 4px; }
   .depth-row { display: flex; align-items: center; gap: 10px; padding: 5px 6px; border-radius: 4px; cursor: pointer; }
   .depth-row:hover { background: var(--surface); }
-  .depth-slot { font-size: 11px; font-weight: 700; color: var(--text-dim); width: 18px; text-align: right; flex-shrink: 0; }
+  .depth-slot { font-size: var(--fs-xs); font-weight: 700; color: var(--text-dim); width: 18px; text-align: right; flex-shrink: 0; }
   .depth-slot.starter { color: #ffd700; }
-  .depth-name { flex: 1; font-size: 14px; color: var(--text); }
+  .depth-name { flex: 1; font-size: var(--fs-sm); color: var(--text); }
   .depth-skills { display: flex; gap: 6px; flex-shrink: 0; }
-  .depth-skill { font-size: 10px; background: var(--surface-deep); padding: 2px 6px; border-radius: 3px; white-space: nowrap; color: var(--text); }
+  .depth-skill { font-size: var(--fs-xs); background: var(--surface-deep); padding: 2px 6px; border-radius: 3px; white-space: nowrap; color: var(--text); }
+
+  /* ── Team sub-nav ── */
+  .team-subnav { display: flex; gap: 2px; margin: 0 -20px 16px; padding: 6px 20px; background: var(--surface); border-bottom: 1px solid var(--border); }
+  .team-subnav-btn { padding: 5px 16px; font-size: var(--fs-sm); font-weight: 600; cursor: pointer; color: var(--text-muted); border-radius: 4px; border: none; background: transparent; }
+  .team-subnav-btn:hover { color: var(--text); }
+  .team-subnav-btn.active { background: var(--accent-dim); color: var(--accent); }
+
+  /* ── Breadcrumb ── */
+  #breadcrumb-bar { display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); color: var(--text-muted); padding: 5px 20px; border-bottom: 1px solid var(--border); background: var(--sidebar-bg); flex-shrink: 0; }
+  .bc-link { cursor: pointer; color: var(--accent); }
+  .bc-link:hover { text-decoration: underline; }
+  .bc-sep { color: var(--text-dim); }
 
   /* ── Conference view ── */
   .conf-section { margin-bottom: 28px; }
   .conf-title { font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
   .conf-team-row { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 6px; cursor: pointer; }
   .conf-team-row:hover { background: var(--surface); }
-  .conf-rank { font-size: 12px; font-weight: 700; color: var(--text-dim); width: 22px; text-align: right; flex-shrink: 0; }
+  .conf-rank { font-size: var(--fs-sm); font-weight: 700; color: var(--text-dim); width: 22px; text-align: right; flex-shrink: 0; }
   .conf-rank.top3 { color: #ffd700; }
   .conf-team-logo { width: 24px; height: 24px; object-fit: contain; flex-shrink: 0; }
-  .conf-team-name { flex: 1; font-size: 14px; font-weight: 600; color: var(--text); }
-  .conf-ovr { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+  .conf-team-name { flex: 1; font-size: var(--fs-sm); font-weight: 600; color: var(--text); }
+  .conf-ovr { font-size: var(--fs-sm); font-weight: 700; padding: 2px 8px; border-radius: 4px; }
 
   /* ── Top players view ── */
   .top-players-controls { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
@@ -199,7 +233,7 @@
   .modal-player-info .sub { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
   .modal-ovr-badge { font-size: 28px; font-weight: 900; width: 54px; height: 54px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .modal-section { margin-bottom: 20px; }
-  .modal-section-title { font-size: 11px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .modal-section-title { font-size: var(--fs-xs); font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
   .skill-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
   .skill-label { font-size: 12px; color: var(--text-muted); width: 100px; flex-shrink: 0; }
   .skill-bar-wrap { flex: 1; background: var(--surface-deep); border-radius: 3px; height: 10px; overflow: hidden; }
@@ -334,11 +368,13 @@
     <option value="">All Conferences</option>
   </select>
   <div class="theme-switcher">
-    <button class="theme-btn" data-t="" title="Standard" onclick="setTheme('')"></button>
-    <button class="theme-btn active" data-t="dark" title="Dark" onclick="setTheme('dark')"></button>
-    <button class="theme-btn" data-t="vintage" title="Vintage" onclick="setTheme('vintage')"></button>
+    <button class="theme-btn active" data-t="dark" title="Analytics Dark" onclick="setTheme('dark')"></button>
+    <button class="theme-btn" data-t="analytics-light" title="Analytics Light" onclick="setTheme('analytics-light')"></button>
+    <button class="theme-btn" data-t="dynasty-dark" title="Dynasty Dark" onclick="setTheme('dynasty-dark')"></button>
+    <button class="theme-btn" data-t="dynasty-light" title="Dynasty Light" onclick="setTheme('dynasty-light')"></button>
   </div>
 </div>
+<div id="breadcrumb-bar" style="display:none"></div>
 <div id="main">
   <div class="tab-bar">
     <div class="tab-btn active"  onclick="switchTab('teams')">Teams</div>
@@ -385,6 +421,7 @@ let sortCol = 'overall';
 let sortAsc = false;
 let posFilter = 'ALL';
 let activeTab = 'teams';
+let teamSubnav = 'roster'; // 'roster' | 'depth' | 'schedule'
 let topSortCol = 'overall';
 let topSortAsc = false;
 let topSearch = '';
@@ -393,11 +430,12 @@ let compareTeamId = null;
 
 // ── Skill attribute definitions (mirrors rating_engine.py SKILL_ATTRS) ────
 const SKILL_ATTRS = {
-  QB:  [['passRating','Pass Rating'],['deepBall','Deep Ball'],['accuracy','Accuracy'],['mobility','Mobility']],
-  RB:  [['rushing','Rushing'],['receiving','Receiving'],['powerRunning','Power Running']],
+  // QB mobility is display-only (not in overall) — listed last so it renders after core skills
+  QB:  [['passVolume','Pass Volume'],['accuracy','Accuracy'],['deepBall','Deep Ball'],['decisionMaking','Decision Making'],['clutch','Clutch'],['mobility','Mobility ★']],
+  RB:  [['rushing','Rushing'],['efficiency','Efficiency'],['powerRunning','Power Running'],['receiving','Receiving'],['explosiveness','Explosiveness']],
   FB:  [['blocking','Blocking'],['rushing','Rushing'],['receiving','Receiving']],
-  WR:  [['receiving','Receiving'],['routeRunning','Route Running'],['yac','YAC']],
-  TE:  [['receiving','Receiving'],['blocking','Blocking'],['routeRunning','Route Running']],
+  WR:  [['receiving','Receiving'],['routeRunning','Route Running'],['bigPlayAbility','Big Play'],['yac','YAC'],['consistency','Consistency']],
+  TE:  [['receiving','Receiving'],['blocking','Blocking'],['routeRunning','Route Running'],['bigPlayAbility','Big Play']],
   OL:  [['runBlock','Run Block'],['passBlock','Pass Block']],
   DL:  [['passRush','Pass Rush'],['runStop','Run Stop']],
   LB:  [['coverage','Coverage'],['runStop','Run Stop'],['passRush','Pass Rush']],
@@ -406,12 +444,15 @@ const SKILL_ATTRS = {
   P:   [['distance','Distance'],['placement','Placement']],
 };
 
+// Display-only skills (shown on card but excluded from overall calculation)
+const DISPLAY_ONLY_SKILLS = { QB: new Set(['mobility']) };
+
 const SKILL_COLS = {  // short labels for table headers
-  QB:  [['passRating','PASS'],['deepBall','DEEP'],['accuracy','ACC'],['mobility','MOB']],
-  RB:  [['rushing','RUSH'],['receiving','REC'],['powerRunning','PWR']],
+  QB:  [['passVolume','VOL'],['accuracy','ACC'],['deepBall','DEEP'],['decisionMaking','DEC'],['clutch','CLUTCH']],
+  RB:  [['rushing','RUSH'],['efficiency','EFF'],['powerRunning','PWR'],['receiving','REC'],['explosiveness','EXPL']],
   FB:  [['blocking','BLK'],['rushing','RUSH'],['receiving','REC']],
-  WR:  [['receiving','REC'],['routeRunning','RTE'],['yac','YAC']],
-  TE:  [['receiving','REC'],['blocking','BLK'],['routeRunning','RTE']],
+  WR:  [['receiving','REC'],['routeRunning','RTE'],['bigPlayAbility','BIG'],['yac','YAC'],['consistency','CON']],
+  TE:  [['receiving','REC'],['blocking','BLK'],['routeRunning','RTE'],['bigPlayAbility','BIG']],
   OL:  [['runBlock','R-BLK'],['passBlock','P-BLK']],
   DL:  [['passRush','P-RSH'],['runStop','R-STP']],
   LB:  [['coverage','COV'],['runStop','R-STP'],['passRush','P-RSH']],
@@ -612,7 +653,9 @@ async function loadData() {
   yearSel.innerHTML = years.map(y =>
     `<option value="${y}">${y}${projectedYears.has(y) ? ' (Projected)' : ' Season'}</option>`
   ).join('');
-  yearSel.value = years[years.length - 1];
+  // Default to 2025 (most recent complete season); fall back to last year if not available
+  const defaultYear = years.includes(2025) ? 2025 : years[years.length - 1];
+  yearSel.value = defaultYear;
   yearSel.onchange = e => { currentYear = parseInt(e.target.value); onDataReady(); };
 
   for (const y of years) {
@@ -627,7 +670,7 @@ async function loadData() {
     } catch (e) { console.warn(`Failed to load ${y}:`, e); }
   }
 
-  currentYear = years[years.length - 1];
+  currentYear = defaultYear;
   onDataReady();
 }
 
@@ -695,9 +738,44 @@ function renderTeams(filteredTeams) {
 function selectTeam(id) {
   selectedTeamId = id;
   posFilter = 'ALL';
+  teamSubnav = 'roster';
   switchTab('roster', false);
   const t = getTeams().find(t => t.id === id);
-  if (t) renderRoster(t);
+  if (t) {
+    setBreadcrumb([{label: 'Teams', onclick: "switchTab('teams')"}, {label: t.name}]);
+    renderTeamView(t);
+  }
+}
+
+function setBreadcrumb(parts) {
+  const bar = document.getElementById('breadcrumb-bar');
+  if (!parts || !parts.length) { bar.style.display = 'none'; return; }
+  bar.style.display = 'flex';
+  bar.innerHTML = parts.map((p, i) =>
+    i < parts.length - 1
+      ? `<span class="bc-link" onclick="${p.onclick}">${p.label}</span><span class="bc-sep">›</span>`
+      : `<span>${p.label}</span>`
+  ).join('');
+}
+
+function renderTeamView(t) {
+  if (!t) { switchTab('teams'); return; }
+  const subNavHTML = `<div class="team-subnav">
+    <button class="team-subnav-btn ${teamSubnav==='roster'?'active':''}" onclick="setTeamSubnav('roster')">Roster</button>
+    <button class="team-subnav-btn ${teamSubnav==='depth'?'active':''}" onclick="setTeamSubnav('depth')">Depth Chart</button>
+    <button class="team-subnav-btn ${teamSubnav==='schedule'?'active':''}" onclick="setTeamSubnav('schedule')">Schedule</button>
+    <button class="team-subnav-btn ${teamSubnav==='analysis'?'active':''}" onclick="setTeamSubnav('analysis')">Analysis</button>
+  </div>`;
+  if (teamSubnav === 'roster') renderRoster(t, subNavHTML);
+  else if (teamSubnav === 'depth') renderDepth(t, subNavHTML);
+  else if (teamSubnav === 'schedule') renderSchedule(t, subNavHTML);
+  else renderAnalysis(t, subNavHTML);
+}
+
+function setTeamSubnav(view) {
+  teamSubnav = view;
+  const t = getTeams().find(t => t.id === selectedTeamId);
+  if (t) renderTeamView(t);
 }
 
 function switchTab(tab, render = true) {
@@ -718,21 +796,31 @@ function setTheme(t) {
   document.querySelectorAll('.theme-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.t === t);
   });
+  localStorage.setItem('cfb-theme', t);
   // Redraw team radar so it picks up new theme colors
   if (window._teamRadarChart) { window._teamRadarChart.destroy(); window._teamRadarChart = null; requestAnimationFrame(() => initTeamRadar()); }
 }
 
 function renderActiveTab() {
   const t = getTeams().find(t => t.id === selectedTeamId);
-  if (activeTab === 'teams') renderTeams();
-  else if (activeTab === 'roster') { if (t) renderRoster(t); else switchTab('teams'); }
-  else if (activeTab === 'depth') { if (t) renderDepth(t); else switchTab('teams'); }
-  else if (activeTab === 'schedule') { if (t) renderSchedule(t); else switchTab('teams'); }
-  else if (activeTab === 'top-players') renderTopPlayers();
-  else if (activeTab === 'conferences') renderConferences();
-  else if (activeTab === 'compare') renderCompare();
-  else if (activeTab === 'map') renderMap();
-  else if (activeTab === 'explain') renderExplain();
+  if (activeTab === 'teams') { setBreadcrumb([]); renderTeams(); }
+  else if (activeTab === 'roster') {
+    if (t) { teamSubnav = 'roster'; setBreadcrumb([{label:'Teams',onclick:"switchTab('teams')"},{label:t.name}]); renderTeamView(t); }
+    else switchTab('teams');
+  }
+  else if (activeTab === 'depth') {
+    if (t) { teamSubnav = 'depth'; setBreadcrumb([{label:'Teams',onclick:"switchTab('teams')"},{label:t.name}]); renderTeamView(t); }
+    else switchTab('teams');
+  }
+  else if (activeTab === 'schedule') {
+    if (t) { teamSubnav = 'schedule'; setBreadcrumb([{label:'Teams',onclick:"switchTab('teams')"},{label:t.name}]); renderTeamView(t); }
+    else switchTab('teams');
+  }
+  else if (activeTab === 'top-players') { setBreadcrumb([]); renderTopPlayers(); }
+  else if (activeTab === 'conferences') { setBreadcrumb([]); renderConferences(); }
+  else if (activeTab === 'compare') { setBreadcrumb([]); renderCompare(); }
+  else if (activeTab === 'map') { setBreadcrumb([]); renderMap(); }
+  else if (activeTab === 'explain') { setBreadcrumb([]); renderExplain(); }
 }
 
 // ── Team header HTML (shared by Roster + Depth) ───────────────────────────
@@ -818,7 +906,7 @@ function renderTeamSwitcherList(query) {
 }
 
 // ── Roster Tab ─────────────────────────────────────────────────────────────
-function renderRoster(t) {
+function renderRoster(t, subNavHTML='') {
   const ps = getPlayers().filter(p => p.teamId === t.id);
   const rMap = buildRatingMap();
   const posGroups = ['ALL', ...new Set(ps.map(p => p.positionGroup).filter(g => g && g !== 'OL'))].sort();
@@ -882,6 +970,7 @@ function renderRoster(t) {
 
     document.getElementById('tab-content').innerHTML = `
       ${teamHeaderHTML(t)}
+      ${subNavHTML}
       <div class="filter-row">
         ${posGroups.map(pg => `<span class="pos-chip ${pg === posFilter ? 'active' : ''}" onclick="filterPos('${pg}')">${pg}</span>`).join('')}
       </div>
@@ -931,6 +1020,7 @@ function renderRoster(t) {
 
   document.getElementById('tab-content').innerHTML = `
     ${teamHeaderHTML(t)}
+    ${subNavHTML}
     <div class="filter-row">
       ${posGroups.map(pg => `<span class="pos-chip ${pg === posFilter ? 'active' : ''}" onclick="filterPos('${pg}')">${pg}</span>`).join('')}
     </div>
@@ -962,7 +1052,7 @@ function renderRoster(t) {
 }
 
 // ── Depth Chart Tab ────────────────────────────────────────────────────────
-function renderDepth(t) {
+function renderDepth(t, subNavHTML='') {
   const ps = getPlayers().filter(p => p.teamId === t.id);
   const rMap = buildRatingMap();
 
@@ -998,6 +1088,7 @@ function renderDepth(t) {
 
   document.getElementById('tab-content').innerHTML = `
     ${teamHeaderHTML(t)}
+    ${subNavHTML}
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 32px">
       ${sections}
     </div>`;
@@ -1062,15 +1153,111 @@ async function loadPlaysForWeek(year, week) {
   } catch { return {}; }
 }
 
+// ── Analysis Tab (Team Report Card) ────────────────────────────────────────
+async function renderAnalysis(t, subNavHTML='') {
+  document.getElementById('tab-content').innerHTML = `${teamHeaderHTML(t)}${subNavHTML}<div id="loading">Loading analysis...</div>`;
+
+  const rMap = buildRatingMap();
+  const allPlayers = getPlayers();
+  const teamPlayers = allPlayers.filter(p => p.teamId === t.id && p.positionGroup !== 'OL');
+
+  // Roster OVR vs national average
+  const allOvrs = getRatings().map(r => r.overall || 0).filter(v => v > 0);
+  const natAvg = allOvrs.length ? Math.round(allOvrs.reduce((s, v) => s + v, 0) / allOvrs.length) : 70;
+  const teamOvrs = teamPlayers.map(p => rMap[p.id]?.overall || 0).filter(v => v > 0);
+  const teamAvg = teamOvrs.length ? Math.round(teamOvrs.reduce((s, v) => s + v, 0) / teamOvrs.length) : 0;
+  const rosterDelta = teamAvg - natAvg;
+  const deltaColor = rosterDelta > 0 ? 'var(--positive)' : rosterDelta < 0 ? 'var(--negative)' : 'var(--text-muted)';
+
+  // Position group ratings
+  const posGroups = ['QB','RB','WR','TE','DL','LB','DB'];
+  const groupRatings = posGroups.map(group => {
+    const ps = teamPlayers.filter(p => p.positionGroup === group);
+    const vals = ps.map(p => rMap[p.id]?.overall || 0).sort((a,b) => b-a).slice(0, 5);
+    const avg = vals.length ? Math.round(vals.reduce((s,v) => s+v,0) / vals.length) : 0;
+    return { group, avg };
+  }).filter(g => g.avg > 0);
+
+  const topGroup = groupRatings.slice().sort((a,b) => b.avg - a.avg)[0];
+  const weakGroup = groupRatings.slice().sort((a,b) => a.avg - b.avg)[0];
+
+  // Top players per side of ball
+  const offGroups = new Set(['QB','RB','WR','TE','FB']);
+  const defGroups = new Set(['DL','LB','DB']);
+  const topOff = teamPlayers.filter(p => offGroups.has(p.positionGroup))
+    .sort((a,b) => (rMap[b.id]?.overall||0) - (rMap[a.id]?.overall||0)).slice(0,3);
+  const topDef = teamPlayers.filter(p => defGroups.has(p.positionGroup))
+    .sort((a,b) => (rMap[b.id]?.overall||0) - (rMap[a.id]?.overall||0)).slice(0,3);
+
+  const playerChip = (p) => {
+    const r = rMap[p.id] || {};
+    return `<span style="cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;background:var(--surface);border:1px solid var(--border);font-size:13px;margin:3px 3px 3px 0" onclick="showPlayerModal('${p.id}')">
+      <span class="ovr" style="background:${ratingColor(r.overall||0)};color:#000;width:24px;font-size:10px">${r.overall||'-'}</span>
+      ${p.firstName[0]}. ${p.lastName}
+      <span style="font-size:10px;color:var(--text-muted)">${p.positionGroup}</span>
+    </span>`;
+  };
+
+  // Season record (async)
+  const schedule = await loadSchedule(currentYear);
+  const record = getTeamRecord(t.name, schedule);
+  const teamGames = schedule.filter(g => g.homeTeam === t.name || g.awayTeam === t.name);
+  const spVals = teamGames.map(g => {
+    const isHome = g.homeTeam === t.name;
+    return isHome ? g.awaySpRank : g.homeSpRank;
+  }).filter(v => v != null && v > 0);
+  const sosAvg = spVals.length ? (spVals.reduce((s,v) => s+v,0) / spVals.length).toFixed(3) : null;
+
+  const groupBars = groupRatings.map(({ group, avg }) => {
+    const pct = ((avg - 40) / 59) * 100;
+    return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+      <span style="width:28px;font-size:12px;color:var(--text-muted);text-align:right">${group}</span>
+      <div style="flex:1;background:var(--surface-deep);border-radius:3px;height:10px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:${ratingColor(avg)};border-radius:3px"></div>
+      </div>
+      <span style="width:28px;font-size:12px;color:${ratingColor(avg)};font-weight:700">${avg}</span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('tab-content').innerHTML = `
+    ${teamHeaderHTML(t)}
+    ${subNavHTML}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px 32px;margin-top:4px">
+      <div>
+        <div class="modal-section-title">Season Summary</div>
+        ${record ? `<div style="font-size:22px;font-weight:800;margin-bottom:6px">${record}</div>` : ''}
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:4px">Roster OVR:
+          <span style="font-weight:700;color:var(--text)">${teamAvg}</span>
+          <span style="color:${deltaColor};font-size:12px;margin-left:4px">(${rosterDelta > 0 ? '+' : ''}${rosterDelta} vs nat. avg ${natAvg})</span>
+        </div>
+        ${sosAvg ? `<div style="font-size:13px;color:var(--text-muted)">Avg Opp SP+: <span style="font-weight:700;color:var(--text)">${sosAvg}</span></div>` : ''}
+        ${topGroup ? `<div style="font-size:13px;color:var(--text-muted);margin-top:6px">Strongest unit: <span style="color:var(--positive);font-weight:700">${topGroup.group}</span> (${topGroup.avg})</div>` : ''}
+        ${weakGroup && weakGroup.group !== topGroup?.group ? `<div style="font-size:13px;color:var(--text-muted)">Weakest unit: <span style="color:var(--negative);font-weight:700">${weakGroup.group}</span> (${weakGroup.avg})</div>` : ''}
+      </div>
+      <div>
+        <div class="modal-section-title">Position Group Ratings</div>
+        ${groupBars}
+      </div>
+      <div>
+        <div class="modal-section-title">Top Offensive Players</div>
+        <div>${topOff.map(playerChip).join('')}</div>
+      </div>
+      <div>
+        <div class="modal-section-title">Top Defensive Players</div>
+        <div>${topDef.map(playerChip).join('')}</div>
+      </div>
+    </div>`;
+}
+
 // ── Schedule Tab ───────────────────────────────────────────────────────────
-async function renderSchedule(t) {
-  document.getElementById('tab-content').innerHTML = `${teamHeaderHTML(t)}<div id="loading">Loading schedule...</div>`;
+async function renderSchedule(t, subNavHTML='') {
+  document.getElementById('tab-content').innerHTML = `${teamHeaderHTML(t)}${subNavHTML}<div id="loading">Loading schedule...</div>`;
   const schedule = await loadSchedule(currentYear);
   const games = schedule.filter(g => g.homeTeam === t.name || g.awayTeam === t.name)
                         .sort((a, b) => (a.week || 0) - (b.week || 0));
 
   if (!games.length) {
-    document.getElementById('tab-content').innerHTML = `${teamHeaderHTML(t)}<div style="color:#666;padding:20px">No schedule data available for ${currentYear}.</div>`;
+    document.getElementById('tab-content').innerHTML = `${teamHeaderHTML(t)}${subNavHTML}<div style="color:#666;padding:20px">No schedule data available for ${currentYear}.</div>`;
     return;
   }
 
@@ -1100,6 +1287,7 @@ async function renderSchedule(t) {
 
   document.getElementById('tab-content').innerHTML = `
     ${teamHeaderHTML(t)}
+    ${subNavHTML}
     <div style="padding:12px 0" class="table-scroll-wrap">
       <table class="roster-table" style="width:100%">
         <thead><tr>
@@ -1347,17 +1535,18 @@ function renderTopPlayers() {
   });
 
   filtered.sort((a, b) => {
-    const ra = rMap[a.id] || {}, rb = rMap[b.id] || {};
-    let va = ra[topSortCol] || 0, vb = rb[topSortCol] || 0;
-    if (topSortCol === 'name') { va = a.lastName; vb = b.lastName; }
-    if (topSortCol === 'team') { va = (teamMap[a.teamId]?.name||''); vb = (teamMap[b.teamId]?.name||''); }
+    const va = getTopSortVal(a, rMap, topSortCol);
+    const vb = getTopSortVal(b, rMap, topSortCol);
     if (typeof va === 'string') return topSortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
     return topSortAsc ? va - vb : vb - va;
   });
 
   const displayList = topSearch ? filtered : filtered.slice(0, 250);
   const skillCols = topPosFilter !== 'ALL' ? (SKILL_COLS[topPosFilter] || []) : [];
-  const headCols = [['name','Name'],['pos','Pos'],['team','Team'],['overall','OVR'], ...skillCols];
+  // Show PPA column for skill positions where PPA data is meaningful
+  const showPPA = !['OL','K','P','LS'].includes(topPosFilter);
+  const ppaCol = showPPA ? [['ppa','PPA']] : [];
+  const headCols = [['name','Name'],['pos','Pos'],['team','Team'],['overall','OVR'], ...ppaCol, ...skillCols];
 
   document.getElementById('tab-content').innerHTML = `
     <div class="top-players-controls">
@@ -1385,6 +1574,7 @@ function renderTopPlayers() {
           <td><span class="pos-badge">${p.position || '?'}</span></td>
           <td style="font-size:11px;color:#aaa;cursor:pointer" onclick="event.stopPropagation();goToTeam(${p.teamId})">${team.name || ''}</td>
           <td><span class="ovr" style="background:${ratingColor(r.overall || 0)};color:#000">${r.overall || '-'}</span></td>
+          ${showPPA ? (() => { const ppaColor = r.ppa > 0 ? 'var(--positive)' : r.ppa < 0 ? 'var(--negative)' : 'var(--text-dim)'; const ppaVal = r.ppa != null && r.ppa !== 0 ? (r.ppa > 0 ? '+' : '') + Number(r.ppa).toFixed(3) : '-'; return `<td style="color:${ppaColor};font-size:12px">${ppaVal}</td>`; })() : ''}
           ${skillCols.map(([a]) => `<td>${r[a] != null ? r[a] : '-'}</td>`).join('')}
         </tr>`;
       }).join('')}
@@ -1400,6 +1590,15 @@ function sortTopBy(col) {
   if (topSortCol === col) topSortAsc = !topSortAsc;
   else { topSortCol = col; topSortAsc = col === 'name' || col === 'team' || col === 'pos'; }
   renderTopPlayers();
+}
+function getTopSortVal(p, rMap, col) {
+  const r = rMap[p.id] || {};
+  if (col === 'name') return `${p.lastName} ${p.firstName}`.toLowerCase();
+  if (col === 'team') return (buildTeamMap()[p.teamId]?.name || '').toLowerCase();
+  if (col === 'pos') return (p.positionGroup || '').toLowerCase();
+  if (col === 'ppa') return r.ppa || 0;
+  if (col === 'overall') return r.overall || 0;
+  return r[col] || 0;
 }
 function goToTeam(teamId) { selectTeam(teamId, true); }
 
@@ -1454,6 +1653,20 @@ function startCompare(teamId) {
   switchTab('compare');
 }
 
+function getTeamRecord(teamName, schedule) {
+  let w = 0, l = 0;
+  for (const g of schedule) {
+    if (g.homeScore == null) continue;
+    const isHome = g.homeTeam === teamName;
+    const isAway = g.awayTeam === teamName;
+    if (!isHome && !isAway) continue;
+    const mine = isHome ? g.homeScore : g.awayScore;
+    const theirs = isHome ? g.awayScore : g.homeScore;
+    mine > theirs ? w++ : l++;
+  }
+  return w + l > 0 ? `${w}-${l}` : '';
+}
+
 function renderCompare() {
   const teams = getTeams().slice().sort((a, b) => (b.ratings?.overall || 0) - (a.ratings?.overall || 0));
   const leftTeam = getTeams().find(t => t.id === selectedTeamId);
@@ -1505,7 +1718,7 @@ function renderCompare() {
           <img src="${leftTeam.logoUrl}" style="width:36px;height:36px;object-fit:contain" onerror="this.style.display='none'">
           <div>
             <div style="font-weight:700">${leftTeam.name}</div>
-            <div style="font-size:11px;color:#888">${leftTeam.conference||''}</div>
+            <div style="font-size:11px;color:var(--text-muted)">${leftTeam.conference||''} <span id="compare-left-record" style="color:var(--accent)"></span></div>
           </div>` : '<span style="color:#666">Select a team from sidebar</span>'}
         <span style="color:#444;font-size:20px;margin:0 8px">vs</span>
         <select onchange="compareTeamId=parseInt(this.value);renderCompare()" style="padding:8px 12px;background:var(--input-bg);border:1px solid var(--border-mid);color:var(--text);font-size:13px;border-radius:4px;cursor:pointer;min-width:200px">
@@ -1515,6 +1728,15 @@ function renderCompare() {
       </div>
     </div>
     ${compHTML}`;
+
+  // Async: fill in W-L record after schedule loads
+  if (leftTeam) {
+    loadSchedule(currentYear).then(sched => {
+      const rec = getTeamRecord(leftTeam.name, sched);
+      const el = document.getElementById('compare-left-record');
+      if (el && rec) el.textContent = `(${rec})`;
+    });
+  }
 }
 
 function renderPositionGroupComparison(leftTeam, rightTeam) {
@@ -1533,14 +1755,26 @@ function renderPositionGroupComparison(leftTeam, rightTeam) {
     { group:'LB', label:'LB' }, { group:'DB', label:'DB' },
   ];
 
+  function getTopPlayer(team, group) {
+    const ps = allPlayers.filter(p => p.teamId === team.id && p.positionGroup === group);
+    return ps.sort((a, b) => (rMap[b.id]?.overall || 0) - (rMap[a.id]?.overall || 0))[0] || null;
+  }
+
   const rows = groups.map(({ group, label }) => {
     const lv = getGroupRating(leftTeam, group);
     const rv = getGroupRating(rightTeam, group);
     if (!lv && !rv) return '';
     const lWin = lv >= rv;
     const lPct = (lv / 99) * 100, rPct = (rv / 99) * 100;
-    return `<div class="compare-head-row">
-      <span class="compare-val-left" style="color:${ratingColor(lv)}">${lv||'-'}</span>
+    const lTop = getTopPlayer(leftTeam, group);
+    const rTop = getTopPlayer(rightTeam, group);
+    const lTopHTML = lTop ? `<span style="font-size:11px;color:var(--text-muted);cursor:pointer;margin-top:2px" onclick="showPlayerModal('${lTop.id}')">${lTop.lastName}</span>` : '';
+    const rTopHTML = rTop ? `<span style="font-size:11px;color:var(--text-muted);cursor:pointer;margin-top:2px" onclick="showPlayerModal('${rTop.id}')">${rTop.lastName}</span>` : '';
+    return `<div class="compare-head-row" style="margin-bottom:2px">
+      <div style="display:flex;flex-direction:column;align-items:flex-end;min-width:60px">
+        <span class="compare-val-left" style="color:${ratingColor(lv)}">${lv||'-'}</span>
+        ${lTopHTML}
+      </div>
       <div class="compare-bars">
         <div style="flex:1;display:flex;justify-content:flex-end">
           <div class="compare-bar-left" style="width:${lPct}%;background:${lWin ? ratingColor(lv) : '#2a4070'}"></div>
@@ -1550,7 +1784,10 @@ function renderPositionGroupComparison(leftTeam, rightTeam) {
           <div class="compare-bar-right" style="width:${rPct}%;background:${!lWin ? ratingColor(rv) : '#2a4070'}"></div>
         </div>
       </div>
-      <span class="compare-val-right" style="color:${ratingColor(rv)}">${rv||'-'}</span>
+      <div style="display:flex;flex-direction:column;align-items:flex-start;min-width:60px">
+        <span class="compare-val-right" style="color:${ratingColor(rv)}">${rv||'-'}</span>
+        ${rTopHTML}
+      </div>
       <span class="compare-cat-label" style="width:80px;text-align:center;font-size:11px;color:#666">${label}</span>
     </div>`;
   }).join('');
@@ -1736,9 +1973,26 @@ function showPlayerModal(playerId) {
         </div>`;
       })()
     : '';
-  const trajectoryHTML = r.trajectory && !r.projected
-    ? `<div style="margin-top:6px;font-size:12px;color:#aaa">Trajectory: <span style="color:${ratingColor(r.trajectory)};font-weight:700">${r.trajectory}</span> <span style="font-size:10px;color:#555">(projected)</span></div>`
-    : '';
+
+  // Advanced metrics: PPA and usage (available after pipeline re-run)
+  const advancedHTML = (() => {
+    const cells = [];
+    if (r.ppa != null && r.ppa !== 0) {
+      const ppaColor = r.ppa > 0 ? 'var(--positive)' : 'var(--negative)';
+      cells.push(`<div class="stat-cell"><div class="sv" style="color:${ppaColor}">${r.ppa > 0 ? '+' : ''}${r.ppa.toFixed(3)}</div><div class="sk">Avg PPA</div></div>`);
+    }
+    if (r.usage?.snap) {
+      cells.push(`<div class="stat-cell"><div class="sv">${Math.round(r.usage.snap * 100)}%</div><div class="sk">Snap %</div></div>`);
+    }
+    if (r.usage?.games) {
+      cells.push(`<div class="stat-cell"><div class="sv">${r.usage.games}</div><div class="sk">Games</div></div>`);
+    }
+    if (!cells.length) return '';
+    return `<div class="modal-section">
+      <div class="modal-section-title">Advanced</div>
+      <div class="stat-grid">${cells.join('')}</div>
+    </div>`;
+  })();
 
   const overviewHTML = `
     <div class="modal-section">
@@ -1746,6 +2000,7 @@ function showPlayerModal(playerId) {
       ${skills.length ? skillBarsHTML : '<div style="color:var(--text-dim);font-size:12px">No skill data available</div>'}
     </div>
     ${statsHTML}
+    ${advancedHTML}
     ${careerHTML}
     ${yoyHTML}
     ${similarHTML}`;
@@ -1763,7 +2018,6 @@ function showPlayerModal(playerId) {
           ${p.height ? ` &bull; ${p.height}` : ''} ${p.weight ? `/ ${p.weight} lbs` : ''}
         </div>
         ${rankHTML}
-        ${trajectoryHTML}
         ${projRangeHTML}
       </div>
     </div>
@@ -2299,6 +2553,15 @@ dampener = max(0.15, 1.0 − (current_ovr − 60) / 60)  # steeper at elite tier
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 document.getElementById('search').addEventListener('input', () => { if (activeTab === 'teams') renderTeams(); });
 document.getElementById('conf-filter').addEventListener('change', () => { if (activeTab === 'teams') renderTeams(); });
+
+// Restore saved theme; default to analytics dark
+(function() {
+  const valid = ['dark', 'analytics-light', 'dynasty-dark', 'dynasty-light'];
+  const saved = localStorage.getItem('cfb-theme');
+  const t = valid.includes(saved) ? saved : 'dark';
+  setTheme(t);
+})();
+
 loadData();
 </script>
 </body>
