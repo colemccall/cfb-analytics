@@ -1126,43 +1126,6 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
     print(f"    Min={min(ovrs)} Max={max(ovrs)} Median={sorted(ovrs)[len(ovrs)//2]}")
     print(f"  {len(teams_private)} teams, {len(players_private)} players.")
 
-    # Trajectory rating: project next-year OVR for returning players with 2+ years of data.
-    # Algorithm: projected = current_ovr + clamp((yoy_growth * 0.4 + momentum_bonus) * dampener, -5, +8)
-    # Only computed for players who appear in both current and prior year.
-    if prior_player_ids:
-        prior_ratings_path = os.path.join(OUTPUT_DIR, str(year - 1), "ratings.json")
-        prior_ratings = {}
-        if os.path.exists(prior_ratings_path):
-            with open(prior_ratings_path) as f:
-                for rr in json.load(f):
-                    prior_ratings[rr["playerId"]] = rr
-        trajectory_count = 0
-        for r in ratings:
-            pid = r["playerId"]
-            if pid not in prior_player_ids or pid not in prior_ratings:
-                continue
-            prev_ovr = prior_ratings[pid].get("overall", 0)
-            curr_ovr = r.get("overall", 0)
-            if prev_ovr < 40 or curr_ovr < 40:
-                continue
-            yoy_growth = curr_ovr - prev_ovr
-            # momentum_bonus: reward improvement in key efficiency skills
-            key_skills = ["passVolume", "accuracy", "rushing", "efficiency", "receiving", "coverage", "passRush"]
-            momentum = 0.0
-            skill_count = 0
-            for sk in key_skills:
-                if sk in r and sk in prior_ratings[pid]:
-                    momentum += r[sk] - prior_ratings[pid][sk]
-                    skill_count += 1
-            momentum_bonus = (momentum / skill_count) if skill_count > 0 else 0
-            # dampener: elite players improve less (steeper falloff above 60)
-            dampener = max(0.15, 1.0 - (curr_ovr - 60) / 60)
-            raw_delta = (yoy_growth * 0.4 + momentum_bonus * 0.3) * dampener
-            max_gain = 3 if curr_ovr >= 85 else 5
-            delta = max(-5, min(max_gain, round(raw_delta)))
-            r["trajectory"] = max(40, min(99, curr_ovr + delta))
-            trajectory_count += 1
-        print(f"  Trajectory ratings computed for {trajectory_count} returning players")
 
     print("Building schedule, drives, and plays...")
     team_schedule = build_team_schedule(games_raw, sp_detail)
@@ -1400,7 +1363,7 @@ def build_projected_year(api_key, proj_year, base_year, output_dir, team_name_ma
             prev_school = prev_team_map.get(pid)
             is_transfer = prev_school is not None and prev_school != school
             new_ovr = prev.get("overall", 55)  # straight copy — no trajectory projection
-            r_entry = {k: v for k, v in prev.items() if k not in ("playerId", "overall", "trajectory", "stats")}
+            r_entry = {k: v for k, v in prev.items() if k not in ("playerId", "overall", "stats")}
             if is_transfer or status == "transfer_in":
                 proj_type = "transfer"
                 low = max(40, new_ovr - 8)
