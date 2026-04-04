@@ -1,67 +1,112 @@
-  /* ── Theme variables ── */
-  /* Analytics Dark (default): deep slate — credible, readable, modern */
+  /* ══════════════════════════════════════════════
+     THEME SYSTEM
+     4 distinct personalities — not just color swaps.
+
+     Analytics Dark/Light: data-forward, editorial.
+       Numbers are the hero. Tight density, monospace
+       numerals, cool-neutral palette, no decoration.
+
+     Dynasty Dark/Light: roster depth, scouting feel.
+       Warmer, more generous spacing, amber/gold accent,
+       stronger card surfaces, bolder display type.
+  ══════════════════════════════════════════════ */
+
+  /* ── Analytics Dark — charcoal ink, steel blue accent ── */
   :root, [data-theme="dark"] {
-    --bg: #111318; --surface: #1c1f26; --surface-deep: #14161c;
-    --text: #e2e5ed; --text-muted: #8890a0; --text-dim: #50576a;
-    --accent: #4d9de0; --accent-dim: rgba(77,157,224,0.12);
-    --border: rgba(255,255,255,0.07); --border-mid: rgba(255,255,255,0.11);
-    --input-bg: #14161c; --sidebar-bg: #0e1014;
-    --positive: #3dbb73; --negative: #e8544a; --warning: #e0a030;
-    --shadow: 0 2px 8px rgba(0,0,0,0.35);
-    --shadow-lg: 0 4px 24px rgba(0,0,0,0.5);
-    --radius: 8px; --radius-sm: 5px;
-  }
-  /* Analytics Light: clean editorial — off-white, readable */
-  [data-theme="analytics-light"] {
-    --bg: #f4f5f7; --surface: #ffffff; --surface-deep: #ebecf0;
-    --text: #172030; --text-muted: #5c6578; --text-dim: #9aa3b2;
-    --accent: #1a6bb5; --accent-dim: rgba(26,107,181,0.08);
-    --border: rgba(0,0,0,0.08); --border-mid: rgba(0,0,0,0.14);
-    --input-bg: #ffffff; --sidebar-bg: #f0f1f4;
-    --positive: #1d8a48; --negative: #c0392b; --warning: #a06800;
-    --shadow: 0 1px 4px rgba(0,0,0,0.10);
-    --shadow-lg: 0 4px 16px rgba(0,0,0,0.14);
-    --radius: 8px; --radius-sm: 5px;
-  }
-  /* Dynasty Dark: deep navy + amber — video game energy */
-  [data-theme="dynasty-dark"] {
-    --bg: #090d16; --surface: #111826; --surface-deep: #070b12;
-    --text: #d8e4f0; --text-muted: #6e8ba8; --text-dim: #374d64;
-    --accent: #e8a030; --accent-dim: rgba(232,160,48,0.12);
+    --bg: #0f1117; --surface: #181b23; --surface-deep: #0b0d12;
+    --text: #dce1ea; --text-muted: #7a8496; --text-dim: #434c5e;
+    --accent: #3d87cc; --accent-dim: rgba(61,135,204,0.1);
+    --accent-2: #5ba8e8;                        /* hover/link shade */
     --border: rgba(255,255,255,0.06); --border-mid: rgba(255,255,255,0.10);
-    --input-bg: #090d16; --sidebar-bg: #060910;
-    --positive: #3dbb73; --negative: #e8544a; --warning: #e8a030;
-    --shadow: 0 2px 10px rgba(0,0,0,0.4);
-    --shadow-lg: 0 4px 28px rgba(0,0,0,0.6);
-    --radius: 8px; --radius-sm: 5px;
-  }
-  /* Dynasty Light: white + deep navy — clean stadium */
-  [data-theme="dynasty-light"] {
-    --bg: #f2f4f8; --surface: #ffffff; --surface-deep: #e6e9f0;
-    --text: #0d1f38; --text-muted: #4e6080; --text-dim: #8fa0ba;
-    --accent: #1a4a96; --accent-dim: rgba(26,74,150,0.08);
-    --border: rgba(0,0,0,0.08); --border-mid: rgba(0,0,0,0.14);
-    --input-bg: #ffffff; --sidebar-bg: #eaedf3;
-    --positive: #1d8a48; --negative: #c0392b; --warning: #a06800;
-    --shadow: 0 1px 4px rgba(0,0,0,0.10);
-    --shadow-lg: 0 4px 16px rgba(0,0,0,0.14);
-    --radius: 8px; --radius-sm: 5px;
+    --input-bg: #0b0d12; --sidebar-bg: #0b0e14;
+    --positive: #34a85a; --negative: #e05050; --warning: #d4922a;
+    --shadow: 0 1px 6px rgba(0,0,0,0.4);
+    --shadow-lg: 0 4px 20px rgba(0,0,0,0.55);
+    --radius: 6px; --radius-sm: 4px;
+    --nav-indicator: 2px solid var(--accent);
+    --hero-border: 3px solid var(--accent);
+    --table-row-alt: rgba(255,255,255,0.02);
+    --num-font: 'Inter', ui-monospace, monospace;  /* tight numerals */
   }
 
-  /* ── Type scale ── */
+  /* ── Analytics Light — newsprint white, ink blue accent ── */
+  [data-theme="analytics-light"] {
+    --bg: #f6f7f9; --surface: #ffffff; --surface-deep: #eceef2;
+    --text: #1a2030; --text-muted: #52607a; --text-dim: #96a3b8;
+    --accent: #1a5fa8; --accent-dim: rgba(26,95,168,0.07);
+    --accent-2: #0d4a8a;
+    --border: rgba(0,0,0,0.07); --border-mid: rgba(0,0,0,0.13);
+    --input-bg: #ffffff; --sidebar-bg: #eef0f4;
+    --positive: #1a7a3e; --negative: #bf3535; --warning: #9a6200;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-lg: 0 3px 14px rgba(0,0,0,0.12);
+    --radius: 6px; --radius-sm: 4px;
+    --nav-indicator: 2px solid var(--accent);
+    --hero-border: 3px solid var(--accent);
+    --table-row-alt: rgba(0,0,0,0.025);
+    --num-font: 'Inter', ui-monospace, monospace;
+  }
+
+  /* ── Dynasty Dark — deep navy, burnished gold accent ── */
+  [data-theme="dynasty-dark"] {
+    --bg: #07090f; --surface: #0f1520; --surface-deep: #060810;
+    --text: #ccd8e8; --text-muted: #607a96; --text-dim: #304060;
+    --accent: #c8922a; --accent-dim: rgba(200,146,42,0.12);
+    --accent-2: #e0aa40;
+    --border: rgba(200,146,42,0.12); --border-mid: rgba(200,146,42,0.18);
+    --input-bg: #07090f; --sidebar-bg: #050710;
+    --positive: #30a857; --negative: #d84848; --warning: #c8922a;
+    --shadow: 0 2px 12px rgba(0,0,0,0.5);
+    --shadow-lg: 0 6px 32px rgba(0,0,0,0.65);
+    --radius: 8px; --radius-sm: 5px;
+    --nav-indicator: 2px solid var(--accent);
+    --hero-border: 2px solid var(--accent);
+    --table-row-alt: rgba(200,146,42,0.03);
+    --num-font: 'Barlow Condensed', 'Inter', sans-serif;
+  }
+
+  /* ── Dynasty Light — cream white, deep navy accent ── */
+  [data-theme="dynasty-light"] {
+    --bg: #f0f2f7; --surface: #ffffff; --surface-deep: #e4e8f0;
+    --text: #0c1a30; --text-muted: #405070; --text-dim: #809ab8;
+    --accent: #163e78; --accent-dim: rgba(22,62,120,0.07);
+    --accent-2: #0e2d5c;
+    --border: rgba(22,62,120,0.10); --border-mid: rgba(22,62,120,0.16);
+    --input-bg: #ffffff; --sidebar-bg: #e8ecf4;
+    --positive: #14723a; --negative: #b83030; --warning: #8a5800;
+    --shadow: 0 1px 4px rgba(12,26,48,0.10);
+    --shadow-lg: 0 4px 18px rgba(12,26,48,0.15);
+    --radius: 8px; --radius-sm: 5px;
+    --nav-indicator: 2px solid var(--accent);
+    --hero-border: 2px solid var(--accent);
+    --table-row-alt: rgba(22,62,120,0.03);
+    --num-font: 'Barlow Condensed', 'Inter', sans-serif;
+  }
+
+  /* ── Dynasty themes: enlarged display type, more generous spacing ── */
+  [data-theme="dynasty-dark"], [data-theme="dynasty-light"] {
+    --fs-xs: 11px; --fs-sm: 13px; --fs-md: 15px;
+    --fs-lg: 18px; --fs-xl: 24px; --fs-2xl: 32px;
+  }
+
+  /* ── Type scale (Analytics base) ── */
   :root {
     --fs-xs: 11px; --fs-sm: 13px; --fs-md: 15px;
     --fs-lg: 17px; --fs-xl: 22px; --fs-2xl: 28px;
     --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-display: 'Barlow Condensed', var(--font-ui);
+    --num-font: 'Inter', ui-monospace, monospace;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: var(--font-ui); background: var(--bg); color: var(--text); display: flex; flex-direction: column; height: 100vh; overflow: hidden; transition: background 0.15s, color 0.15s; font-size: var(--fs-sm); line-height: 1.5; }
 
   /* ── Top bar ── */
-  #top-bar { background: var(--sidebar-bg); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; padding: 8px 16px; flex-shrink: 0; flex-wrap: wrap; }
-  #top-bar .app-title { font-family: var(--font-display); font-size: 17px; font-weight: 800; color: var(--accent); letter-spacing: 0.3px; white-space: nowrap; margin-right: 4px; }
+  #top-bar { background: var(--sidebar-bg); border-bottom: 1px solid var(--border-mid); display: flex; align-items: center; gap: 8px; padding: 8px 16px; flex-shrink: 0; flex-wrap: wrap; }
+  #top-bar .app-title { font-family: var(--font-display); font-size: 17px; font-weight: 800; color: var(--accent); letter-spacing: 0.5px; white-space: nowrap; margin-right: 4px; text-transform: uppercase; }
+  /* Dynasty themes: bigger, bolder title treatment */
+  [data-theme="dynasty-dark"] #top-bar .app-title,
+  [data-theme="dynasty-light"] #top-bar .app-title { font-size: 20px; letter-spacing: 1px; }
   #top-bar select, #top-bar input { padding: 6px 10px; background: var(--input-bg); border: 1px solid var(--border-mid); color: var(--text); font-size: var(--fs-sm); outline: none; border-radius: var(--radius-sm); font-family: var(--font-ui); transition: border-color 0.15s; }
   #top-bar select:focus, #top-bar input:focus { border-color: var(--accent); }
   #top-bar input { flex: 1; min-width: 120px; max-width: 220px; }
@@ -71,9 +116,14 @@
 
   /* ── Team grid (Teams tab) ── */
   .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
-  .team-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: border-color 0.15s, box-shadow 0.15s; box-shadow: var(--shadow); }
-  .team-card:hover { border-color: var(--accent); box-shadow: var(--shadow-lg); }
-  .team-card.active { border-color: var(--accent); }
+  .team-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s; box-shadow: var(--shadow); }
+  .team-card:hover { border-color: var(--accent); box-shadow: var(--shadow-lg); transform: translateY(-1px); }
+  .team-card.active { border-color: var(--accent); background: var(--accent-dim); }
+  /* Dynasty cards: taller, more visual weight */
+  [data-theme="dynasty-dark"] .team-card,
+  [data-theme="dynasty-light"] .team-card { padding: 14px 16px; border-width: 1px; }
+  [data-theme="dynasty-dark"] .team-card:hover,
+  [data-theme="dynasty-light"] .team-card:hover { transform: translateY(-2px); }
   .team-card-logo { width: 36px; height: 36px; object-fit: contain; flex-shrink: 0; }
   .team-card-info { flex: 1; min-width: 0; }
   .team-card-name { font-size: var(--fs-sm); font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -82,11 +132,16 @@
 
   /* ── Main area ── */
   #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-  .tab-bar { display: flex; background: var(--sidebar-bg); border-bottom: 1px solid var(--border); flex-shrink: 0; overflow-x: auto; align-items: center; scrollbar-width: none; }
+  .tab-bar { display: flex; background: var(--sidebar-bg); border-bottom: 1px solid var(--border-mid); flex-shrink: 0; overflow-x: auto; align-items: center; scrollbar-width: none; }
   .tab-bar::-webkit-scrollbar { display: none; }
-  .tab-btn { padding: 11px 18px; font-size: var(--fs-sm); font-weight: 500; cursor: pointer; color: var(--text-muted); border-bottom: 2px solid transparent; white-space: nowrap; transition: color 0.15s, border-color 0.15s; letter-spacing: 0.1px; }
+  .tab-btn { padding: 11px 16px; font-size: var(--fs-sm); font-weight: 500; cursor: pointer; color: var(--text-muted); border-bottom: var(--nav-indicator); border-bottom-color: transparent; white-space: nowrap; transition: color 0.15s, border-color 0.15s; letter-spacing: 0.1px; }
   .tab-btn:hover { color: var(--text); }
   .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+  /* Dynasty: tab bar gets a stronger separator, caps labels */
+  [data-theme="dynasty-dark"] .tab-btn,
+  [data-theme="dynasty-light"] .tab-btn { font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; padding: 12px 14px; font-weight: 600; }
+  [data-theme="dynasty-dark"] .tab-btn.active,
+  [data-theme="dynasty-light"] .tab-btn.active { font-weight: 700; }
   .tab-content { flex: 1; overflow-y: auto; padding: 20px; background: var(--bg); }
   .tab-content.map-mode { padding: 0; overflow: hidden; }
 
@@ -95,13 +150,16 @@
   .theme-btn { width: 18px; height: 18px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: border-color 0.15s, transform 0.1s; }
   .theme-btn:hover { transform: scale(1.2); }
   .theme-btn.active { border-color: var(--text); }
-  .theme-btn[data-t="dark"]            { background: linear-gradient(135deg, #58a6ff 50%, #0d1117 50%); }
-  .theme-btn[data-t="analytics-light"] { background: linear-gradient(135deg, #0969da 50%, #ffffff 50%); }
-  .theme-btn[data-t="dynasty-dark"]    { background: linear-gradient(135deg, #f0c040 50%, #080c14 50%); }
-  .theme-btn[data-t="dynasty-light"]   { background: linear-gradient(135deg, #1a4fa0 50%, #f5f7fa 50%); }
+  .theme-btn[data-t="dark"]            { background: linear-gradient(135deg, #3d87cc 50%, #0f1117 50%); }
+  .theme-btn[data-t="analytics-light"] { background: linear-gradient(135deg, #1a5fa8 50%, #f6f7f9 50%); }
+  .theme-btn[data-t="dynasty-dark"]    { background: linear-gradient(135deg, #c8922a 50%, #07090f 50%); }
+  .theme-btn[data-t="dynasty-light"]   { background: linear-gradient(135deg, #163e78 50%, #f0f2f7 50%); }
 
   /* ── Hero banner ── */
-  .team-hero { display: flex; align-items: center; gap: 18px; padding: 18px 22px; background: var(--surface); border-left: 3px solid var(--accent); margin-bottom: 18px; border-radius: var(--radius); flex-wrap: wrap; box-shadow: var(--shadow); }
+  .team-hero { display: flex; align-items: center; gap: 18px; padding: 18px 22px; background: var(--surface); border-left: var(--hero-border); margin-bottom: 18px; border-radius: var(--radius); flex-wrap: wrap; box-shadow: var(--shadow); }
+  /* Dynasty: full-width top accent bar instead of left border */
+  [data-theme="dynasty-dark"] .team-hero,
+  [data-theme="dynasty-light"] .team-hero { border-left: none; border-top: var(--hero-border); padding-top: 20px; }
   .team-hero-logo { width: 68px; height: 68px; object-fit: contain; flex-shrink: 0; }
   .team-hero-info { flex: 1; min-width: 0; }
   .team-hero-name { font-family: var(--font-display); font-size: 30px; font-weight: 700; color: var(--text); line-height: 1.1; letter-spacing: 0.3px; }
@@ -123,12 +181,19 @@
 
   /* ── Tables ── */
   table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
-  th { text-align: left; padding: 9px 10px; background: var(--surface); color: var(--text-muted); font-weight: 600; position: sticky; top: 0; z-index: 1; cursor: pointer; user-select: none; border-bottom: 1px solid var(--border-mid); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.4px; }
+  th { text-align: left; padding: 8px 10px; background: var(--surface-deep); color: var(--text-muted); font-weight: 700; position: sticky; top: 0; z-index: 1; cursor: pointer; user-select: none; border-bottom: 1px solid var(--border-mid); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.5px; }
   th:hover { color: var(--text); }
   th.sorted-asc::after { content: ' ▲'; }
   th.sorted-desc::after { content: ' ▼'; }
   td { padding: 8px 10px; border-bottom: 1px solid var(--border); color: var(--text); line-height: 1.5; }
-  tr:hover td { background: var(--surface); }
+  tr:nth-child(even) td { background: var(--table-row-alt); }
+  tr:hover td { background: var(--accent-dim); }
+  /* Analytics: tighter rows, monospace numbers */
+  [data-theme="dark"] td, [data-theme="analytics-light"] td { padding: 7px 10px; }
+  /* Dynasty: slightly more breathing room */
+  [data-theme="dynasty-dark"] td, [data-theme="dynasty-light"] td { padding: 9px 10px; }
+  /* Number cells use tabular numerals across all themes */
+  td.num, th.num { font-family: var(--num-font); text-align: right; font-variant-numeric: tabular-nums; }
   tr.clickable { cursor: pointer; }
   tr.status-transferred-out td { color: #e05555; }
   tr.status-transferred-out td .pos-badge { opacity: 0.7; }
@@ -141,12 +206,8 @@
   .status-pill.in { background: #4caf7d33; color: #4caf7d; border: 1px solid #4caf7d66; }
   .status-pill.recruit { background: #64b5f633; color: #64b5f6; border: 1px solid #64b5f666; }
   .status-pill.draft { background: #ffd70033; color: #ffd700; border: 1px solid #ffd70066; }
-  .ovr { display: inline-block; width: 30px; text-align: center; padding: 2px 4px; border-radius: var(--radius-sm); font-weight: 700; font-size: 11px; font-family: var(--font-display); }
-  .pos-badge { display: inline-block; background: var(--surface-deep); padding: 2px 6px; border-radius: var(--radius-sm); font-size: var(--fs-xs); font-weight: 600; min-width: 30px; text-align: center; color: var(--text-muted); border: 1px solid var(--border); }
-  .tier-badge { display: inline-block; padding: 2px 7px; border-radius: 10px; font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; margin-left: 4px; vertical-align: middle; }
-  .tier-dynasty { background: #e8a030; color: #0d1117; }
-  .tier-impact  { background: #8b6fea; color: #ffffff; }
-  .archetype-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: var(--fs-xs); font-weight: 600; letter-spacing: 0.2px; background: var(--accent-dim); color: var(--accent); margin-left: 4px; vertical-align: middle; border: 1px solid rgba(77,157,224,0.2); }
+  .ovr { display: inline-block; width: 32px; text-align: center; padding: 2px 4px; border-radius: var(--radius-sm); font-weight: 700; font-size: 11px; font-family: var(--num-font); font-variant-numeric: tabular-nums; }
+  .pos-badge { display: inline-block; background: var(--surface-deep); padding: 2px 6px; border-radius: var(--radius-sm); font-size: var(--fs-xs); font-weight: 600; min-width: 32px; text-align: center; color: var(--text-muted); border: 1px solid var(--border); letter-spacing: 0.2px; }
   .ol-section { margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--border); }
   .ol-section-header { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 8px; }
   .ol-names-grid { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -236,7 +297,9 @@
   .modal-player-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 22px; }
   .modal-player-info h2 { font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--text); line-height: 1.1; }
   .modal-player-info .sub { font-size: var(--fs-sm); color: var(--text-muted); margin-top: 4px; }
-  .modal-ovr-badge { font-family: var(--font-display); font-size: 28px; font-weight: 900; width: 56px; height: 56px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .modal-ovr-badge { font-family: var(--num-font); font-size: 28px; font-weight: 900; width: 56px; height: 56px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+  [data-theme="dynasty-dark"] .modal-ovr-badge,
+  [data-theme="dynasty-light"] .modal-ovr-badge { font-family: var(--font-display); font-size: 32px; width: 62px; height: 62px; border-radius: var(--radius); }
   .modal-section { margin-bottom: 22px; }
   .modal-section-title { font-size: var(--fs-xs); font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
   .skill-row { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
@@ -364,3 +427,532 @@
   .explain-blend-bar { flex: 1; background: var(--surface-deep); border-radius: 3px; height: 14px; overflow: hidden; display: flex; }
   .explain-blend-seg { height: 100%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.4); }
   .explain-note { background: var(--surface); border-left: 3px solid #ffd700; padding: 10px 14px; border-radius: 0 6px 6px 0; font-size: 12px; color: var(--text-muted); margin: 10px 0; }
+
+  /* ══════════════════════════════════════════════
+     DYNASTY THEME PERSONALITY OVERRIDES
+     Bigger numbers, warmer accents, bolder cards.
+  ══════════════════════════════════════════════ */
+
+  /* Hero name — larger in Dynasty */
+  [data-theme="dynasty-dark"] .team-hero-name,
+  [data-theme="dynasty-light"] .team-hero-name { font-size: 34px; letter-spacing: 0.5px; }
+
+  /* Rating cards — larger value numbers in Dynasty */
+  [data-theme="dynasty-dark"] .rating-card .value,
+  [data-theme="dynasty-light"] .rating-card .value { font-size: 30px; }
+
+  /* Skill bars — slightly thicker in Dynasty */
+  [data-theme="dynasty-dark"] .skill-bar-wrap,
+  [data-theme="dynasty-light"] .skill-bar-wrap { height: 10px; }
+  [data-theme="dynasty-dark"] .skill-bar-fill,
+  [data-theme="dynasty-light"] .skill-bar-fill { height: 10px; }
+
+  /* Depth chart rows — more spacious in Dynasty */
+  [data-theme="dynasty-dark"] .depth-row,
+  [data-theme="dynasty-light"] .depth-row { padding: 7px 8px; }
+
+  /* Conference section headers — stronger in Dynasty */
+  [data-theme="dynasty-dark"] .conf-title,
+  [data-theme="dynasty-light"] .conf-title { font-size: 20px; border-bottom-width: 2px; }
+
+  /* Team subnav — pill style in Dynasty */
+  [data-theme="dynasty-dark"] .team-subnav-btn,
+  [data-theme="dynasty-light"] .team-subnav-btn { border-radius: 20px; padding: 5px 16px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+  [data-theme="dynasty-dark"] .team-subnav-btn.active,
+  [data-theme="dynasty-light"] .team-subnav-btn.active { background: var(--accent); color: #fff; }
+
+  /* Analytics: subnav underline style */
+  [data-theme="dark"] .team-subnav-btn.active,
+  [data-theme="analytics-light"] .team-subnav-btn.active { background: transparent; color: var(--accent); border-bottom: 2px solid var(--accent); border-radius: 0; }
+
+  /* Sidebar/top bar bottom border — gold in Dynasty Dark */
+  [data-theme="dynasty-dark"] #top-bar { border-bottom-color: rgba(200,146,42,0.2); }
+  [data-theme="dynasty-dark"] .tab-bar { border-bottom-color: rgba(200,146,42,0.2); }
+
+  /* Analytics: subtle left-border accent on active table rows */
+  [data-theme="dark"] tr.clickable:hover td:first-child,
+  [data-theme="analytics-light"] tr.clickable:hover td:first-child { border-left: 2px solid var(--accent); padding-left: 8px; }
+
+  /* Player name in modal — display font in Dynasty */
+  [data-theme="dynasty-dark"] .modal-player-info h2,
+  [data-theme="dynasty-light"] .modal-player-info h2 { font-size: 28px; }
+
+  /* Stat cells — accent border in Dynasty */
+  [data-theme="dynasty-dark"] .stat-cell,
+  [data-theme="dynasty-light"] .stat-cell { border-color: var(--border-mid); }
+  [data-theme="dynasty-dark"] .stat-cell .sv,
+  [data-theme="dynasty-light"] .stat-cell .sv { font-size: 24px; color: var(--accent-2); }
+
+  /* Scroll bar — thin and themed */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+
+  /* ══════════════════════════════════════════════════════════════
+     ANALYTICS THEME — EDITORIAL / DATA-FORWARD COMPONENTS
+     Flat, typographic, zero decoration. Numbers speak for themselves.
+     Think: ESPN Stats & Info, The Athletic box scores.
+  ══════════════════════════════════════════════════════════════ */
+
+  /* ── Analytics: Team Hero — flat band, no card ── */
+  .a-team-hero {
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 0 16px; margin-bottom: 16px;
+    border-left: 4px solid var(--accent);
+    padding-left: 16px;
+    background: transparent;
+  }
+  .a-hero-logo { width: 48px; height: 48px; object-fit: contain; flex-shrink: 0; opacity: 0.95; }
+  .a-hero-info { flex: 1; min-width: 0; }
+  .a-hero-name {
+    font-family: var(--font-ui); font-size: 22px; font-weight: 700;
+    color: var(--text); line-height: 1.1; letter-spacing: -0.3px;
+  }
+  .a-hero-meta { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+  .a-hero-ovr {
+    font-family: var(--num-font); font-size: 28px; font-weight: 800;
+    font-variant-numeric: tabular-nums; line-height: 1;
+  }
+  .a-hero-ovr-label { font-size: 11px; color: var(--text-muted); font-weight: 600; margin-left: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .a-hero-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; position: relative; }
+
+  /* Analytics rating bars: tight, minimal */
+  .a-rating-bars { display: flex; flex-direction: column; gap: 4px; min-width: 160px; }
+  .a-rating-row { display: flex; align-items: center; gap: 8px; }
+  .a-rating-label { font-size: 10px; color: var(--text-muted); width: 52px; text-align: right; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.3px; }
+  .a-rating-track { flex: 1; height: 5px; background: var(--surface-deep); border-radius: 2px; overflow: hidden; min-width: 70px; }
+  .a-rating-fill { height: 100%; border-radius: 2px; transition: width 0.3s ease; }
+  .a-rating-val { width: 24px; font-size: 11px; font-weight: 700; text-align: right; font-family: var(--num-font); font-variant-numeric: tabular-nums; flex-shrink: 0; }
+
+  /* ── Analytics: Team List (Teams tab) ── */
+  .a-team-list { display: flex; flex-direction: column; }
+  .a-team-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px; border-bottom: 1px solid var(--border);
+    cursor: pointer; transition: background 0.1s, border-left 0.1s;
+    border-left: 3px solid transparent;
+  }
+  .a-team-row:hover { background: var(--surface); border-left-color: var(--accent); }
+  .a-team-row.active { background: var(--accent-dim); border-left-color: var(--accent); }
+  .a-team-row-logo { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; opacity: 0.9; }
+  .a-team-row-name { flex: 1; font-size: 13px; font-weight: 500; color: var(--text); }
+  .a-team-row-conf { font-size: 11px; color: var(--text-muted); margin-right: 8px; }
+  .a-team-row-ovr { font-family: var(--num-font); font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+  /* ── Analytics: Roster — plain table feel ── */
+  /* OVR in roster: text color only, no pill background */
+  .a-ovr { font-family: var(--num-font); font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  /* Skill value cells: right-aligned mono */
+  .a-skill-val { font-family: var(--num-font); font-size: 12px; font-variant-numeric: tabular-nums; text-align: right; color: var(--text-muted); }
+  /* Position filter: text links */
+  .a-pos-filters { display: flex; gap: 0; margin-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .a-pos-filter-btn {
+    padding: 5px 12px; font-size: 12px; font-weight: 500; cursor: pointer;
+    color: var(--text-muted); border-bottom: 2px solid transparent;
+    margin-bottom: -1px; transition: color 0.1s, border-color 0.1s;
+    background: transparent; white-space: nowrap;
+  }
+  .a-pos-filter-btn:hover { color: var(--text); }
+  .a-pos-filter-btn.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+
+  /* ── Analytics: Depth Chart — editorial list ── */
+  .a-depth-section { margin-bottom: 18px; }
+  .a-depth-pos-header {
+    font-size: 10px; font-weight: 700; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 1px;
+    padding: 4px 0; border-bottom: 1px solid var(--border-mid); margin-bottom: 2px;
+  }
+  .a-depth-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 5px 4px; cursor: pointer; border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+  }
+  .a-depth-row:hover { background: var(--surface); }
+  .a-depth-slot { font-size: 11px; font-weight: 700; color: var(--text-dim); width: 16px; text-align: right; flex-shrink: 0; font-family: var(--num-font); }
+  .a-depth-slot.starter { color: var(--text); font-weight: 800; }
+  .a-depth-pos { font-size: var(--fs-xs); color: var(--text-muted); width: 28px; flex-shrink: 0; }
+  .a-depth-name { flex: 1; font-size: 13px; color: var(--text); }
+  .a-depth-ovr { font-family: var(--num-font); font-size: 12px; font-weight: 700; width: 28px; text-align: right; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+  .a-depth-skills { display: flex; gap: 10px; font-size: 11px; color: var(--text-muted); flex-shrink: 0; }
+  .a-depth-skill-item { font-family: var(--num-font); font-variant-numeric: tabular-nums; }
+  .a-depth-skill-label { color: var(--text-dim); font-size: 10px; margin-right: 2px; }
+
+  /* ── Analytics: Player Modal ── */
+  .a-modal-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .a-modal-ovr { font-family: var(--num-font); font-size: 36px; font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; flex-shrink: 0; padding-top: 2px; }
+  .a-modal-name { font-family: var(--font-ui); font-size: 22px; font-weight: 700; color: var(--text); line-height: 1.15; letter-spacing: -0.2px; }
+  .a-modal-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+  /* Analytics skill rows: tighter */
+  .a-skill-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+  .a-skill-label { font-size: 11px; color: var(--text-muted); width: 100px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.3px; }
+  .a-skill-track { flex: 1; background: var(--surface-deep); border-radius: 2px; height: 5px; overflow: hidden; }
+  .a-skill-fill { height: 100%; border-radius: 2px; transition: width 0.4s ease; }
+  .a-skill-val { font-family: var(--num-font); font-size: 12px; font-weight: 700; width: 26px; text-align: right; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+
+  /* Analytics schedule: result W/L inline */
+  .a-result-w { color: var(--positive); font-weight: 700; font-family: var(--num-font); }
+  .a-result-l { color: var(--negative); font-weight: 700; font-family: var(--num-font); }
+  .a-result-score { font-size: 11px; color: var(--text-muted); margin-left: 4px; font-family: var(--num-font); font-variant-numeric: tabular-nums; }
+
+  /* Analytics drive plays: compact monospace table */
+  .a-play-row td { font-family: var(--num-font); font-size: 11px; padding: 4px 8px; font-variant-numeric: tabular-nums; }
+  .a-play-down { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+  .a-epa-pos { color: var(--positive); font-weight: 700; }
+  .a-epa-neg { color: var(--negative); font-weight: 700; }
+
+  /* ── Analytics: Conference list ── */
+  .a-conf-section { margin-bottom: 24px; }
+  .a-conf-header { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); padding: 6px 0 4px; border-bottom: 2px solid var(--border-mid); margin-bottom: 0; display: flex; align-items: center; gap: 8px; }
+  .a-conf-team-row { display: flex; align-items: center; gap: 10px; padding: 7px 6px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.1s, border-left 0.1s; border-left: 3px solid transparent; }
+  .a-conf-team-row:hover { background: var(--surface); border-left-color: var(--accent); }
+  .a-conf-rank { font-size: 12px; font-weight: 700; color: var(--text-dim); width: 20px; text-align: right; font-family: var(--num-font); flex-shrink: 0; }
+  .a-conf-rank.top3 { color: var(--warning); }
+  .a-conf-logo { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
+  .a-conf-name { flex: 1; font-size: 13px; font-weight: 500; color: var(--text); }
+  .a-conf-ovr { font-family: var(--num-font); font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+  /* ── Analytics: Top Players — pure table ── */
+  .a-rank-num { font-family: var(--num-font); font-size: 12px; font-weight: 700; color: var(--text-dim); font-variant-numeric: tabular-nums; }
+  .a-rank-num.top3 { color: var(--warning); }
+  .a-rank-num.top10 { color: var(--text-muted); }
+  .a-player-team-cell { display: flex; align-items: center; gap: 6px; }
+  .a-player-team-logo { width: 16px; height: 16px; object-fit: contain; opacity: 0.85; }
+
+
+  /* ══════════════════════════════════════════════════════════════
+     DYNASTY THEME — FRANCHISE MODE / GAME-CARD COMPONENTS
+     Madden/EA CFB franchise feel. Cards have depth. Players are
+     assets. OVR is prominent. Interactions are tactile.
+  ══════════════════════════════════════════════════════════════ */
+
+  /* ── Dynasty: Team Hero — large logo, bold name, colored card ── */
+  .d-team-hero {
+    display: flex; align-items: center; gap: 20px;
+    padding: 20px 22px; margin-bottom: 20px;
+    background: var(--surface);
+    border-radius: var(--radius);
+    border-top: 3px solid var(--accent);
+    box-shadow: var(--shadow-lg);
+    position: relative; overflow: hidden;
+  }
+  /* Subtle team-color wash behind logo */
+  .d-team-hero::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 120px;
+    background: linear-gradient(90deg, var(--d-team-color, var(--accent-dim)) 0%, transparent 100%);
+    opacity: 0.08; pointer-events: none;
+  }
+  .d-hero-logo { width: 84px; height: 84px; object-fit: contain; flex-shrink: 0; position: relative; z-index: 1; }
+  .d-hero-info { flex: 1; min-width: 0; position: relative; z-index: 1; }
+  .d-hero-name {
+    font-family: var(--font-display); font-size: 38px; font-weight: 800;
+    color: var(--text); line-height: 1; letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .d-hero-conf-badge {
+    display: inline-block; margin-top: 6px; padding: 2px 10px;
+    border-radius: 20px; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    background: var(--accent-dim); color: var(--accent); border: 1px solid var(--border-mid);
+  }
+  .d-hero-meta { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+  .d-hero-right { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; flex-shrink: 0; position: relative; z-index: 1; }
+  .d-hero-ovr-box {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 60px; height: 60px; border-radius: var(--radius);
+    background: var(--surface-deep); border: 2px solid var(--border-mid);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+  .d-hero-ovr-num { font-family: var(--font-display); font-size: 28px; font-weight: 900; line-height: 1; }
+  .d-hero-ovr-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); margin-top: 2px; }
+
+  /* Dynasty rating bars: thicker, bolder */
+  .d-rating-bars { display: flex; flex-direction: column; gap: 5px; min-width: 170px; }
+  .d-rating-row { display: flex; align-items: center; gap: 8px; }
+  .d-rating-label { font-size: 10px; color: var(--text-muted); width: 56px; text-align: right; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.3px; font-weight: 600; }
+  .d-rating-track { flex: 1; height: 10px; background: var(--surface-deep); border-radius: 4px; overflow: hidden; min-width: 80px; border: 1px solid var(--border); }
+  .d-rating-fill { height: 100%; border-radius: 3px; transition: width 0.35s ease; }
+  .d-rating-val { width: 24px; font-size: 12px; font-weight: 700; text-align: right; font-family: var(--font-display); flex-shrink: 0; }
+
+  /* ── Dynasty: Team Grid (Teams tab) — game-card tiles ── */
+  .d-team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+  .d-team-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px 14px 14px;
+    cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.12s;
+    box-shadow: var(--shadow); position: relative; overflow: hidden;
+  }
+  .d-team-card::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+    background: var(--d-team-color, var(--accent)); opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .d-team-card:hover { border-color: var(--accent); box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+  .d-team-card:hover::after { opacity: 1; }
+  .d-team-card.active { border-color: var(--accent); background: var(--accent-dim); }
+  .d-team-card-logo { width: 52px; height: 52px; object-fit: contain; }
+  .d-team-card-name { font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--text); text-align: center; line-height: 1.2; text-transform: uppercase; letter-spacing: 0.3px; }
+  .d-team-card-conf { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; }
+  .d-team-card-ovr { font-family: var(--font-display); font-size: 15px; font-weight: 800; padding: 2px 8px; border-radius: var(--radius-sm); }
+
+  /* ── Dynasty: Depth Chart — player game-cards ── */
+  .d-depth-section { margin-bottom: 22px; }
+  .d-depth-pos-header {
+    font-family: var(--font-display); font-size: 13px; font-weight: 800;
+    color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px;
+    padding: 8px 12px; background: var(--surface);
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    border: 1px solid var(--border-mid); border-bottom: none;
+  }
+  .d-depth-cards { border: 1px solid var(--border-mid); border-radius: 0 var(--radius-sm) var(--radius-sm) var(--radius-sm); overflow: hidden; }
+  .d-depth-card {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px; cursor: pointer; background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s, border-left-color 0.12s;
+    border-left: 3px solid transparent;
+  }
+  .d-depth-card:last-child { border-bottom: none; }
+  .d-depth-card:hover { background: var(--surface-deep); border-left-color: var(--accent); }
+  .d-depth-card.starter { border-left-color: var(--accent); background: var(--accent-dim); }
+  .d-depth-card.starter .d-depth-slot { color: var(--accent); }
+  .d-depth-slot { font-family: var(--font-display); font-size: 22px; font-weight: 900; color: var(--text-dim); width: 24px; flex-shrink: 0; line-height: 1; }
+  .d-depth-avatar {
+    width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+    background: var(--surface-deep); border: 1px solid var(--border-mid);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-size: 13px; font-weight: 800;
+    color: var(--text-muted); text-transform: uppercase;
+  }
+  .d-depth-card.starter .d-depth-avatar { border-color: var(--accent); color: var(--accent); }
+  .d-depth-info { flex: 1; min-width: 0; }
+  .d-depth-name { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--text); letter-spacing: 0.2px; line-height: 1.2; }
+  .d-depth-pos-tag { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 1px; }
+  .d-depth-ovr-box {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 38px; height: 38px; border-radius: var(--radius-sm); flex-shrink: 0;
+  }
+  .d-depth-ovr-num { font-family: var(--font-display); font-size: 18px; font-weight: 900; line-height: 1; }
+  .d-depth-ovr-label { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.7; }
+  .d-depth-skills { display: flex; gap: 5px; flex-wrap: wrap; }
+  .d-skill-chip {
+    padding: 2px 7px; border-radius: 3px; font-size: 10px; font-weight: 700;
+    background: var(--surface-deep); border: 1px solid var(--border);
+    color: var(--text-muted); white-space: nowrap; font-family: var(--num-font);
+  }
+
+  /* ── Dynasty: Player Modal ── */
+  .d-modal-header {
+    display: flex; align-items: flex-start; gap: 16px;
+    margin-bottom: 22px; padding-bottom: 18px;
+    border-bottom: 1px solid var(--border-mid);
+  }
+  .d-modal-ovr-box {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 68px; height: 68px; border-radius: var(--radius); flex-shrink: 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+  .d-modal-ovr-num { font-family: var(--font-display); font-size: 32px; font-weight: 900; line-height: 1; }
+  .d-modal-ovr-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; opacity: 0.75; margin-top: 2px; }
+  .d-modal-name { font-family: var(--font-display); font-size: 28px; font-weight: 800; color: var(--text); line-height: 1.05; text-transform: uppercase; letter-spacing: 0.3px; }
+  .d-modal-team-line { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
+  .d-modal-team-logo { width: 22px; height: 22px; object-fit: contain; }
+  .d-modal-team-name { font-size: 13px; color: var(--accent); font-weight: 600; cursor: pointer; }
+  .d-modal-team-name:hover { text-decoration: underline; }
+  .d-modal-sub { font-size: 12px; color: var(--text-muted); margin-top: 5px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+  /* Dynasty skill rows: thicker bars, attribute-style */
+  .d-skill-row { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
+  .d-skill-label { font-size: 11px; color: var(--text-muted); width: 110px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.4px; font-weight: 600; }
+  .d-skill-track { flex: 1; background: var(--surface-deep); border-radius: 3px; height: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .d-skill-fill { height: 100%; border-radius: 2px; transition: width 0.4s ease; }
+  .d-skill-val { font-family: var(--font-display); font-size: 14px; font-weight: 900; width: 28px; text-align: right; flex-shrink: 0; }
+
+  /* Dynasty stat grid: prominent numbers */
+  .d-stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .d-stat-cell {
+    background: var(--surface-deep); border-radius: var(--radius-sm);
+    padding: 12px 14px; border: 1px solid var(--border-mid);
+    border-top: 2px solid var(--accent-dim);
+  }
+  .d-stat-val { font-family: var(--font-display); font-size: 24px; font-weight: 900; color: var(--accent-2); line-height: 1; }
+  .d-stat-key { font-size: 10px; font-weight: 700; color: var(--text-muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ── Dynasty: Schedule — match cards ── */
+  .d-game-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 12px; border-bottom: 1px solid var(--border);
+    cursor: pointer; transition: background 0.12s, border-left-color 0.12s;
+    border-left: 3px solid transparent;
+  }
+  .d-game-row:hover { background: var(--surface); border-left-color: var(--accent); }
+  .d-game-week { font-size: 10px; font-weight: 700; color: var(--text-dim); width: 28px; text-align: center; flex-shrink: 0; text-transform: uppercase; }
+  .d-game-loc { font-size: 11px; color: var(--text-dim); width: 16px; flex-shrink: 0; text-align: center; }
+  .d-game-opp { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; }
+  .d-game-opp-logo { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
+  .d-game-opp-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .d-game-result-pill {
+    padding: 2px 9px; border-radius: 12px; font-size: 11px; font-weight: 800;
+    font-family: var(--num-font); font-variant-numeric: tabular-nums;
+    flex-shrink: 0; letter-spacing: 0.2px;
+  }
+  .d-game-result-w { background: rgba(48,168,87,0.15); color: var(--positive); border: 1px solid rgba(48,168,87,0.25); }
+  .d-game-result-l { background: rgba(216,72,72,0.15); color: var(--negative); border: 1px solid rgba(216,72,72,0.25); }
+  .d-game-margin { font-family: var(--num-font); font-size: 12px; font-variant-numeric: tabular-nums; color: var(--text-muted); width: 40px; text-align: right; flex-shrink: 0; }
+  .d-game-opp-sp { font-size: 11px; color: var(--text-dim); width: 36px; text-align: right; font-family: var(--num-font); flex-shrink: 0; }
+
+  /* Dynasty drive cards */
+  .d-drive-card { border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 6px; overflow: hidden; }
+  .d-drive-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 12px; cursor: pointer; background: var(--surface);
+    transition: background 0.12s; user-select: none;
+  }
+  .d-drive-header:hover { background: var(--surface-deep); }
+  .d-drive-card.expanded .d-drive-chevron { transform: rotate(90deg); }
+  .d-drive-chevron { color: var(--text-dim); transition: transform 0.2s; font-size: 12px; flex-shrink: 0; }
+  .d-drive-num { font-family: var(--font-display); font-size: 12px; font-weight: 800; color: var(--text-muted); width: 20px; flex-shrink: 0; }
+  .d-drive-result-badge {
+    padding: 2px 8px; border-radius: 3px; font-size: 10px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.4px; flex-shrink: 0;
+  }
+  .d-drive-td   { background: rgba(48,168,87,0.15);  color: var(--positive); border: 1px solid rgba(48,168,87,0.3); }
+  .d-drive-fg   { background: rgba(200,146,42,0.15); color: var(--warning);  border: 1px solid rgba(200,146,42,0.3); }
+  .d-drive-punt { background: var(--surface-deep); color: var(--text-dim); border: 1px solid var(--border); }
+  .d-drive-to   { background: rgba(216,72,72,0.15);  color: var(--negative); border: 1px solid rgba(216,72,72,0.3); }
+  .d-drive-summary { flex: 1; font-size: 12px; color: var(--text-muted); }
+  .d-drive-yards { font-family: var(--num-font); font-size: 12px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; flex-shrink: 0; }
+  .d-drive-score { font-family: var(--num-font); font-size: 12px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; flex-shrink: 0; min-width: 40px; text-align: right; }
+  .d-drive-plays-panel { background: var(--surface-deep); border-top: 1px solid var(--border); padding: 0; }
+
+  /* Dynasty play rows inside drive */
+  .d-play-row { display: flex; align-items: flex-start; gap: 8px; padding: 7px 12px; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .d-play-row:last-child { border-bottom: none; }
+  .d-play-down-chip {
+    padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: 800;
+    background: var(--surface); border: 1px solid var(--border-mid);
+    color: var(--text-muted); flex-shrink: 0; white-space: nowrap;
+    text-transform: uppercase; letter-spacing: 0.2px;
+  }
+  .d-play-field { font-size: 10px; color: var(--text-dim); flex-shrink: 0; width: 40px; font-family: var(--num-font); }
+  .d-play-text { flex: 1; color: var(--text-muted); line-height: 1.4; }
+  .d-play-yards { font-family: var(--num-font); font-size: 12px; font-weight: 700; width: 30px; text-align: right; font-variant-numeric: tabular-nums; flex-shrink: 0; color: var(--text); }
+  .d-epa-pos { font-family: var(--num-font); font-size: 11px; font-weight: 700; color: var(--positive); width: 38px; text-align: right; flex-shrink: 0; }
+  .d-epa-neg { font-family: var(--num-font); font-size: 11px; font-weight: 700; color: var(--negative); width: 38px; text-align: right; flex-shrink: 0; }
+  .d-epa-neu { font-family: var(--num-font); font-size: 11px; color: var(--text-dim); width: 38px; text-align: right; flex-shrink: 0; }
+
+  /* ── Dynasty: Conference — ranked cards ── */
+  .d-conf-section { margin-bottom: 26px; }
+  .d-conf-header {
+    font-family: var(--font-display); font-size: 18px; font-weight: 800;
+    color: var(--text); text-transform: uppercase; letter-spacing: 0.5px;
+    padding: 10px 14px; background: var(--surface);
+    border: 1px solid var(--border-mid); border-bottom: none;
+    border-radius: var(--radius) var(--radius) 0 0;
+    border-top: 2px solid var(--accent);
+  }
+  .d-conf-rows { border: 1px solid var(--border-mid); border-radius: 0 0 var(--radius) var(--radius); overflow: hidden; }
+  .d-conf-team-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 14px; background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer; transition: background 0.12s, border-left-color 0.12s;
+    border-left: 3px solid transparent;
+  }
+  .d-conf-team-row:last-child { border-bottom: none; }
+  .d-conf-team-row:hover { background: var(--surface-deep); border-left-color: var(--accent); }
+  .d-rank-badge {
+    width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; font-family: var(--font-display); font-size: 12px;
+    font-weight: 900; flex-shrink: 0;
+  }
+  .d-rank-1 { background: rgba(212,175,55,0.2); color: #d4af37; border: 1px solid rgba(212,175,55,0.4); }
+  .d-rank-2 { background: rgba(160,160,170,0.15); color: #a0a0aa; border: 1px solid rgba(160,160,170,0.3); }
+  .d-rank-3 { background: rgba(180,115,70,0.15); color: #b47346; border: 1px solid rgba(180,115,70,0.3); }
+  .d-rank-other { background: transparent; color: var(--text-dim); border: 1px solid var(--border); }
+  .d-conf-team-logo { width: 26px; height: 26px; object-fit: contain; flex-shrink: 0; }
+  .d-conf-team-name { flex: 1; font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--text); letter-spacing: 0.2px; }
+  .d-conf-ovr { font-family: var(--font-display); font-size: 16px; font-weight: 900; padding: 2px 8px; border-radius: var(--radius-sm); }
+  .d-conf-mini-bars { display: flex; flex-direction: column; gap: 3px; min-width: 90px; }
+  .d-conf-mini-bar-row { display: flex; align-items: center; gap: 4px; }
+  .d-conf-mini-label { font-size: 9px; color: var(--text-dim); width: 30px; text-align: right; text-transform: uppercase; letter-spacing: 0.2px; }
+  .d-conf-mini-track { flex: 1; height: 4px; background: var(--surface-deep); border-radius: 2px; overflow: hidden; }
+  .d-conf-mini-fill { height: 100%; border-radius: 2px; }
+
+  /* ── Dynasty: Top Players — ranked player cards ── */
+  .d-player-card {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px; background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer; transition: background 0.12s, border-left-color 0.12s;
+    border-left: 3px solid transparent;
+  }
+  .d-player-card:hover { background: var(--surface-deep); border-left-color: var(--accent); }
+  .d-player-card.rank1 { border-left-color: #d4af37; }
+  .d-player-card.rank2 { border-left-color: #a0a0aa; }
+  .d-player-card.rank3 { border-left-color: #b47346; }
+  .d-player-rank { font-family: var(--font-display); font-size: 20px; font-weight: 900; color: var(--text-dim); width: 28px; text-align: right; flex-shrink: 0; line-height: 1; }
+  .d-player-rank.rank1 { color: #d4af37; }
+  .d-player-rank.rank2 { color: #a0a0aa; }
+  .d-player-rank.rank3 { color: #b47346; }
+  .d-player-ovr-box {
+    width: 42px; height: 42px; border-radius: var(--radius-sm); flex-shrink: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .d-player-ovr-num { font-family: var(--font-display); font-size: 20px; font-weight: 900; line-height: 1; }
+  .d-player-ovr-lbl { font-size: 8px; font-weight: 700; text-transform: uppercase; opacity: 0.7; margin-top: 1px; }
+  .d-player-info { flex: 1; min-width: 0; }
+  .d-player-name { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--text); letter-spacing: 0.2px; line-height: 1.2; }
+  .d-player-team-line { display: flex; align-items: center; gap: 4px; margin-top: 2px; }
+  .d-player-team-logo { width: 16px; height: 16px; object-fit: contain; }
+  .d-player-team-name { font-size: 11px; color: var(--text-muted); }
+  .d-player-pos-badge {
+    padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: 700;
+    background: var(--surface-deep); border: 1px solid var(--border-mid);
+    color: var(--text-muted); flex-shrink: 0; text-transform: uppercase;
+  }
+  .d-player-skill-bars { display: flex; flex-direction: column; gap: 3px; min-width: 80px; }
+  .d-player-skill-row { display: flex; align-items: center; gap: 4px; }
+  .d-player-skill-label { font-size: 9px; color: var(--text-dim); width: 22px; text-align: right; text-transform: uppercase; letter-spacing: 0.2px; }
+  .d-player-skill-track { flex: 1; height: 4px; background: var(--surface-deep); border-radius: 2px; overflow: hidden; }
+  .d-player-skill-fill { height: 100%; border-radius: 2px; }
+
+  /* ── Dynasty: Roster roster-card sparklines ── */
+  .d-skill-sparkline-cell { display: flex; align-items: center; gap: 4px; }
+  .d-skill-sparkline-bar { height: 4px; min-width: 2px; max-width: 40px; border-radius: 2px; flex-shrink: 0; }
+  .d-skill-sparkline-val { font-family: var(--num-font); font-size: 11px; font-weight: 700; color: var(--text-muted); }
+
+  /* ── Shared: Modal animation ── */
+  @keyframes modalSlideUp {
+    from { opacity: 0; transform: translateY(12px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0)   scale(1); }
+  }
+  .modal-overlay.open .modal { animation: modalSlideUp 0.18s ease-out; }
+
+  /* ── Dynasty specific: modal animation stronger ── */
+  [data-theme="dynasty-dark"] .modal-overlay.open .modal,
+  [data-theme="dynasty-light"] .modal-overlay.open .modal {
+    animation: modalSlideUp 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* ── Roster skill sparkline for Dynasty (inline bar in table cell) ── */
+  .d-roster-skill-cell { display: flex; align-items: center; gap: 5px; }
+  .d-roster-mini-bar { height: 3px; border-radius: 2px; display: inline-block; }
+
+  /* ── Shared utility: section divider ── */
+  .section-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
+  /* ── Analytics: flat section headers (no card) ── */
+  .a-section-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--text-muted); padding: 4px 0 8px; border-bottom: 1px solid var(--border-mid);
+    margin-bottom: 10px;
+  }
+
+  /* ── Dynasty: card section headers ── */
+  .d-section-label {
+    font-family: var(--font-display); font-size: 14px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.8px; color: var(--accent);
+    padding: 0 0 8px; border-bottom: 2px solid var(--border-mid); margin-bottom: 12px;
+  }

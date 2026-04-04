@@ -285,11 +285,7 @@ const ratingColor = v => {
 // Text color that contrasts with a ratingColor background
 const ratingTextColor = v => (v >= 95 || (v >= 60 && v < 70)) ? '#111' : '#fff';
 
-const tierBadge = v => {
-  if (v >= 95) return '<span class="tier-badge tier-dynasty">Dynasty</span>';
-  if (v >= 88) return '<span class="tier-badge tier-impact">Impact</span>';
-  return '';
-};
+const tierBadge = () => '';
 
 // ── Data loading ───────────────────────────────────────────────────────────
 async function loadData() {
@@ -1614,8 +1610,7 @@ function showPlayerModal(playerId) {
     : p.status === 'likely_leaving' ? '<span class="status-pill leaving" style="margin-left:6px">Likely Leaving</span>'
     : p.status === 'transfer_in' ? '<span class="status-pill in" style="margin-left:6px">Transfer In</span>'
     : p.status === 'recruit' ? '<span class="status-pill recruit" style="margin-left:6px">Recruit</span>' : '';
-  const archetype = ovr >= 80 ? computeArchetype(posGroup, r) : null;
-  const archetypeHTML = archetype ? `<span class="archetype-badge">${archetype}</span>` : '';
+  const archetypeHTML = '';
   const projTypeLabels = { returning: 'Returning', transfer: 'Transfer', recruit: 'Recruit', unknown: 'New Player' };
   const projRangeHTML = r.projected && r.overallLow != null && r.overallHigh != null
     ? (() => {
@@ -2242,16 +2237,7 @@ function renderExplain() {
 
     <div class="explain-section">
       <h2>Player Archetypes</h2>
-      <p>Each player is assigned an <strong>archetype label</strong> based on their skill rating profile. Archetypes are purely descriptive — they don't affect ratings — but they quickly communicate a player's style. Examples:</p>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">
-        ${['Dual Threat','Pocket Passer','Big Arm','Scrambler','Game Manager',
-           'Power Back','Speed Back','Receiving Back','All-Purpose Back',
-           'No. 1 Receiver','Route Runner','YAC Monster','Slot Receiver',
-           'Complete TE','Pass Catcher','Blocking TE',
-           'Pass Rusher','Run Stuffer','Ball Hawk','Hit Man','Shutdown Corner',
-           'Edge Rusher','Coverage LB','Run Stopper','Pass Blocker','Run Blocker'].map(a =>
-          `<span class="archetype-badge" style="font-size:11px">${a}</span>`).join('')}
-      </div>
+      <p>Player archetypes are being redesigned as part of the rating overhaul — they will return with more nuanced, data-driven labels in a future update.</p>
     </div>
 
     <div class="explain-section">
