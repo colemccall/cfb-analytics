@@ -648,6 +648,42 @@ def build_player_gamelogs(game_stats_raw, games_raw):
 
                 for type_data in (category_data.get("types") or []):
                     stat_name = (type_data.get("name") or "").upper()
+
+                    # Handle combined "C/ATT" field (e.g. "22/35") → comp + att
+                    if stat_name == "C/ATT" and cat == "PASSING":
+                        for athlete in (type_data.get("athletes") or []):
+                            pid_raw = athlete.get("id")
+                            if not pid_raw:
+                                continue
+                            try:
+                                pid = int(pid_raw)
+                            except (ValueError, TypeError):
+                                continue
+                            raw_val = str(athlete.get("stat") or "")
+                            if "/" in raw_val:
+                                parts = raw_val.split("/")
+                                try:
+                                    comp_val = int(parts[0])
+                                    att_val  = int(parts[1])
+                                except (ValueError, IndexError):
+                                    continue
+                                if pid not in gamelogs:
+                                    gamelogs[pid] = []
+                                existing = next((e for e in gamelogs[pid] if e["gameId"] == gid), None)
+                                if existing:
+                                    existing["stats"]["comp"] = comp_val
+                                    existing["stats"]["att"]  = att_val
+                                else:
+                                    gamelogs[pid].append({
+                                        "gameId":   gid,
+                                        "week":     week,
+                                        "opponent": opponent,
+                                        "homeGame": is_home,
+                                        "result":   result_str,
+                                        "stats":    {"comp": comp_val, "att": att_val},
+                                    })
+                        continue
+
                     norm_key = key_map.get(stat_name)
                     if not norm_key:
                         continue
