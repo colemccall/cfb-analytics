@@ -13,7 +13,7 @@
 
   /* ── Dynasty Dark — deep navy, burnished gold accent ── */
   [data-theme="dynasty-dark"] {
-    --bg: #07090f; --surface: #0f1520; --surface-deep: #060810;
+    --bg: #05070c; --surface: #0c1219; --surface-deep: #030508;
     --text: #ccd8e8; --text-muted: #607a96; --text-dim: #304060;
     --accent: #c8922a; --accent-dim: rgba(200,146,42,0.12);
     --accent-2: #e0aa40;
@@ -370,7 +370,13 @@
     text-transform: uppercase; letter-spacing: 0.3px; font-family: var(--font-ui);
     min-height: 52px;
   }
-  .bottom-tab-bar button.active { color: var(--accent); }
+  .bottom-tab-bar button.active { color: var(--accent); font-weight: 800; }
+  [data-theme="dynasty-dark"] .bottom-tab-bar button.active,
+  [data-theme="dynasty-mid"] .bottom-tab-bar button.active,
+  [data-theme="dynasty-light"] .bottom-tab-bar button.active {
+    color: #07090f; background: var(--accent); border-radius: var(--radius-sm);
+  }
+  [data-theme="dynasty-light"] .bottom-tab-bar button.active { color: #fff; }
   .btab-icon { font-size: 17px; line-height: 1; }
 
 /* ── Tablet (601–900px) ── */
@@ -416,9 +422,15 @@
   }
 
   /* ── Explainability tab ── */
-  .explain-section { margin-bottom: 32px; }
-  .explain-section h2 { font-family: var(--font-display); font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 4px; padding-bottom: 8px; border-bottom: 2px solid var(--accent); display: inline-block; }
-  .explain-section p, .explain-section li { font-size: 14px; color: var(--text-muted); line-height: 1.65; margin-bottom: 6px; }
+  .explain-section { margin-bottom: 18px; border: 1px solid var(--border-mid); border-radius: var(--radius); overflow: hidden; }
+  .explain-section h2 {
+    font-family: var(--font-display); font-size: 15px; font-weight: 800; color: var(--text);
+    padding: 10px 14px; background: var(--surface); display: block; margin: 0;
+    border-bottom: 1px solid var(--border-mid); border-top: 2px solid var(--accent);
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .explain-section > *:not(h2) { padding: 12px 14px; background: var(--surface); display: block; }
+  .explain-section p, .explain-section li { font-size: 13px; color: var(--text-muted); line-height: 1.65; margin-bottom: 6px; }
   .explain-section ul { padding-left: 18px; margin-top: 6px; }
   .explain-section li { margin-bottom: 3px; }
   .explain-section strong { color: var(--text); }
@@ -716,7 +728,7 @@
     background: var(--d-team-color, var(--accent)); opacity: 0;
     transition: opacity 0.15s;
   }
-  .d-team-card:hover { border-color: var(--accent); box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+  .d-team-card:hover { border-color: var(--d-team-color, var(--accent)); box-shadow: var(--shadow-lg); transform: translateY(-3px); background: color-mix(in srgb, var(--d-team-color, var(--accent)) 9%, var(--surface-deep)); }
   .d-team-card:hover::after { opacity: 1; }
   .d-team-card.active { border-color: var(--accent); background: var(--accent-dim); }
   .d-team-card-logo { width: 52px; height: 52px; object-fit: contain; }
@@ -1044,3 +1056,83 @@
   .d-scoreboard-score.win { color: var(--positive); }
   .d-scoreboard-score.loss { color: var(--negative); }
   .d-scoreboard-score.tie { color: var(--text-muted); }
+
+  /* ── Dynasty: Roster unit headers ── */
+  .d-unit-section { margin-bottom: 22px; }
+  .d-unit-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px; background: var(--surface);
+    border: 1px solid var(--border-mid); border-radius: var(--radius) var(--radius) 0 0;
+    border-left: 3px solid var(--accent);
+  }
+  .d-unit-title {
+    font-family: var(--font-display); font-size: 15px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 1px; color: var(--text); flex: 1;
+  }
+  .d-unit-count { font-size: 11px; color: var(--text-dim); }
+  .d-unit-ovr-box {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 44px; height: 44px; border-radius: var(--radius-sm); flex-shrink: 0;
+  }
+  .d-unit-ovr-num { font-family: var(--font-display); font-size: 20px; font-weight: 900; line-height: 1; }
+  .d-unit-ovr-lbl { font-size: 8px; font-weight: 700; text-transform: uppercase; opacity: 0.7; }
+  .d-unit-rows { border: 1px solid var(--border-mid); border-top: none; border-radius: 0 0 var(--radius) var(--radius); overflow: hidden; }
+
+  /* ── Dynasty: Schedule — record + streak banner ── */
+  .d-record-banner {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 16px; margin-bottom: 12px;
+    background: var(--surface); border: 1px solid var(--border-mid);
+    border-radius: var(--radius); border-left: 3px solid var(--accent);
+  }
+  .d-record-pill {
+    font-family: var(--font-display); font-size: 22px; font-weight: 900;
+    color: var(--text); letter-spacing: 0.3px;
+  }
+  .d-record-sep { color: var(--border-mid); font-size: 18px; }
+  .d-streak-chip {
+    padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 800;
+    font-family: var(--num-font); letter-spacing: 0.3px; flex-shrink: 0;
+  }
+  .d-streak-w { background: rgba(48,168,87,0.15); color: var(--positive); border: 1px solid rgba(48,168,87,0.3); }
+  .d-streak-l { background: rgba(216,72,72,0.15); color: var(--negative); border: 1px solid rgba(216,72,72,0.3); }
+  .d-record-stat { font-size: 12px; color: var(--text-muted); }
+  .d-record-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ── Dynasty: Game detail — drive summary bar ── */
+  .d-drive-summary-section {
+    padding: 14px 16px; border-bottom: 1px solid var(--border-mid);
+  }
+  .d-drive-summary-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px;
+    color: var(--text-muted); margin-bottom: 8px;
+  }
+  .d-drive-summary-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .d-drive-summary-team { font-size: 11px; font-weight: 700; color: var(--text-muted); width: 80px; flex-shrink: 0; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
+  .d-drive-outcome-bar { flex: 1; display: flex; height: 14px; border-radius: 3px; overflow: hidden; gap: 1px; }
+  .d-drive-outcome-seg {
+    height: 100%; display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 800; color: rgba(255,255,255,0.9);
+    min-width: 14px; transition: flex 0.3s ease;
+  }
+  .d-drive-legend { display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
+  .d-drive-legend-item { display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--text-dim); }
+  .d-drive-legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+
+  /* ── How It Works tab — Dynasty styled ── */
+  .d-explain-section { margin-bottom: 24px; }
+  .d-explain-section h2 {
+    font-family: var(--font-display); font-size: 18px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent);
+    padding: 10px 14px; background: var(--surface);
+    border: 1px solid var(--border-mid); border-bottom: none;
+    border-radius: var(--radius) var(--radius) 0 0;
+    border-top: 2px solid var(--accent);
+  }
+  .d-explain-section > *:not(h2) { padding: 12px 14px; background: var(--surface); border: 1px solid var(--border-mid); border-top: none; }
+  .d-explain-section > *:last-child { border-radius: 0 0 var(--radius) var(--radius); }
+  .d-explain-section ul { padding-left: 18px; }
+  .d-explain-section li { margin-bottom: 6px; font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+  .d-explain-section p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .d-explain-section strong { color: var(--text); }
+  .d-explain-section code { background: var(--surface-deep); padding: 1px 5px; border-radius: 3px; font-size: 11px; color: var(--accent-2); }

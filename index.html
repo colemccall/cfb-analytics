@@ -741,35 +741,61 @@ function renderRoster(t, subNavHTML='') {
       </div>
     </div>` : '';
 
+  // Dynasty: group into units with OVR badge headers
+  const UNIT_GROUPS = {
+    'Offense':       ['QB','RB','WR','TE'],
+    'Defense':       ['DL','LB','DB'],
+    'Special Teams': ['K','P','LS'],
+  };
+  function unitOVR(unitGroups) {
+    const unitPlayers = ps.filter(p => unitGroups.includes(p.positionGroup));
+    const vals = unitPlayers.map(p => rMap[p.id]?.overall || 0).sort((a,b)=>b-a).slice(0,8);
+    return vals.length ? Math.round(vals.reduce((s,v)=>s+v,0)/vals.length) : 0;
+  }
+
+  const unitSections = Object.entries(UNIT_GROUPS).map(([unitName, groups]) => {
+    const unitFiltered = filtered.filter(p => groups.includes(p.positionGroup));
+    if (!unitFiltered.length) return '';
+    const uOvr = unitOVR(groups);
+    const rows = unitFiltered.map(p => {
+      const r = rMap[p.id] || {};
+      const [pgBg, pgColor] = posGroupColor(p.positionGroup);
+      return `<div class="d-depth-card" onclick="showPlayerModal('${p.id}')">
+        <span class="d-depth-slot" style="font-size:13px;width:20px">${p.jersey != null && p.jersey !== '' ? p.jersey : '—'}</span>
+        <div class="d-depth-avatar" style="background:${pgBg};border-color:${pgColor}40;color:${pgColor}">${p.firstName[0]}${p.lastName[0]}</div>
+        <div class="d-depth-info">
+          <div class="d-depth-name">${p.firstName} ${p.lastName}</div>
+          <div class="d-depth-pos-tag" style="color:${pgColor}">${p.position || p.positionGroup} · ${yrLabel(p.year) || '—'}</div>
+        </div>
+        ${(SKILL_COLS[p.positionGroup]||[]).slice(0,3).map(([a,lbl])=>`<span class="d-skill-chip" style="color:${ratingColor(r[a]||0)}">${lbl} ${r[a]||'-'}</span>`).join('')}
+        <div class="d-depth-ovr-box" style="background:${ratingColor(r.overall||0)};color:${ratingTextColor(r.overall||0)}">
+          <span class="d-depth-ovr-num">${r.overall||'-'}</span>
+          <span class="d-depth-ovr-label">OVR</span>
+        </div>
+      </div>`;
+    }).join('');
+    return `<div class="d-unit-section">
+      <div class="d-unit-header">
+        <div class="d-unit-title">${unitName}</div>
+        <span class="d-unit-count">${unitFiltered.length} players</span>
+        <div class="d-unit-ovr-box" style="background:${ratingColor(uOvr)};color:${ratingTextColor(uOvr)}">
+          <span class="d-unit-ovr-num">${uOvr||'—'}</span>
+          <span class="d-unit-ovr-lbl">OVR</span>
+        </div>
+      </div>
+      <div class="d-unit-rows">${rows}</div>
+    </div>`;
+  }).join('');
+
   document.getElementById('tab-content').innerHTML = `
     ${teamHeaderHTML(t)}
     ${subNavHTML}
     <div class="filter-row">
       ${posGroups.map(pg => `<span class="pos-chip ${pg === posFilter ? 'active' : ''}" onclick="filterPos('${pg}')">${pg}</span>`).join('')}
     </div>
-    <div class="table-scroll-wrap"><table>
-      <tr>
-        ${allCols.map(([col,lbl]) => {
-          const cls = sortCol === col ? (sortAsc ? 'sorted-asc' : 'sorted-desc') : '';
-          return `<th class="${cls}" onclick="sortBy('${col}')">${lbl}</th>`;
-        }).join('')}
-      </tr>
-      ${filtered.map(p => {
-        const r = rMap[p.id] || {};
-        return `<tr class="clickable" onclick="showPlayerModal('${p.id}')">
-          <td>${p.jersey != null && p.jersey !== '' ? p.jersey : '-'}</td>
-          <td><span class="pos-badge">${p.position || '?'}</span></td>
-          <td>${p.firstName} ${p.lastName}${tierBadge(r.overall || 0)}</td>
-          <td>${yrLabel(p.year)}</td>
-          <td>
-            <span class="ovr" style="background:${ratingColor(r.overall || 0)};color:${ratingTextColor(r.overall || 0)}">${r.overall || '-'}</span>
-          </td>
-          ${skillCols.map(([a]) => `<td>${r[a] != null ? r[a] : '-'}</td>`).join('')}
-        </tr>`;
-      }).join('')}
-    </table></div>
+    ${unitSections}
     ${posFilter === 'ALL' ? olBlock : ''}
-    <div style="padding:8px;color:#666;font-size:11px">${filtered.length} players${posFilter !== 'ALL' ? ` (${posFilter})` : ''} &bull; ${ps.length} total &bull; click a player for detail</div>
+    <div style="padding:8px;color:var(--text-dim);font-size:11px">${filtered.length} players${posFilter !== 'ALL' ? ` (${posFilter})` : ''} · ${ps.length} total · click a player for detail</div>
   `;
   requestAnimationFrame(() => initTeamRadar());
 }
@@ -1031,6 +1057,33 @@ async function renderSchedule(t, subNavHTML='') {
   const dynasty = isDynasty();
   const teamMap = buildTeamMap();
 
+  // Compute record + streak
+  const played = games.filter(g => g.homeScore != null && g.awayScore != null);
+  let wins = 0, losses = 0, streak = 0, streakType = '';
+  for (const g of played) {
+    const isHome = g.homeTeam === t.name;
+    const mine = isHome ? g.homeScore : g.awayScore;
+    const opp  = isHome ? g.awayScore : g.homeScore;
+    mine > opp ? wins++ : losses++;
+  }
+  // streak: count from end
+  for (let i = played.length - 1; i >= 0; i--) {
+    const g = played[i];
+    const isHome = g.homeTeam === t.name;
+    const w = (isHome ? g.homeScore : g.awayScore) > (isHome ? g.awayScore : g.homeScore);
+    if (i === played.length - 1) { streakType = w ? 'W' : 'L'; streak = 1; }
+    else if ((w && streakType === 'W') || (!w && streakType === 'L')) streak++;
+    else break;
+  }
+  const winPct = played.length ? ((wins / played.length) * 100).toFixed(0) : null;
+  const recordBanner = played.length ? `
+    <div class="d-record-banner">
+      <span class="d-record-pill">${wins}–${losses}</span>
+      <span class="d-record-sep">·</span>
+      ${streak > 0 ? `<span class="d-streak-chip ${streakType === 'W' ? 'd-streak-w' : 'd-streak-l'}">${streakType}${streak}</span>` : ''}
+      ${winPct !== null ? `<div><div class="d-record-stat">${winPct}%</div><div class="d-record-label">Win %</div></div>` : ''}
+    </div>` : '';
+
   const gameRowsHTML = games.map(g => {
     const isHome = g.homeTeam === t.name;
     const opponent = isHome ? g.awayTeam : g.homeTeam;
@@ -1094,7 +1147,8 @@ async function renderSchedule(t, subNavHTML='') {
   document.getElementById('tab-content').innerHTML = `
     ${teamHeaderHTML(t)}
     ${subNavHTML}
-    <div style="padding:12px 0">${scheduleBody}</div>
+    ${recordBanner}
+    <div style="padding:4px 0 12px">${scheduleBody}</div>
     <div id="game-detail-panel"></div>`;
 }
 
@@ -1376,12 +1430,57 @@ async function showGameDetail(gameId, teamName) {
     </table></div></div>`;
   }
 
+  // Drive summary bar: tally outcomes per team
+  function driveSummaryBar(teamName) {
+    const drives = drivesData[teamName] || [];
+    const gamedrives = drives.filter(d => d.gameId === gameId);
+    if (!gamedrives.length) return '';
+    let td=0, fg=0, punt=0, to=0, other=0;
+    for (const d of gamedrives) {
+      const r = (d.result||'').toUpperCase();
+      if (r.includes('TD')||r.includes('TOUCHDOWN')) td++;
+      else if (r.includes('FG')||r.includes('FIELD GOAL')) fg++;
+      else if (r.includes('INT')||r.includes('FUMBLE')||r.includes('INTERCEPTION')) to++;
+      else if (r.includes('PUNT')||r==='DOWNS') punt++;
+      else other++;
+    }
+    const total = gamedrives.length;
+    const seg = (count, color, label) => count > 0
+      ? `<div class="d-drive-outcome-seg" style="flex:${count};background:${color}" title="${label}: ${count}">${count}</div>` : '';
+    return `<div class="d-drive-summary-row">
+      <span class="d-drive-summary-team">${teamName}</span>
+      <div class="d-drive-outcome-bar">
+        ${seg(td,  'var(--positive)', 'TD')}
+        ${seg(fg,  'var(--warning)',  'FG')}
+        ${seg(punt,'var(--text-dim)', 'Punt')}
+        ${seg(to,  'var(--negative)', 'Turnover')}
+        ${seg(other,'var(--border-mid)','Other')}
+      </div>
+      <span style="font-size:10px;color:var(--text-dim);flex-shrink:0">${total} drv</span>
+    </div>`;
+  }
+  const summaryBarHTML = (dyn && (awaySection || homeSection)) ? `
+    <div class="d-drive-summary-section">
+      <div class="d-drive-summary-label">Drive Outcomes</div>
+      ${driveSummaryBar(game.awayTeam)}
+      ${driveSummaryBar(game.homeTeam)}
+      <div class="d-drive-legend">
+        <div class="d-drive-legend-item"><div class="d-drive-legend-dot" style="background:var(--positive)"></div>TD</div>
+        <div class="d-drive-legend-item"><div class="d-drive-legend-dot" style="background:var(--warning)"></div>FG</div>
+        <div class="d-drive-legend-item"><div class="d-drive-legend-dot" style="background:var(--text-dim)"></div>Punt</div>
+        <div class="d-drive-legend-item"><div class="d-drive-legend-dot" style="background:var(--negative)"></div>TO</div>
+      </div>
+    </div>` : '';
+
   const drivesPanel = document.getElementById('game-detail-panel');
   if (drivesPanel) drivesPanel.innerHTML += `
-    <div style="margin-top:14px;border:1px solid var(--border-mid);border-radius:var(--radius);padding:16px">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-        ${driveBlock(game.awayTeam, awaySection)}
-        ${driveBlock(game.homeTeam, homeSection)}
+    <div style="margin-top:14px;border:1px solid var(--border-mid);border-radius:var(--radius);overflow:hidden">
+      ${summaryBarHTML}
+      <div style="padding:16px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          ${driveBlock(game.awayTeam, awaySection)}
+          ${driveBlock(game.homeTeam, homeSection)}
+        </div>
       </div>
     </div>`;
 }
