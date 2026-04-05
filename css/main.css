@@ -113,6 +113,13 @@
   #top-bar input::placeholder { color: var(--text-dim); }
   #top-bar select { cursor: pointer; }
   #year-select { min-width: 130px; }
+  [data-theme="dynasty-dark"] #year-select,
+  [data-theme="dynasty-light"] #year-select {
+    font-family: var(--font-display); font-size: 15px; font-weight: 800;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    border-color: var(--accent); color: var(--accent);
+    padding: 5px 12px; min-width: 110px;
+  }
 
   /* ── Team grid (Teams tab) ── */
   .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
@@ -639,10 +646,11 @@
   }
   /* Subtle team-color wash behind logo */
   .d-team-hero::before {
-    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 120px;
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 180px;
     background: linear-gradient(90deg, var(--d-team-color, var(--accent-dim)) 0%, transparent 100%);
-    opacity: 0.08; pointer-events: none;
+    opacity: 0.12; pointer-events: none;
   }
+  [data-theme="dynasty-light"] .d-team-hero::before { opacity: 0.22; }
   .d-hero-logo { width: 84px; height: 84px; object-fit: contain; flex-shrink: 0; position: relative; z-index: 1; }
   .d-hero-info { flex: 1; min-width: 0; position: relative; z-index: 1; }
   .d-hero-name {
@@ -861,7 +869,8 @@
     border-left: 3px solid transparent;
   }
   .d-conf-team-row:last-child { border-bottom: none; }
-  .d-conf-team-row:hover { background: var(--surface-deep); border-left-color: var(--accent); }
+  .d-conf-team-row:nth-child(even) { background: var(--surface-deep); }
+  .d-conf-team-row:hover { background: var(--accent-dim); border-left-color: var(--accent); }
   .d-rank-badge {
     width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center;
     justify-content: center; font-family: var(--font-display); font-size: 12px;
@@ -912,7 +921,7 @@
     background: var(--surface-deep); border: 1px solid var(--border-mid);
     color: var(--text-muted); flex-shrink: 0; text-transform: uppercase;
   }
-  .d-player-skill-bars { display: flex; flex-direction: column; gap: 3px; min-width: 80px; }
+  .d-player-skill-bars { display: flex; flex-direction: column; gap: 3px; min-width: 120px; max-width: 200px; flex: 1; }
   .d-player-skill-row { display: flex; align-items: center; gap: 4px; }
   .d-player-skill-label { font-size: 9px; color: var(--text-dim); width: 22px; text-align: right; text-transform: uppercase; letter-spacing: 0.2px; }
   .d-player-skill-track { flex: 1; height: 4px; background: var(--surface-deep); border-radius: 2px; overflow: hidden; }
@@ -956,3 +965,61 @@
     text-transform: uppercase; letter-spacing: 0.8px; color: var(--accent);
     padding: 0 0 8px; border-bottom: 2px solid var(--border-mid); margin-bottom: 12px;
   }
+
+  /* ── Dynasty: game detail card ── */
+  .d-game-detail-card {
+    margin-top: 16px; border: 1px solid var(--border-mid); border-radius: var(--radius);
+    overflow: hidden; background: var(--surface);
+    border-top: 3px solid var(--accent);
+  }
+  .d-game-detail-scoreboard {
+    display: flex; align-items: center; justify-content: center; gap: 28px;
+    padding: 20px 24px 16px; background: var(--surface);
+    border-bottom: 1px solid var(--border-mid);
+  }
+  .d-scoreboard-team { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 100px; }
+  .d-scoreboard-logo { width: 52px; height: 52px; object-fit: contain; }
+  .d-scoreboard-name { font-family: var(--font-display); font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3px; color: var(--text); text-align: center; }
+  .d-scoreboard-score { font-family: var(--font-display); font-size: 44px; font-weight: 900; line-height: 1; }
+  .d-scoreboard-sep { font-size: 28px; color: var(--text-dim); font-weight: 300; align-self: center; padding-bottom: 8px; }
+  .d-game-detail-meta { font-size: 11px; color: var(--text-dim); text-align: center; padding: 6px 0 10px; }
+  .d-game-detail-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .d-game-detail-col { padding: 16px; }
+  .d-game-detail-col:first-child { border-right: 1px solid var(--border-mid); }
+  .d-game-detail-col-header {
+    font-family: var(--font-display); font-size: 12px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted);
+    padding-bottom: 8px; border-bottom: 1px solid var(--border); margin-bottom: 10px;
+  }
+
+  /* ── Dynasty: play rows — down-type color coding ── */
+  .d-play-row.scoring-play { background: rgba(48,168,87,0.07); border-left: 2px solid var(--positive); }
+  .d-play-down-chip.down-1 { background: rgba(56,139,253,0.12); border-color: rgba(56,139,253,0.3); color: #4fa3f7; }
+  .d-play-down-chip.down-3, .d-play-down-chip.down-4 { background: rgba(216,72,72,0.1); border-color: rgba(216,72,72,0.3); color: var(--negative); }
+
+  /* ── Dynasty: drive card — field position bar ── */
+  .d-drive-field-bar {
+    display: flex; align-items: center; gap: 6px; padding: 4px 12px 6px;
+    background: var(--surface-deep); border-top: 1px solid var(--border);
+    font-size: 10px; color: var(--text-dim);
+  }
+  .d-drive-field-track {
+    flex: 1; height: 6px; background: var(--border); border-radius: 3px; position: relative; overflow: visible;
+  }
+  .d-drive-field-segment {
+    position: absolute; top: 0; height: 100%; border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+  .d-drive-field-marker {
+    position: absolute; top: -3px; width: 2px; height: 12px;
+    background: var(--text-muted); border-radius: 1px;
+  }
+
+  /* ── Dynasty: conference — record + rating columns ── */
+  .d-conf-team-record { font-family: var(--num-font); font-size: 11px; color: var(--text-dim); min-width: 36px; text-align: right; flex-shrink: 0; }
+  .d-conf-sp-rank { font-family: var(--num-font); font-size: 11px; color: var(--text-dim); min-width: 28px; text-align: right; flex-shrink: 0; }
+
+  /* ── Dynasty: game result — win color on score ── */
+  .d-scoreboard-score.win { color: var(--positive); }
+  .d-scoreboard-score.loss { color: var(--negative); }
+  .d-scoreboard-score.tie { color: var(--text-muted); }
