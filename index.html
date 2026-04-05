@@ -272,6 +272,9 @@ function buildDepthPositions(teamPlayers) {
   return sections;
 }
 
+// ── Theme helpers ──────────────────────────────────────────────────────────
+const isDynasty = () => (document.documentElement.getAttribute('data-theme') || '').startsWith('dynasty');
+
 // ── Color helpers ──────────────────────────────────────────────────────────
 const ratingColor = v => {
   if (v >= 95) return '#ffd700';
@@ -369,21 +372,36 @@ function renderTeams(filteredTeams) {
     );
     filteredTeams.sort((a, b) => (b.ratings?.overall || 0) - (a.ratings?.overall || 0));
   }
-  document.getElementById('tab-content').innerHTML = `
-    <div style="margin-bottom:12px;font-size:13px;color:var(--text-muted)">${filteredTeams.length} teams — click to view roster</div>
-    <div class="team-grid">
-      ${filteredTeams.map(t => {
-        const ovr = t.ratings?.overall || 0;
-        return `<div class="team-card ${t.id === selectedTeamId ? 'active' : ''}" onclick="selectTeam(${t.id})">
-          ${t.logoUrl ? `<img class="team-card-logo" src="${t.logoUrl}" onerror="this.style.display='none'">` : '<div style="width:36px"></div>'}
-          <div class="team-card-info">
-            <div class="team-card-name">${t.name}</div>
-            <div class="team-card-conf">${t.conference || ''}</div>
-          </div>
-          <span class="team-card-ovr" style="background:${ratingColor(ovr)};color:${ratingTextColor(ovr)}">${ovr}</span>
-        </div>`;
-      }).join('')}
-    </div>`;
+  if (isDynasty()) {
+    document.getElementById('tab-content').innerHTML = `
+      <div style="margin-bottom:12px;font-size:12px;color:var(--text-muted);letter-spacing:0.3px">${filteredTeams.length} TEAMS</div>
+      <div class="d-team-grid">
+        ${filteredTeams.map(t => {
+          const ovr = t.ratings?.overall || 0;
+          const tc = t.primaryColor || 'var(--accent)';
+          return `<div class="d-team-card ${t.id === selectedTeamId ? 'active' : ''}" onclick="selectTeam(${t.id})" style="--d-team-color:${tc}">
+            ${t.logoUrl ? `<img class="d-team-card-logo" src="${t.logoUrl}" onerror="this.style.display='none'">` : '<div style="height:52px"></div>'}
+            <div class="d-team-card-name">${t.name}</div>
+            <div class="d-team-card-conf">${t.conference || ''}</div>
+            <span class="d-team-card-ovr" style="background:${ratingColor(ovr)};color:${ratingTextColor(ovr)}">${ovr}</span>
+          </div>`;
+        }).join('')}
+      </div>`;
+  } else {
+    document.getElementById('tab-content').innerHTML = `
+      <div style="margin-bottom:8px;font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px">${filteredTeams.length} teams — click to view</div>
+      <div class="a-team-list">
+        ${filteredTeams.map(t => {
+          const ovr = t.ratings?.overall || 0;
+          return `<div class="a-team-row ${t.id === selectedTeamId ? 'active' : ''}" onclick="selectTeam(${t.id})">
+            ${t.logoUrl ? `<img class="a-team-row-logo" src="${t.logoUrl}" onerror="this.style.display='none'">` : '<div style="width:22px"></div>'}
+            <span class="a-team-row-name">${t.name}</span>
+            <span class="a-team-row-conf">${t.conference || ''}</span>
+            <span class="a-team-row-ovr" style="color:${ratingColor(ovr)}">${ovr}</span>
+          </div>`;
+        }).join('')}
+      </div>`;
+  }
 }
 
 function selectTeam(id) {
@@ -448,8 +466,8 @@ function setTheme(t) {
     btn.classList.toggle('active', btn.dataset.t === t);
   });
   localStorage.setItem('cfb-theme', t);
-  // Redraw team radar so it picks up new theme colors
-  if (window._teamRadarChart) { window._teamRadarChart.destroy(); window._teamRadarChart = null; requestAnimationFrame(() => initTeamRadar()); }
+  // Re-render active tab so structural HTML (Analytics vs Dynasty) updates immediately
+  requestAnimationFrame(() => renderActiveTab());
 }
 
 function renderActiveTab() {
@@ -483,13 +501,25 @@ function teamRatingBarsHTML(r) {
     ['Run Def',  r.runDef  || 0],
     ['Spec',     r.specialTeams || 0],
   ];
-  return `<div class="team-rating-bars">
+  if (isDynasty()) {
+    return `<div class="d-rating-bars">
+      ${bars.map(([label, val]) => {
+        const pct = val ? Math.max(4, Math.round(((val - 55) / 44) * 100)) : 0;
+        return `<div class="d-rating-row">
+          <span class="d-rating-label">${label}</span>
+          <div class="d-rating-track"><div class="d-rating-fill" style="width:${pct}%;background:${ratingColor(val)}"></div></div>
+          <span class="d-rating-val" style="color:${ratingColor(val)}">${val || '—'}</span>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+  return `<div class="a-rating-bars">
     ${bars.map(([label, val]) => {
-      const pct = val ? Math.round(((val - 55) / 44) * 100) : 0;
-      return `<div class="team-rating-bar-row">
-        <span class="team-rating-bar-label">${label}</span>
-        <div class="team-rating-bar-track"><div class="team-rating-bar-fill" style="width:${pct}%;background:${ratingColor(val)}"></div></div>
-        <span class="team-rating-bar-val" style="color:${ratingColor(val)}">${val || '—'}</span>
+      const pct = val ? Math.max(4, Math.round(((val - 55) / 44) * 100)) : 0;
+      return `<div class="a-rating-row">
+        <span class="a-rating-label">${label}</span>
+        <div class="a-rating-track"><div class="a-rating-fill" style="width:${pct}%;background:${ratingColor(val)}"></div></div>
+        <span class="a-rating-val" style="color:${ratingColor(val)}">${val || '—'}</span>
       </div>`;
     }).join('')}
   </div>`;
@@ -497,28 +527,58 @@ function teamRatingBarsHTML(r) {
 
 function teamHeaderHTML(t) {
   const r = t.ratings || {};
-  const accentStyle = t.primaryColor ? `border-color:${t.primaryColor}` : '';
-  return `
-    <div class="team-hero" ${accentStyle ? `style="${accentStyle}"` : ''}>
-      ${t.logoUrl ? `<img class="team-hero-logo" src="${t.logoUrl}" onerror="this.style.display='none'">` : ''}
-      <div class="team-hero-info">
-        <div class="team-hero-name">${t.name}${t.mascot ? ' ' + t.mascot : ''}</div>
-        <div class="team-hero-meta">${[t.conference, t.stadiumName, t.city && t.state ? `${t.city}, ${t.state}` : ''].filter(Boolean).join(' · ')}</div>
-        <div style="display:flex;align-items:center;gap:6px;margin-top:6px">
-          <span style="font-size:28px;font-weight:900;color:${ratingColor(r.overall||0)}">${r.overall || '—'}</span>
-          <span style="font-size:12px;color:var(--text-muted);font-weight:600">OVR</span>
+  const ovr = r.overall || 0;
+  const meta = [t.conference, t.stadiumName, t.city && t.state ? `${t.city}, ${t.state}` : ''].filter(Boolean).join(' · ');
+  const switcher = `<div id="team-switcher-panel" class="team-switch-panel" style="display:none">
+    <input type="text" placeholder="Search teams..." id="team-switcher-search" oninput="renderTeamSwitcherList(this.value)" onclick="event.stopPropagation()">
+    <div id="team-switcher-list"></div>
+  </div>`;
+
+  if (isDynasty()) {
+    const teamColor = t.primaryColor || 'var(--accent)';
+    return `
+      <div class="d-team-hero" style="--d-team-color:${teamColor}; border-top-color:${teamColor}">
+        ${t.logoUrl ? `<img class="d-hero-logo" src="${t.logoUrl}" onerror="this.style.display='none'">` : '<div style="width:84px"></div>'}
+        <div class="d-hero-info">
+          <div class="d-hero-name">${t.name}${t.mascot ? ' ' + t.mascot : ''}</div>
+          ${t.conference ? `<span class="d-hero-conf-badge">${t.conference}</span>` : ''}
+          <div class="d-hero-meta">${[t.stadiumName, t.city && t.state ? `${t.city}, ${t.state}` : ''].filter(Boolean).join(' · ')}</div>
         </div>
+        <div class="d-hero-right">
+          <div style="display:flex;gap:6px">
+            <button class="btn-compare" onclick="startCompare(${t.id})">Compare</button>
+            <button class="btn-switch-team" onclick="toggleTeamSwitcher(event)">Switch ▾</button>
+          </div>
+          ${teamRatingBarsHTML(r)}
+          <div class="d-hero-ovr-box">
+            <span class="d-hero-ovr-num" style="color:${ratingColor(ovr)}">${ovr || '—'}</span>
+            <span class="d-hero-ovr-label">OVR</span>
+          </div>
+          ${switcher}
+        </div>
+      </div>`;
+  }
+
+  // Analytics: flat band with left accent border in team color
+  const borderColor = t.primaryColor || 'var(--accent)';
+  return `
+    <div class="a-team-hero" style="border-left-color:${borderColor}">
+      ${t.logoUrl ? `<img class="a-hero-logo" src="${t.logoUrl}" onerror="this.style.display='none'">` : ''}
+      <div class="a-hero-info">
+        <div class="a-hero-name">${t.name}${t.mascot ? ' ' + t.mascot : ''}</div>
+        <div class="a-hero-meta">${meta}</div>
       </div>
-      <div class="team-hero-right">
+      <div style="display:flex;align-items:center;gap:8px;margin:0 12px;flex-shrink:0">
+        <span class="a-hero-ovr" style="color:${ratingColor(ovr)}">${ovr || '—'}</span>
+        <span class="a-hero-ovr-label">OVR</span>
+      </div>
+      <div class="a-hero-right">
         <div style="display:flex;gap:6px">
-          <button class="btn-compare" onclick="startCompare(${t.id})">⚖ Compare</button>
-          <button class="btn-switch-team" onclick="toggleTeamSwitcher(event)">Switch Team ▾</button>
+          <button class="btn-compare" onclick="startCompare(${t.id})">Compare</button>
+          <button class="btn-switch-team" onclick="toggleTeamSwitcher(event)">Switch ▾</button>
         </div>
         ${teamRatingBarsHTML(r)}
-        <div id="team-switcher-panel" class="team-switch-panel" style="display:none">
-          <input type="text" placeholder="Search teams..." id="team-switcher-search" oninput="renderTeamSwitcherList(this.value)" onclick="event.stopPropagation()">
-          <div id="team-switcher-list"></div>
-        </div>
+        ${switcher}
       </div>
     </div>`;
 }
@@ -707,6 +767,7 @@ function renderDepth(t, subNavHTML='') {
   const ps = getPlayers().filter(p => p.teamId === t.id);
   const rMap = buildRatingMap();
 
+  const dynasty = isDynasty();
   const sections = buildDepthPositions(ps).map(({ group, label, slots, positions }) => {
     const groupPlayers = ps
       .filter(p => p.positionGroup === group && (!positions || positions.includes(p.position)))
@@ -717,22 +778,52 @@ function renderDepth(t, subNavHTML='') {
     if (!groupPlayers.length) return '';
 
     const skills = SKILL_COLS[group] || [];
+
+    if (dynasty) {
+      const cards = groupPlayers.map(({ p, r }, i) => {
+        const isStarter = i === 0;
+        const initials = `${p.firstName?.[0] || ''}${p.lastName?.[0] || ''}`;
+        const skillChips = skills.map(([a, lbl]) =>
+          `<span class="d-skill-chip" style="color:${ratingColor(r[a] || 0)}">${lbl} ${r[a] || '-'}</span>`
+        ).join('');
+        const ovr = r.overall || 0;
+        return `<div class="d-depth-card ${isStarter ? 'starter' : ''}" onclick="showPlayerModal('${p.id}')">
+          <span class="d-depth-slot">${i + 1}</span>
+          <div class="d-depth-avatar">${initials}</div>
+          <div class="d-depth-info">
+            <div class="d-depth-name">${p.firstName} ${p.lastName}</div>
+            <div class="d-depth-pos-tag">${p.position || group}</div>
+          </div>
+          <div class="d-depth-skills">${skillChips}</div>
+          <div class="d-depth-ovr-box" style="background:${ratingColor(ovr)};color:${ratingTextColor(ovr)}">
+            <span class="d-depth-ovr-num">${ovr || '-'}</span>
+            <span class="d-depth-ovr-label">OVR</span>
+          </div>
+        </div>`;
+      }).join('');
+      return `<div class="d-depth-section">
+        <div class="d-depth-pos-header">${label}</div>
+        <div class="d-depth-cards">${cards}</div>
+      </div>`;
+    }
+
+    // Analytics: flat editorial list
     const rows = groupPlayers.map(({ p, r }, i) => {
       const isStarter = i === 0;
-      const skillHtml = skills.map(([a, lbl]) =>
-        `<span class="depth-skill" style="color:${ratingColor(r[a] || 0)}">${lbl} ${r[a] || '-'}</span>`
+      const ovr = r.overall || 0;
+      const skillText = skills.map(([a, lbl]) =>
+        `<span class="a-depth-skill-item"><span class="a-depth-skill-label">${lbl}</span><span style="color:${ratingColor(r[a]||0)}">${r[a] || '-'}</span></span>`
       ).join('');
-      return `<div class="depth-row" onclick="showPlayerModal('${p.id}')">
-        <span class="depth-slot ${isStarter ? 'starter' : ''}">${i === 0 ? '★' : i + 1}</span>
-        <span class="pos-badge" style="flex-shrink:0">${p.position || '?'}</span>
-        <span class="depth-name">${p.firstName} ${p.lastName}${tierBadge(r.overall || 0)}</span>
-        <span class="ovr" style="background:${ratingColor(r.overall || 0)};color:${ratingTextColor(r.overall || 0)};flex-shrink:0">${r.overall || '-'}</span>
-        <div class="depth-skills">${skillHtml}</div>
+      return `<div class="a-depth-row" onclick="showPlayerModal('${p.id}')">
+        <span class="a-depth-slot ${isStarter ? 'starter' : ''}">${i + 1}</span>
+        <span class="a-depth-pos">${p.position || group}</span>
+        <span class="a-depth-name">${p.firstName} ${p.lastName}</span>
+        <div class="a-depth-skills">${skillText}</div>
+        <span class="a-depth-ovr" style="color:${ratingColor(ovr)}">${ovr || '-'}</span>
       </div>`;
     }).join('');
-
-    return `<div class="depth-section">
-      <div class="depth-pos-header">${label}</div>
+    return `<div class="a-depth-section">
+      <div class="a-depth-pos-header">${label}</div>
       ${rows}
     </div>`;
   }).join('');
@@ -924,46 +1015,73 @@ async function renderSchedule(t, subNavHTML='') {
     return;
   }
 
-  const rows = games.map(g => {
+  const dynasty = isDynasty();
+  const teamMap = buildTeamMap();
+
+  const gameRowsHTML = games.map(g => {
     const isHome = g.homeTeam === t.name;
     const opponent = isHome ? g.awayTeam : g.homeTeam;
     const myScore  = isHome ? g.homeScore : g.awayScore;
     const oppScore = isHome ? g.awayScore : g.homeScore;
     const oppSp    = isHome ? g.awaySpRank : g.homeSpRank;
     const loc = g.neutralSite ? 'N' : (isHome ? 'vs' : '@');
-    let result = '-', resultColor = '#aaa';
-    if (myScore != null && oppScore != null) {
-      const win = myScore > oppScore;
-      result = `${win ? 'W' : 'L'} ${myScore}-${oppScore}`;
-      resultColor = win ? '#00c853' : '#f44336';
+    const played = myScore != null && oppScore != null;
+    const win = played && myScore > oppScore;
+    const margin = played ? myScore - oppScore : null;
+    // find opponent team for logo
+    const oppTeam = Object.values(teamMap).find(tm => tm.name === opponent);
+
+    if (dynasty) {
+      const resultPill = played
+        ? `<span class="d-game-result-pill ${win ? 'd-game-result-w' : 'd-game-result-l'}">${win ? 'W' : 'L'} ${myScore}–${oppScore}</span>`
+        : `<span style="font-size:11px;color:var(--text-dim)">—</span>`;
+      const marginText = margin != null
+        ? `<span class="d-game-margin" style="color:${margin > 0 ? 'var(--positive)' : 'var(--negative)'}">${margin > 0 ? '+' : ''}${margin}</span>`
+        : `<span class="d-game-margin">—</span>`;
+      return `<div class="d-game-row" onclick="showGameDetail(${g.gameId}, '${t.name.replace(/'/g,"\\'")}')">
+        <span class="d-game-week">Wk ${g.week ?? '—'}</span>
+        <span class="d-game-loc">${loc}</span>
+        <div class="d-game-opp">
+          ${oppTeam?.logoUrl ? `<img class="d-game-opp-logo" src="${oppTeam.logoUrl}" onerror="this.style.display='none'">` : ''}
+          <span class="d-game-opp-name">${opponent}</span>
+        </div>
+        ${resultPill}
+        ${marginText}
+        <span class="d-game-opp-sp">${oppSp != null ? `#${oppSp}` : '—'}</span>
+      </div>`;
     }
-    const margin = (myScore != null && oppScore != null) ? (myScore - oppScore) : null;
+
+    const resultColor = played ? (win ? 'var(--positive)' : 'var(--negative)') : 'var(--text-dim)';
+    const resultText = played ? `${win ? 'W' : 'L'} ${myScore}–${oppScore}` : '—';
+    const marginColor = margin != null ? (margin > 0 ? 'var(--positive)' : 'var(--negative)') : 'var(--text-dim)';
     return `<tr class="clickable" onclick="showGameDetail(${g.gameId}, '${t.name.replace(/'/g,"\\'")}')">
-      <td>${g.week ?? '-'}</td>
-      <td style="color:#aaa;font-size:11px">${loc}</td>
-      <td>${opponent}</td>
-      <td style="color:${resultColor};font-weight:700">${result}</td>
-      <td style="color:${margin != null ? (margin > 0 ? '#8bc34a' : '#f44336') : '#aaa'}">${margin != null ? (margin > 0 ? `+${margin}` : margin) : '-'}</td>
-      <td style="color:#aaa;font-size:11px">${oppSp != null ? `SP+ ${oppSp}` : '-'}</td>
+      <td style="color:var(--text-muted);font-size:11px">${g.week ?? '—'}</td>
+      <td style="color:var(--text-dim);font-size:11px">${loc}</td>
+      <td>
+        <div class="a-player-team-cell">
+          ${oppTeam?.logoUrl ? `<img class="a-player-team-logo" src="${oppTeam.logoUrl}" onerror="this.style.display='none'">` : ''}
+          ${opponent}
+        </div>
+      </td>
+      <td style="color:${resultColor};font-weight:700;font-family:var(--num-font)">${resultText}</td>
+      <td style="color:${marginColor};font-family:var(--num-font)">${margin != null ? (margin > 0 ? `+${margin}` : margin) : '—'}</td>
+      <td style="color:var(--text-dim);font-size:11px">${oppSp != null ? `#${oppSp}` : '—'}</td>
     </tr>`;
   }).join('');
+
+  const scheduleBody = dynasty
+    ? `<div style="border:1px solid var(--border-mid);border-radius:var(--radius);overflow:hidden">${gameRowsHTML}</div>`
+    : `<div class="table-scroll-wrap"><table>
+        <thead><tr>
+          <th>Wk</th><th></th><th>Opponent</th><th>Result</th><th>Margin</th><th>Opp SP+</th>
+        </tr></thead>
+        <tbody>${gameRowsHTML}</tbody>
+      </table></div>`;
 
   document.getElementById('tab-content').innerHTML = `
     ${teamHeaderHTML(t)}
     ${subNavHTML}
-    <div style="padding:12px 0" class="table-scroll-wrap">
-      <table class="roster-table" style="width:100%">
-        <thead><tr>
-          <th onclick="void(0)">Wk</th>
-          <th></th>
-          <th onclick="void(0)">Opponent</th>
-          <th onclick="void(0)">Result</th>
-          <th onclick="void(0)">Margin</th>
-          <th onclick="void(0)">Opp SP+</th>
-        </tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>
+    <div style="padding:12px 0">${scheduleBody}</div>
     <div id="game-detail-panel"></div>`;
 }
 
@@ -1080,95 +1198,134 @@ async function showGameDetail(gameId, teamName) {
   // Append drive-level breakdown — show both teams' drives
   const [drivesData, playsData] = await Promise.all([loadDrives(currentYear), loadPlaysForWeek(currentYear, game.week)]);
 
-  function buildDriveRows(driveTeam, driveIdPrefix) {
+  const dyn = isDynasty();
+
+  function buildPlayRows(drivePlays) {
+    return drivePlays.map(pl => {
+      const yl = pl.yardsToGoal;
+      const fieldPos = yl != null ? (yl > 50 ? `Own ${100-yl}` : `Opp ${yl}`) : '—';
+      const yds = pl.yardsGained != null ? (pl.yardsGained > 0 ? '+' : '') + pl.yardsGained : '—';
+      const epa = pl.ppa != null ? (pl.ppa > 0 ? '+' : '') + pl.ppa.toFixed(2) : '—';
+      const epaClass = pl.ppa > 0 ? 'd-epa-pos' : pl.ppa < 0 ? 'd-epa-neg' : 'd-epa-neu';
+      const downStr = pl.down ? `${pl.down}&amp;${pl.distance}` : '—';
+      if (dyn) {
+        return `<div class="d-play-row${pl.scoring ? ' scoring-play' : ''}">
+          <span class="d-play-down-chip">${downStr}</span>
+          <span class="d-play-field">${fieldPos}</span>
+          <span class="d-play-text">${pl.playText || ''}</span>
+          <span class="d-play-yards">${yds}</span>
+          <span class="${epaClass}">${epa}</span>
+        </div>`;
+      }
+      const epaColor = pl.ppa > 0 ? 'var(--positive)' : pl.ppa < 0 ? 'var(--negative)' : 'var(--text-dim)';
+      return `<tr class="a-play-row${pl.scoring ? ' scoring-play' : ''}">
+        <td class="a-play-down">${downStr}</td>
+        <td style="color:var(--text-dim);font-size:10px">${fieldPos}</td>
+        <td style="color:var(--text-muted);max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${pl.playText || ''}</td>
+        <td style="text-align:right">${yds}</td>
+        <td class="${pl.ppa > 0 ? 'a-epa-pos' : pl.ppa < 0 ? 'a-epa-neg' : ''}" style="text-align:right">${epa}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  function buildDriveSection(driveTeam, driveIdPrefix) {
     const drives = (drivesData[driveTeam] || []).filter(d => d.gameId === gameId);
     const plays  = (playsData[driveTeam]  || []).filter(p => p.gameId === gameId);
     if (!drives.length) return null;
+
     return drives.map((d, idx) => {
       const drivePlays = plays.filter(p => p.driveNumber === d.driveNumber);
-      const playRows = drivePlays.map(pl => {
-        const epaColor = pl.ppa > 0 ? 'var(--positive)' : pl.ppa < 0 ? 'var(--negative)' : 'var(--text-dim)';
-        const scoringBg = pl.scoring ? 'background:rgba(63,185,80,0.07);' : '';
-        const yl = pl.yardsToGoal;
-        const fieldPos = yl != null ? (yl > 50 ? `Own ${100 - yl}` : `Opp ${yl}`) : '-';
-        return `<tr style="${scoringBg}font-size:11px;border-bottom:1px solid var(--border)">
-          <td style="padding:4px 6px;color:var(--text-muted);white-space:nowrap">${pl.down ? `${pl.down}&amp;${pl.distance}` : '-'}</td>
-          <td style="padding:4px 6px;color:var(--text-muted);white-space:nowrap;font-size:10px">${fieldPos}</td>
-          <td style="padding:4px 6px;font-size:10px;color:var(--text-muted)">${pl.playType || '-'}</td>
-          <td style="padding:4px 6px;color:var(--text);max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${pl.playText || ''}</td>
-          <td style="padding:4px 6px;text-align:right;white-space:nowrap">${pl.yardsGained != null ? (pl.yardsGained > 0 ? '+' : '') + pl.yardsGained : '-'}</td>
-          <td style="padding:4px 6px;text-align:right;color:${epaColor};white-space:nowrap">${pl.ppa != null ? (pl.ppa > 0 ? '+' : '') + pl.ppa.toFixed(2) : '-'}</td>
-        </tr>`;
-      }).join('');
-      const playsSection = drivePlays.length ? `
-        <tr id="${driveIdPrefix}-drive-plays-${idx}" style="display:none"><td colspan="6" style="padding:0;background:var(--surface-deep)">
-          <div style="padding:4px 8px 8px 24px">
-          <table style="width:100%;border-collapse:collapse">
-            <thead><tr style="font-size:10px;color:var(--text-dim)">
-              <th style="padding:3px 6px;text-align:left">D&amp;D</th>
-              <th style="padding:3px 6px;text-align:left">Fld</th>
-              <th style="padding:3px 6px;text-align:left">Type</th>
-              <th style="padding:3px 6px;text-align:left">Play</th>
-              <th style="padding:3px 6px;text-align:right">Yds</th>
-              <th style="padding:3px 6px;text-align:right">EPA</th>
-            </tr></thead>
-            <tbody>${playRows}</tbody>
-          </table>
+      const hasPl = drivePlays.length > 0;
+      const isTd = d.scoring || (d.result || '').toUpperCase().includes('TD') || (d.result || '').toUpperCase().includes('TOUCHDOWN');
+      const isFg = (d.result || '').toUpperCase().includes('FG') || (d.result || '').toUpperCase().includes('FIELD GOAL');
+      const isTo = ['INT','FUMBLE','INTERCEPTION'].some(x => (d.result||'').toUpperCase().includes(x));
+      const isPunt = (d.result||'').toUpperCase().includes('PUNT') || (d.result||'').toUpperCase() === 'DOWNS';
+      const resultLabel = d.result || '—';
+      const scoreStr = (d.startScore != null && d.endScore != null) ? `${d.startScore}→${d.endScore}` : '';
+
+      if (dyn) {
+        const badgeClass = isTd ? 'd-drive-td' : isFg ? 'd-drive-fg' : isTo ? 'd-drive-to' : 'd-drive-punt';
+        const playsPanel = hasPl ? `
+          <div id="${driveIdPrefix}-drive-plays-${idx}" class="d-drive-plays-panel" style="display:none">
+            ${buildPlayRows(drivePlays)}
+          </div>` : '';
+        return `<div class="d-drive-card" id="${driveIdPrefix}-drive-card-${idx}">
+          <div class="d-drive-header" onclick="${hasPl ? `toggleDrivePlays('${driveIdPrefix}',${idx})` : ''}">
+            ${hasPl ? `<span class="d-drive-chevron">▶</span>` : '<span style="width:16px;display:inline-block"></span>'}
+            <span class="d-drive-num">${d.driveNumber ?? idx+1}</span>
+            <span class="d-drive-result-badge ${badgeClass}">${resultLabel}</span>
+            <span class="d-drive-summary">${d.plays ?? '—'} plays · ${d.yards ?? '—'} yds</span>
+            ${scoreStr ? `<span class="d-drive-score">${scoreStr}</span>` : ''}
           </div>
-        </td></tr>` : '';
-      const resultColor = d.scoring ? 'var(--positive)' : d.result === 'PUNT' || d.result === 'DOWNS' ? 'var(--text-muted)' : d.result === 'INT' || d.result === 'FUMBLE' ? 'var(--negative)' : 'var(--text)';
-      const chevron = drivePlays.length ? `<span class="drive-chevron" style="display:inline-block;transition:transform 0.15s;font-size:9px;color:var(--text-dim)">▶</span>` : '';
-      return `<tr id="${driveIdPrefix}-drive-row-${idx}" class="clickable${drivePlays.length ? '' : ' no-expand'}" onclick="${drivePlays.length ? `toggleDrivePlays('${driveIdPrefix}',${idx})` : ''}" style="border-top:1px solid var(--border)">
-        <td style="padding:6px 8px;color:var(--text-muted);font-size:11px">#${d.driveNumber ?? idx+1}</td>
-        <td style="padding:6px 8px;font-weight:700;color:${resultColor}">${d.result || '-'}</td>
-        <td style="padding:6px 8px;color:var(--text-muted)">${d.plays ?? '-'} plays</td>
-        <td style="padding:6px 8px;color:var(--text-muted)">${d.yards ?? '-'} yds</td>
-        <td style="padding:6px 8px;color:var(--text-muted);font-size:11px">${d.startScore ?? '?'}→${d.endScore ?? '?'}</td>
-        <td style="padding:6px 8px;width:18px">${chevron}</td>
+          ${playsPanel}
+        </div>`;
+      }
+
+      // Analytics table row
+      const resultColor = isTd ? 'var(--positive)' : isTo ? 'var(--negative)' : 'var(--text-muted)';
+      const playsSection = hasPl ? `
+        <tr id="${driveIdPrefix}-drive-plays-${idx}" style="display:none">
+          <td colspan="5" style="padding:0;background:var(--surface-deep)">
+            <div style="padding:4px 8px 8px 20px">
+              <table style="width:100%;border-collapse:collapse">
+                <thead><tr style="font-size:10px;color:var(--text-dim)">
+                  <th style="padding:3px 6px;text-align:left">D&amp;D</th>
+                  <th style="padding:3px 6px;text-align:left">Fld</th>
+                  <th style="padding:3px 6px;text-align:left">Play</th>
+                  <th style="padding:3px 6px;text-align:right">Yds</th>
+                  <th style="padding:3px 6px;text-align:right">EPA</th>
+                </tr></thead>
+                <tbody>${buildPlayRows(drivePlays)}</tbody>
+              </table>
+            </div>
+          </td>
+        </tr>` : '';
+      return `<tr id="${driveIdPrefix}-drive-row-${idx}" class="clickable" onclick="${hasPl ? `toggleDrivePlays('${driveIdPrefix}',${idx})` : ''}">
+        <td style="color:var(--text-dim);font-size:11px">#${d.driveNumber ?? idx+1}</td>
+        <td style="font-weight:700;color:${resultColor}">${resultLabel}</td>
+        <td style="color:var(--text-muted)">${d.plays ?? '—'} plays</td>
+        <td style="color:var(--text-muted)">${d.yards ?? '—'} yds</td>
+        <td style="color:var(--text-muted);font-size:11px">${scoreStr}</td>
+        <td style="width:16px">${hasPl ? `<span class="drive-chevron" style="font-size:9px;color:var(--text-dim)">▶</span>` : ''}</td>
       </tr>${playsSection}`;
     }).join('');
   }
 
-  const awayRows = buildDriveRows(game.awayTeam, 'away');
-  const homeRows = buildDriveRows(game.homeTeam, 'home');
-  if (!awayRows && !homeRows) return;
+  const awaySection = buildDriveSection(game.awayTeam, 'away');
+  const homeSection = buildDriveSection(game.homeTeam, 'home');
+  if (!awaySection && !homeSection) return;
 
-  function driveTable(label, rows) {
-    if (!rows) return `<div style="color:var(--text-dim);font-size:12px;padding:8px">No drive data for ${label}</div>`;
-    return `<div>
-      <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;margin-bottom:6px">${label}</div>
-      <div class="table-scroll-wrap"><table style="width:100%;border-collapse:collapse;font-size:12px">
-        <thead><tr style="font-size:10px;color:#666">
-          <th style="padding:3px 8px;text-align:left">Drive</th>
-          <th style="padding:3px 8px;text-align:left">Result</th>
-          <th style="padding:3px 8px;text-align:left">Plays</th>
-          <th style="padding:3px 8px;text-align:left">Yards</th>
-          <th style="padding:3px 8px;text-align:left">Score</th>
-          <th></th>
-        </tr></thead>
-        <tbody>${rows}</tbody>
-      </table></div>
-    </div>`;
+  function driveBlock(label, content) {
+    if (!content) return `<div style="color:var(--text-dim);font-size:12px;padding:8px">No drive data for ${label}</div>`;
+    const header = `<div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">${label}</div>`;
+    if (dyn) return `<div>${header}${content}</div>`;
+    return `<div>${header}<div class="table-scroll-wrap"><table style="width:100%;border-collapse:collapse;font-size:12px">
+      <thead><tr><th>Drive</th><th>Result</th><th>Plays</th><th>Yards</th><th>Score</th><th></th></tr></thead>
+      <tbody>${content}</tbody>
+    </table></div></div>`;
   }
 
   const drivesPanel = document.getElementById('game-detail-panel');
   if (drivesPanel) drivesPanel.innerHTML += `
-    <div style="margin-top:12px;border:1px solid var(--border-mid);border-radius:8px;padding:16px">
+    <div style="margin-top:14px;border:1px solid var(--border-mid);border-radius:var(--radius);padding:16px">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-        ${driveTable(game.awayTeam, awayRows)}
-        ${driveTable(game.homeTeam, homeRows)}
+        ${driveBlock(game.awayTeam, awaySection)}
+        ${driveBlock(game.homeTeam, homeSection)}
       </div>
     </div>`;
 }
 
 function toggleDrivePlays(prefix, idx) {
-  const row = document.getElementById(`${prefix}-drive-plays-${idx}`);
-  const driveRow = document.getElementById(`${prefix}-drive-row-${idx}`);
-  if (row) {
-    const opening = row.style.display === 'none';
-    row.style.display = opening ? 'table-row' : 'none';
-    if (driveRow) driveRow.classList.toggle('drive-expanded', opening);
-  }
+  const playsEl = document.getElementById(`${prefix}-drive-plays-${idx}`);
+  if (!playsEl) return;
+  const opening = playsEl.style.display === 'none';
+  // Dynasty: plays panel is a div; Analytics: it's a table-row
+  playsEl.style.display = opening ? (playsEl.tagName === 'TR' ? 'table-row' : 'block') : 'none';
+  // Toggle chevron rotation on parent drive row/card
+  const driveRow  = document.getElementById(`${prefix}-drive-row-${idx}`);
+  const driveCard = document.getElementById(`${prefix}-drive-card-${idx}`);
+  if (driveRow)  driveRow.classList.toggle('drive-expanded', opening);
+  if (driveCard) driveCard.classList.toggle('expanded', opening);
 }
 
 // ── Top Players Tab ────────────────────────────────────────────────────────
@@ -1200,40 +1357,81 @@ function renderTopPlayers() {
   const ppaCol = showPPA ? [['ppa','PPA']] : [];
   const headCols = [['name','Name'],['pos','Pos'],['team','Team'],['overall','OVR'], ...ppaCol, ...skillCols];
 
-  document.getElementById('tab-content').innerHTML = `
-    <div class="top-players-controls">
-      <input type="text" id="top-search" placeholder="Search player or team..." value="${topSearch}" oninput="onTopSearch(this.value)">
-      <select id="top-pos-filter" onchange="onTopPos(this.value)">
-        ${allPositions.map(p => `<option value="${p}" ${p === topPosFilter ? 'selected' : ''}>${p}</option>`).join('')}
-      </select>
-    </div>
-    <div class="table-scroll-wrap"><table>
-      <tr>
-        <th style="width:28px">#</th>
-        ${headCols.map(([col,lbl]) => {
-          const cls = topSortCol === col ? (topSortAsc ? 'sorted-asc' : 'sorted-desc') : '';
-          return `<th class="${cls}" onclick="sortTopBy('${col}')">${lbl}</th>`;
+  const controls = `<div class="top-players-controls">
+    <input type="text" id="top-search" placeholder="Search player or team..." value="${topSearch}" oninput="onTopSearch(this.value)">
+    <select id="top-pos-filter" onchange="onTopPos(this.value)">
+      ${allPositions.map(p => `<option value="${p}" ${p === topPosFilter ? 'selected' : ''}>${p}</option>`).join('')}
+    </select>
+  </div>`;
+
+  if (isDynasty()) {
+    const cards = displayList.map((p, i) => {
+      const r = rMap[p.id] || {};
+      const team = teamMap[p.teamId] || {};
+      const rank = i + 1;
+      const rankCls = rank === 1 ? 'rank1' : rank === 2 ? 'rank2' : rank === 3 ? 'rank3' : '';
+      const ovr = r.overall || 0;
+      const topSkills = (SKILL_COLS[p.positionGroup] || []).slice(0, 3);
+      const skillBars = topSkills.map(([a, lbl]) => {
+        const val = r[a] || 0;
+        const pct = Math.max(4, Math.round(((val - 40) / 59) * 100));
+        return `<div class="d-player-skill-row">
+          <span class="d-player-skill-label">${lbl}</span>
+          <div class="d-player-skill-track"><div class="d-player-skill-fill" style="width:${pct}%;background:${ratingColor(val)}"></div></div>
+        </div>`;
+      }).join('');
+      return `<div class="d-player-card ${rankCls}" onclick="showPlayerModal('${p.id}')">
+        <span class="d-player-rank ${rankCls}">${rank}</span>
+        <div class="d-player-ovr-box" style="background:${ratingColor(ovr)};color:${ratingTextColor(ovr)}">
+          <span class="d-player-ovr-num">${ovr || '-'}</span>
+          <span class="d-player-ovr-lbl">OVR</span>
+        </div>
+        <div class="d-player-info">
+          <div class="d-player-name">${p.firstName} ${p.lastName}</div>
+          <div class="d-player-team-line">
+            ${team.logoUrl ? `<img class="d-player-team-logo" src="${team.logoUrl}" onerror="this.style.display='none'">` : ''}
+            <span class="d-player-team-name" onclick="event.stopPropagation();goToTeam(${p.teamId})">${team.name || ''}</span>
+          </div>
+        </div>
+        <span class="d-player-pos-badge">${p.position || p.positionGroup || '?'}</span>
+        ${topSkills.length ? `<div class="d-player-skill-bars">${skillBars}</div>` : ''}
+      </div>`;
+    }).join('');
+    document.getElementById('tab-content').innerHTML = `${controls}
+      <div style="border:1px solid var(--border-mid);border-radius:var(--radius);overflow:hidden">${cards}</div>
+      <div style="padding:8px;color:var(--text-dim);font-size:11px">${topSearch ? `${filtered.length} results` : `Top ${displayList.length} of ${filtered.length}`}</div>`;
+  } else {
+    document.getElementById('tab-content').innerHTML = `${controls}
+      <div class="table-scroll-wrap"><table>
+        <tr>
+          <th style="width:28px">#</th>
+          ${headCols.map(([col,lbl]) => {
+            const cls = topSortCol === col ? (topSortAsc ? 'sorted-asc' : 'sorted-desc') : '';
+            return `<th class="${cls}" onclick="sortTopBy('${col}')">${lbl}</th>`;
+          }).join('')}
+        </tr>
+        ${displayList.map((p, i) => {
+          const r = rMap[p.id] || {};
+          const team = teamMap[p.teamId] || {};
+          const rank = i + 1;
+          const rankCls = rank <= 3 ? 'top3' : rank <= 10 ? 'top10' : '';
+          const ppaColor = r.ppa > 0 ? 'var(--positive)' : r.ppa < 0 ? 'var(--negative)' : 'var(--text-dim)';
+          const ppaVal = r.ppa != null && r.ppa !== 0 ? (r.ppa > 0 ? '+' : '') + Number(r.ppa).toFixed(3) : '-';
+          return `<tr class="clickable" onclick="showPlayerModal('${p.id}')">
+            <td><span class="a-rank-num ${rankCls}">${rank}</span></td>
+            <td>${p.firstName} ${p.lastName}</td>
+            <td><span class="pos-badge">${p.position || '?'}</span></td>
+            <td class="a-player-team-cell" style="cursor:pointer" onclick="event.stopPropagation();goToTeam(${p.teamId})">
+              ${team.logoUrl ? `<img class="a-player-team-logo" src="${team.logoUrl}" onerror="this.style.display='none'">` : ''}
+              <span style="font-size:12px;color:var(--text-muted)">${team.name || ''}</span>
+            </td>
+            <td><span class="a-ovr" style="color:${ratingColor(r.overall || 0)}">${r.overall || '-'}</span></td>
+            ${showPPA ? `<td style="color:${ppaColor};font-size:12px;font-family:var(--num-font)">${ppaVal}</td>` : ''}
+            ${skillCols.map(([a]) => `<td style="font-family:var(--num-font);color:var(--text-muted)">${r[a] != null ? r[a] : '-'}</td>`).join('')}
+          </tr>`;
         }).join('')}
-      </tr>
-      ${displayList.map((p, i) => {
-        const r = rMap[p.id] || {};
-        const team = teamMap[p.teamId] || {};
-        const rank = i + 1;
-        const rankCls = rank <= 3 ? 'top3' : rank <= 10 ? 'top10' : '';
-        return `<tr class="clickable" onclick="showPlayerModal('${p.id}')">
-          <td><span class="player-rank ${rankCls}">${rank}</span></td>
-          <td>${p.firstName} ${p.lastName}${tierBadge(r.overall || 0)}</td>
-          <td><span class="pos-badge">${p.position || '?'}</span></td>
-          <td style="font-size:11px;color:#aaa;cursor:pointer" onclick="event.stopPropagation();goToTeam(${p.teamId})">${team.name || ''}</td>
-          <td><span class="ovr" style="background:${ratingColor(r.overall || 0)};color:${ratingTextColor(r.overall || 0)}">${r.overall || '-'}</span></td>
-          ${showPPA ? (() => { const ppaColor = r.ppa > 0 ? 'var(--positive)' : r.ppa < 0 ? 'var(--negative)' : 'var(--text-dim)'; const ppaVal = r.ppa != null && r.ppa !== 0 ? (r.ppa > 0 ? '+' : '') + Number(r.ppa).toFixed(3) : '-'; return `<td style="color:${ppaColor};font-size:12px">${ppaVal}</td>`; })() : ''}
-          ${skillCols.map(([a]) => `<td>${r[a] != null ? r[a] : '-'}</td>`).join('')}
-        </tr>`;
-      }).join('')}
-    </table></div>
-    <div style="padding:8px;color:#666;font-size:11px">
-      ${topSearch ? `${filtered.length} results` : `Top ${displayList.length} of ${filtered.length}`} &bull; click a player for detail
-    </div>`;
+      </table></div>
+      <div style="padding:8px;color:var(--text-dim);font-size:11px">${topSearch ? `${filtered.length} results` : `Top ${displayList.length} of ${filtered.length}`} · click a player for detail</div>`;
 }
 
 function onTopSearch(val) { topSearch = val.toLowerCase(); renderTopPlayers(); }
@@ -1277,24 +1475,48 @@ function renderConferences() {
   const power4 = ['SEC','Big Ten','Big 12','ACC'];
   const confNames = [...power4.filter(c => confMap[c]), ...Object.keys(confMap).filter(c => !power4.includes(c)).sort()];
 
+  const dynasty = isDynasty();
   document.getElementById('tab-content').innerHTML = confNames.map(conf => {
     const confTeams = confMap[conf].sort((a, b) => (b.ratings?.overall || 0) - (a.ratings?.overall || 0));
-    return `<div class="conf-section">
-      <div class="conf-title">${conf} <span style="font-size:11px;color:#555;font-weight:400">${confTeams.length} teams</span></div>
-      ${confTeams.map((t, i) => {
+    if (dynasty) {
+      const rows = confTeams.map((t, i) => {
         const ovr = t.ratings?.overall || 0;
         const r = t.ratings || {};
-        return `<div class="conf-team-row" onclick="selectTeam(${t.id})">
-          <span class="conf-rank ${i < 3 ? 'top3' : ''}">${i+1}</span>
-          ${t.logoUrl ? `<img class="conf-team-logo" src="${t.logoUrl}" onerror="this.style.display='none'">` : ''}
-          <div class="conf-team-name">${t.name}</div>
-          <div style="display:flex;gap:6px;font-size:10px;color:#888">
-            <span>OFF ${r.passOff||0}/${r.runOff||0}</span>
-            <span>DEF ${r.passDef||0}/${r.runDef||0}</span>
-          </div>
-          <span class="conf-ovr" style="background:${ratingColor(ovr)};color:${ratingTextColor(ovr)}">${ovr}</span>
+        const rankClass = i === 0 ? 'd-rank-1' : i === 1 ? 'd-rank-2' : i === 2 ? 'd-rank-3' : 'd-rank-other';
+        const miniBarRows = [['OFF', r.passOff||0, r.runOff||0], ['DEF', r.passDef||0, r.runDef||0]].map(([lbl, v1, v2]) => {
+          const avg = Math.round((v1 + v2) / 2);
+          const pct = Math.max(4, Math.round(((avg - 55) / 44) * 100));
+          return `<div class="d-conf-mini-bar-row">
+            <span class="d-conf-mini-label">${lbl}</span>
+            <div class="d-conf-mini-track"><div class="d-conf-mini-fill" style="width:${pct}%;background:${ratingColor(avg)}"></div></div>
+          </div>`;
+        }).join('');
+        return `<div class="d-conf-team-row" onclick="selectTeam(${t.id})">
+          <div class="d-rank-badge ${rankClass}">${i+1}</div>
+          ${t.logoUrl ? `<img class="d-conf-team-logo" src="${t.logoUrl}" onerror="this.style.display='none'">` : ''}
+          <div class="d-conf-team-name">${t.name}</div>
+          <div class="d-conf-mini-bars">${miniBarRows}</div>
+          <span class="d-conf-ovr" style="background:${ratingColor(ovr)};color:${ratingTextColor(ovr)}">${ovr}</span>
         </div>`;
-      }).join('')}
+      }).join('');
+      return `<div class="d-conf-section">
+        <div class="d-conf-header">${conf} <span style="font-size:11px;font-weight:400;opacity:0.5;margin-left:8px">${confTeams.length} teams</span></div>
+        <div class="d-conf-rows">${rows}</div>
+      </div>`;
+    }
+    // Analytics
+    const rows = confTeams.map((t, i) => {
+      const ovr = t.ratings?.overall || 0;
+      return `<div class="a-conf-team-row" onclick="selectTeam(${t.id})">
+        <span class="a-conf-rank ${i < 3 ? 'top3' : ''}">${i+1}</span>
+        ${t.logoUrl ? `<img class="a-conf-logo" src="${t.logoUrl}" onerror="this.style.display='none'">` : ''}
+        <span class="a-conf-name">${t.name}</span>
+        <span class="a-conf-ovr" style="color:${ratingColor(ovr)}">${ovr}</span>
+      </div>`;
+    }).join('');
+    return `<div class="a-conf-section">
+      <div class="a-conf-header">${conf} <span style="font-weight:400;opacity:0.6;margin-left:6px">${confTeams.length}</span></div>
+      ${rows}
     </div>`;
   }).join('');
 }
@@ -1462,17 +1684,24 @@ function showPlayerModal(playerId) {
   const posGroup = p.positionGroup;
   const ovr = r.overall || 0;
 
+  const dynasty = isDynasty();
+
   // Skill bars
   const skills = SKILL_ATTRS[posGroup] || [];
   const skillBarsHTML = skills.map(([key, label]) => {
     const val = r[key] || 0;
     const pct = ((val - 40) / 59) * 100;
-    return `<div class="skill-row">
-      <span class="skill-label">${label}</span>
-      <div class="skill-bar-wrap">
-        <div class="skill-bar-fill" style="width:${pct}%;background:${ratingColor(val)}"></div>
-      </div>
-      <span class="skill-val" style="color:${ratingColor(val)}">${val}</span>
+    if (dynasty) {
+      return `<div class="d-skill-row">
+        <span class="d-skill-label">${label}</span>
+        <div class="d-skill-track"><div class="d-skill-fill" style="width:${pct}%;background:${ratingColor(val)}"></div></div>
+        <span class="d-skill-val" style="color:${ratingColor(val)}">${val}</span>
+      </div>`;
+    }
+    return `<div class="a-skill-row">
+      <span class="a-skill-label">${label}</span>
+      <div class="a-skill-track"><div class="a-skill-fill" style="width:${pct}%;background:${ratingColor(val)}"></div></div>
+      <span class="a-skill-val" style="color:${ratingColor(val)}">${val}</span>
     </div>`;
   }).join('');
 
@@ -1480,11 +1709,13 @@ function showPlayerModal(playerId) {
   const stats = r.stats || {};
   const statDefs = STAT_LABELS[posGroup] || [];
   const statCells = statDefs.filter(([k]) => stats[k] != null && stats[k] !== 0).map(([k, label]) =>
-    `<div class="stat-cell"><div class="sv">${stats[k]}</div><div class="sk">${label}</div></div>`
+    dynasty
+      ? `<div class="d-stat-cell"><div class="d-stat-val">${stats[k]}</div><div class="d-stat-key">${label}</div></div>`
+      : `<div class="stat-cell"><div class="sv">${stats[k]}</div><div class="sk">${label}</div></div>`
   ).join('');
   const statsHTML = statCells ? `<div class="modal-section">
-    <div class="modal-section-title">Stats (${currentYear})</div>
-    <div class="stat-grid">${statCells}</div>
+    <div class="${dynasty ? 'd-section-label' : 'modal-section-title'}">Stats (${currentYear})</div>
+    <div class="${dynasty ? 'd-stat-grid' : 'stat-grid'}">${statCells}</div>
   </div>` : '';
 
   // Year-over-year progression
@@ -1577,11 +1808,13 @@ function showPlayerModal(playerId) {
     const lbl = (STAT_LABELS[posGroup] || []).find(([sk]) => sk === k)?.[1] || k;
     const val = typeof careerTotals[k] === 'number' && !Number.isInteger(careerTotals[k])
       ? careerTotals[k].toFixed(1) : careerTotals[k];
-    return `<div class="stat-cell"><div class="sv">${val}</div><div class="sk">${lbl}</div></div>`;
+    return dynasty
+      ? `<div class="d-stat-cell"><div class="d-stat-val">${val}</div><div class="d-stat-key">${lbl}</div></div>`
+      : `<div class="stat-cell"><div class="sv">${val}</div><div class="sk">${lbl}</div></div>`;
   }).join('');
   const careerHTML = careerCells && careerYears > 1 ? `<div class="modal-section">
-    <div class="modal-section-title">Career Totals (${careerYears} seasons)</div>
-    <div class="stat-grid">${careerCells}</div>
+    <div class="${dynasty ? 'd-section-label' : 'modal-section-title'}">Career Totals (${careerYears} seasons)</div>
+    <div class="${dynasty ? 'd-stat-grid' : 'stat-grid'}">${careerCells}</div>
   </div>` : '';
 
   // Similar players
@@ -1645,9 +1878,13 @@ function showPlayerModal(playerId) {
     </div>`;
   })();
 
+  const sectionTitle = (lbl) => dynasty
+    ? `<div class="d-section-label">${lbl}</div>`
+    : `<div class="modal-section-title">${lbl}</div>`;
+
   const overviewHTML = `
     <div class="modal-section">
-      <div class="modal-section-title">Skill Ratings</div>
+      ${sectionTitle(dynasty ? 'Attributes' : 'Skill Ratings')}
       ${skills.length ? skillBarsHTML : '<div style="color:var(--text-dim);font-size:12px">No skill data available</div>'}
     </div>
     ${statsHTML}
@@ -1656,22 +1893,48 @@ function showPlayerModal(playerId) {
     ${yoyHTML}
     ${similarHTML}`;
 
-  document.getElementById('modal-body').innerHTML = `
-    <div class="modal-player-header">
-      <div class="modal-ovr-badge" style="background:${ratingColor(ovr)};color:${ratingTextColor(ovr)}">${ovr}</div>
-      <div class="modal-player-info">
-        <h2>${p.firstName} ${p.lastName}${tierBadge(ovr)}</h2>
-        <div class="sub">
+  const modalHeader = dynasty ? `
+    <div class="d-modal-header">
+      <div class="d-modal-ovr-box" style="background:${ratingColor(ovr)};color:${ratingTextColor(ovr)}">
+        <span class="d-modal-ovr-num">${ovr || '—'}</span>
+        <span class="d-modal-ovr-label">OVR</span>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div class="d-modal-name">${p.firstName} ${p.lastName}</div>
+        <div class="d-modal-team-line">
+          ${team.logoUrl ? `<img class="d-modal-team-logo" src="${team.logoUrl}" onerror="this.style.display='none'">` : ''}
+          <span class="d-modal-team-name" onclick="closeModal();goToTeam(${p.teamId})">${team.name || ''}</span>
+        </div>
+        <div class="d-modal-sub">
           <span class="pos-badge">${p.position || posGroup}</span>
-          ${archetypeHTML}
-          &nbsp;${classYearDisplay}${statusBadgeHTML} &bull; #${p.jersey != null && p.jersey !== '' ? p.jersey : '?'} &bull;
-          <span style="cursor:pointer;color:#a0c4ff" onclick="closeModal();goToTeam(${p.teamId})">${team.name || ''}</span>
-          ${p.height ? ` &bull; ${p.height}` : ''} ${p.weight ? `/ ${p.weight} lbs` : ''}
+          ${classYearDisplay}${statusBadgeHTML}
+          ${p.jersey != null && p.jersey !== '' ? `· #${p.jersey}` : ''}
+          ${p.height ? `· ${p.height}` : ''} ${p.weight ? `/ ${p.weight} lbs` : ''}
         </div>
         ${rankHTML}
         ${projRangeHTML}
       </div>
-    </div>
+    </div>` : `
+    <div class="a-modal-header">
+      <div>
+        <span class="a-modal-ovr" style="color:${ratingColor(ovr)}">${ovr || '—'}</span>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div class="a-modal-name">${p.firstName} ${p.lastName}</div>
+        <div class="a-modal-sub">
+          <span class="pos-badge">${p.position || posGroup}</span>
+          ${classYearDisplay}${statusBadgeHTML}
+          ${p.jersey != null && p.jersey !== '' ? `· #${p.jersey}` : ''}
+          · <span style="cursor:pointer;color:var(--accent)" onclick="closeModal();goToTeam(${p.teamId})">${team.name || ''}</span>
+          ${p.height ? `· ${p.height}` : ''} ${p.weight ? `/ ${p.weight} lbs` : ''}
+        </div>
+        ${rankHTML}
+        ${projRangeHTML}
+      </div>
+    </div>`;
+
+  document.getElementById('modal-body').innerHTML = `
+    ${modalHeader}
     <div class="modal-tab-bar">
       <div class="modal-tab-btn active" data-mtab="overview" onclick="switchModalTab('overview')">Overview</div>
       <div class="modal-tab-btn" data-mtab="gamelog" onclick="switchModalTab('gamelog', '${pid}')">Game Log</div>
