@@ -1432,6 +1432,7 @@ function renderTopPlayers() {
         }).join('')}
       </table></div>
       <div style="padding:8px;color:var(--text-dim);font-size:11px">${topSearch ? `${filtered.length} results` : `Top ${displayList.length} of ${filtered.length}`} · click a player for detail</div>`;
+  }
 }
 
 function onTopSearch(val) { topSearch = val.toLowerCase(); renderTopPlayers(); }
@@ -2625,6 +2626,8 @@ document.getElementById('conf-filter').addEventListener('change', () => { if (ac
 })();
 
 loadData();
+
 </script>
+
 </body>
 </html>
