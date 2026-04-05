@@ -21,10 +21,9 @@
     <option value="">All Conferences</option>
   </select>
   <div class="theme-switcher">
-    <button class="theme-btn active" data-t="dark" title="Analytics Dark" onclick="setTheme('dark')"></button>
-    <button class="theme-btn" data-t="analytics-light" title="Analytics Light" onclick="setTheme('analytics-light')"></button>
-    <button class="theme-btn" data-t="dynasty-dark" title="Dynasty Dark" onclick="setTheme('dynasty-dark')"></button>
-    <button class="theme-btn" data-t="dynasty-light" title="Dynasty Light" onclick="setTheme('dynasty-light')"></button>
+    <button class="theme-btn active" data-t="dynasty-dark"  title="Dark"  onclick="setTheme('dynasty-dark')"></button>
+    <button class="theme-btn"        data-t="dynasty-mid"   title="Mid"   onclick="setTheme('dynasty-mid')"></button>
+    <button class="theme-btn"        data-t="dynasty-light" title="Light" onclick="setTheme('dynasty-light')"></button>
   </div>
 </div>
 <div id="breadcrumb-bar" style="display:none"></div>
@@ -273,7 +272,7 @@ function buildDepthPositions(teamPlayers) {
 }
 
 // ── Theme helpers ──────────────────────────────────────────────────────────
-const isDynasty = () => (document.documentElement.getAttribute('data-theme') || '').startsWith('dynasty');
+const isDynasty = () => true;
 
 // ── Color helpers ──────────────────────────────────────────────────────────
 const ratingColor = v => {
@@ -287,6 +286,19 @@ const ratingColor = v => {
 };
 // Text color that contrasts with a ratingColor background
 const ratingTextColor = v => (v >= 95 || (v >= 60 && v < 70)) ? '#111' : '#fff';
+
+// Position group badge color (background, text)
+const posGroupColor = g => {
+  switch(g) {
+    case 'QB':             return ['rgba(200,146,42,0.18)', '#c8922a'];   // gold
+    case 'RB': case 'WR':
+    case 'TE':             return ['rgba(56,139,253,0.15)', '#4fa3f7'];   // blue
+    case 'DL': case 'LB': return ['rgba(216,72,72,0.15)',  '#d84848'];   // red
+    case 'DB':             return ['rgba(48,168,87,0.15)',  '#30a857'];   // green
+    case 'K':  case 'P':  return ['rgba(128,128,160,0.15)','#8080a0'];   // muted
+    default:               return ['var(--surface-deep)', 'var(--text-muted)'];
+  }
+};
 
 const tierBadge = () => '';
 
@@ -787,12 +799,13 @@ function renderDepth(t, subNavHTML='') {
           `<span class="d-skill-chip" style="color:${ratingColor(r[a] || 0)}">${lbl} ${r[a] || '-'}</span>`
         ).join('');
         const ovr = r.overall || 0;
+        const [pgBg, pgColor] = posGroupColor(p.positionGroup);
         return `<div class="d-depth-card ${isStarter ? 'starter' : ''}" onclick="showPlayerModal('${p.id}')">
           <span class="d-depth-slot">${i + 1}</span>
-          <div class="d-depth-avatar">${initials}</div>
+          <div class="d-depth-avatar" style="background:${pgBg};border-color:${pgColor}40;color:${pgColor}">${initials}</div>
           <div class="d-depth-info">
             <div class="d-depth-name">${p.firstName} ${p.lastName}</div>
-            <div class="d-depth-pos-tag">${p.position || group}</div>
+            <div class="d-depth-pos-tag" style="color:${pgColor}">${p.position || group}</div>
           </div>
           <div class="d-depth-skills">${skillChips}</div>
           <div class="d-depth-ovr-box" style="background:${ratingColor(ovr)};color:${ratingTextColor(ovr)}">
@@ -1451,7 +1464,7 @@ function renderTopPlayers() {
             <span class="d-player-team-name" onclick="event.stopPropagation();goToTeam(${p.teamId})">${team.name || ''}</span>
           </div>
         </div>
-        <span class="d-player-pos-badge">${p.position || p.positionGroup || '?'}</span>
+        <span class="d-player-pos-badge" style="background:${posGroupColor(p.positionGroup)[0]};border-color:${posGroupColor(p.positionGroup)[1]}40;color:${posGroupColor(p.positionGroup)[1]}">${p.position || p.positionGroup || '?'}</span>
         ${topSkills.length ? `<div class="d-player-skill-bars">${skillBars}</div>` : ''}
       </div>`;
     }).join('');
@@ -2677,11 +2690,11 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
 document.getElementById('search').addEventListener('input', () => { if (activeTab === 'teams') renderTeams(); });
 document.getElementById('conf-filter').addEventListener('change', () => { if (activeTab === 'teams') renderTeams(); });
 
-// Restore saved theme; default to analytics dark
+// Restore saved theme; default to dynasty dark
 (function() {
-  const valid = ['dark', 'analytics-light', 'dynasty-dark', 'dynasty-light'];
+  const valid = ['dynasty-dark', 'dynasty-mid', 'dynasty-light'];
   const saved = localStorage.getItem('cfb-theme');
-  const t = valid.includes(saved) ? saved : 'dark';
+  const t = valid.includes(saved) ? saved : 'dynasty-dark';
   setTheme(t);
 })();
 

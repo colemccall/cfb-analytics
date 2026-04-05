@@ -1,51 +1,15 @@
   /* ══════════════════════════════════════════════
-     THEME SYSTEM
-     4 distinct personalities — not just color swaps.
+     THEME SYSTEM — 3 Dynasty personalities
 
-     Analytics Dark/Light: data-forward, editorial.
-       Numbers are the hero. Tight density, monospace
-       numerals, cool-neutral palette, no decoration.
+     Dynasty Dark:  deep navy, burnished gold.
+       Late-night film room. Maximum contrast.
 
-     Dynasty Dark/Light: roster depth, scouting feel.
-       Warmer, more generous spacing, amber/gold accent,
-       stronger card surfaces, bolder display type.
+     Dynasty Mid:   slate blue-gray, gold accent.
+       Press box in daylight. Not black, not white.
+
+     Dynasty Light: cream white, deep navy accent.
+       Stadium program. Clean and readable.
   ══════════════════════════════════════════════ */
-
-  /* ── Analytics Dark — charcoal ink, steel blue accent ── */
-  :root, [data-theme="dark"] {
-    --bg: #0f1117; --surface: #181b23; --surface-deep: #0b0d12;
-    --text: #dce1ea; --text-muted: #7a8496; --text-dim: #434c5e;
-    --accent: #3d87cc; --accent-dim: rgba(61,135,204,0.1);
-    --accent-2: #5ba8e8;                        /* hover/link shade */
-    --border: rgba(255,255,255,0.06); --border-mid: rgba(255,255,255,0.10);
-    --input-bg: #0b0d12; --sidebar-bg: #0b0e14;
-    --positive: #34a85a; --negative: #e05050; --warning: #d4922a;
-    --shadow: 0 1px 6px rgba(0,0,0,0.4);
-    --shadow-lg: 0 4px 20px rgba(0,0,0,0.55);
-    --radius: 6px; --radius-sm: 4px;
-    --nav-indicator: 2px solid var(--accent);
-    --hero-border: 3px solid var(--accent);
-    --table-row-alt: rgba(255,255,255,0.02);
-    --num-font: 'Inter', ui-monospace, monospace;  /* tight numerals */
-  }
-
-  /* ── Analytics Light — newsprint white, ink blue accent ── */
-  [data-theme="analytics-light"] {
-    --bg: #f6f7f9; --surface: #ffffff; --surface-deep: #eceef2;
-    --text: #1a2030; --text-muted: #52607a; --text-dim: #96a3b8;
-    --accent: #1a5fa8; --accent-dim: rgba(26,95,168,0.07);
-    --accent-2: #0d4a8a;
-    --border: rgba(0,0,0,0.07); --border-mid: rgba(0,0,0,0.13);
-    --input-bg: #ffffff; --sidebar-bg: #eef0f4;
-    --positive: #1a7a3e; --negative: #bf3535; --warning: #9a6200;
-    --shadow: 0 1px 3px rgba(0,0,0,0.08);
-    --shadow-lg: 0 3px 14px rgba(0,0,0,0.12);
-    --radius: 6px; --radius-sm: 4px;
-    --nav-indicator: 2px solid var(--accent);
-    --hero-border: 3px solid var(--accent);
-    --table-row-alt: rgba(0,0,0,0.025);
-    --num-font: 'Inter', ui-monospace, monospace;
-  }
 
   /* ── Dynasty Dark — deep navy, burnished gold accent ── */
   [data-theme="dynasty-dark"] {
@@ -83,19 +47,50 @@
     --num-font: 'Barlow Condensed', 'Inter', sans-serif;
   }
 
+  /* ── Dynasty Mid — slate blue-gray, gold accent ── */
+  [data-theme="dynasty-mid"] {
+    --bg: #1a202e; --surface: #222a38; --surface-deep: #141a26;
+    --text: #d4dde8; --text-muted: #637890; --text-dim: #38506a;
+    --accent: #c8922a; --accent-dim: rgba(200,146,42,0.12);
+    --accent-2: #e0aa40;
+    --border: rgba(200,146,42,0.12); --border-mid: rgba(200,146,42,0.20);
+    --input-bg: #181f2c; --sidebar-bg: #141924;
+    --positive: #30a857; --negative: #d84848; --warning: #c8922a;
+    --shadow: 0 2px 10px rgba(0,0,0,0.35);
+    --shadow-lg: 0 5px 24px rgba(0,0,0,0.5);
+    --radius: 8px; --radius-sm: 5px;
+    --nav-indicator: 2px solid var(--accent);
+    --hero-border: 2px solid var(--accent);
+    --table-row-alt: rgba(200,146,42,0.04);
+    --num-font: 'Barlow Condensed', 'Inter', sans-serif;
+  }
+
   /* ── Dynasty themes: enlarged display type, more generous spacing ── */
-  [data-theme="dynasty-dark"], [data-theme="dynasty-light"] {
+  [data-theme="dynasty-dark"], [data-theme="dynasty-mid"], [data-theme="dynasty-light"] {
     --fs-xs: 11px; --fs-sm: 13px; --fs-md: 15px;
     --fs-lg: 18px; --fs-xl: 24px; --fs-2xl: 32px;
   }
 
-  /* ── Type scale (Analytics base) ── */
+  /* ── Base shared values ── */
   :root {
     --fs-xs: 11px; --fs-sm: 13px; --fs-md: 15px;
     --fs-lg: 17px; --fs-xl: 22px; --fs-2xl: 28px;
     --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-display: 'Barlow Condensed', var(--font-ui);
-    --num-font: 'Inter', ui-monospace, monospace;
+    --num-font: 'Barlow Condensed', 'Inter', sans-serif;
+    /* Default to dynasty-dark so app never renders unstyled */
+    --bg: #07090f; --surface: #0f1520; --surface-deep: #060810;
+    --text: #ccd8e8; --text-muted: #607a96; --text-dim: #304060;
+    --accent: #c8922a; --accent-dim: rgba(200,146,42,0.12);
+    --accent-2: #e0aa40;
+    --border: rgba(200,146,42,0.12); --border-mid: rgba(200,146,42,0.18);
+    --input-bg: #07090f; --sidebar-bg: #050710;
+    --positive: #30a857; --negative: #d84848; --warning: #c8922a;
+    --shadow: 0 2px 12px rgba(0,0,0,0.5);
+    --shadow-lg: 0 6px 32px rgba(0,0,0,0.65);
+    --radius: 8px; --radius-sm: 5px;
+    --hero-border: 2px solid var(--accent);
+    --table-row-alt: rgba(200,146,42,0.03);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -106,6 +101,7 @@
   #top-bar .app-title { font-family: var(--font-display); font-size: 17px; font-weight: 800; color: var(--accent); letter-spacing: 0.5px; white-space: nowrap; margin-right: 4px; text-transform: uppercase; }
   /* Dynasty themes: bigger, bolder title treatment */
   [data-theme="dynasty-dark"] #top-bar .app-title,
+  [data-theme="dynasty-mid"] #top-bar .app-title,
   [data-theme="dynasty-light"] #top-bar .app-title { font-size: 20px; letter-spacing: 1px; }
   #top-bar select, #top-bar input { padding: 6px 10px; background: var(--input-bg); border: 1px solid var(--border-mid); color: var(--text); font-size: var(--fs-sm); outline: none; border-radius: var(--radius-sm); font-family: var(--font-ui); transition: border-color 0.15s; }
   #top-bar select:focus, #top-bar input:focus { border-color: var(--accent); }
@@ -114,6 +110,7 @@
   #top-bar select { cursor: pointer; }
   #year-select { min-width: 130px; }
   [data-theme="dynasty-dark"] #year-select,
+  [data-theme="dynasty-mid"] #year-select,
   [data-theme="dynasty-light"] #year-select {
     font-family: var(--font-display); font-size: 15px; font-weight: 800;
     letter-spacing: 0.5px; text-transform: uppercase;
@@ -128,8 +125,10 @@
   .team-card.active { border-color: var(--accent); background: var(--accent-dim); }
   /* Dynasty cards: taller, more visual weight */
   [data-theme="dynasty-dark"] .team-card,
+  [data-theme="dynasty-mid"] .team-card,
   [data-theme="dynasty-light"] .team-card { padding: 14px 16px; border-width: 1px; }
   [data-theme="dynasty-dark"] .team-card:hover,
+  [data-theme="dynasty-mid"] .team-card:hover,
   [data-theme="dynasty-light"] .team-card:hover { transform: translateY(-2px); }
   .team-card-logo { width: 36px; height: 36px; object-fit: contain; flex-shrink: 0; }
   .team-card-info { flex: 1; min-width: 0; }
@@ -146,9 +145,15 @@
   .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
   /* Dynasty: tab bar gets a stronger separator, caps labels */
   [data-theme="dynasty-dark"] .tab-btn,
-  [data-theme="dynasty-light"] .tab-btn { font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; padding: 12px 14px; font-weight: 600; }
+  [data-theme="dynasty-mid"] .tab-btn,
+  [data-theme="dynasty-light"] .tab-btn { font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; padding: 10px 14px; font-weight: 600; }
   [data-theme="dynasty-dark"] .tab-btn.active,
-  [data-theme="dynasty-light"] .tab-btn.active { font-weight: 700; }
+  [data-theme="dynasty-mid"] .tab-btn.active,
+  [data-theme="dynasty-light"] .tab-btn.active {
+    font-weight: 800; background: var(--accent); color: #07090f;
+    border-radius: var(--radius-sm); border-bottom-color: transparent;
+  }
+  [data-theme="dynasty-light"] .tab-btn.active { color: #fff; }
   .tab-content { flex: 1; overflow-y: auto; padding: 20px; background: var(--bg); }
   .tab-content.map-mode { padding: 0; overflow: hidden; }
 
@@ -157,15 +162,15 @@
   .theme-btn { width: 18px; height: 18px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: border-color 0.15s, transform 0.1s; }
   .theme-btn:hover { transform: scale(1.2); }
   .theme-btn.active { border-color: var(--text); }
-  .theme-btn[data-t="dark"]            { background: linear-gradient(135deg, #3d87cc 50%, #0f1117 50%); }
-  .theme-btn[data-t="analytics-light"] { background: linear-gradient(135deg, #1a5fa8 50%, #f6f7f9 50%); }
-  .theme-btn[data-t="dynasty-dark"]    { background: linear-gradient(135deg, #c8922a 50%, #07090f 50%); }
-  .theme-btn[data-t="dynasty-light"]   { background: linear-gradient(135deg, #163e78 50%, #f0f2f7 50%); }
+  .theme-btn[data-t="dynasty-dark"]  { background: linear-gradient(135deg, #c8922a 50%, #07090f 50%); }
+  .theme-btn[data-t="dynasty-mid"]   { background: linear-gradient(135deg, #c8922a 50%, #1a202e 50%); }
+  .theme-btn[data-t="dynasty-light"] { background: linear-gradient(135deg, #163e78 50%, #f0f2f7 50%); }
 
   /* ── Hero banner ── */
   .team-hero { display: flex; align-items: center; gap: 18px; padding: 18px 22px; background: var(--surface); border-left: var(--hero-border); margin-bottom: 18px; border-radius: var(--radius); flex-wrap: wrap; box-shadow: var(--shadow); }
   /* Dynasty: full-width top accent bar instead of left border */
   [data-theme="dynasty-dark"] .team-hero,
+  [data-theme="dynasty-mid"] .team-hero,
   [data-theme="dynasty-light"] .team-hero { border-left: none; border-top: var(--hero-border); padding-top: 20px; }
   .team-hero-logo { width: 68px; height: 68px; object-fit: contain; flex-shrink: 0; }
   .team-hero-info { flex: 1; min-width: 0; }
@@ -198,7 +203,7 @@
   /* Analytics: tighter rows, monospace numbers */
   [data-theme="dark"] td, [data-theme="analytics-light"] td { padding: 7px 10px; }
   /* Dynasty: slightly more breathing room */
-  [data-theme="dynasty-dark"] td, [data-theme="dynasty-light"] td { padding: 9px 10px; }
+  [data-theme="dynasty-dark"] td, [data-theme="dynasty-mid"] td, [data-theme="dynasty-light"] td { padding: 9px 10px; }
   /* Number cells use tabular numerals across all themes */
   td.num, th.num { font-family: var(--num-font); text-align: right; font-variant-numeric: tabular-nums; }
   tr.clickable { cursor: pointer; }
@@ -306,6 +311,7 @@
   .modal-player-info .sub { font-size: var(--fs-sm); color: var(--text-muted); margin-top: 4px; }
   .modal-ovr-badge { font-family: var(--num-font); font-size: 28px; font-weight: 900; width: 56px; height: 56px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-variant-numeric: tabular-nums; }
   [data-theme="dynasty-dark"] .modal-ovr-badge,
+  [data-theme="dynasty-mid"] .modal-ovr-badge,
   [data-theme="dynasty-light"] .modal-ovr-badge { font-family: var(--font-display); font-size: 32px; width: 62px; height: 62px; border-radius: var(--radius); }
   .modal-section { margin-bottom: 22px; }
   .modal-section-title { font-size: var(--fs-xs); font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
@@ -442,30 +448,38 @@
 
   /* Hero name — larger in Dynasty */
   [data-theme="dynasty-dark"] .team-hero-name,
+  [data-theme="dynasty-mid"] .team-hero-name,
   [data-theme="dynasty-light"] .team-hero-name { font-size: 34px; letter-spacing: 0.5px; }
 
   /* Rating cards — larger value numbers in Dynasty */
   [data-theme="dynasty-dark"] .rating-card .value,
+  [data-theme="dynasty-mid"] .rating-card .value,
   [data-theme="dynasty-light"] .rating-card .value { font-size: 30px; }
 
   /* Skill bars — slightly thicker in Dynasty */
   [data-theme="dynasty-dark"] .skill-bar-wrap,
+  [data-theme="dynasty-mid"] .skill-bar-wrap,
   [data-theme="dynasty-light"] .skill-bar-wrap { height: 10px; }
   [data-theme="dynasty-dark"] .skill-bar-fill,
+  [data-theme="dynasty-mid"] .skill-bar-fill,
   [data-theme="dynasty-light"] .skill-bar-fill { height: 10px; }
 
   /* Depth chart rows — more spacious in Dynasty */
   [data-theme="dynasty-dark"] .depth-row,
+  [data-theme="dynasty-mid"] .depth-row,
   [data-theme="dynasty-light"] .depth-row { padding: 7px 8px; }
 
   /* Conference section headers — stronger in Dynasty */
   [data-theme="dynasty-dark"] .conf-title,
+  [data-theme="dynasty-mid"] .conf-title,
   [data-theme="dynasty-light"] .conf-title { font-size: 20px; border-bottom-width: 2px; }
 
   /* Team subnav — pill style in Dynasty */
   [data-theme="dynasty-dark"] .team-subnav-btn,
+  [data-theme="dynasty-mid"] .team-subnav-btn,
   [data-theme="dynasty-light"] .team-subnav-btn { border-radius: 20px; padding: 5px 16px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
   [data-theme="dynasty-dark"] .team-subnav-btn.active,
+  [data-theme="dynasty-mid"] .team-subnav-btn.active { background: var(--accent); color: #07090f; }
   [data-theme="dynasty-light"] .team-subnav-btn.active { background: var(--accent); color: #fff; }
 
   /* Analytics: subnav underline style */
@@ -473,8 +487,10 @@
   [data-theme="analytics-light"] .team-subnav-btn.active { background: transparent; color: var(--accent); border-bottom: 2px solid var(--accent); border-radius: 0; }
 
   /* Sidebar/top bar bottom border — gold in Dynasty Dark */
-  [data-theme="dynasty-dark"] #top-bar { border-bottom-color: rgba(200,146,42,0.2); }
-  [data-theme="dynasty-dark"] .tab-bar { border-bottom-color: rgba(200,146,42,0.2); }
+  [data-theme="dynasty-dark"] #top-bar,
+  [data-theme="dynasty-mid"] #top-bar { border-bottom-color: rgba(200,146,42,0.2); }
+  [data-theme="dynasty-dark"] .tab-bar,
+  [data-theme="dynasty-mid"] .tab-bar { border-bottom-color: rgba(200,146,42,0.2); }
 
   /* Analytics: subtle left-border accent on active table rows */
   [data-theme="dark"] tr.clickable:hover td:first-child,
@@ -482,12 +498,15 @@
 
   /* Player name in modal — display font in Dynasty */
   [data-theme="dynasty-dark"] .modal-player-info h2,
+  [data-theme="dynasty-mid"] .modal-player-info h2,
   [data-theme="dynasty-light"] .modal-player-info h2 { font-size: 28px; }
 
   /* Stat cells — accent border in Dynasty */
   [data-theme="dynasty-dark"] .stat-cell,
+  [data-theme="dynasty-mid"] .stat-cell,
   [data-theme="dynasty-light"] .stat-cell { border-color: var(--border-mid); }
   [data-theme="dynasty-dark"] .stat-cell .sv,
+  [data-theme="dynasty-mid"] .stat-cell .sv,
   [data-theme="dynasty-light"] .stat-cell .sv { font-size: 24px; color: var(--accent-2); }
 
   /* Scroll bar — thin and themed */
@@ -650,6 +669,7 @@
     background: linear-gradient(90deg, var(--d-team-color, var(--accent-dim)) 0%, transparent 100%);
     opacity: 0.12; pointer-events: none;
   }
+  [data-theme="dynasty-mid"] .d-team-hero::before { opacity: 0.16; }
   [data-theme="dynasty-light"] .d-team-hero::before { opacity: 0.22; }
   .d-hero-logo { width: 84px; height: 84px; object-fit: contain; flex-shrink: 0; position: relative; z-index: 1; }
   .d-hero-info { flex: 1; min-width: 0; position: relative; z-index: 1; }
@@ -941,6 +961,7 @@
 
   /* ── Dynasty specific: modal animation stronger ── */
   [data-theme="dynasty-dark"] .modal-overlay.open .modal,
+  [data-theme="dynasty-mid"] .modal-overlay.open .modal,
   [data-theme="dynasty-light"] .modal-overlay.open .modal {
     animation: modalSlideUp 0.22s cubic-bezier(0.22, 1, 0.36, 1);
   }
