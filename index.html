@@ -842,8 +842,16 @@ function renderRoster(t, subNavHTML='') {
   };
   function unitOVR(unitGroups) {
     const unitPlayers = ps.filter(p => unitGroups.includes(p.positionGroup));
-    const vals = unitPlayers.map(p => rMap[p.id]?.overall || 0).sort((a,b)=>b-a).slice(0,8);
-    return vals.length ? Math.round(vals.reduce((s,v)=>s+v,0)/vals.length) : 0;
+    const vals = unitPlayers.map(p => rMap[p.id]?.overall || 0).filter(v => v > 0).sort((a,b) => b - a);
+    if (!vals.length) return 0;
+    // Weighted: starter heavy, 2 starters/top, 2 rotation, rest light
+    const weights = [5, 3, 3, 1.5, 1.5, 0.75, 0.75, 0.5];
+    let sum = 0, wTotal = 0;
+    for (let i = 0; i < vals.length && i < weights.length; i++) {
+      sum += vals[i] * weights[i];
+      wTotal += weights[i];
+    }
+    return Math.round(sum / wTotal);
   }
 
   const unitSections = Object.entries(UNIT_GROUPS).map(([unitName, groups]) => {
