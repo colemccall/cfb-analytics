@@ -189,6 +189,8 @@
   }
   .d-map-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
   .d-map-card-name { font-size: 16px; font-weight: 800; color: var(--text); }
+  .d-map-card-link { cursor: pointer; }
+  .d-map-card-link:hover { color: var(--accent); text-decoration: underline; }
   .d-map-card-sub { font-size: 11px; color: var(--text-muted); margin-top: 3px; display: flex; align-items: center; gap: 6px; }
   .d-map-card-close { background: none; border: none; cursor: pointer; font-size: 20px; color: var(--text-muted); line-height: 1; padding: 0; }
   .d-map-card-stars { font-size: 14px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }

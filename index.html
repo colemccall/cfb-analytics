@@ -2724,7 +2724,7 @@ function _renderMapSidebar() {
     </div>
     <div class="d-map-sidebar-section">
       <div class="d-section-label">Layers</div>
-      ${layerToggle(_mapShowR, MAP_COLORS.recruit, '2026 Recruits', fR.length, '_mapToggleR()')}
+      ${layerToggle(_mapShowR, MAP_COLORS.recruit, `${currentYear} Recruits`, fR.length, '_mapToggleR()')}
       ${layerToggle(_mapShowT, MAP_COLORS.xferAll, 'Transfers', fT.length, '_mapToggleT()')}
     </div>
     <div class="d-map-sidebar-section">
@@ -2782,29 +2782,52 @@ function _renderMapMarkers() {
   });
 }
 
+function _mapNavToPlayer(playerName, teamName) {
+  // Find player in current year's data by name, navigate to their roster card
+  const players = getPlayers();
+  const norm = n => n.toLowerCase().replace(/[^a-z]/g, '');
+  const match = players.find(pl => norm(`${pl.firstName} ${pl.lastName}`) === norm(playerName));
+  if (match) {
+    document.getElementById('map-card').style.display = 'none';
+    selectTeam(match.teamId);
+    setTimeout(() => showPlayerModal(match.id), 150);
+    return;
+  }
+  // Player not in roster data (e.g. recruit not yet enrolled) — navigate to team only
+  const teamMap = buildTeamMap();
+  const team = Object.values(teamMap).find(t => t.name === teamName);
+  if (team) {
+    document.getElementById('map-card').style.display = 'none';
+    selectTeam(team.id);
+  }
+}
+
 function _showMapCard(p) {
   const card = document.getElementById('map-card');
   if (!card) return;
   const isT = p.type === 'transfer';
   const filledStars = Math.min(p.stars || 0, 5);
   const starsHTML = `<span style="color:${MAP_COLORS.recruit}">${'★'.repeat(filledStars)}</span><span style="color:var(--text-dim)">${'★'.repeat(5 - filledStars)}</span>`;
+  // Primary team to navigate to: destination for transfers, committedTo for recruits
+  const navTeam = isT ? (p.dest || p.origin || '') : (p.committedTo || '');
+  const navAttr = `onclick="_mapNavToPlayer('${p.name.replace(/'/g,"\\'")}','${navTeam.replace(/'/g,"\\'")}')"`
   card.style.display = 'block';
   card.innerHTML = `
     <div class="d-map-card-header">
       <div>
-        <div class="d-map-card-name">${p.name}</div>
-        <div class="d-map-card-sub"><span class="pos-badge">${p.pos}</span> ${isT ? 'Transfer' : `${p.year || 2026} Recruit`}</div>
+        <div class="d-map-card-name d-map-card-link" ${navAttr}>${p.name}</div>
+        <div class="d-map-card-sub"><span class="pos-badge">${p.pos}</span> ${isT ? 'Transfer' : `${p.year || currentYear} Recruit`}</div>
       </div>
       <button class="d-map-card-close" onclick="document.getElementById('map-card').style.display='none'">×</button>
     </div>
     <div class="d-map-card-stars">${starsHTML}${p.rating > 0 ? `<span class="d-map-card-rating">${p.rating.toFixed(4)}</span>` : ''}</div>
     ${isT ? `
       <div class="d-map-card-row"><span class="d-map-card-from">FROM</span> ${p.origin || '—'}</div>
-      <div class="d-map-card-row"><span class="d-map-card-to">TO</span> ${p.dest || 'Undecided'}</div>
+      <div class="d-map-card-row d-map-card-link" onclick="_mapNavToPlayer('${p.name.replace(/'/g,"\\'")}','${(p.dest||'').replace(/'/g,"\\'")}')"><span class="d-map-card-to">TO</span> ${p.dest || 'Undecided'}</div>
       <div class="d-map-card-loc">${[p.city, p.state].filter(Boolean).join(', ')}${p.date ? ' · ' + p.date : ''}</div>
     ` : `
-      <div class="d-map-card-row"><span class="d-map-card-commit">COMMIT</span> ${p.committedTo || 'Uncommitted'}</div>
-      <div class="d-map-card-loc">${[p.city, p.state].filter(Boolean).join(', ')} · Class of ${p.year || 2026}</div>
+      <div class="d-map-card-row d-map-card-link" onclick="_mapNavToPlayer('${p.name.replace(/'/g,"\\'")}','${(p.committedTo||'').replace(/'/g,"\\'")}')"><span class="d-map-card-commit">COMMIT</span> ${p.committedTo || 'Uncommitted'}</div>
+      <div class="d-map-card-loc">${[p.city, p.state].filter(Boolean).join(', ')} · Class of ${p.year || currentYear}</div>
     `}`;
 }
 
