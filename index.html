@@ -2627,6 +2627,7 @@ function filterPos(pg) {
 // ── Map Tab ────────────────────────────────────────────────────────────────
 let _mapInstance = null;
 let _mapData = null;
+let _mapDataYear = null;   // tracks which year _mapData was loaded for
 let _mapMarkerLayer = null;
 let _mapSchool = 'All';
 let _mapPos = 'All';
@@ -2659,12 +2660,13 @@ async function renderMap() {
       </div>
     </div>`;
 
-  if (!_mapData) {
+  if (!_mapData || _mapDataYear !== currentYear) {
     const [recruits, transfers] = await Promise.all([
-      fetch('app/assets/data/map/recruits.json').then(r => r.json()),
-      fetch('app/assets/data/map/transfers.json').then(r => r.json()),
+      fetch(`app/assets/data/map/recruits_${currentYear}.json`).then(r => r.json()),
+      fetch(`app/assets/data/map/transfers_${currentYear}.json`).then(r => r.json()),
     ]);
     _mapData = { recruits, transfers };
+    _mapDataYear = currentYear;
   }
 
   if (!_mapInstance) {
@@ -2826,12 +2828,13 @@ async function renderTeamMap(t, subNavHTML = '') {
       </div>
     </div>`;
 
-  if (!_mapData) {
+  if (!_mapData || _mapDataYear !== currentYear) {
     const [recruits, transfers] = await Promise.all([
-      fetch('app/assets/data/map/recruits.json').then(r => r.json()),
-      fetch('app/assets/data/map/transfers.json').then(r => r.json()),
+      fetch(`app/assets/data/map/recruits_${currentYear}.json`).then(r => r.json()),
+      fetch(`app/assets/data/map/transfers_${currentYear}.json`).then(r => r.json()),
     ]);
     _mapData = { recruits, transfers };
+    _mapDataYear = currentYear;
   }
 
   // Destroy and recreate map instance so it mounts into the new DOM element
