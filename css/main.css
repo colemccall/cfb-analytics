@@ -1119,6 +1119,10 @@
   .d-drive-legend-item { display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--text-dim); }
   .d-drive-legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
 
+  /* ── Roster two-row position filter ── */
+  .d-roster-filter-rows { display: flex; flex-direction: column; gap: 4px; padding: 8px 0 4px; }
+  .d-roster-filter-row  { display: flex; flex-wrap: wrap; gap: 4px; }
+
   /* ── Depth chart view toggle ── */
   .d-depth-toggle {
     display: flex; gap: 4px; padding: 8px 0 4px;
@@ -1171,12 +1175,12 @@
   .d-week-block-lbl { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.85); pointer-events: none; }
   .d-week-block-w { background: #2a7a3b; }
   .d-week-block-l { background: #7a2a2a; }
-  .d-week-block-future { background: var(--surface-deep); border: 1px solid var(--border-subtle); }
+  .d-week-block-future { background: var(--surface-deep); border: 1px solid var(--border); }
   .d-week-block-future .d-week-block-lbl { color: var(--text-dim); }
 
   /* ── Compare H2H banner ── */
   .d-h2h-banner {
-    background: var(--surface-deep); border: 1px solid var(--border-subtle);
+    background: var(--surface-deep); border: 1px solid var(--border);
     border-radius: var(--radius-sm); padding: 8px 14px; margin: 12px 0;
     font-size: 12px; text-align: center;
   }
@@ -1185,7 +1189,7 @@
   .d-conf-standing-chip {
     display: inline-flex; flex-direction: column; cursor: pointer;
     margin-top: 5px; background: var(--surface-deep);
-    border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
     padding: 3px 8px; max-width: 220px; user-select: none;
   }
   .d-conf-standing-summary { font-size: 10px; color: var(--text-muted); font-weight: 600; }

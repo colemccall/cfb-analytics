@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark"><!-- theme set by JS on load -->
+<html lang="en" data-theme="dynasty-dark"><!-- theme set by JS on load -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -338,6 +338,31 @@ const playerArchetype = (pos, r) => {
   }
 };
 
+// Per-position weighted OVR (used in Roster + Analysis)
+const POS_OVR_WEIGHTS = {
+  QB:  [10, 3, 0.5],
+  RB:  [5, 3, 3, 0.5],
+  WR:  [5, 5, 5, 2, 2, 0.5],
+  TE:  [5, 3, 1],
+  DL:  [4, 4, 3, 2, 1],
+  LB:  [4, 4, 3, 2, 1],
+  DB:  [4, 4, 3, 2, 1],
+  K:   [10, 1],
+  P:   [10, 1],
+  OL:  [3, 3, 3, 3, 3, 1, 1],
+};
+function posWeightedGroupOVR(posGroup, players, rMap) {
+  const vals = players.map(p => rMap[p.id]?.overall || rMap[String(p.id)]?.overall || 0).filter(v => v > 0).sort((a,b) => b-a);
+  if (!vals.length) return 0;
+  const wts = POS_OVR_WEIGHTS[posGroup] || [5, 3, 2, 1, 0.5];
+  let sum = 0, wTotal = 0;
+  for (let i = 0; i < vals.length; i++) {
+    const w = i < wts.length ? wts[i] : 0.25;
+    sum += vals[i] * w; wTotal += w;
+  }
+  return Math.round(sum / wTotal);
+}
+
 // Conference rank + top-5 for standings widget
 const getConfRank = (team, teams) => {
   const conf = team.conference;
@@ -527,8 +552,8 @@ function setTheme(t) {
     btn.classList.toggle('active', btn.dataset.t === t);
   });
   localStorage.setItem('cfb-theme', t);
-  // Re-render active tab so structural HTML (Analytics vs Dynasty) updates immediately
-  requestAnimationFrame(() => renderActiveTab());
+  // Re-render active tab only if data is ready
+  if (years && years.length) requestAnimationFrame(() => renderActiveTab());
 }
 
 function renderActiveTab() {
@@ -787,8 +812,14 @@ function renderRoster(t, subNavHTML='') {
   }
 
   // Normal (non-projected) year roster
-  const filtered = (posFilter === 'ALL' ? ps : ps.filter(p => p.positionGroup === posFilter))
-    .filter(p => p.positionGroup !== 'OL');
+  // OL shown in olBlock when ALL; shown inline when OL filter selected
+  const filtered = posFilter === 'ALL'
+    ? ps.filter(p => p.positionGroup !== 'OL')
+    : ps.filter(p => {
+        if (posFilter === 'OL') return p.positionGroup === 'OL';
+        // allow sub-position matches like 'DE','DT' within positionGroup
+        return p.positionGroup === posFilter || p.position === posFilter;
+      });
 
   filtered.sort((a, b) => {
     const ra = rMap[a.id] || {}, rb = rMap[b.id] || {};
@@ -813,91 +844,53 @@ function renderRoster(t, subNavHTML='') {
       </div>
     </div>` : '';
 
-  // League avg OVR per position group (for dynasty grade)
-  function leagueAvgForGroups(groups) {
-    const allP = getPlayers();
-    const allR = buildRatingMap();
-    const vals = allP
-      .filter(p => groups.includes(p.positionGroup))
-      .map(p => allR[p.id]?.overall || 0)
-      .filter(v => v > 0);
-    return vals.length ? vals.reduce((s,v) => s+v, 0) / vals.length : 70;
-  }
-  function unitLetterGrade(unitOvrVal, leagueAvg) {
-    const diff = unitOvrVal - leagueAvg;
-    if (diff >= 7)  return ['A+', '#ffd700'];
-    if (diff >= 4)  return ['A',  '#f0c040'];
-    if (diff >= 1)  return ['B+', '#a3d977'];
-    if (diff >= -1) return ['B',  '#6fbe6f'];
-    if (diff >= -4) return ['C',  '#e0a030'];
-    if (diff >= -7) return ['D',  '#e06030'];
-    return             ['F',  '#d84848'];
-  }
-
-  // Dynasty: group into units with OVR badge headers
-  const UNIT_GROUPS = {
+const UNIT_GROUPS = {
     'Offense':       ['QB','RB','WR','TE'],
     'Defense':       ['DL','LB','DB'],
     'Special Teams': ['K','P','LS'],
   };
   function unitOVR(unitGroups) {
-    const unitPlayers = ps.filter(p => unitGroups.includes(p.positionGroup));
-    const vals = unitPlayers.map(p => rMap[p.id]?.overall || 0).filter(v => v > 0).sort((a,b) => b - a);
-    if (!vals.length) return 0;
-    // Weighted: starter heavy, 2 starters/top, 2 rotation, rest light
-    const weights = [5, 3, 3, 1.5, 1.5, 0.75, 0.75, 0.5];
-    let sum = 0, wTotal = 0;
-    for (let i = 0; i < vals.length && i < weights.length; i++) {
-      sum += vals[i] * weights[i];
-      wTotal += weights[i];
-    }
-    return Math.round(sum / wTotal);
+    const groupOvrs = unitGroups.map(g => {
+      const gPlayers = ps.filter(p => p.positionGroup === g);
+      return gPlayers.length ? posWeightedGroupOVR(g, gPlayers, rMap) : null;
+    }).filter(v => v !== null && v > 0);
+    return groupOvrs.length ? Math.round(groupOvrs.reduce((s,v) => s+v, 0) / groupOvrs.length) : 0;
   }
 
-  const unitSections = Object.entries(UNIT_GROUPS).map(([unitName, groups]) => {
-    const unitFiltered = filtered.filter(p => groups.includes(p.positionGroup));
-    if (!unitFiltered.length) return '';
-    const uOvr = unitOVR(groups);
-    const lAvg = leagueAvgForGroups(groups);
-    const [grade, gradeColor] = unitLetterGrade(uOvr, lAvg);
-    const rows = unitFiltered.map(p => {
-      const r = rMap[p.id] || {};
-      const [pgBg, pgColor] = posGroupColor(p.positionGroup);
-      return `<div class="d-depth-card" onclick="showPlayerModal('${p.id}')">
-        <span class="d-depth-slot" style="font-size:13px;width:20px">${p.jersey != null && p.jersey !== '' ? p.jersey : '—'}</span>
-        <div class="d-depth-avatar" style="background:${pgBg};border-color:${pgColor}40;color:${pgColor}">${p.firstName[0]}${p.lastName[0]}</div>
-        <div class="d-depth-info">
-          <div class="d-depth-name">${p.firstName} ${p.lastName}</div>
-          <div class="d-depth-pos-tag" style="color:${pgColor}">${p.position || p.positionGroup} · ${yrLabel(p.year) || '—'}</div>
-        </div>
-        ${(SKILL_COLS[p.positionGroup]||[]).slice(0,3).map(([a,lbl])=>`<span class="d-skill-chip" style="color:${ratingColor(r[a]||0)}">${lbl} ${r[a]||'-'}</span>`).join('')}
-        <div class="d-depth-ovr-box" style="background:${ratingColor(r.overall||0)};color:${ratingTextColor(r.overall||0)}">
-          <span class="d-depth-ovr-num">${r.overall||'-'}</span>
-          <span class="d-depth-ovr-label">OVR</span>
-        </div>
-      </div>`;
-    }).join('');
-    return `<div class="d-unit-section">
-      <div class="d-unit-header">
-        <div class="d-unit-title">${unitName}</div>
-        <span class="d-unit-count">${unitFiltered.length} players</span>
-        <span class="d-unit-grade" style="color:${gradeColor}">${grade}</span>
-        <div class="d-unit-ovr-box" style="background:${ratingColor(uOvr)};color:${ratingTextColor(uOvr)}">
-          <span class="d-unit-ovr-num">${uOvr||'—'}</span>
-          <span class="d-unit-ovr-lbl">OVR</span>
-        </div>
+  // Two-row position filter (ordered)
+  const OFF_FILTERS = ['ALL','QB','RB','WR','TE','OL'];
+  const DEF_FILTERS = ['DL','DT','DE','LB','CB','DB','S','K','P'];
+  const makeChip = pg => `<span class="pos-chip ${posFilter === pg ? 'active' : ''}" onclick="filterPos('${pg}')">${pg}</span>`;
+  const filterRowHTML = `
+    <div class="d-roster-filter-rows">
+      <div class="d-roster-filter-row">${OFF_FILTERS.map(makeChip).join('')}</div>
+      <div class="d-roster-filter-row">${DEF_FILTERS.map(makeChip).join('')}</div>
+    </div>`;
+
+  // Flat dynasty cards, sorted by OVR
+  const rosterCards = filtered.map(p => {
+    const r = rMap[p.id] || {};
+    const [pgBg, pgColor] = posGroupColor(p.positionGroup);
+    return `<div class="d-depth-card" onclick="showPlayerModal('${p.id}')">
+      <span class="d-depth-slot" style="font-size:13px;width:20px">${p.jersey != null && p.jersey !== '' ? p.jersey : '—'}</span>
+      <div class="d-depth-avatar" style="background:${pgBg};border-color:${pgColor}40;color:${pgColor}">${p.firstName[0]}${p.lastName[0]}</div>
+      <div class="d-depth-info">
+        <div class="d-depth-name">${p.firstName} ${p.lastName}</div>
+        <div class="d-depth-pos-tag" style="color:${pgColor}">${p.position || p.positionGroup} · ${yrLabel(p.year) || '—'}</div>
       </div>
-      <div class="d-unit-rows">${rows}</div>
+      ${(SKILL_COLS[p.positionGroup]||[]).slice(0,3).map(([a,lbl])=>`<span class="d-skill-chip" style="color:${ratingColor(r[a]||0)}">${lbl} ${r[a]||'-'}</span>`).join('')}
+      <div class="d-depth-ovr-box" style="background:${ratingColor(r.overall||0)};color:${ratingTextColor(r.overall||0)}">
+        <span class="d-depth-ovr-num">${r.overall||'-'}</span>
+        <span class="d-depth-ovr-label">OVR</span>
+      </div>
     </div>`;
   }).join('');
 
   document.getElementById('tab-content').innerHTML = `
     ${teamHeaderHTML(t)}
     ${subNavHTML}
-    <div class="filter-row">
-      ${posGroups.map(pg => `<span class="pos-chip ${pg === posFilter ? 'active' : ''}" onclick="filterPos('${pg}')">${pg}</span>`).join('')}
-    </div>
-    ${unitSections}
+    ${filterRowHTML}
+    <div class="d-unit-rows">${rosterCards}</div>
     ${posFilter === 'ALL' ? olBlock : ''}
     <div style="padding:8px;color:var(--text-dim);font-size:11px">${filtered.length} players${posFilter !== 'ALL' ? ` (${posFilter})` : ''} · ${ps.length} total · click a player for detail</div>
   `;
@@ -1137,12 +1130,11 @@ async function renderAnalysis(t, subNavHTML='') {
   const rosterDelta = teamAvg - natAvg;
   const deltaColor = rosterDelta > 0 ? 'var(--positive)' : rosterDelta < 0 ? 'var(--negative)' : 'var(--text-muted)';
 
-  // Position group ratings
+  // Position group ratings (weighted by position)
   const posGroups = ['QB','RB','WR','TE','DL','LB','DB'];
   const groupRatings = posGroups.map(group => {
-    const ps = teamPlayers.filter(p => p.positionGroup === group);
-    const vals = ps.map(p => rMap[p.id]?.overall || 0).sort((a,b) => b-a).slice(0, 5);
-    const avg = vals.length ? Math.round(vals.reduce((s,v) => s+v,0) / vals.length) : 0;
+    const gps = teamPlayers.filter(p => p.positionGroup === group);
+    const avg = posWeightedGroupOVR(group, gps, rMap);
     return { group, avg };
   }).filter(g => g.avg > 0);
 
@@ -1176,14 +1168,31 @@ async function renderAnalysis(t, subNavHTML='') {
   }).filter(v => v != null && v > 0);
   const sosAvg = spVals.length ? (spVals.reduce((s,v) => s+v,0) / spVals.length).toFixed(3) : null;
 
+  // League avg per group for grading
+  const allPlayersForGrade = getPlayers();
+  const leagueGroupAvg = (group) => {
+    const vals = allPlayersForGrade.filter(p => p.positionGroup === group).map(p => rMap[p.id]?.overall || 0).filter(v=>v>0);
+    return vals.length ? vals.reduce((s,v)=>s+v,0)/vals.length : 70;
+  };
+  const gradeFromDiff = (diff) => {
+    if (diff >= 6)  return ['A', '#f0c040'];
+    if (diff >= 2)  return ['B', '#6fbe6f'];
+    if (diff >= -2) return ['C', '#e0a030'];
+    if (diff >= -6) return ['D', '#e06030'];
+    return             ['F', '#d84848'];
+  };
+
   const groupBars = groupRatings.map(({ group, avg }) => {
     const pct = ((avg - 40) / 59) * 100;
-    return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+    const lAvg = leagueGroupAvg(group);
+    const [grade, gradeColor] = gradeFromDiff(avg - lAvg);
+    return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
       <span style="width:28px;font-size:12px;color:var(--text-muted);text-align:right">${group}</span>
       <div style="flex:1;background:var(--surface-deep);border-radius:3px;height:10px;overflow:hidden">
         <div style="height:100%;width:${pct}%;background:${ratingColor(avg)};border-radius:3px"></div>
       </div>
       <span style="width:28px;font-size:12px;color:${ratingColor(avg)};font-weight:700">${avg}</span>
+      <span style="width:18px;font-size:13px;font-weight:900;font-family:var(--font-display);color:${gradeColor}">${grade}</span>
     </div>`;
   }).join('');
 
@@ -1622,33 +1631,28 @@ async function showGameDetail(gameId, teamName) {
     </table></div></div>`;
   }
 
-  // Drive summary bar: tally outcomes per team
+  // Drive summary bar: one segment per drive in drive order
   function driveSummaryBar(teamName) {
     const drives = drivesData[teamName] || [];
-    const gamedrives = drives.filter(d => d.gameId === gameId);
+    const gamedrives = drives.filter(d => d.gameId === gameId)
+      .slice().sort((a, b) => (a.driveNumber ?? 0) - (b.driveNumber ?? 0));
     if (!gamedrives.length) return '';
-    let td=0, fg=0, punt=0, to=0, other=0;
-    for (const d of gamedrives) {
+    const driveColor = d => {
       const r = (d.result||'').toUpperCase();
-      if (r.includes('TD')||r.includes('TOUCHDOWN')) td++;
-      else if (r.includes('FG')||r.includes('FIELD GOAL')) fg++;
-      else if (r.includes('INT')||r.includes('FUMBLE')||r.includes('INTERCEPTION')) to++;
-      else if (r.includes('PUNT')||r==='DOWNS') punt++;
-      else other++;
-    }
-    const total = gamedrives.length;
-    const seg = (count, color, label) => count > 0
-      ? `<div class="d-drive-outcome-seg" style="flex:${count};background:${color}" title="${label}: ${count}">${count}</div>` : '';
+      if (r.includes('TD')||r.includes('TOUCHDOWN')) return ['var(--positive)', 'TD'];
+      if (r.includes('FG')||r.includes('FIELD GOAL')) return ['var(--warning)', 'FG'];
+      if (r.includes('INT')||r.includes('FUMBLE')||r.includes('INTERCEPTION')) return ['var(--negative)', 'TO'];
+      if (r.includes('PUNT')||r==='DOWNS') return ['var(--text-dim)', 'Punt'];
+      return ['var(--border-mid)', d.result || '—'];
+    };
+    const segs = gamedrives.map(d => {
+      const [color, label] = driveColor(d);
+      return `<div class="d-drive-outcome-seg" style="flex:1;background:${color}" title="Drive ${d.driveNumber}: ${label} (${d.plays??'?'} plays, ${d.yards??'?'} yds)">${label[0]}</div>`;
+    }).join('');
     return `<div class="d-drive-summary-row">
       <span class="d-drive-summary-team">${teamName}</span>
-      <div class="d-drive-outcome-bar">
-        ${seg(td,  'var(--positive)', 'TD')}
-        ${seg(fg,  'var(--warning)',  'FG')}
-        ${seg(punt,'var(--text-dim)', 'Punt')}
-        ${seg(to,  'var(--negative)', 'Turnover')}
-        ${seg(other,'var(--border-mid)','Other')}
-      </div>
-      <span style="font-size:10px;color:var(--text-dim);flex-shrink:0">${total} drv</span>
+      <div class="d-drive-outcome-bar">${segs}</div>
+      <span style="font-size:10px;color:var(--text-dim);flex-shrink:0">${gamedrives.length} drv</span>
     </div>`;
   }
   const summaryBarHTML = (dyn && (awaySection || homeSection)) ? `
