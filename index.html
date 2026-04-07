@@ -2651,7 +2651,7 @@ function filterPos(pg) {
 }
 
 
-// ── Portal Map Tab ─────────────────────────────────────────────────────────
+// ── Map Tab ────────────────────────────────────────────────────────────────
 let _mapInstance = null;
 let _mapData = null;
 let _mapMarkerLayer = null;
@@ -2661,39 +2661,43 @@ let _mapShowR = true;
 let _mapShowT = true;
 
 const MAP_COLORS = {
-  recruit: '#E8A800',
-  xferIn:  '#3db87a',
-  xferOut: '#e03b2e',
-  xferAll: '#6da8d8',
+  recruit: '#c8922a',   // accent gold — recruits
+  xferIn:  '#30a857',   // positive green — transfers in
+  xferOut: '#d84848',   // negative red — transfers out
+  xferAll: '#4fa3f7',   // blue — all transfers (no school filter)
 };
 const MAP_POSITIONS = ['All','QB','RB','WR','TE','DL','EDGE','LB','CB','S','ATH','K','P','IOL','OT','OG','OC'];
 
+function _mapTileUrl() {
+  const theme = document.documentElement.getAttribute('data-theme') || 'dynasty-dark';
+  return theme === 'dynasty-light'
+    ? 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+}
+
 async function renderMap() {
   const el = document.getElementById('tab-content');
-  el.innerHTML = `<div id="portal-map-wrap" style="display:flex;height:100%;position:relative;overflow:hidden">
-    <div id="portal-map-sidebar" style="width:260px;flex-shrink:0;background:var(--sidebar-bg);border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column;font-size:13px"></div>
-    <div style="flex:1;position:relative">
-      <div id="portal-map" style="width:100%;height:100%"></div>
-      <div id="portal-map-card" style="display:none;position:absolute;bottom:20px;right:20px;width:270px;background:var(--surface);border:1px solid var(--border-mid);border-radius:6px;padding:14px 16px;z-index:1000;box-shadow:0 8px 32px rgba(0,0,0,.5)"></div>
-    </div>
-  </div>`;
+  el.innerHTML = `
+    <div id="map-wrap" class="d-map-wrap">
+      <div id="map-sidebar" class="d-map-sidebar"></div>
+      <div class="d-map-canvas-wrap">
+        <div id="portal-map" class="d-map-canvas"></div>
+        <div id="map-card" class="d-map-card" style="display:none"></div>
+      </div>
+    </div>`;
 
   if (!_mapData) {
     const [recruits, transfers] = await Promise.all([
-      fetch('app/assets/data/map/recruits.json').then(r=>r.json()),
-      fetch('app/assets/data/map/transfers.json').then(r=>r.json()),
+      fetch('app/assets/data/map/recruits.json').then(r => r.json()),
+      fetch('app/assets/data/map/transfers.json').then(r => r.json()),
     ]);
     _mapData = { recruits, transfers };
   }
 
   if (!_mapInstance) {
-    const theme = document.documentElement.getAttribute('data-theme') || '';
-    const tileUrl = theme === 'dark' || theme === ''
-      ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-      : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
-    _mapInstance = L.map('portal-map', {center:[38.5,-96], zoom:4, zoomControl:false, preferCanvas:true});
-    L.tileLayer(tileUrl, {attribution:'© OpenStreetMap © CARTO', maxZoom:19}).addTo(_mapInstance);
-    L.control.zoom({position:'bottomright'}).addTo(_mapInstance);
+    _mapInstance = L.map('portal-map', { center: [38.5, -96], zoom: 4, zoomControl: false, preferCanvas: true });
+    L.tileLayer(_mapTileUrl(), { attribution: '© OpenStreetMap © CARTO', maxZoom: 19 }).addTo(_mapInstance);
+    L.control.zoom({ position: 'bottomright' }).addTo(_mapInstance);
     _mapMarkerLayer = L.layerGroup().addTo(_mapInstance);
   } else {
     setTimeout(() => _mapInstance.invalidateSize(), 60);
@@ -2708,7 +2712,7 @@ function _renderMapSidebar() {
   const schools = new Set(['All']);
   recruits.forEach(r => { if (r.committedTo) schools.add(r.committedTo); });
   transfers.forEach(t => { if (t.origin) schools.add(t.origin); if (t.dest) schools.add(t.dest); });
-  const schoolList = Array.from(schools).sort((a,b) => a==='All'?-1:a.localeCompare(b));
+  const schoolList = Array.from(schools).sort((a, b) => a === 'All' ? -1 : a.localeCompare(b));
 
   const fR = _mapFilteredRecruits();
   const fT = _mapFilteredTransfers();
@@ -2716,31 +2720,54 @@ function _renderMapSidebar() {
   const tOut = _mapSchool === 'All' ? [] : fT.filter(t => t.origin === _mapSchool && t.dest !== _mapSchool);
   const net  = tIn.length - tOut.length;
 
-  const sel = (id, val, opts, onch) => `<select id="${id}" style="width:100%;padding:8px 10px;background:var(--input-bg);border:1px solid var(--border-mid);color:var(--text);font-size:13px;border-radius:4px;outline:none" onchange="${onch}">${opts.map(o=>`<option value="${o}"${o===val?' selected':''}>${o}</option>`).join('')}</select>`;
-  const lbl = t => `<div style="font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px">${t}</div>`;
-  const sec = c => `<div style="padding:12px 14px;border-bottom:1px solid var(--border)">${c}</div>`;
-  const tog = (id, active, color, label, count, fn) => `<div onclick="${fn}" style="display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:4px;cursor:pointer;border:1px solid ${active?'var(--border)':'transparent'};background:${active?'rgba(255,255,255,0.04)':'transparent'}"><div style="width:9px;height:9px;border-radius:50%;background:${active?color:'var(--border-mid)'};flex-shrink:0"></div><span style="flex:1;font-weight:600;color:${active?'var(--text)':'var(--text-muted)'}">${label}</span><span style="font-size:12px;font-weight:700;color:${active?color:'var(--text-muted)'}">${count}</span></div>`;
-  const stat = (val, label, color) => `<div style="background:var(--surface-deep);border-left:3px solid ${color};border-radius:4px;padding:10px 12px"><div style="font-size:26px;font-weight:800;color:${color};line-height:1">${val}</div><div style="font-size:11px;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase;margin-top:5px;font-weight:600">${label}</div></div>`;
+  const sel = (id, val, opts, onch) =>
+    `<select id="${id}" class="d-map-select" onchange="${onch}">${opts.map(o => `<option value="${o}"${o === val ? ' selected' : ''}>${o}</option>`).join('')}</select>`;
 
-  document.getElementById('portal-map-sidebar').innerHTML = `
-    <div style="padding:16px 14px 12px;border-bottom:1px solid var(--border)">
-      <div style="font-size:22px;font-weight:800;letter-spacing:0"><span style="color:var(--text)">Portal</span><span style="color:var(--accent)">Flow</span></div>
-      <div style="width:32px;height:3px;background:var(--accent);border-radius:2px;margin:6px 0 4px"></div>
-      <div style="font-size:11px;color:var(--text-muted);letter-spacing:1.5px;font-weight:700;text-transform:uppercase">CFB Recruiting &amp; Portal · 2026</div>
-      <div style="margin-top:6px;font-size:10px;color:var(--text-dim)">Map data currently available for 2026 only. Multi-year support coming when pipeline generates geocoded data per season.</div>
+  const layerToggle = (active, color, label, count, fn) =>
+    `<div class="d-map-layer-row${active ? ' active' : ''}" onclick="${fn}">
+      <div class="d-map-layer-dot" style="background:${active ? color : 'var(--border-mid)'}"></div>
+      <span class="d-map-layer-label">${label}</span>
+      <span class="d-map-layer-count" style="color:${active ? color : 'var(--text-muted)'}">${count}</span>
+    </div>`;
+
+  const statCard = (val, label, color) =>
+    `<div class="d-map-stat" style="border-left-color:${color}">
+      <div class="d-map-stat-val" style="color:${color}">${val}</div>
+      <div class="d-map-stat-lbl">${label}</div>
+    </div>`;
+
+  const schoolLabel = _mapSchool === 'All' ? 'All Schools' : _mapSchool;
+
+  document.getElementById('map-sidebar').innerHTML = `
+    <div class="d-map-sidebar-section">
+      <div class="d-section-label">School</div>
+      ${sel('map-school', _mapSchool, schoolList, '_mapSetSchool(this.value)')}
     </div>
-    ${sec(lbl('School') + sel('map-school', _mapSchool, schoolList, '_mapSetSchool(this.value)'))}
-    ${sec(lbl('Position') + sel('map-pos', _mapPos, MAP_POSITIONS, '_mapSetPos(this.value)'))}
-    ${sec(lbl('Layers') + tog('r', _mapShowR, MAP_COLORS.recruit, '2026 Recruits', fR.length, '_mapToggleR()') + tog('t', _mapShowT, MAP_COLORS.xferAll, 'Transfers', fT.length, '_mapToggleT()'))}
-    <div style="padding:12px 14px">
-      ${lbl(_mapSchool === 'All' ? 'All Schools' : _mapSchool)}
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px">
-        ${stat(fR.length.toLocaleString(), '2026 Recruits', MAP_COLORS.recruit)}
-        ${stat(fT.length.toLocaleString(), 'Total Transfers', MAP_COLORS.xferAll)}
-        ${stat(tIn.length.toLocaleString(), 'Transfers In', MAP_COLORS.xferIn)}
-        ${stat(tOut.length.toLocaleString(), 'Transfers Out', MAP_COLORS.xferOut)}
-        ${_mapSchool !== 'All' ? `<div style="grid-column:span 2">${stat((net>0?'+':'')+net, 'Net Portal', net>0?MAP_COLORS.xferIn:net<0?MAP_COLORS.xferOut:'var(--text-muted)')}</div>` : ''}
+    <div class="d-map-sidebar-section">
+      <div class="d-section-label">Position</div>
+      ${sel('map-pos', _mapPos, MAP_POSITIONS, '_mapSetPos(this.value)')}
+    </div>
+    <div class="d-map-sidebar-section">
+      <div class="d-section-label">Layers</div>
+      ${layerToggle(_mapShowR, MAP_COLORS.recruit, '2026 Recruits', fR.length, '_mapToggleR()')}
+      ${layerToggle(_mapShowT, MAP_COLORS.xferAll, 'Transfers', fT.length, '_mapToggleT()')}
+    </div>
+    <div class="d-map-sidebar-section">
+      <div class="d-section-label">${schoolLabel}</div>
+      <div class="d-map-stats-grid">
+        ${statCard(fR.length.toLocaleString(), 'Recruits', MAP_COLORS.recruit)}
+        ${statCard(fT.length.toLocaleString(), 'Transfers', MAP_COLORS.xferAll)}
+        ${statCard(tIn.length.toLocaleString(), 'In', MAP_COLORS.xferIn)}
+        ${statCard(tOut.length.toLocaleString(), 'Out', MAP_COLORS.xferOut)}
       </div>
+      ${_mapSchool !== 'All' ? `<div style="margin-top:8px">${statCard((net > 0 ? '+' : '') + net, 'Net Portal', net > 0 ? MAP_COLORS.xferIn : net < 0 ? MAP_COLORS.xferOut : 'var(--text-muted)')}</div>` : ''}
+    </div>
+    <div class="d-map-sidebar-section d-map-legend">
+      <div class="d-section-label">Legend</div>
+      <div class="d-map-legend-row"><span class="d-map-legend-dot" style="background:${MAP_COLORS.recruit}"></span>Recruit Hometown</div>
+      <div class="d-map-legend-row"><span class="d-map-legend-dot" style="background:${MAP_COLORS.xferIn}"></span>Transfer In</div>
+      <div class="d-map-legend-row"><span class="d-map-legend-dot" style="background:${MAP_COLORS.xferOut}"></span>Transfer Out</div>
+      <div class="d-map-legend-row"><span class="d-map-legend-dot" style="background:${MAP_COLORS.xferAll}"></span>Transfer (all schools)</div>
     </div>`;
 }
 
@@ -2768,48 +2795,41 @@ function _renderMapMarkers() {
   const renderer = L.canvas({ padding: 0.5 });
 
   _mapFilteredRecruits().forEach(r => {
-    const m = L.circleMarker([r.lat, r.lon], {renderer, radius:5, fillColor:MAP_COLORS.recruit, color:'rgba(255,255,255,0.15)', weight:1, fillOpacity:0.85});
+    const m = L.circleMarker([r.lat, r.lon], { renderer, radius: 5, fillColor: MAP_COLORS.recruit, color: 'rgba(255,255,255,0.1)', weight: 1, fillOpacity: 0.9 });
     m.on('click', () => _showMapCard(r));
     _mapMarkerLayer.addLayer(m);
   });
   _mapFilteredTransfers().forEach(t => {
-    let col = MAP_COLORS.xferAll;
-    if (_mapSchool !== 'All') col = t.dest === _mapSchool ? MAP_COLORS.xferIn : MAP_COLORS.xferOut;
-    const m = L.circleMarker([t.lat, t.lon], {renderer, radius:5, fillColor:col, color:'rgba(255,255,255,0.15)', weight:1, fillOpacity:0.85});
+    const col = _mapSchool !== 'All' ? (t.dest === _mapSchool ? MAP_COLORS.xferIn : MAP_COLORS.xferOut) : MAP_COLORS.xferAll;
+    const m = L.circleMarker([t.lat, t.lon], { renderer, radius: 5, fillColor: col, color: 'rgba(255,255,255,0.1)', weight: 1, fillOpacity: 0.9 });
     m.on('click', () => _showMapCard(t));
     _mapMarkerLayer.addLayer(m);
   });
 }
 
 function _showMapCard(p) {
-  const card = document.getElementById('portal-map-card');
+  const card = document.getElementById('map-card');
   if (!card) return;
   const isT = p.type === 'transfer';
-  const stars = '★'.repeat(p.stars || 0) + '☆'.repeat(5 - (p.stars || 0));
+  const filledStars = Math.min(p.stars || 0, 5);
+  const starsHTML = `<span style="color:${MAP_COLORS.recruit}">${'★'.repeat(filledStars)}</span><span style="color:var(--text-dim)">${'★'.repeat(5 - filledStars)}</span>`;
   card.style.display = 'block';
   card.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+    <div class="d-map-card-header">
       <div>
-        <div style="font-size:17px;font-weight:800;color:var(--text)">${p.name}</div>
-        <div style="font-size:11px;letter-spacing:1.5px;color:var(--text-muted);margin-top:3px;text-transform:uppercase;font-weight:600">${p.pos} · ${isT?'Transfer':'2026 Recruit'}</div>
+        <div class="d-map-card-name">${p.name}</div>
+        <div class="d-map-card-sub"><span class="pos-badge">${p.pos}</span> ${isT ? 'Transfer' : `${p.year || 2026} Recruit`}</div>
       </div>
-      <button onclick="document.getElementById('portal-map-card').style.display='none'" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--text-muted)">×</button>
+      <button class="d-map-card-close" onclick="document.getElementById('map-card').style.display='none'">×</button>
     </div>
-    <div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)">
-      <span style="color:${MAP_COLORS.recruit};font-size:14px">${stars}</span>
-      ${p.rating>0?`<span style="font-size:12px;color:var(--text-muted);margin-left:6px">${p.rating.toFixed(4)}</span>`:''}
-    </div>
+    <div class="d-map-card-stars">${starsHTML}${p.rating > 0 ? `<span class="d-map-card-rating">${p.rating.toFixed(4)}</span>` : ''}</div>
     ${isT ? `
-      <div style="font-size:13px;line-height:1.9">
-        <div style="display:flex;gap:8px"><span style="color:${MAP_COLORS.xferOut};font-weight:800;width:40px;flex-shrink:0">FROM</span><span style="color:var(--text)">${p.origin||'—'}</span></div>
-        <div style="display:flex;gap:8px"><span style="color:${MAP_COLORS.xferIn};font-weight:800;width:40px;flex-shrink:0">TO</span><span style="color:var(--text)">${p.dest||'Undecided'}</span></div>
-      </div>
-      <div style="font-size:12px;color:var(--text-muted);margin-top:6px">${p.city||''}${p.state?', '+p.state:''}${p.date?' · '+p.date:''}</div>
+      <div class="d-map-card-row"><span class="d-map-card-from">FROM</span> ${p.origin || '—'}</div>
+      <div class="d-map-card-row"><span class="d-map-card-to">TO</span> ${p.dest || 'Undecided'}</div>
+      <div class="d-map-card-loc">${[p.city, p.state].filter(Boolean).join(', ')}${p.date ? ' · ' + p.date : ''}</div>
     ` : `
-      <div style="font-size:13px;line-height:1.9">
-        <div style="display:flex;gap:8px"><span style="color:${MAP_COLORS.recruit};font-weight:800;width:52px;flex-shrink:0">COMMIT</span><span style="color:var(--text)">${p.committedTo||'Uncommitted'}</span></div>
-      </div>
-      <div style="font-size:12px;color:var(--text-muted);margin-top:6px">${p.city||''}${p.state?', '+p.state:''} · Class of ${p.year||2026}</div>
+      <div class="d-map-card-row"><span class="d-map-card-commit">COMMIT</span> ${p.committedTo || 'Uncommitted'}</div>
+      <div class="d-map-card-loc">${[p.city, p.state].filter(Boolean).join(', ')} · Class of ${p.year || 2026}</div>
     `}`;
 }
 
