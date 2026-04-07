@@ -30,24 +30,18 @@
 <div id="main">
   <div class="tab-bar">
     <div class="tab-btn active"  onclick="switchTab('teams')">Teams</div>
-    <div class="tab-btn"         onclick="switchTab('roster')">Roster</div>
-    <div class="tab-btn"         onclick="switchTab('depth')">Depth Chart</div>
-    <div class="tab-btn"         onclick="switchTab('schedule')">Schedule</div>
+    <div class="tab-btn"         onclick="switchTab('team')">Team</div>
     <div class="tab-btn"         onclick="switchTab('top-players')">Top Players</div>
     <div class="tab-btn"         onclick="switchTab('conferences')">Conferences</div>
     <div class="tab-btn"         onclick="switchTab('compare')">Compare</div>
-    <div class="tab-btn"         onclick="switchTab('map')">Map</div>
     <div class="tab-btn"         onclick="switchTab('explain')">How It Works</div>
   </div>
   <div class="bottom-tab-bar">
     <button class="active" onclick="switchTab('teams')" data-btab="teams"><span class="btab-icon">🏈</span>Teams</button>
-    <button onclick="switchTab('roster')" data-btab="roster"><span class="btab-icon">📋</span>Roster</button>
-    <button onclick="switchTab('depth')" data-btab="depth"><span class="btab-icon">📊</span>Depth</button>
-    <button onclick="switchTab('schedule')" data-btab="schedule"><span class="btab-icon">📅</span>Schedule</button>
+    <button onclick="switchTab('team')" data-btab="team"><span class="btab-icon">📋</span>Team</button>
     <button onclick="switchTab('top-players')" data-btab="top-players"><span class="btab-icon">⭐</span>Top</button>
     <button onclick="switchTab('conferences')" data-btab="conferences"><span class="btab-icon">🏆</span>Conf</button>
     <button onclick="switchTab('compare')" data-btab="compare"><span class="btab-icon">⚖</span>Compare</button>
-    <button onclick="switchTab('map')" data-btab="map"><span class="btab-icon">🗺</span>Map</button>
     <button onclick="switchTab('explain')" data-btab="explain"><span class="btab-icon">ℹ</span>Info</button>
   </div>
   <div class="tab-content" id="tab-content">
@@ -494,7 +488,7 @@ function selectTeam(id) {
   selectedTeamId = id;
   posFilter = 'ALL';
   teamSubnav = 'roster';
-  switchTab('roster', false);
+  switchTab('team', false);
   const t = getTeams().find(t => t.id === id);
   if (t) {
     setBreadcrumb([{label: 'Teams', onclick: "switchTab('teams')"}, {label: t.name}]);
@@ -515,28 +509,33 @@ function setBreadcrumb(parts) {
 
 function renderTeamView(t) {
   if (!t) { switchTab('teams'); return; }
-  const subNavHTML = `<div class="team-subnav">
+  const subNavHTML = `<div class="team-subnav" id="tab-subnav">
     <button class="team-subnav-btn ${teamSubnav==='roster'?'active':''}" onclick="setTeamSubnav('roster')">Roster</button>
     <button class="team-subnav-btn ${teamSubnav==='depth'?'active':''}" onclick="setTeamSubnav('depth')">Depth Chart</button>
     <button class="team-subnav-btn ${teamSubnav==='schedule'?'active':''}" onclick="setTeamSubnav('schedule')">Schedule</button>
     <button class="team-subnav-btn ${teamSubnav==='analysis'?'active':''}" onclick="setTeamSubnav('analysis')">Analysis</button>
+    <button class="team-subnav-btn ${teamSubnav==='map'?'active':''}" onclick="setTeamSubnav('map')">Map</button>
   </div>`;
   if (teamSubnav === 'roster') renderRoster(t, subNavHTML);
   else if (teamSubnav === 'depth') renderDepth(t, subNavHTML);
   else if (teamSubnav === 'schedule') renderSchedule(t, subNavHTML);
+  else if (teamSubnav === 'map') renderTeamMap(t, subNavHTML);
   else renderAnalysis(t, subNavHTML);
 }
 
 function setTeamSubnav(view) {
   teamSubnav = view;
+  // Reset map school filter when leaving map tab
+  if (view !== 'map') _mapSchool = 'All';
   const t = getTeams().find(t => t.id === selectedTeamId);
   if (t) renderTeamView(t);
 }
 
 function switchTab(tab, render = true) {
   activeTab = tab;
+  // map-mode (no padding, full height) only when map is shown at team level
   document.getElementById('tab-content').classList.toggle('map-mode', tab === 'map');
-  const tabs = ['teams','roster','depth','schedule','top-players','conferences','compare','map','explain'];
+  const tabs = ['teams','team','top-players','conferences','compare','explain'];
   document.querySelectorAll('.tab-btn').forEach((btn, i) => {
     btn.classList.toggle('active', tabs[i] === tab);
   });
@@ -559,22 +558,13 @@ function setTheme(t) {
 function renderActiveTab() {
   const t = getTeams().find(t => t.id === selectedTeamId);
   if (activeTab === 'teams') { setBreadcrumb([]); renderTeams(); }
-  else if (activeTab === 'roster') {
-    if (t) { teamSubnav = 'roster'; setBreadcrumb([{label:'Teams',onclick:"switchTab('teams')"},{label:t.name}]); renderTeamView(t); }
-    else switchTab('teams');
-  }
-  else if (activeTab === 'depth') {
-    if (t) { teamSubnav = 'depth'; setBreadcrumb([{label:'Teams',onclick:"switchTab('teams')"},{label:t.name}]); renderTeamView(t); }
-    else switchTab('teams');
-  }
-  else if (activeTab === 'schedule') {
-    if (t) { teamSubnav = 'schedule'; setBreadcrumb([{label:'Teams',onclick:"switchTab('teams')"},{label:t.name}]); renderTeamView(t); }
+  else if (activeTab === 'team') {
+    if (t) { setBreadcrumb([{label:'Teams',onclick:"switchTab('teams')"},{label:t.name}]); renderTeamView(t); }
     else switchTab('teams');
   }
   else if (activeTab === 'top-players') { setBreadcrumb([]); renderTopPlayers(); }
   else if (activeTab === 'conferences') { setBreadcrumb([]); renderConferences(); }
   else if (activeTab === 'compare') { setBreadcrumb([]); renderCompare(); }
-  else if (activeTab === 'map') { setBreadcrumb([]); renderMap(); }
   else if (activeTab === 'explain') { setBreadcrumb([]); renderExplain(); }
 }
 
@@ -1168,31 +1158,14 @@ async function renderAnalysis(t, subNavHTML='') {
   }).filter(v => v != null && v > 0);
   const sosAvg = spVals.length ? (spVals.reduce((s,v) => s+v,0) / spVals.length).toFixed(3) : null;
 
-  // League avg per group for grading
-  const allPlayersForGrade = getPlayers();
-  const leagueGroupAvg = (group) => {
-    const vals = allPlayersForGrade.filter(p => p.positionGroup === group).map(p => rMap[p.id]?.overall || 0).filter(v=>v>0);
-    return vals.length ? vals.reduce((s,v)=>s+v,0)/vals.length : 70;
-  };
-  const gradeFromDiff = (diff) => {
-    if (diff >= 6)  return ['A', '#f0c040'];
-    if (diff >= 2)  return ['B', '#6fbe6f'];
-    if (diff >= -2) return ['C', '#e0a030'];
-    if (diff >= -6) return ['D', '#e06030'];
-    return             ['F', '#d84848'];
-  };
-
   const groupBars = groupRatings.map(({ group, avg }) => {
     const pct = ((avg - 40) / 59) * 100;
-    const lAvg = leagueGroupAvg(group);
-    const [grade, gradeColor] = gradeFromDiff(avg - lAvg);
     return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
       <span style="width:28px;font-size:12px;color:var(--text-muted);text-align:right">${group}</span>
       <div style="flex:1;background:var(--surface-deep);border-radius:3px;height:10px;overflow:hidden">
         <div style="height:100%;width:${pct}%;background:${ratingColor(avg)};border-radius:3px"></div>
       </div>
       <span style="width:28px;font-size:12px;color:${ratingColor(avg)};font-weight:700">${avg}</span>
-      <span style="width:18px;font-size:13px;font-weight:900;font-family:var(--font-display);color:${gradeColor}">${grade}</span>
     </div>`;
   }).join('');
 
@@ -2834,6 +2807,47 @@ function _showMapCard(p) {
 }
 
 function _mapSetSchool(v) { _mapSchool = v; _renderMapSidebar(); _renderMapMarkers(); }
+
+// Team-scoped map view — rendered inside team subnav
+async function renderTeamMap(t, subNavHTML = '') {
+  // Pre-filter map to this team
+  _mapSchool = t.name;
+
+  const el = document.getElementById('tab-content');
+  // Team hero + subnav, then map layout (map-mode padding removed inline)
+  el.innerHTML = `
+    ${teamHeaderHTML(t)}
+    ${subNavHTML}
+    <div id="map-wrap" class="d-map-wrap" style="height:calc(100vh - 200px)">
+      <div id="map-sidebar" class="d-map-sidebar"></div>
+      <div class="d-map-canvas-wrap">
+        <div id="portal-map" class="d-map-canvas"></div>
+        <div id="map-card" class="d-map-card" style="display:none"></div>
+      </div>
+    </div>`;
+
+  if (!_mapData) {
+    const [recruits, transfers] = await Promise.all([
+      fetch('app/assets/data/map/recruits.json').then(r => r.json()),
+      fetch('app/assets/data/map/transfers.json').then(r => r.json()),
+    ]);
+    _mapData = { recruits, transfers };
+  }
+
+  // Destroy and recreate map instance so it mounts into the new DOM element
+  if (_mapInstance) {
+    _mapInstance.remove();
+    _mapInstance = null;
+    _mapMarkerLayer = null;
+  }
+  _mapInstance = L.map('portal-map', { center: [38.5, -96], zoom: 4, zoomControl: false, preferCanvas: true });
+  L.tileLayer(_mapTileUrl(), { attribution: '© OpenStreetMap © CARTO', maxZoom: 19 }).addTo(_mapInstance);
+  L.control.zoom({ position: 'bottomright' }).addTo(_mapInstance);
+  _mapMarkerLayer = L.layerGroup().addTo(_mapInstance);
+
+  _renderMapSidebar();
+  _renderMapMarkers();
+}
 function _mapSetPos(v)    { _mapPos    = v; _renderMapSidebar(); _renderMapMarkers(); }
 function _mapToggleR()    { _mapShowR  = !_mapShowR; _renderMapSidebar(); _renderMapMarkers(); }
 function _mapToggleT()    { _mapShowT  = !_mapShowT; _renderMapSidebar(); _renderMapMarkers(); }

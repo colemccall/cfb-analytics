@@ -1,15 +1,28 @@
   /* ══════════════════════════════════════════════
      THEME SYSTEM — 3 Dynasty personalities
-
-     Dynasty Dark:  deep navy, burnished gold.
-       Late-night film room. Maximum contrast.
-
-     Dynasty Mid:   slate blue-gray, gold accent.
-       Press box in daylight. Not black, not white.
-
-     Dynasty Light: cream white, deep navy accent.
-       Stadium program. Clean and readable.
   ══════════════════════════════════════════════ */
+
+  /* ── Base / fallback values (must come BEFORE theme overrides) ── */
+  :root {
+    --fs-xs: 11px; --fs-sm: 13px; --fs-md: 15px;
+    --fs-lg: 17px; --fs-xl: 22px; --fs-2xl: 28px;
+    --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-display: 'Barlow Condensed', var(--font-ui);
+    --num-font: 'Barlow Condensed', 'Inter', sans-serif;
+    /* Fallback colors (dynasty-dark palette) */
+    --bg: #07090f; --surface: #0f1520; --surface-deep: #060810;
+    --text: #ccd8e8; --text-muted: #607a96; --text-dim: #304060;
+    --accent: #c8922a; --accent-dim: rgba(200,146,42,0.12);
+    --accent-2: #e0aa40;
+    --border: rgba(200,146,42,0.12); --border-mid: rgba(200,146,42,0.18);
+    --input-bg: #07090f; --sidebar-bg: #050710;
+    --positive: #30a857; --negative: #d84848; --warning: #c8922a;
+    --shadow: 0 2px 12px rgba(0,0,0,0.5);
+    --shadow-lg: 0 6px 32px rgba(0,0,0,0.65);
+    --radius: 8px; --radius-sm: 5px;
+    --hero-border: 2px solid var(--accent);
+    --table-row-alt: rgba(200,146,42,0.03);
+  }
 
   /* ── Dynasty Dark — deep navy, burnished gold accent ── */
   [data-theme="dynasty-dark"] {
@@ -69,28 +82,6 @@
   [data-theme="dynasty-dark"], [data-theme="dynasty-mid"], [data-theme="dynasty-light"] {
     --fs-xs: 11px; --fs-sm: 13px; --fs-md: 15px;
     --fs-lg: 18px; --fs-xl: 24px; --fs-2xl: 32px;
-  }
-
-  /* ── Base shared values ── */
-  :root {
-    --fs-xs: 11px; --fs-sm: 13px; --fs-md: 15px;
-    --fs-lg: 17px; --fs-xl: 22px; --fs-2xl: 28px;
-    --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-display: 'Barlow Condensed', var(--font-ui);
-    --num-font: 'Barlow Condensed', 'Inter', sans-serif;
-    /* Default to dynasty-dark so app never renders unstyled */
-    --bg: #07090f; --surface: #0f1520; --surface-deep: #060810;
-    --text: #ccd8e8; --text-muted: #607a96; --text-dim: #304060;
-    --accent: #c8922a; --accent-dim: rgba(200,146,42,0.12);
-    --accent-2: #e0aa40;
-    --border: rgba(200,146,42,0.12); --border-mid: rgba(200,146,42,0.18);
-    --input-bg: #07090f; --sidebar-bg: #050710;
-    --positive: #30a857; --negative: #d84848; --warning: #c8922a;
-    --shadow: 0 2px 12px rgba(0,0,0,0.5);
-    --shadow-lg: 0 6px 32px rgba(0,0,0,0.65);
-    --radius: 8px; --radius-sm: 5px;
-    --hero-border: 2px solid var(--accent);
-    --table-row-alt: rgba(200,146,42,0.03);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
