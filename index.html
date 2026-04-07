@@ -79,6 +79,7 @@ let topSortAsc = false;
 let topSearch = '';
 let topPosFilter = 'ALL';
 let compareTeamId = null;
+let depthViewMode = 'depth'; // 'depth' | 'scouting'
 
 // ── Skill attribute definitions (mirrors rating_engine.py SKILL_ATTRS) ────
 const SKILL_ATTRS = {
@@ -301,6 +302,54 @@ const posGroupColor = g => {
 };
 
 const tierBadge = () => '';
+
+// Player archetype label from position + key ratings
+const playerArchetype = (pos, r) => {
+  const spd = r.speed || 0, pwr = r.power || 0, awr = r.awareness || 0;
+  const thp = r.throwPower || 0, tha = r.throwAccuracy || 0;
+  const cth = r.catching || 0, rou = r.route || 0;
+  const blk = r.blocking || 0, tck = r.tackle || 0, prs = r.passRush || 0;
+  switch (pos) {
+    case 'QB': return (thp >= 80 && tha >= 80) ? 'Pocket Passer'
+             : (spd >= 78 && thp >= 72)        ? 'Dual-Threat Scrambler'
+             : (tha >= 78)                      ? 'Game Manager' : 'Developing QB';
+    case 'RB': return (spd >= 85) ? 'Speed Back'
+             : (pwr >= 82)        ? 'Power Back'
+             : (cth >= 75)        ? 'Receiving Back' : 'All-Purpose Back';
+    case 'WR': return (spd >= 87)              ? 'Deep Threat'
+             : (rou >= 82)                      ? 'Route Runner'
+             : (cth >= 80 && spd < 82)          ? 'Possession Receiver' : 'Slot Receiver';
+    case 'TE': return (blk >= 78) ? 'Blocking TE'
+             : (cth >= 80)        ? 'Receiving TE' : 'H-Back';
+    case 'OL': case 'OT': case 'OG': case 'C':
+             return (pwr >= 82) ? 'Mauler' : (awr >= 78) ? 'Technician' : 'Developmental';
+    case 'DE': case 'DT':
+             return (prs >= 84) ? 'Pass Rush Specialist'
+             : (pwr >= 82)      ? 'Run Stopper' : 'Two-Gap Anchor';
+    case 'LB': return (spd >= 80) ? 'Coverage LB'
+             : (tck >= 82)         ? 'Run Stopper' : 'Field General';
+    case 'CB': return (spd >= 86) ? 'Shutdown Corner'
+             : (awr >= 78)         ? 'Zone Corner' : 'Press Corner';
+    case 'S':  return (awr >= 82) ? 'Center Field Safety'
+             : (tck >= 78)         ? 'Box Safety' : 'Cover Safety';
+    case 'K':  return (r.kickPower >= 85) ? 'Cannon Leg' : 'Reliable Kicker';
+    case 'P':  return (r.kickPower >= 85) ? 'Elite Punter' : 'Steady Punter';
+    default:   return '';
+  }
+};
+
+// Conference rank + top-5 for standings widget
+const getConfRank = (team, teams) => {
+  const conf = team.conference;
+  if (!conf) return null;
+  const confTeams = teams.filter(t => t.conference === conf)
+    .sort((a, b) => (b.ratings?.overall || 0) - (a.ratings?.overall || 0));
+  const rank = confTeams.findIndex(t => t.id === team.id) + 1;
+  const total = confTeams.length;
+  const confAvgOvr = Math.round(confTeams.reduce((s, t) => s + (t.ratings?.overall || 0), 0) / total);
+  const top5 = confTeams.slice(0, 5);
+  return { rank, total, confAvgOvr, top5 };
+};
 
 // ── Data loading ───────────────────────────────────────────────────────────
 async function loadData() {
@@ -548,12 +597,27 @@ function teamHeaderHTML(t) {
 
   if (isDynasty()) {
     const teamColor = t.primaryColor || 'var(--accent)';
+    const confRankInfo = getConfRank(t, getTeams());
+    const confStandingHTML = confRankInfo ? (() => {
+      const { rank, total, confAvgOvr, top5 } = confRankInfo;
+      const listItems = top5.map((ct, i) => `
+        <div class="d-conf-standing-row${ct.id === t.id ? ' active' : ''}">
+          <span class="d-conf-rank">${i + 1}</span>
+          <span class="d-conf-team-name">${ct.name}</span>
+          <span class="d-conf-ovr" style="color:${ratingColor(ct.ratings?.overall || 0)}">${ct.ratings?.overall || '?'}</span>
+        </div>`).join('');
+      return `<div class="d-conf-standing-chip" onclick="this.classList.toggle('expanded')">
+        <span class="d-conf-standing-summary">#${rank} of ${total} · Avg ${confAvgOvr} OVR ▾</span>
+        <div class="d-conf-standing-list">${listItems}</div>
+      </div>`;
+    })() : '';
     return `
       <div class="d-team-hero" style="--d-team-color:${teamColor}; border-top-color:${teamColor}">
         ${t.logoUrl ? `<img class="d-hero-logo" src="${t.logoUrl}" onerror="this.style.display='none'">` : '<div style="width:84px"></div>'}
         <div class="d-hero-info">
           <div class="d-hero-name">${t.name}${t.mascot ? ' ' + t.mascot : ''}</div>
           ${t.conference ? `<span class="d-hero-conf-badge">${t.conference}</span>` : ''}
+          ${confStandingHTML}
           <div class="d-hero-meta">${[t.stadiumName, t.city && t.state ? `${t.city}, ${t.state}` : ''].filter(Boolean).join(' · ')}</div>
         </div>
         <div class="d-hero-right">
@@ -641,45 +705,58 @@ function renderRoster(t, subNavHTML='') {
   const olPlayers = ps.filter(p => p.positionGroup === 'OL')
     .sort((a, b) => a.position.localeCompare(b.position) || `${a.lastName}${a.firstName}`.localeCompare(`${b.lastName}${b.firstName}`));
 
-  // For 2026, split into returning vs departing
+  // For 2026, dynasty recruiting class view
   if (currentYear === 2026) {
     const nonOl = ps.filter(p => p.positionGroup !== 'OL');
-    const returning = nonOl.filter(p => p.status !== 'likely_leaving' && p.status !== 'transferred_out');
-    const departing = nonOl.filter(p => p.status === 'likely_leaving' || p.status === 'transferred_out');
-
     const applyPos = arr => posFilter === 'ALL' ? arr : arr.filter(p => p.positionGroup === posFilter);
-    const sortArr = arr => [...arr].sort((a, b) => {
-      const ra = rMap[a.id] || {}, rb = rMap[b.id] || {};
-      return (rb.overall || 0) - (ra.overall || 0);
-    });
+    const sortArr = arr => [...arr].sort((a, b) => (rMap[b.id]?.overall || 0) - (rMap[a.id]?.overall || 0));
 
-    const retFiltered = sortArr(applyPos(returning));
-    const depFiltered = sortArr(applyPos(departing));
+    const recruits    = sortArr(applyPos(nonOl.filter(p => p.status === 'recruit')));
+    const transfers   = sortArr(applyPos(nonOl.filter(p => p.status === 'transfer_in')));
+    const returners   = sortArr(applyPos(nonOl.filter(p => p.status !== 'recruit' && p.status !== 'transfer_in' && p.status !== 'likely_leaving' && p.status !== 'transferred_out')));
+    const departing   = sortArr(applyPos(nonOl.filter(p => p.status === 'likely_leaving' || p.status === 'transferred_out')));
 
-    const makeRosterRow = (p, isLeaving = false) => {
-      const r = rMap[p.id] || {};
-      const ovr = r.overall || 0;
-      const yr = yrLabel(p.year) || yrLabel(p.yearPrev) || '—';
-      const leavingPill = isLeaving
-        ? (p.status === 'transferred_out' ? '<span class="status-pill out">Transfer</span>' : '<span class="status-pill leaving">Grad</span>')
-        : (p.status === 'transfer_in' ? '<span class="status-pill in">New</span>' : p.status === 'recruit' ? '<span class="status-pill recruit">Recruit</span>' : '');
-      return `<tr class="clickable" onclick="showPlayerModal('${p.id}')">
-        <td><span class="pos-badge">${p.position || '?'}</span></td>
-        <td>${p.firstName} ${p.lastName}${tierBadge(ovr)}${leavingPill}</td>
-        <td>${yr}</td>
-        <td><span class="ovr" style="background:${ratingColor(ovr)};color:${ratingTextColor(ovr)}">${ovr || '-'}</span></td>
-      </tr>`;
+    // Star rating from recruitRating field (1-5)
+    const starHTML = (p) => {
+      const stars = p.recruitRating || 0;
+      if (!stars) return '';
+      const filled = '★'.repeat(Math.min(stars, 5));
+      const empty  = '☆'.repeat(Math.max(0, 5 - stars));
+      return `<span class="d-star-rating">${filled}<span class="d-star-empty">${empty}</span></span>`;
     };
 
-    const retTable = retFiltered.length ? `<div class="table-scroll-wrap"><table>
-      <tr><th>Pos</th><th>Name</th><th>Yr</th><th>OVR</th></tr>
-      ${retFiltered.map(p => makeRosterRow(p, false)).join('')}
-    </table></div>` : '<div style="color:var(--text-dim);padding:12px;font-size:13px">No players</div>';
+    const makeCard2026 = (p, section) => {
+      const r = rMap[p.id] || {};
+      const ovr = r.overall || 0;
+      const [pgBg, pgColor] = posGroupColor(p.positionGroup);
+      const yr = yrLabel(p.year) || yrLabel(p.yearPrev) || 'Fr';
+      const projBadge = r.projected && r.overallLow != null
+        ? `<span class="d-proj-range">${r.overallLow}–${r.overallHigh}</span>` : '';
+      return `<div class="d-depth-card" onclick="showPlayerModal('${p.id}')">
+        <div class="d-depth-avatar" style="background:${pgBg};border-color:${pgColor}40;color:${pgColor}">${p.firstName[0]}${p.lastName[0]}</div>
+        <div class="d-depth-info">
+          <div class="d-depth-name">${p.firstName} ${p.lastName}</div>
+          <div class="d-depth-pos-tag" style="color:${pgColor}">${p.position || p.positionGroup} · ${yr}</div>
+          ${section === 'recruit' ? starHTML(p) : ''}
+        </div>
+        ${projBadge}
+        <div class="d-depth-ovr-box" style="background:${ratingColor(ovr)};color:${ratingTextColor(ovr)}">
+          <span class="d-depth-ovr-num">${ovr || '-'}</span>
+          <span class="d-depth-ovr-label">OVR</span>
+        </div>
+      </div>`;
+    };
 
-    const depTable = depFiltered.length ? `<div class="table-scroll-wrap"><table>
-      <tr><th>Pos</th><th>Name</th><th>Yr</th><th>OVR</th></tr>
-      ${depFiltered.map(p => makeRosterRow(p, true)).join('')}
-    </table></div>` : '<div style="color:var(--text-dim);padding:12px;font-size:13px">No players</div>';
+    const makeSection2026 = (title, arr, section, accentColor) => {
+      if (!arr.length) return '';
+      return `<div class="d-unit-section">
+        <div class="d-unit-header" style="border-left-color:${accentColor}">
+          <div class="d-unit-title">${title}</div>
+          <span class="d-unit-count">${arr.length}</span>
+        </div>
+        <div class="d-unit-rows">${arr.map(p => makeCard2026(p, section)).join('')}</div>
+      </div>`;
+    };
 
     const olBlock = olPlayers.length ? `
       <div class="ol-section">
@@ -697,18 +774,13 @@ function renderRoster(t, subNavHTML='') {
       <div class="filter-row">
         ${posGroups.map(pg => `<span class="pos-chip ${pg === posFilter ? 'active' : ''}" onclick="filterPos('${pg}')">${pg}</span>`).join('')}
       </div>
-      <div class="roster-split">
-        <div class="roster-split-col">
-          <h3><span>${retFiltered.length}</span> Returning</h3>
-          ${retTable}
-        </div>
-        <div class="roster-split-col">
-          <h3><span>${depFiltered.length}</span> Graduating / Leaving</h3>
-          ${depTable}
-        </div>
-      </div>
+      <div style="padding:4px 0 8px;font-size:11px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.08em">2026 Roster Projection</div>
+      ${makeSection2026('Returning Players', returners, 'return', 'var(--accent)')}
+      ${makeSection2026('Transfer Portal', transfers, 'transfer', '#f5a623')}
+      ${makeSection2026('Recruiting Class', recruits, 'recruit', '#a8d8a8')}
+      ${makeSection2026('Departing', departing, 'depart', 'var(--text-dim)')}
       ${olBlock}
-      <div style="padding:8px;color:#666;font-size:11px">${ps.length} total players &bull; click a player for detail</div>
+      <div style="padding:8px;color:var(--text-dim);font-size:11px">${ps.length} total · click a player for detail</div>
     `;
     requestAnimationFrame(() => initTeamRadar());
     return;
@@ -741,6 +813,27 @@ function renderRoster(t, subNavHTML='') {
       </div>
     </div>` : '';
 
+  // League avg OVR per position group (for dynasty grade)
+  function leagueAvgForGroups(groups) {
+    const allP = getPlayers();
+    const allR = buildRatingMap();
+    const vals = allP
+      .filter(p => groups.includes(p.positionGroup))
+      .map(p => allR[p.id]?.overall || 0)
+      .filter(v => v > 0);
+    return vals.length ? vals.reduce((s,v) => s+v, 0) / vals.length : 70;
+  }
+  function unitLetterGrade(unitOvrVal, leagueAvg) {
+    const diff = unitOvrVal - leagueAvg;
+    if (diff >= 7)  return ['A+', '#ffd700'];
+    if (diff >= 4)  return ['A',  '#f0c040'];
+    if (diff >= 1)  return ['B+', '#a3d977'];
+    if (diff >= -1) return ['B',  '#6fbe6f'];
+    if (diff >= -4) return ['C',  '#e0a030'];
+    if (diff >= -7) return ['D',  '#e06030'];
+    return             ['F',  '#d84848'];
+  }
+
   // Dynasty: group into units with OVR badge headers
   const UNIT_GROUPS = {
     'Offense':       ['QB','RB','WR','TE'],
@@ -757,6 +850,8 @@ function renderRoster(t, subNavHTML='') {
     const unitFiltered = filtered.filter(p => groups.includes(p.positionGroup));
     if (!unitFiltered.length) return '';
     const uOvr = unitOVR(groups);
+    const lAvg = leagueAvgForGroups(groups);
+    const [grade, gradeColor] = unitLetterGrade(uOvr, lAvg);
     const rows = unitFiltered.map(p => {
       const r = rMap[p.id] || {};
       const [pgBg, pgColor] = posGroupColor(p.positionGroup);
@@ -778,6 +873,7 @@ function renderRoster(t, subNavHTML='') {
       <div class="d-unit-header">
         <div class="d-unit-title">${unitName}</div>
         <span class="d-unit-count">${unitFiltered.length} players</span>
+        <span class="d-unit-grade" style="color:${gradeColor}">${grade}</span>
         <div class="d-unit-ovr-box" style="background:${ratingColor(uOvr)};color:${ratingTextColor(uOvr)}">
           <span class="d-unit-ovr-num">${uOvr||'—'}</span>
           <span class="d-unit-ovr-lbl">OVR</span>
@@ -867,9 +963,80 @@ function renderDepth(t, subNavHTML='') {
     </div>`;
   }).join('');
 
+  const depthToggleHTML = `
+    <div class="d-depth-toggle">
+      <button class="d-depth-toggle-btn${depthViewMode==='depth'?' active':''}" onclick="depthViewMode='depth';setTeamSubnav('depth')">Depth</button>
+      <button class="d-depth-toggle-btn${depthViewMode==='scouting'?' active':''}" onclick="depthViewMode='scouting';setTeamSubnav('depth')">Scouting</button>
+    </div>`;
+
+  if (depthViewMode === 'scouting') {
+    // Scouting view: radar chart per position group starter
+    const scoutSections = buildDepthPositions(ps).map(({ group, label, slots, positions }) => {
+      const groupPlayers = ps
+        .filter(p => p.positionGroup === group && (!positions || positions.includes(p.position)))
+        .map(p => ({ p, r: rMap[p.id] || {} }))
+        .sort((a, b) => (b.r.overall || 0) - (a.r.overall || 0))
+        .slice(0, 1); // just starter for radar
+      if (!groupPlayers.length) return '';
+      const { p: starter, r: sr } = groupPlayers[0];
+      const skills = SKILL_COLS[group] || [];
+      const labels = skills.map(([,lbl]) => lbl);
+      const vals   = skills.map(([a]) => sr[a] || 0);
+      const canvasId = `radar-${group}`;
+      const [pgBg, pgColor] = posGroupColor(starter.positionGroup);
+      return `<div class="d-scout-card">
+        <div class="d-scout-header">
+          <div class="d-depth-avatar" style="background:${pgBg};border-color:${pgColor}40;color:${pgColor};width:32px;height:32px;font-size:12px">${starter.firstName[0]}${starter.lastName[0]}</div>
+          <div>
+            <div style="font-weight:700;font-size:13px">${starter.firstName} ${starter.lastName}</div>
+            <div style="font-size:11px;color:${pgColor}">${label} · <span style="color:${ratingColor(sr.overall||0)}">${sr.overall||'—'} OVR</span></div>
+          </div>
+        </div>
+        <canvas id="${canvasId}" width="180" height="180"></canvas>
+      </div>`;
+    }).filter(Boolean).join('');
+
+    document.getElementById('tab-content').innerHTML = `
+      ${teamHeaderHTML(t)}
+      ${subNavHTML}
+      ${depthToggleHTML}
+      <div class="d-scout-grid">${scoutSections}</div>`;
+
+    requestAnimationFrame(() => {
+      buildDepthPositions(ps).forEach(({ group, slots, positions }) => {
+        const groupPlayers = ps
+          .filter(p => p.positionGroup === group && (!positions || positions.includes(p.position)))
+          .map(p => ({ p, r: rMap[p.id] || {} }))
+          .sort((a, b) => (b.r.overall || 0) - (a.r.overall || 0))
+          .slice(0, 1);
+        if (!groupPlayers.length) return;
+        const { r: sr } = groupPlayers[0];
+        const skills = SKILL_COLS[group] || [];
+        if (!skills.length) return;
+        const canvas = document.getElementById(`radar-${group}`);
+        if (!canvas) return;
+        new Chart(canvas, {
+          type: 'radar',
+          data: {
+            labels: skills.map(([,lbl]) => lbl),
+            datasets: [{ data: skills.map(([a]) => sr[a] || 0), backgroundColor: 'rgba(200,146,42,0.18)', borderColor: '#c8922a', borderWidth: 2, pointBackgroundColor: '#c8922a', pointRadius: 3 }],
+          },
+          options: {
+            scales: { r: { min: 40, max: 99, ticks: { display: false, stepSize: 20 }, grid: { color: 'rgba(255,255,255,0.08)' }, pointLabels: { color: '#888', font: { size: 10 } } } },
+            plugins: { legend: { display: false } },
+            elements: { line: { tension: 0.1 } },
+          },
+        });
+      });
+      initTeamRadar();
+    });
+    return;
+  }
+
   document.getElementById('tab-content').innerHTML = `
     ${teamHeaderHTML(t)}
     ${subNavHTML}
+    ${depthToggleHTML}
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 32px">
       ${sections}
     </div>`;
@@ -1144,10 +1311,27 @@ async function renderSchedule(t, subNavHTML='') {
         <tbody>${gameRowsHTML}</tbody>
       </table></div>`;
 
+  // Season timeline strip
+  const timelineHTML = (() => {
+    if (!games.length) return '';
+    const blocks = games.map(g => {
+      const isHome = g.homeTeam === t.name;
+      const mine = isHome ? g.homeScore : g.awayScore;
+      const opp  = isHome ? g.awayScore : g.homeScore;
+      const done = mine != null && opp != null;
+      const win  = done && mine > opp;
+      const cls  = done ? (win ? 'd-week-block-w' : 'd-week-block-l') : 'd-week-block-future';
+      const lbl  = g.week != null ? String(g.week) : '?';
+      return `<div class="d-week-block ${cls}" title="Wk ${lbl}: ${done ? (win?'W':'L')+' '+mine+'-'+opp : 'upcoming'}" onclick="showGameDetail(${g.gameId},'${t.name.replace(/'/g,"\\'")}')"><span class="d-week-block-lbl">${lbl}</span></div>`;
+    }).join('');
+    return `<div class="d-season-timeline">${blocks}</div>`;
+  })();
+
   document.getElementById('tab-content').innerHTML = `
     ${teamHeaderHTML(t)}
     ${subNavHTML}
     ${recordBanner}
+    ${timelineHTML}
     <div style="padding:4px 0 12px">${scheduleBody}</div>
     <div id="game-detail-panel"></div>`;
 }
@@ -1753,6 +1937,9 @@ function renderCompare() {
         </div>`;
       }).join('')}
       ${renderPositionGroupComparison(leftTeam, rightTeam)}
+      <div id="compare-h2h-banner" class="d-h2h-banner">
+        <span id="compare-h2h-text" style="color:var(--text-muted)">Loading history…</span>
+      </div>
     `;
   } else if (leftTeam) {
     compHTML = `<div style="color:#666;padding:20px 0">Select a team on the right to compare.</div>`;
@@ -1776,13 +1963,47 @@ function renderCompare() {
     </div>
     ${compHTML}`;
 
-  // Async: fill in W-L record after schedule loads
+  // Async: fill in W-L record after schedule loads, plus H2H scan if both teams selected
   if (leftTeam) {
     loadSchedule(currentYear).then(sched => {
       const rec = getTeamRecord(leftTeam.name, sched);
       const el = document.getElementById('compare-left-record');
       if (el && rec) el.textContent = `(${rec})`;
     });
+  }
+  if (leftTeam && rightTeam) {
+    (async () => {
+      let h2hWins = 0, h2hLosses = 0, lastYear = null;
+      const lName = leftTeam.name, rName = rightTeam.name;
+      for (const y of years) {
+        try {
+          const ySched = await loadSchedule(y);
+          for (const g of ySched) {
+            if (g.homeScore == null || g.awayScore == null) continue;
+            const isH2H = (g.homeTeam === lName && g.awayTeam === rName) ||
+                          (g.homeTeam === rName && g.awayTeam === lName);
+            if (!isH2H) continue;
+            const lIsHome = g.homeTeam === lName;
+            const lScore = lIsHome ? g.homeScore : g.awayScore;
+            const rScore = lIsHome ? g.awayScore : g.homeScore;
+            if (lScore > rScore) h2hWins++; else h2hLosses++;
+            if (!lastYear || y > lastYear) lastYear = y;
+          }
+        } catch { /* skip year */ }
+      }
+      const el = document.getElementById('compare-h2h-text');
+      if (!el) return;
+      const total = h2hWins + h2hLosses;
+      if (!total) {
+        el.textContent = 'No head-to-head matchups in data';
+        el.style.color = 'var(--text-dim)';
+      } else {
+        const favor = h2hWins >= h2hLosses ? lName : rName;
+        const favW = h2hWins >= h2hLosses ? h2hWins : h2hLosses;
+        const favL = h2hWins >= h2hLosses ? h2hLosses : h2hWins;
+        el.innerHTML = `<strong style="color:var(--text)">${total} game${total>1?'s':''} in data</strong> · <span style="color:var(--accent)">${favW}–${favL}</span> in favor of <strong style="color:var(--text)">${favor}</strong>${lastYear ? ` · Last meeting: ${lastYear}` : ''}`;
+      }
+    })();
   }
 }
 
@@ -2016,7 +2237,8 @@ function showPlayerModal(playerId) {
     : p.status === 'likely_leaving' ? '<span class="status-pill leaving" style="margin-left:6px">Likely Leaving</span>'
     : p.status === 'transfer_in' ? '<span class="status-pill in" style="margin-left:6px">Transfer In</span>'
     : p.status === 'recruit' ? '<span class="status-pill recruit" style="margin-left:6px">Recruit</span>' : '';
-  const archetypeHTML = '';
+  const arch = playerArchetype(p.position || posGroup, r);
+  const archetypeHTML = arch ? `<span class="d-archetype-badge">${arch}</span>` : '';
   const projTypeLabels = { returning: 'Returning', transfer: 'Transfer', recruit: 'Recruit', unknown: 'New Player' };
   const projRangeHTML = r.projected && r.overallLow != null && r.overallHigh != null
     ? (() => {
@@ -2080,6 +2302,7 @@ function showPlayerModal(playerId) {
         </div>
         <div class="d-modal-sub">
           <span class="pos-badge">${p.position || posGroup}</span>
+          ${archetypeHTML}
           ${classYearDisplay}${statusBadgeHTML}
           ${p.jersey != null && p.jersey !== '' ? `· #${p.jersey}` : ''}
           ${p.height ? `· ${p.height}` : ''} ${p.weight ? `/ ${p.weight} lbs` : ''}

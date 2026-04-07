@@ -1119,6 +1119,92 @@
   .d-drive-legend-item { display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--text-dim); }
   .d-drive-legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
 
+  /* ── Depth chart view toggle ── */
+  .d-depth-toggle {
+    display: flex; gap: 4px; padding: 8px 0 4px;
+  }
+  .d-depth-toggle-btn {
+    padding: 5px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-mid);
+    background: var(--surface-deep); color: var(--text-muted); font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: background 0.15s, color 0.15s;
+  }
+  .d-depth-toggle-btn.active, .d-depth-toggle-btn:hover {
+    background: var(--accent); color: #07090f; border-color: var(--accent);
+  }
+  /* ── Scouting view grid ── */
+  .d-scout-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; padding-top: 8px;
+  }
+  .d-scout-card {
+    background: var(--surface); border: 1px solid var(--border-mid); border-radius: var(--radius);
+    padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .d-scout-header { display: flex; align-items: center; gap: 8px; width: 100%; }
+
+  /* ── 2026 recruiting class styles ── */
+  .d-star-rating { font-size: 12px; color: #f5c518; letter-spacing: 1px; margin-top: 2px; display: block; }
+  .d-star-empty { color: var(--text-dim); }
+  .d-proj-range {
+    font-size: 10px; font-weight: 700; color: #a0c4ff;
+    background: rgba(160,196,255,0.12); border-radius: 3px;
+    padding: 1px 5px; margin-right: 6px; flex-shrink: 0; white-space: nowrap;
+  }
+
+  /* ── Unit grade badge (Roster tab) ── */
+  .d-unit-grade {
+    font-family: var(--font-display); font-size: 20px; font-weight: 900;
+    letter-spacing: -0.5px; margin-left: auto; margin-right: 8px;
+    line-height: 1; text-shadow: 0 0 8px currentColor;
+  }
+
+  /* ── Season timeline strip ── */
+  .d-season-timeline {
+    display: flex; flex-wrap: wrap; gap: 4px;
+    padding: 8px 0 6px; margin-bottom: 4px;
+  }
+  .d-week-block {
+    width: 26px; height: 26px; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: transform 0.1s, opacity 0.1s; position: relative;
+  }
+  .d-week-block:hover { transform: scale(1.15); }
+  .d-week-block-lbl { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.85); pointer-events: none; }
+  .d-week-block-w { background: #2a7a3b; }
+  .d-week-block-l { background: #7a2a2a; }
+  .d-week-block-future { background: var(--surface-deep); border: 1px solid var(--border-subtle); }
+  .d-week-block-future .d-week-block-lbl { color: var(--text-dim); }
+
+  /* ── Compare H2H banner ── */
+  .d-h2h-banner {
+    background: var(--surface-deep); border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm); padding: 8px 14px; margin: 12px 0;
+    font-size: 12px; text-align: center;
+  }
+
+  /* ── Conference standings chip (team hero) ── */
+  .d-conf-standing-chip {
+    display: inline-flex; flex-direction: column; cursor: pointer;
+    margin-top: 5px; background: var(--surface-deep);
+    border: 1px solid var(--border-subtle); border-radius: var(--radius-sm);
+    padding: 3px 8px; max-width: 220px; user-select: none;
+  }
+  .d-conf-standing-summary { font-size: 10px; color: var(--text-muted); font-weight: 600; }
+  .d-conf-standing-list { display: none; flex-direction: column; gap: 3px; padding-top: 6px; }
+  .d-conf-standing-chip.expanded .d-conf-standing-list { display: flex; }
+  .d-conf-standing-row { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-muted); }
+  .d-conf-standing-row.active { color: var(--accent); font-weight: 700; }
+  .d-conf-rank { width: 14px; flex-shrink: 0; text-align: right; }
+  .d-conf-team-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .d-conf-ovr { font-weight: 700; font-size: 12px; flex-shrink: 0; }
+
+  /* ── Player modal archetype badge ── */
+  .d-archetype-badge {
+    display: inline-block; padding: 2px 7px; border-radius: 4px;
+    font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+    background: rgba(200,146,42,0.14); color: var(--accent);
+    vertical-align: middle; margin-right: 4px;
+  }
+
   /* ── How It Works tab — Dynasty styled ── */
   .d-explain-section { margin-bottom: 24px; }
   .d-explain-section h2 {
