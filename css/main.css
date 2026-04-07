@@ -1253,6 +1253,40 @@
     vertical-align: middle; margin-right: 4px;
   }
 
+  /* ── Rating Explanation chip ── */
+  .d-explain-chip {
+    margin-top: 10px;
+    border: 1px solid var(--border-mid);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .d-explain-chip-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 7px 12px; background: var(--surface);
+    cursor: pointer; user-select: none;
+    font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .d-explain-chip-header:hover { color: var(--accent); }
+  .d-explain-chip-arrow { font-size: 10px; transition: transform 0.2s; }
+  .d-explain-chip.open .d-explain-chip-arrow { transform: rotate(180deg); }
+  .d-explain-chip-body {
+    display: none; padding: 8px 12px 10px;
+    background: var(--bg); border-top: 1px solid var(--border);
+  }
+  .d-explain-chip.open .d-explain-chip-body { display: block; }
+  .d-explain-chip-body ul {
+    margin: 0; padding: 0; list-style: none;
+  }
+  .d-explain-chip-body ul li {
+    padding: 3px 0; font-size: 12px; color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+  }
+  .d-explain-chip-body ul li:last-child { border-bottom: none; }
+  .d-explain-chip-body ul li::before {
+    content: "·"; margin-right: 6px; color: var(--accent);
+  }
+
   /* ── How It Works tab — Dynasty styled ── */
   .d-explain-section { margin-bottom: 24px; }
   .d-explain-section h2 {

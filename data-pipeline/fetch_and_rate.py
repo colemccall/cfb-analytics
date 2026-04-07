@@ -14,7 +14,7 @@ from api_client import (
     fetch_transfer_portal,
 )
 from collections import defaultdict
-from rating_engine import get_position_group, compute_raw_ratings, normalize_all_ratings, compute_overall, compute_gamelog_skills, SKILL_ATTRS
+from rating_engine import get_position_group, compute_raw_ratings, normalize_all_ratings, compute_overall, compute_gamelog_skills, generate_rating_explanation, SKILL_ATTRS
 
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "app", "assets", "data")
 YEARS = [2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
@@ -940,6 +940,7 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
             raw = compute_raw_ratings(pid, pos_group, p_stats, ppa_val, t_stats, tq, stars, usage, position=pos)
             raw_ratings_all[pid] = {
                 "pos": pos_group,
+                "pos_detail": pos,
                 "raw": raw,
                 "stats": capture_display_stats(pos_group, p_stats),
                 "ppa": round(ppa_val, 4),
@@ -948,6 +949,14 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
                     "passSnap": round(float(usage.get("pass") or 0), 3),
                     "rushSnap": round(float(usage.get("rush") or 0), 3),
                     "games": int(usage.get("games") or 0),
+                },
+                "_explain_ctx": {
+                    "player_stats": p_stats,
+                    "ppa_val": round(ppa_val, 4),
+                    "team_quality": tq,
+                    "recruit_stars": stars,
+                    "player_usage": usage,
+                    "position": pos,
                 },
             }
 
@@ -1094,6 +1103,18 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
         ovr = compute_overall(attrs, p["positionGroup"])
         player_info = raw_ratings_all.get(pid, {})
         display_stats = player_info.get("stats", {})
+        ctx = player_info.get("_explain_ctx", {})
+        explanation = generate_rating_explanation(
+            pos_group=p["positionGroup"],
+            player_stats=ctx.get("player_stats", {}),
+            ppa_val=ctx.get("ppa_val", 0.0),
+            team_quality=ctx.get("team_quality", 0.5),
+            recruit_stars=ctx.get("recruit_stars", 0),
+            player_usage=ctx.get("player_usage", {}),
+            normalized_attrs=attrs,
+            overall=ovr,
+            position=ctx.get("position"),
+        )
         ratings.append({
             "playerId": pid,
             "overall": ovr,
@@ -1101,6 +1122,7 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
             "stats": display_stats,
             "ppa": player_info.get("ppa", 0.0),
             "usage": player_info.get("usage", {}),
+            "ratingExplanation": explanation,
         })
 
     # Team ratings: compute then normalize distribution
@@ -1150,8 +1172,8 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
 
 def _write_json(path, data):
     """Write JSON, always producing a .json.gz compressed file alongside."""
-    with open(path, "w") as f:
-        json.dump(data, f, indent=2)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
     gz_path = path + ".gz"
     with open(path, "rb") as f_in, gzip.open(gz_path, "wb") as f_out:
         f_out.write(f_in.read())

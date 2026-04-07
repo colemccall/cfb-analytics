@@ -2262,10 +2262,24 @@ function showPlayerModal(playerId) {
     ? `<div class="d-section-label">${lbl}</div>`
     : `<div class="modal-section-title">${lbl}</div>`;
 
+  // Rating explanation chip (dynasty mode only)
+  const explainLines = (r.ratingExplanation || []);
+  const explainChipHTML = dynasty && explainLines.length ? `
+    <div class="d-explain-chip" id="explain-chip-${pid}">
+      <div class="d-explain-chip-header" onclick="toggleExplainChip('${pid}')">
+        Why this rating?
+        <span class="d-explain-chip-arrow">▼</span>
+      </div>
+      <div class="d-explain-chip-body">
+        <ul>${explainLines.map(l => `<li>${l}</li>`).join('')}</ul>
+      </div>
+    </div>` : '';
+
   const overviewHTML = `
     <div class="modal-section">
       ${sectionTitle(dynasty ? 'Attributes' : 'Skill Ratings')}
       ${skills.length ? skillBarsHTML : '<div style="color:var(--text-dim);font-size:12px">No skill data available</div>'}
+      ${explainChipHTML}
     </div>
     ${statsHTML}
     ${advancedHTML}
@@ -2328,6 +2342,11 @@ function showPlayerModal(playerId) {
   document.getElementById('player-modal').classList.add('open');
 }
 
+
+function toggleExplainChip(pid) {
+  const chip = document.getElementById(`explain-chip-${pid}`);
+  if (chip) chip.classList.toggle('open');
+}
 
 function switchModalTab(tab, pid) {
   document.querySelectorAll('.modal-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.mtab === tab));

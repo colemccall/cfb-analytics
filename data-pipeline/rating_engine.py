@@ -567,3 +567,147 @@ def compute_overall(ratings, pos_group):
     if weight_sum == 0:
         return 55
     return max(40, min(99, int(round(total / weight_sum))))
+
+
+def generate_rating_explanation(pos_group, player_stats, ppa_val, team_quality,
+                                 recruit_stars, player_usage, normalized_attrs,
+                                 overall, position=None):
+    """Generate 2-4 human-readable bullet strings explaining what drove the rating.
+
+    Returns a list of strings, e.g.:
+      ["8 sacks + 12 TFL on the season", "Team quality: 0.74 (strong SP+/talent)"]
+    """
+    lines = []
+    sf = _safe_float
+    snap_pct = sf(player_usage.get("overall") if player_usage else 0)
+    games    = int(player_usage.get("games", 0) if player_usage else 0)
+    has_stats = _has_meaningful_stats(player_stats)
+
+    def _pct_label(val, lo, hi):
+        """Map val in [lo, hi] to a qualitative label."""
+        if val is None:
+            return ""
+        frac = (val - lo) / max(hi - lo, 1)
+        if frac >= 0.85:
+            return "elite"
+        if frac >= 0.65:
+            return "above avg"
+        if frac >= 0.40:
+            return "average"
+        if frac >= 0.20:
+            return "below avg"
+        return "low"
+
+    # --- QB ---
+    if pos_group == "QB" and has_stats:
+        pass_yds = sf(player_stats.get("passingYDS", player_stats.get("passingYards", 0)))
+        pass_tds = sf(player_stats.get("passingTD", player_stats.get("passingTDs", 0)))
+        ints     = sf(player_stats.get("passingINT", player_stats.get("interceptions", 0)))
+        attempts = sf(player_stats.get("passingATT", player_stats.get("passingAttempts", 0)))
+        comps    = sf(player_stats.get("passingCOMPLETIONS", player_stats.get("passingCOMP", 0)))
+        comp_pct = comps / attempts * 100 if attempts >= 20 else None
+        ypa      = pass_yds / attempts if attempts >= 20 else None
+        if pass_yds > 0 or pass_tds > 0:
+            lines.append(f"{int(pass_yds):,} pass yds · {int(pass_tds)} TDs · {int(ints)} INTs"
+                         + (f" · {comp_pct:.1f}% comp" if comp_pct else ""))
+        if ypa:
+            lines.append(f"{ypa:.1f} YPA ({_pct_label(ypa, 5.5, 10.0)})")
+        if ppa_val:
+            lines.append(f"PPA: {ppa_val:+.3f} ({_pct_label(ppa_val, -0.2, 0.5)})")
+
+    # --- RB ---
+    elif pos_group in ("RB", "FB") and has_stats:
+        rush_yds = sf(player_stats.get("rushingYDS", player_stats.get("rushingYards", 0)))
+        rush_tds = sf(player_stats.get("rushingTD", player_stats.get("rushingTDs", 0)))
+        ypc      = sf(player_stats.get("rushingYPC", player_stats.get("yardsPerRushAttempt", 0)))
+        rec_yds  = sf(player_stats.get("receivingYDS", player_stats.get("receivingYards", 0)))
+        if rush_yds > 0:
+            lines.append(f"{int(rush_yds):,} rush yds · {int(rush_tds)} TDs"
+                         + (f" · {ypc:.1f} YPC ({_pct_label(ypc, 3.5, 6.5)})" if ypc > 0 else ""))
+        if rec_yds > 0:
+            lines.append(f"{int(rec_yds)} recv yds (pass-catching back)")
+        if ppa_val:
+            lines.append(f"PPA: {ppa_val:+.3f} ({_pct_label(ppa_val, -0.1, 0.4)})")
+
+    # --- WR / TE ---
+    elif pos_group in ("WR", "TE") and has_stats:
+        rec_yds  = sf(player_stats.get("receivingYDS", player_stats.get("receivingYards", 0)))
+        rec_tds  = sf(player_stats.get("receivingTD", player_stats.get("receivingTDs", 0)))
+        recs     = sf(player_stats.get("receivingREC", player_stats.get("receptions", 0)))
+        ypr      = rec_yds / recs if recs >= 3 else None
+        if rec_yds > 0:
+            lines.append(f"{int(rec_yds):,} recv yds · {int(rec_tds)} TDs · {int(recs)} rec"
+                         + (f" · {ypr:.1f} YPR ({_pct_label(ypr, 8, 18)})" if ypr else ""))
+        if ppa_val:
+            lines.append(f"PPA: {ppa_val:+.3f} ({_pct_label(ppa_val, -0.1, 0.5)})")
+
+    # --- DL ---
+    elif pos_group == "DL" and has_stats:
+        sacks = sf(player_stats.get("defensiveSACKS", player_stats.get("sacks", 0)))
+        tfl   = sf(player_stats.get("defensiveTFL", 0))
+        qbh   = sf(player_stats.get("defensiveQBH", player_stats.get("defensiveQB HUR", 0)))
+        if sacks > 0 or tfl > 0:
+            lines.append(f"{sacks:.1f} sacks · {tfl:.1f} TFL"
+                         + (f" · {int(qbh)} QBH" if qbh > 0 else ""))
+        if ppa_val:
+            lines.append(f"PPA: {ppa_val:+.3f} ({_pct_label(ppa_val, -0.3, 0.2)})")
+
+    # --- LB ---
+    elif pos_group == "LB" and has_stats:
+        tackles = sf(player_stats.get("defensiveTOT", player_stats.get("totalTackles", 0)))
+        sacks   = sf(player_stats.get("defensiveSACKS", player_stats.get("sacks", 0)))
+        ints    = max(sf(player_stats.get("defensiveINT", 0)), sf(player_stats.get("interceptionsINT", 0)))
+        pds     = sf(player_stats.get("defensivePD", 0))
+        if tackles > 0:
+            lines.append(f"{int(tackles)} tackles · {sacks:.1f} sacks"
+                         + (f" · {int(ints)} INTs · {int(pds)} PDs" if ints + pds > 0 else ""))
+        if ppa_val:
+            lines.append(f"PPA: {ppa_val:+.3f} ({_pct_label(ppa_val, -0.3, 0.2)})")
+
+    # --- DB ---
+    elif pos_group == "DB" and has_stats:
+        tackles = sf(player_stats.get("defensiveTOT", player_stats.get("totalTackles", 0)))
+        ints    = max(sf(player_stats.get("defensiveINT", 0)), sf(player_stats.get("interceptionsINT", 0)))
+        pds     = sf(player_stats.get("defensivePD", 0))
+        if ints + pds + tackles > 0:
+            lines.append(f"{int(ints)} INTs · {int(pds)} PDs · {int(tackles)} tackles")
+        if ppa_val:
+            lines.append(f"PPA: {ppa_val:+.3f} ({_pct_label(ppa_val, -0.3, 0.2)})")
+
+    # --- K ---
+    elif pos_group == "K" and has_stats:
+        fgm     = sf(player_stats.get("kickingFGM", 0))
+        fga     = sf(player_stats.get("kickingFGA", 0))
+        longest = sf(player_stats.get("kickingLONG", 0))
+        fg_pct  = fgm / max(fga, 1) * 100
+        if fga > 0:
+            lines.append(f"{int(fgm)}/{int(fga)} FG ({fg_pct:.1f}%)"
+                         + (f" · long {int(longest)} yds" if longest > 0 else ""))
+
+    # --- P ---
+    elif pos_group == "P" and has_stats:
+        punt_yds = sf(player_stats.get("puntingYDS", 0))
+        punt_no  = sf(player_stats.get("puntingNO", 0))
+        in20     = sf(player_stats.get("puntingIN20", 0))
+        punt_avg = punt_yds / max(punt_no, 1)
+        if punt_no > 0:
+            lines.append(f"{int(punt_no)} punts · {punt_avg:.1f} avg"
+                         + (f" · {int(in20)} inside-20" if in20 > 0 else ""))
+
+    # --- OL (no individual stats) ---
+    elif pos_group == "OL":
+        ol_pos = (position or "OL").upper()
+        lines.append(f"Position: {ol_pos} — rated on team run/pass efficiency + snap share")
+        if recruit_stars >= 4:
+            lines.append(f"{recruit_stars}-star recruit")
+
+    # --- Context bullets (added for all positions) ---
+    if snap_pct > 0:
+        snap_lbl = "starter" if snap_pct >= 0.35 else ("rotation" if snap_pct >= 0.15 else "backup")
+        lines.append(f"{snap_pct*100:.0f}% snap share · {games} games ({snap_lbl})")
+
+    tq_lbl = _pct_label(team_quality, 0.0, 1.0)
+    lines.append(f"Team quality: {team_quality:.2f} ({tq_lbl} SP+/talent context)")
+
+    # Trim to max 4 lines
+    return lines[:4]
