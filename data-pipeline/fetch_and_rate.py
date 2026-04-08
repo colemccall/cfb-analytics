@@ -284,21 +284,26 @@ def build_recruit_lookup(api_key, year):
     return lookup
 
 
-def build_rb_explosive_rate(plays_flat):
-    """Parse play-by-play text to compute per-RB big-carry rate.
+def build_rb_explosive_rate(plays_flat, qb_names=None):
+    """Parse play-by-play text to compute per-RB tiered carry breakdown.
 
-    Big carry threshold: 15+ yards on a single rush play.
-    Returns: {player_name_lower: {big_carries, total_carries}}
+    Returns multi-tier counts per rusher:
+      {name_lower: {total, t7, t12, t20, t50}}
+    where tN = carries gaining N+ yards.
+
+    qb_names: set of lowercase QB names to exclude from RB lookup
+    (prevents dual-threat QB scrambles from inflating their own RB-style
+    explosiveness — QBs are rated separately via mobility).
     """
     import re
     RUSH_TYPES = {"Rush", "Rushing Touchdown", "Rushing TD", "Run"}
-    BIG_CARRY  = 15
-    # Pattern: "FirstName LastName run/rush for N yards"
-    # Handles: "Najee Harris rush for 18 yds", "Bijan Robinson run for 22 yards"
     _RE_RUSHER = re.compile(
         r"^([A-Z][a-zA-Z'-]+(?:\s[A-Z][a-zA-Z'-]+)+)\s+(?:rush|run)\b",
         re.IGNORECASE,
     )
+    if qb_names is None:
+        qb_names = set()
+
     stats = {}
     for play in plays_flat:
         if play.get("playType") not in RUSH_TYPES:
@@ -309,11 +314,16 @@ def build_rb_explosive_rate(plays_flat):
         if not m:
             continue
         name = m.group(1).lower().strip()
+        if name in qb_names:
+            continue  # exclude QB scrambles
         if name not in stats:
-            stats[name] = {"big_carries": 0, "total_carries": 0}
-        stats[name]["total_carries"] += 1
-        if yards >= BIG_CARRY:
-            stats[name]["big_carries"] += 1
+            stats[name] = {"total": 0, "t7": 0, "t12": 0, "t20": 0, "t50": 0}
+        s = stats[name]
+        s["total"] += 1
+        if yards >= 7:  s["t7"]  += 1
+        if yards >= 12: s["t12"] += 1
+        if yards >= 20: s["t20"] += 1
+        if yards >= 50: s["t50"] += 1
     return stats
 
 
@@ -946,8 +956,17 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
         plays_by_team[p.get("offense", "")].append(p)
     print(f"  {len(plays_flat)} total plays fetched")
 
-    rb_explosive_lookup = build_rb_explosive_rate(plays_flat)
-    print(f"  {len(rb_explosive_lookup)} RBs with parsed carry data")
+    # Build QB name set to exclude scrambles from RB explosive lookup
+    qb_names_set = set()
+    for team_roster in rosters.values():
+        for player in team_roster:
+            if player.get("position") in ("QB",):
+                fn = (player.get("firstName") or "").lower()
+                ln = (player.get("lastName")  or "").lower()
+                if fn and ln:
+                    qb_names_set.add(f"{fn} {ln}")
+    rb_explosive_lookup = build_rb_explosive_rate(plays_flat, qb_names=qb_names_set)
+    print(f"  {len(rb_explosive_lookup)} rushers with parsed carry data ({len(qb_names_set)} QBs excluded)")
 
     print(f"\n[7/7] Processing ratings...")
     teams_private = []
@@ -1054,8 +1073,12 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
     # can be computed before normalization.
     print("Building player gamelogs (early pass for gamelog-derived skills)...")
     player_gamelogs_early = build_player_gamelogs(game_stats_raw, games_raw)
+    # Build opponent SP+ lookup: {team_name_lower: sp_def_normalized_0_1}
+    # Used in gamelog skills to weight each game's stats by opponent defensive quality.
+    opp_sp_lookup = {name.lower(): vals.get("def", 0.5) for name, vals in sp_detail.items()}
     compute_gamelog_skills(raw_ratings_all, player_gamelogs_early,
-                           rb_explosive_lookup=rb_explosive_lookup)
+                           rb_explosive_lookup=rb_explosive_lookup,
+                           opponent_sp_lookup=opp_sp_lookup)
     print(f"  Gamelog-derived skills computed for {len(player_gamelogs_early)} players")
 
     print("Normalizing ratings...")

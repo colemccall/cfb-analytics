@@ -280,10 +280,15 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
         raw["_rotation_confidence"] = tier_confidence
 
     # ── Multipliers ───────────────────────────────────────────────────────
-    # tq_mult_skill: narrowed 0.70-1.00 — individual stats carry real signal
-    # regardless of team quality. tq_mult_proxy: wider 0.50-1.00 for OL/no-stat DL.
-    tq_mult_skill = 0.70 + 0.30 * team_quality
-    tq_mult_proxy = 0.50 + 0.50 * team_quality
+    # tq_mult_skill: blends team quality (recruiting talent/overall program) with
+    # SP+ sub-ratings (opponent-adjusted). SP+ is the honest schedule-quality signal —
+    # a team with high SP+ is doing it against real competition.
+    # Formula: 40% team_quality (baseline program level) + 60% SP+ average.
+    # This ensures a G5 team that genuinely competes at a high level (e.g. Boise)
+    # gets credit, while a G5 team inflating stats vs weak competition gets discounted.
+    sp_quality = (sp_off + sp_def) / 2.0   # avg of team's own SP+ offense + defense
+    tq_mult_skill = 0.50 + 0.50 * (0.40 * team_quality + 0.60 * sp_quality)
+    tq_mult_proxy = 0.50 + 0.50 * team_quality   # OL: wider range, no sp adjustment needed
 
     has_defensive_stats = has_stats and any(
         k.startswith("defensive") and sf(player_stats.get(k, 0)) > 0
@@ -477,12 +482,15 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
         sack_rate_al  = team_sacks_al / max(team_pass_att, 200) * 100.0  # sacks per 100 attempts
         attributed_sr = sack_rate_al * sack_sh
 
-        # Usage multiplier: separates starters from backups
-        ol_usage_mult = {"starter": 1.00, "rotation": 0.55, "backup": 0.30, "nodata": 0.45}.get(snap_tier, 0.50)
+        # Usage multiplier: separates confirmed starters (snap% data) from unknowns.
+        # nodata reduced to 0.40 to widen gap between confirmed and unconfirmed.
+        ol_usage_mult = {"starter": 1.00, "rotation": 0.60, "backup": 0.30, "nodata": 0.40}.get(snap_tier, 0.40)
 
         d_signal = _OL_DRAFT_SIGNAL.get(draft_round, 0.0)
         a_signal = _OL_AWARD_SIGNAL.get(award_tier,  0.0)
-        stars_sig = max(0.0, (recruit_stars - 2) * 0.5)
+        # Stars carry more weight for OL: only signal we have for individual talent.
+        # 5-star → +3.0, 4-star → +2.0, 3-star → +1.0, 2-star → 0, 1-star → -0.5
+        stars_sig = (recruit_stars - 2) * 1.0
 
         run_base  = (team_run_eff * 2.5 + sp_off * 0.045 + stars_sig + d_signal * 1.5 + a_signal * 2.0) * tq_mult_proxy * ol_usage_mult
         pass_base = (max(0.0, 7.0 - attributed_sr * 1.8) + sp_off * 0.040 + stars_sig + d_signal * 1.5 + a_signal * 2.0) * tq_mult_proxy * ol_usage_mult
@@ -515,7 +523,8 @@ def _is_specialist(pos_group):
 
 # ── Gamelog skill fills ───────────────────────────────────────────────────────
 
-def compute_gamelog_skills(raw_by_player, player_gamelogs, rb_explosive_lookup=None):
+def compute_gamelog_skills(raw_by_player, player_gamelogs, rb_explosive_lookup=None,
+                           opponent_sp_lookup=None):
     """Fill in gamelog-derived skill placeholders.
 
     Called AFTER build_player_gamelogs() and BEFORE normalize_all_ratings().
@@ -523,11 +532,25 @@ def compute_gamelog_skills(raw_by_player, player_gamelogs, rb_explosive_lookup=N
 
     Skills filled:
     - QB clutch:        Peak game performance vs season avg (requires >= 2 games, >= 10 att)
-    - RB explosiveness: Big-carry rate from PBP lookup; falls back to peak-YPC gamelog method
-    - WR/TE consistency: Inverse CV of per-game receiving yards
+    - RB explosiveness: Multi-tier carry composite from PBP; falls back to gamelog YPC method
+    - WR/TE consistency: Opponent-quality-weighted inverse CV of per-game receiving yards
+
+    opponent_sp_lookup: {team_name_lower: sp_normalized_0_1} — used to weight per-game
+    stats by opponent quality. Games vs elite defenses count more than games vs weak ones.
+    If None, all games weighted equally (original behavior).
     """
     if rb_explosive_lookup is None:
         rb_explosive_lookup = {}
+    if opponent_sp_lookup is None:
+        opponent_sp_lookup = {}
+
+    def _opp_weight(opponent_name, default=0.5):
+        """Return opponent quality weight: 0.4 (weak) to 1.6 (elite).
+        Maps SP+ normalized 0-1 to a multiplier centered at 1.0 for average (0.5).
+        """
+        opp_sp = opponent_sp_lookup.get((opponent_name or "").lower(), default)
+        # Linear map: 0→0.4, 0.5→1.0, 1.0→1.6
+        return 0.4 + 1.2 * opp_sp
 
     for pid_int, games in player_gamelogs.items():
         pid = str(pid_int)
@@ -537,7 +560,11 @@ def compute_gamelog_skills(raw_by_player, player_gamelogs, rb_explosive_lookup=N
         pos = info["pos"]
 
         if pos == "QB":
+            # Clutch: opponent-weighted peak performance vs season average.
+            # Games vs elite defenses count more — a great game vs Alabama means more
+            # than a great game vs a bottom-tier defense.
             scores = []
+            weights = []
             for g in games:
                 st  = g.get("stats", {})
                 att = st.get("att", 0) or 0
@@ -549,11 +576,13 @@ def compute_gamelog_skills(raw_by_player, player_gamelogs, rb_explosive_lookup=N
                 ints     = st.get("ints",    0) or 0
                 cp   = comp / att
                 ypa  = pass_yds / att
-                # Stricter threshold (10 att vs old 5) + heavier peak weight (60 vs 50)
                 score = cp * 10.0 + ypa * 5.0 + pass_tds * 2.0 - ints * 3.0
-                scores.append(score)
+                opp_w = _opp_weight(g.get("opponent"))
+                scores.append(score * opp_w)
+                weights.append(opp_w)
             if len(scores) >= 2:
-                season_avg = sum(scores) / len(scores)
+                total_w = sum(weights)
+                season_avg = sum(scores) / total_w if total_w > 0 else 0
                 top_n = sorted(scores)[-min(3, len(scores)):]
                 top_avg = sum(top_n) / len(top_n)
                 if season_avg > 0:
@@ -563,22 +592,38 @@ def compute_gamelog_skills(raw_by_player, player_gamelogs, rb_explosive_lookup=N
                 info["raw"]["clutch"] = max(0.0, raw_clutch)
 
         elif pos == "RB":
-            # Primary: play-by-play big-carry rate
+            # Multi-tier carry breakdown: composite of 7+, 12+, 20+, 50+ yard gains.
+            # Each tier captures a different dimension of explosiveness:
+            #   7+  = consistent chunk gains (above-average run)
+            #   12+ = big gains (defense broken down)
+            #   20+ = explosive run (second-level penetration)
+            #   50+ = house call potential
+            # QBs are excluded from this lookup (scrambles handled via mobility attr).
             player_name = info.get("name", "").lower()
             pbp = rb_explosive_lookup.get(player_name, {})
-            total_car = pbp.get("total_carries", 0)
-            big_car   = pbp.get("big_carries",   0)
+            total_car = pbp.get("total", 0)
 
-            if total_car >= 30:
-                big_carry_rate = big_car / total_car
-                raw_expl = big_carry_rate * 90.0
-            elif total_car >= 10:
-                # Blend toward league mean (~10%) to avoid small-sample extremes
-                blend = total_car / 30.0
-                blended_rate = blend * (big_car / total_car) + (1 - blend) * 0.10
-                raw_expl = blended_rate * 90.0
+            if total_car >= 20:
+                r7  = pbp.get("t7",  0) / total_car
+                r12 = pbp.get("t12", 0) / total_car
+                r20 = pbp.get("t20", 0) / total_car
+                r50 = pbp.get("t50", 0) / total_car
+                # Weighted composite: chunk rate has moderate weight, true explosions weighted highest
+                composite = r7 * 0.25 + r12 * 0.40 + r20 * 0.25 + r50 * 0.10
+                # Scale: composite of 0.20 → raw ~25 (elite); 0.10 → raw ~12 (average)
+                raw_expl = composite * 125.0
+            elif total_car >= 8:
+                # Blend toward league mean composite (~0.17) for small samples
+                r7  = pbp.get("t7",  0) / max(total_car, 1)
+                r12 = pbp.get("t12", 0) / max(total_car, 1)
+                r20 = pbp.get("t20", 0) / max(total_car, 1)
+                r50 = pbp.get("t50", 0) / max(total_car, 1)
+                raw_composite = r7 * 0.25 + r12 * 0.40 + r20 * 0.25 + r50 * 0.10
+                blend = total_car / 20.0
+                composite = blend * raw_composite + (1 - blend) * 0.17
+                raw_expl = composite * 125.0
             else:
-                # Fallback: peak-YPC gamelog dispersion (original method)
+                # Fallback: peak-YPC gamelog dispersion
                 ypc_by_game = []
                 for g in games:
                     st = g.get("stats", {})
@@ -596,18 +641,24 @@ def compute_gamelog_skills(raw_by_player, player_gamelogs, rb_explosive_lookup=N
             info["raw"]["explosiveness"] = max(0.0, raw_expl)
 
         elif pos in ("WR", "TE"):
-            yds_by_game = []
+            # Consistency: opponent-weighted receiving yards CV.
+            # A big game vs a weak defense is discounted; consistency vs good defenses
+            # is the real signal. Yards are weighted by opponent quality before computing CV.
+            opp_weighted_yds = []
             for g in games:
                 st  = g.get("stats", {})
                 rec = st.get("receptions", 0) or 0
                 if rec >= 1:
-                    yds_by_game.append(st.get("recYds", 0) or 0)
-            if len(yds_by_game) >= 3:
-                mean_yds = sum(yds_by_game) / len(yds_by_game)
+                    raw_yds = st.get("recYds", 0) or 0
+                    opp_w = _opp_weight(g.get("opponent"))
+                    opp_weighted_yds.append(raw_yds * opp_w)
+            if len(opp_weighted_yds) >= 3:
+                mean_yds = sum(opp_weighted_yds) / len(opp_weighted_yds)
                 if mean_yds > 0:
-                    variance = sum((y - mean_yds) ** 2 for y in yds_by_game) / len(yds_by_game)
+                    variance = sum((y - mean_yds) ** 2 for y in opp_weighted_yds) / len(opp_weighted_yds)
                     cv = (variance ** 0.5) / mean_yds
-                    # cv=0 → raw 80 (perfectly consistent); cv=1.0 → raw 20
+                    # cv=0 → raw 80 (perfectly consistent vs good defenses)
+                    # cv=1.0 → raw 20 (feast or famine)
                     info["raw"]["consistency"] = (1.0 - min(cv, 1.0)) * 60.0 + 20.0
 
 
