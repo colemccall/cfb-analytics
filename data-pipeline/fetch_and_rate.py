@@ -14,7 +14,12 @@ from api_client import (
     fetch_transfer_portal,
 )
 from collections import defaultdict
-from rating_engine import get_position_group, compute_raw_ratings, normalize_all_ratings, compute_overall, compute_gamelog_skills, generate_rating_explanation, SKILL_ATTRS
+from rating_engine import (
+    get_position_group, compute_raw_ratings, normalize_all_ratings,
+    compute_overall, compute_gamelog_skills, compute_backup_ratings,
+    generate_rating_explanation, build_absolute_thresholds,
+    ABSOLUTE_THRESHOLDS, SKILL_ATTRS,
+)
 
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "app", "assets", "data")
 YEARS = [2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
@@ -277,6 +282,39 @@ def build_recruit_lookup(api_key, year):
         except Exception as e:
             print(f"    Warning: {yr}: {e}")
     return lookup
+
+
+def build_rb_explosive_rate(plays_flat):
+    """Parse play-by-play text to compute per-RB big-carry rate.
+
+    Big carry threshold: 15+ yards on a single rush play.
+    Returns: {player_name_lower: {big_carries, total_carries}}
+    """
+    import re
+    RUSH_TYPES = {"Rush", "Rushing Touchdown", "Rushing TD", "Run"}
+    BIG_CARRY  = 15
+    # Pattern: "FirstName LastName run/rush for N yards"
+    # Handles: "Najee Harris rush for 18 yds", "Bijan Robinson run for 22 yards"
+    _RE_RUSHER = re.compile(
+        r"^([A-Z][a-zA-Z'-]+(?:\s[A-Z][a-zA-Z'-]+)+)\s+(?:rush|run)\b",
+        re.IGNORECASE,
+    )
+    stats = {}
+    for play in plays_flat:
+        if play.get("playType") not in RUSH_TYPES:
+            continue
+        yards = play.get("yardsGained", 0) or 0
+        text  = play.get("playText", "") or ""
+        m = _RE_RUSHER.match(text)
+        if not m:
+            continue
+        name = m.group(1).lower().strip()
+        if name not in stats:
+            stats[name] = {"big_carries": 0, "total_carries": 0}
+        stats[name]["total_carries"] += 1
+        if yards >= BIG_CARRY:
+            stats[name]["big_carries"] += 1
+    return stats
 
 
 def capture_display_stats(pos_group, player_stats):
@@ -908,6 +946,9 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
         plays_by_team[p.get("offense", "")].append(p)
     print(f"  {len(plays_flat)} total plays fetched")
 
+    rb_explosive_lookup = build_rb_explosive_rate(plays_flat)
+    print(f"  {len(rb_explosive_lookup)} RBs with parsed carry data")
+
     print(f"\n[7/7] Processing ratings...")
     teams_private = []
     players_private = []
@@ -924,6 +965,11 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
 
         t_stats = team_stats_lookup.get(school.lower(), {})
 
+        # Per-team SP+ signals for DB penalty and OL formula
+        sp_team = sp_detail.get(school.lower(), {})
+        sp_off_val = sp_team.get("off", 0.5)   # normalized 0-1, higher = better offense
+        sp_def_val = sp_team.get("def", 0.5)   # normalized 0-1, higher = better defense
+
         for p in roster:
             pid = p.get("id", 0)
             first = p.get("firstName", "")
@@ -937,10 +983,22 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
             stars = recruit_lookup.get((full_lower, school.lower()), 0)
 
             usage = usage_lookup.get(pid, {})
-            raw = compute_raw_ratings(pid, pos_group, p_stats, ppa_val, t_stats, tq, stars, usage, position=pos)
+
+            # OL individual signals (needed inside compute_raw_ratings)
+            ol_draft = draft_lookup.get(full_lower, 0) if pos_group == "OL" else 0
+            ol_award = awards_lookup.get((full_lower, school.lower()), 0) if pos_group == "OL" else 0
+
+            raw = compute_raw_ratings(
+                pid, pos_group, p_stats, ppa_val, t_stats, tq, stars, usage,
+                position=pos,
+                sp_off=sp_off_val, sp_def=sp_def_val,
+                draft_round=ol_draft, award_tier=ol_award,
+                rb_explosive_lookup=rb_explosive_lookup,
+            )
             raw_ratings_all[pid] = {
                 "pos": pos_group,
                 "pos_detail": pos,
+                "name": full_lower,
                 "raw": raw,
                 "stats": capture_display_stats(pos_group, p_stats),
                 "ppa": round(ppa_val, 4),
@@ -958,12 +1016,13 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
                     "player_usage": usage,
                     "position": pos,
                 },
+                "_stars": stars,
             }
 
-            # Collect OL boost signals: draft, awards, cross-year continuity
+            # Collect OL boost signals for post-norm floor pass
             if pos_group == "OL":
-                draft_round = draft_lookup.get(full_lower, 0)
-                award_tier = awards_lookup.get((full_lower, school.lower()), 0)
+                draft_round = ol_draft
+                award_tier  = ol_award
                 # Continuity floor only applies to same-team returners.
                 # Transfers are in a new system and their prior performance is uncertain.
                 prior_team = prior_player_teams.get(pid) if prior_player_teams else None
@@ -995,19 +1054,19 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
     # can be computed before normalization.
     print("Building player gamelogs (early pass for gamelog-derived skills)...")
     player_gamelogs_early = build_player_gamelogs(game_stats_raw, games_raw)
-    compute_gamelog_skills(raw_ratings_all, player_gamelogs_early)
+    compute_gamelog_skills(raw_ratings_all, player_gamelogs_early,
+                           rb_explosive_lookup=rb_explosive_lookup)
     print(f"  Gamelog-derived skills computed for {len(player_gamelogs_early)} players")
 
     print("Normalizing ratings...")
     normalized = normalize_all_ratings(raw_ratings_all)
 
-    # ── Backup/freshman OVR ceiling ────────────────────────────────────────────────────
-    # For low-snap players with no individual stats, cap their rating at the starter's
-    # rating for that position group on the same team. A freshman with no stats should
-    # never outrate the proven starter he sits behind, regardless of recruiting ranking.
-    # Conditions to apply: snap% < 0.25 AND no meaningful individual stats.
-    # Does NOT apply to K/P/LS (specialists) or if no starter data exists.
-    print("Applying backup/freshman OVR ceilings...")
+    # ── Backup / no-data tier ratings ─────────────────────────────────────────────────
+    # Players whose raw dict has '_tier' (backup/nodata) were skipped by normalize_all_ratings.
+    # Apply compute_backup_ratings() using stars anchored to team starter OVR.
+    print("Applying backup/no-data tier ratings...")
+
+    # First pass: compute OVR for all starters/rotation players that normalized
     prelim_ovr = {}
     for p in players_private:
         pid = p["id"]
@@ -1015,56 +1074,50 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
         if attrs:
             prelim_ovr[pid] = compute_overall(attrs, p["positionGroup"])
 
-    # Find the "starter" per (team_id, pos_group) = player with highest snap% usage
-    starter_ovr_map = {}  # (team_id, pos_group) -> {"snap": float, "ovr": int}
+    # Identify starter OVR and top-3 avg OVR per (team_id, pos_group)
+    starter_ovr_map  = {}  # (team_id, pos_group) -> highest-snap player's OVR
+    top3_ovr_map     = {}  # (team_id, pos_group) -> mean of top-3 OVRs (team ceiling for nodata)
     for p in players_private:
-        if p["positionGroup"] in ("K", "P", "LS"):
-            continue
+        pg  = p["positionGroup"]
         pid = p["id"]
-        key = (p["teamId"], p["positionGroup"])
+        key = (p["teamId"], pg)
         snap = float(usage_lookup.get(pid, {}).get("overall") or 0)
-        ovr = prelim_ovr.get(pid, 0)
+        ovr  = prelim_ovr.get(pid, 0)
+        if ovr == 0:
+            continue
         if key not in starter_ovr_map or snap > starter_ovr_map[key]["snap"]:
             starter_ovr_map[key] = {"snap": snap, "ovr": ovr}
+        top3_ovr_map.setdefault(key, []).append(ovr)
 
-    ceiling_count = 0
+    # Reduce top3 to actual mean of top-3
+    for key in top3_ovr_map:
+        vals = sorted(top3_ovr_map[key], reverse=True)[:3]
+        top3_ovr_map[key] = int(round(sum(vals) / len(vals)))
+
+    # Second pass: assign backup/nodata ratings
+    backup_count = 0
     for p in players_private:
-        if p["positionGroup"] in ("K", "P", "LS"):
-            continue
         pid = p["id"]
-        snap = float(usage_lookup.get(pid, {}).get("overall") or 0)
-        if snap >= 0.25:
-            continue  # starter or significant contributor — no ceiling needed
+        pg  = p["positionGroup"]
+        if pid in normalized:
+            continue  # already rated by normalize_all_ratings
+        raw_info = raw_ratings_all.get(pid, {})
+        tier  = raw_info.get("raw", {}).get("_tier")
+        stars = raw_info.get("_stars", 0)
+        if tier is None:
+            continue
 
-        # Check for meaningful individual stats in display_stats
-        display_stats = raw_ratings_all.get(pid, {}).get("stats", {})
-        has_any_stats = any(
-            isinstance(v, (int, float)) and v != 0
-            for v in display_stats.values()
-        )
-        if has_any_stats:
-            continue  # they have real production — rate them on it
-
-        key = (p["teamId"], p["positionGroup"])
+        key = (p["teamId"], pg)
         starter_info = starter_ovr_map.get(key)
-        if not starter_info or starter_info["snap"] < 0.35:
-            continue  # no clear starter on this team — skip
+        starter_ovr  = starter_info["ovr"] if starter_info else None
+        team_ceiling = top3_ovr_map.get(key)
 
-        starter_ovr = starter_info["ovr"]
-        current_ovr = prelim_ovr.get(pid, 0)
-        if current_ovr <= starter_ovr:
-            continue  # already at or below starter — no cap needed
+        attrs = compute_backup_ratings(pid, pg, stars, starter_ovr, team_ceiling)
+        normalized[pid] = attrs
+        prelim_ovr[pid] = compute_overall(attrs, pg)
+        backup_count += 1
 
-        # Scale normalized skills down proportionally so OVR matches the ceiling
-        attrs = normalized.get(pid)
-        if attrs:
-            scale = starter_ovr / current_ovr
-            for skill in list(attrs.keys()):
-                attrs[skill] = max(40, int(round(attrs[skill] * scale)))
-            prelim_ovr[pid] = compute_overall(attrs, p["positionGroup"])
-            ceiling_count += 1
-    if ceiling_count:
-        print(f"  Backup/freshman OVR ceilings applied to {ceiling_count} player(s)")
+    print(f"  {backup_count} backup/no-data players rated via star-anchor pathway")
 
     # ── OL boost: apply floor ratings driven by draft status, awards, and continuity ──
     # These three signals are the best proxies we have for OL quality with no individual stats.
