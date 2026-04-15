@@ -280,15 +280,11 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
         raw["_rotation_confidence"] = tier_confidence
 
     # ── Multipliers ───────────────────────────────────────────────────────
-    # tq_mult_skill: blends team quality (recruiting talent/overall program) with
-    # SP+ sub-ratings (opponent-adjusted). SP+ is the honest schedule-quality signal —
-    # a team with high SP+ is doing it against real competition.
-    # Formula: 40% team_quality (baseline program level) + 60% SP+ average.
-    # This ensures a G5 team that genuinely competes at a high level (e.g. Boise)
-    # gets credit, while a G5 team inflating stats vs weak competition gets discounted.
-    sp_quality = (sp_off + sp_def) / 2.0   # avg of team's own SP+ offense + defense
-    tq_mult_skill = 0.50 + 0.50 * (0.40 * team_quality + 0.60 * sp_quality)
-    tq_mult_proxy = 0.50 + 0.50 * team_quality   # OL: wider range, no sp adjustment needed
+    # tq_mult_skill: 0.60-1.00 range. The primary schedule-quality adjustment now
+    # happens upstream via per-game opponent weighting in build_opp_weighted_stats().
+    # This multiplier handles residual program quality context (recruiting, depth, system).
+    tq_mult_skill = 0.60 + 0.40 * team_quality
+    tq_mult_proxy = 0.50 + 0.50 * team_quality   # OL: wider range for proxy signals
 
     has_defensive_stats = has_stats and any(
         k.startswith("defensive") and sf(player_stats.get(k, 0)) > 0
@@ -896,6 +892,8 @@ def generate_rating_explanation(pos_group, player_stats, ppa_val, team_quality,
             return "below avg"
         return "low"
 
+    conf_ctx = "G5" if team_quality < 0.55 else ("mid-major" if team_quality < 0.70 else "P4")
+
     # --- QB ---
     if pos_group == "QB" and has_stats:
         pass_yds = sf(player_stats.get("passingYDS", player_stats.get("passingYards", 0)))
@@ -905,13 +903,18 @@ def generate_rating_explanation(pos_group, player_stats, ppa_val, team_quality,
         comps    = sf(player_stats.get("passingCOMPLETIONS", player_stats.get("passingCOMP", 0)))
         comp_pct = comps / attempts * 100 if attempts >= 20 else None
         ypa      = pass_yds / attempts if attempts >= 20 else None
-        if pass_yds > 0 or pass_tds > 0:
-            lines.append(f"{int(pass_yds):,} pass yds · {int(pass_tds)} TDs · {int(ints)} INTs"
-                         + (f" · {comp_pct:.1f}% comp" if comp_pct else ""))
+        td_int   = f"{int(pass_tds)}/{int(ints)} TD/INT ratio"
+        ypa_str  = f"{ypa:.1f} YPA" if ypa else ""
+        comp_str = f"{comp_pct:.1f}% completion" if comp_pct else ""
+        if pass_yds > 0:
+            lines.append(f"{int(pass_yds):,} passing yards, {td_int}"
+                         + (f" — {comp_str}" if comp_str else ""))
         if ypa:
-            lines.append(f"{ypa:.1f} YPA ({_pct_label(ypa, 5.5, 10.0)})")
-        if ppa_val:
-            lines.append(f"PPA: {ppa_val:+.3f} ({_pct_label(ppa_val, -0.2, 0.5)})")
+            quality = _pct_label(ypa, 5.5, 10.0)
+            lines.append(f"{ypa_str} ({quality} efficiency); stats opponent-adjusted")
+        if ppa_val and abs(ppa_val) > 0.05:
+            ppa_lbl = "positive impact" if ppa_val > 0.15 else ("slightly positive" if ppa_val > 0 else "negative EPA impact")
+            lines.append(f"Advanced metrics: {ppa_val:+.3f} PPA per play ({ppa_lbl})")
 
     # --- RB ---
     elif pos_group in ("RB", "FB") and has_stats:
@@ -920,12 +923,14 @@ def generate_rating_explanation(pos_group, player_stats, ppa_val, team_quality,
         ypc      = sf(player_stats.get("rushingYPC", player_stats.get("yardsPerRushAttempt", 0)))
         rec_yds  = sf(player_stats.get("receivingYDS", player_stats.get("receivingYards", 0)))
         if rush_yds > 0:
-            lines.append(f"{int(rush_yds):,} rush yds · {int(rush_tds)} TDs"
-                         + (f" · {ypc:.1f} YPC ({_pct_label(ypc, 3.5, 6.5)})" if ypc > 0 else ""))
-        if rec_yds > 0:
-            lines.append(f"{int(rec_yds)} recv yds (pass-catching back)")
-        if ppa_val:
-            lines.append(f"PPA: {ppa_val:+.3f} ({_pct_label(ppa_val, -0.1, 0.4)})")
+            ypc_lbl = _pct_label(ypc, 3.5, 6.5)
+            lines.append(f"{int(rush_yds):,} rushing yards, {int(rush_tds)} TDs"
+                         + (f" — {ypc:.1f} YPC ({ypc_lbl})" if ypc > 0 else ""))
+            lines.append("Stats opponent-adjusted; big-play rate (7/12/20/50+ yds) feeds explosiveness rating")
+        if rec_yds > 50:
+            lines.append(f"Also a pass-catching threat: {int(rec_yds)} receiving yards")
+        if ppa_val and abs(ppa_val) > 0.05:
+            lines.append(f"Advanced metrics: {ppa_val:+.3f} PPA per play")
 
     # --- WR / TE ---
     elif pos_group in ("WR", "TE") and has_stats:
@@ -934,10 +939,12 @@ def generate_rating_explanation(pos_group, player_stats, ppa_val, team_quality,
         recs     = sf(player_stats.get("receivingREC", player_stats.get("receptions", 0)))
         ypr      = rec_yds / recs if recs >= 3 else None
         if rec_yds > 0:
-            lines.append(f"{int(rec_yds):,} recv yds · {int(rec_tds)} TDs · {int(recs)} rec"
-                         + (f" · {ypr:.1f} YPR ({_pct_label(ypr, 8, 18)})" if ypr else ""))
-        if ppa_val:
-            lines.append(f"PPA: {ppa_val:+.3f} ({_pct_label(ppa_val, -0.1, 0.5)})")
+            ypr_lbl = f" — {ypr:.1f} YPR ({_pct_label(ypr, 8, 18)})" if ypr else ""
+            lines.append(f"{int(rec_yds):,} receiving yards, {int(rec_tds)} TDs, {int(recs)} catches{ypr_lbl}")
+        if conf_ctx == "G5" and rec_yds > 600:
+            lines.append("G5 stats opponent-adjusted — production vs weaker defenses discounted")
+        elif ppa_val and abs(ppa_val) > 0.05:
+            lines.append(f"Advanced metrics: {ppa_val:+.3f} PPA per play")
 
     # --- DL ---
     elif pos_group == "DL" and has_stats:
@@ -945,10 +952,11 @@ def generate_rating_explanation(pos_group, player_stats, ppa_val, team_quality,
         tfl   = sf(player_stats.get("defensiveTFL", 0))
         qbh   = sf(player_stats.get("defensiveQBH", player_stats.get("defensiveQB HUR", 0)))
         if sacks > 0 or tfl > 0:
-            lines.append(f"{sacks:.1f} sacks · {tfl:.1f} TFL"
-                         + (f" · {int(qbh)} QBH" if qbh > 0 else ""))
-        if ppa_val:
-            lines.append(f"PPA: {ppa_val:+.3f} ({_pct_label(ppa_val, -0.3, 0.2)})")
+            qbh_str = f", {int(qbh)} QB pressures" if qbh > 0 else ""
+            lines.append(f"{sacks:.1f} sacks, {tfl:.1f} TFL{qbh_str}")
+            lines.append("Pressure rated per 100 opponent pass plays (opponent-adjusted rate)")
+        if ppa_val and abs(ppa_val) > 0.05:
+            lines.append(f"Advanced metrics: {ppa_val:+.3f} PPA per play")
 
     # --- LB ---
     elif pos_group == "LB" and has_stats:
@@ -957,10 +965,11 @@ def generate_rating_explanation(pos_group, player_stats, ppa_val, team_quality,
         ints    = max(sf(player_stats.get("defensiveINT", 0)), sf(player_stats.get("interceptionsINT", 0)))
         pds     = sf(player_stats.get("defensivePD", 0))
         if tackles > 0:
-            lines.append(f"{int(tackles)} tackles · {sacks:.1f} sacks"
-                         + (f" · {int(ints)} INTs · {int(pds)} PDs" if ints + pds > 0 else ""))
-        if ppa_val:
-            lines.append(f"PPA: {ppa_val:+.3f} ({_pct_label(ppa_val, -0.3, 0.2)})")
+            cov_str = f", {int(ints)} INTs, {int(pds)} PDs" if ints + pds > 0 else ""
+            lines.append(f"{int(tackles)} tackles, {sacks:.1f} sacks{cov_str}")
+            lines.append("Tackle and pass-rush production adjusted for opponent offensive quality")
+        if ppa_val and abs(ppa_val) > 0.05:
+            lines.append(f"Advanced metrics: {ppa_val:+.3f} PPA per play")
 
     # --- DB ---
     elif pos_group == "DB" and has_stats:
@@ -968,9 +977,11 @@ def generate_rating_explanation(pos_group, player_stats, ppa_val, team_quality,
         ints    = max(sf(player_stats.get("defensiveINT", 0)), sf(player_stats.get("interceptionsINT", 0)))
         pds     = sf(player_stats.get("defensivePD", 0))
         if ints + pds + tackles > 0:
-            lines.append(f"{int(ints)} INTs · {int(pds)} PDs · {int(tackles)} tackles")
-        if ppa_val:
-            lines.append(f"PPA: {ppa_val:+.3f} ({_pct_label(ppa_val, -0.3, 0.2)})")
+            lines.append(f"{int(ints)} interceptions, {int(pds)} pass breakups, {int(tackles)} tackles")
+        if ppa_val and abs(ppa_val) > 0.05:
+            lines.append(f"Advanced metrics: {ppa_val:+.3f} PPA per play")
+        if ints + pds == 0 and tackles > 0:
+            lines.append("Limited pass-defense stats; coverage grade based on team context and tackles")
 
     # --- K ---
     elif pos_group == "K" and has_stats:
@@ -979,8 +990,8 @@ def generate_rating_explanation(pos_group, player_stats, ppa_val, team_quality,
         longest = sf(player_stats.get("kickingLONG", 0))
         fg_pct  = fgm / max(fga, 1) * 100
         if fga > 0:
-            lines.append(f"{int(fgm)}/{int(fga)} FG ({fg_pct:.1f}%)"
-                         + (f" · long {int(longest)} yds" if longest > 0 else ""))
+            long_str = f" — leg: {int(longest)} yds max" if longest > 0 else ""
+            lines.append(f"{int(fgm)}/{int(fga)} FG ({fg_pct:.1f}% accuracy){long_str}")
 
     # --- P ---
     elif pos_group == "P" and has_stats:
@@ -989,23 +1000,34 @@ def generate_rating_explanation(pos_group, player_stats, ppa_val, team_quality,
         in20     = sf(player_stats.get("puntingIN20", 0))
         punt_avg = punt_yds / max(punt_no, 1)
         if punt_no > 0:
-            lines.append(f"{int(punt_no)} punts · {punt_avg:.1f} avg"
-                         + (f" · {int(in20)} inside-20" if in20 > 0 else ""))
+            pin_str = f" — {int(in20)} pinned inside 20" if in20 > 0 else ""
+            lines.append(f"{int(punt_no)} punts, {punt_avg:.1f} yard average{pin_str}")
 
     # --- OL (no individual stats) ---
     elif pos_group == "OL":
         ol_pos = (position or "OL").upper()
-        lines.append(f"Position: {ol_pos} — rated on team run/pass efficiency + snap share")
+        lines.append(f"{ol_pos} rated on team run efficiency, sack rate allowed, SP+ offense, and recruiting stars")
         if recruit_stars >= 4:
-            lines.append(f"{recruit_stars}-star recruit")
+            lines.append(f"{recruit_stars}-star recruit — individual talent signal for OL")
+        elif recruit_stars == 0:
+            lines.append("No recruiting data — rated primarily on team performance signals")
 
-    # --- Context bullets (added for all positions) ---
-    if snap_pct > 0:
-        snap_lbl = "starter" if snap_pct >= 0.35 else ("rotation" if snap_pct >= 0.15 else "backup")
-        lines.append(f"{snap_pct*100:.0f}% snap share · {games} games ({snap_lbl})")
+    # --- No stats at all ---
+    elif not has_stats:
+        if recruit_stars >= 3:
+            lines.append(f"Limited playing time — rated as {recruit_stars}-star prospect anchored to team depth")
+        else:
+            lines.append("Backup/reserve — rated on recruiting profile relative to team starters")
 
+    # --- Context line (all positions) ---
     tq_lbl = _pct_label(team_quality, 0.0, 1.0)
-    lines.append(f"Team quality: {team_quality:.2f} ({tq_lbl} SP+/talent context)")
+    if team_quality < 0.55:
+        ctx = f"G5 program (tq={team_quality:.2f}) — stats weighted by opponent quality each game"
+    elif team_quality >= 0.80:
+        ctx = f"Elite P4 program context (tq={team_quality:.2f}) — production vs top competition"
+    else:
+        ctx = f"Solid program context (tq={team_quality:.2f}, {tq_lbl})"
+    lines.append(ctx)
 
     # Trim to max 4 lines
     return lines[:4]

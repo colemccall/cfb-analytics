@@ -774,6 +774,98 @@ def build_player_gamelogs(game_stats_raw, games_raw):
     return gamelogs
 
 
+def build_opp_weighted_stats(player_gamelogs, sp_detail):
+    """Build opponent-quality-weighted season stat totals from per-game data.
+
+    For each player, recompute season totals where each game's contribution is
+    scaled by the opponent's quality:
+      - Offense (QB/RB/WR/TE/FB): weighted by opponent *defensive* SP+ quality
+      - Defense (DL/LB/DB):       weighted by opponent *offensive* SP+ quality
+
+    This discounts stats piled up against weak opponents and gives extra credit
+    for production against elite competition.
+
+    Weight formula: opp_weight = 0.5 + 1.0 * opp_sp_quality
+      SP=0 (worst) → weight 0.5 (stats count half)
+      SP=0.5 (avg) → weight 1.0 (neutral)
+      SP=1.0 (best) → weight 1.5 (stats count 50% more)
+
+    Returns: {pid_str: {stat_key: weighted_total, '_games_weighted': float}}
+    """
+    OFF_POSITIONS = {"QB", "RB", "FB", "WR", "TE"}
+    DEF_POSITIONS = {"DL", "LB", "DB"}
+
+    # Determine each player's position from the raw_by_player context — we'll
+    # fall back to a neutral weight for positions without clear offense/defense role.
+    weighted = {}
+
+    for pid_int, games in player_gamelogs.items():
+        pid = str(pid_int)
+        if not games:
+            continue
+
+        # Detect position from first game's stat keys
+        first_stats = games[0].get("stats", {})
+        has_pass = "passYds" in first_stats or "att" in first_stats
+        has_rush = "rushYds" in first_stats or "carries" in first_stats
+        has_rec  = "recYds" in first_stats or "receptions" in first_stats
+        has_def  = "tackles" in first_stats or "sacks" in first_stats
+
+        if has_pass or has_rush or has_rec:
+            sp_side = "def"   # offensive player: penalized/rewarded by opponent defense
+        elif has_def:
+            sp_side = "off"   # defensive player: penalized/rewarded by opponent offense
+        else:
+            sp_side = None    # unknown: skip weighting
+
+        totals = {}
+        weight_sum = 0.0
+
+        for g in games:
+            opp_name = (g.get("opponent") or "").lower().strip()
+            if sp_side:
+                opp_sp = sp_detail.get(opp_name, {}).get(sp_side, 0.5)
+            else:
+                opp_sp = 0.5
+            w = 0.5 + 1.0 * opp_sp   # 0.5 at worst, 1.0 at avg, 1.5 at best
+
+            st = g.get("stats", {})
+            for key, val in st.items():
+                if val is None:
+                    continue
+                try:
+                    fval = float(val)
+                except (TypeError, ValueError):
+                    continue
+                # Don't weight rate stats (ypc, ypr, compPct) — only counting stats
+                if key in ("ypc", "ypr", "ypa", "compPct", "puntAvg"):
+                    # For rate stats, compute weighted average separately
+                    if key not in totals:
+                        totals[key] = {"wsum": 0.0, "wcount": 0.0}
+                    totals[key]["wsum"] += fval * w
+                    totals[key]["wcount"] += w
+                else:
+                    totals[key] = totals.get(key, 0.0) + fval * w
+
+            weight_sum += w
+
+        # Resolve rate stats to weighted averages, count stats to weighted sums
+        result = {"_games_weighted": weight_sum}
+        for key, val in totals.items():
+            if isinstance(val, dict):
+                # Rate stat: weighted average
+                result[key] = val["wsum"] / val["wcount"] if val["wcount"] > 0 else 0.0
+            else:
+                # Count stat: weighted sum (normalize back to "per game equivalent" scale)
+                # We keep it as a raw weighted sum — the formula uses it as a season total
+                # and the normalization step handles cross-player comparison.
+                result[key] = val
+
+        weighted[pid] = result
+
+    return weighted
+
+
 def _build_game_lookup(games_raw):
     lookup = {}
     for g in (games_raw or []):
@@ -969,6 +1061,14 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
     print(f"  {len(rb_explosive_lookup)} rushers with parsed carry data ({len(qb_names_set)} QBs excluded)")
 
     print(f"\n[7/7] Processing ratings...")
+    # Build opponent-weighted season stats from per-game data before the main loop.
+    # These replace raw season totals for all stat-based positions, discounting
+    # production against weak competition and rewarding it against elite opponents.
+    print("  Building opponent-weighted stats from gamelog...")
+    _gamelogs_for_weighting = build_player_gamelogs(game_stats_raw, games_raw)
+    opp_weighted_stats = build_opp_weighted_stats(_gamelogs_for_weighting, sp_detail)
+    print(f"  {len(opp_weighted_stats)} players with opponent-weighted stats")
+
     teams_private = []
     players_private = []
     raw_ratings_all = {}
@@ -998,6 +1098,39 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
 
             p_stats = find_player_stats(stat_lookup, first, last, school)
             ppa_val = find_player_ppa(ppa_lookup, first, last, school)
+
+            # Merge opponent-weighted stats over raw season totals.
+            # Weighted stats use the gamelog's per-game data scaled by opponent SP+,
+            # so production vs elite opponents counts more than vs weak ones.
+            # We only override counting stats (yards, TDs, tackles, etc.) — not rates.
+            w_stats = opp_weighted_stats.get(str(pid), {})
+            if w_stats:
+                _GAMELOG_STAT_MAP = {
+                    # gamelog key → season stat key(s) to override
+                    "passYds":    ("passingYDS", "passingYards"),
+                    "passTDs":    ("passingTD", "passingTDs"),
+                    "ints":       ("passingINT", "interceptions"),
+                    "comp":       ("passingCOMPLETIONS", "passingCOMP", "completions"),
+                    "att":        ("passingATT", "passingAttempts", "attempts"),
+                    "rushYds":    ("rushingYDS", "rushingYards"),
+                    "rushTDs":    ("rushingTD", "rushingTDs"),
+                    "carries":    ("rushingCAR", "rushingATT"),
+                    "recYds":     ("receivingYDS", "receivingYards"),
+                    "recTDs":     ("receivingTD", "receivingTDs"),
+                    "receptions": ("receivingREC", "receptions"),
+                    "tackles":    ("defensiveTOT", "totalTackles"),
+                    "sacks":      ("defensiveSACKS", "sacks"),
+                    "tfl":        ("defensiveTFL",),
+                    "pds":        ("defensivePD", "passesDeflected"),
+                    "dints":      ("defensiveINT",),
+                    "qbh":        ("defensiveQBH",),
+                }
+                merged = dict(p_stats)
+                for gl_key, stat_keys in _GAMELOG_STAT_MAP.items():
+                    if gl_key in w_stats:
+                        for sk in stat_keys:
+                            merged[sk] = w_stats[gl_key]
+                p_stats = merged
             full_lower = f"{first} {last}".lower()
             stars = recruit_lookup.get((full_lower, school.lower()), 0)
 

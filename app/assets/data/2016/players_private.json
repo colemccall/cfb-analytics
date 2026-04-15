@@ -8978,7 +8978,7 @@
   {
     "id": "-1002222",
     "teamId": 8,
-    "firstName": "Henre\u2019",
+    "firstName": "Henre’",
     "lastName": "Toliver",
     "position": "DB",
     "positionGroup": "DB",
@@ -9098,7 +9098,7 @@
   {
     "id": "-1002206",
     "teamId": 8,
-    "firstName": "De\u2019Andre",
+    "firstName": "De’Andre",
     "lastName": "Coley",
     "position": "DB",
     "positionGroup": "DB",
@@ -9146,7 +9146,7 @@
   {
     "id": "-1002199",
     "teamId": 8,
-    "firstName": "La\u2019Michael",
+    "firstName": "La’Michael",
     "lastName": "Pettway",
     "position": "WR",
     "positionGroup": "WR",
@@ -33771,7 +33771,7 @@
     "id": "-1008753",
     "teamId": 150,
     "firstName": "Zach",
-    "lastName": "Mu\u00f1iz",
+    "lastName": "Muñiz",
     "position": "CB",
     "positionGroup": "DB",
     "jersey": 39,
@@ -36518,7 +36518,7 @@
   {
     "id": "-1009381",
     "teamId": 2199,
-    "firstName": "D\u2019Marcus",
+    "firstName": "D’Marcus",
     "lastName": "Moon",
     "position": "TE",
     "positionGroup": "TE",
@@ -36590,7 +36590,7 @@
   {
     "id": "-1009343",
     "teamId": 2199,
-    "firstName": "Ka\u2019John",
+    "firstName": "Ka’John",
     "lastName": "Armstrong",
     "position": "OL",
     "positionGroup": "OL",
@@ -36602,7 +36602,7 @@
   {
     "id": "-1009263",
     "teamId": 2199,
-    "firstName": "Tre\u2019Shown",
+    "firstName": "Tre’Shown",
     "lastName": "Fields",
     "position": "TE",
     "positionGroup": "TE",
@@ -43515,7 +43515,7 @@
     "id": "4035629",
     "teamId": 52,
     "firstName": "Walvenski",
-    "lastName": "Aim\u00e9",
+    "lastName": "Aimé",
     "position": "DT",
     "positionGroup": "DL",
     "jersey": 94,
@@ -46694,7 +46694,7 @@
   {
     "id": "-1012057",
     "teamId": 290,
-    "firstName": "Jc\u2019kenzie",
+    "firstName": "Jc’kenzie",
     "lastName": "Walker",
     "position": "S",
     "positionGroup": "DB",
@@ -46815,7 +46815,7 @@
     "id": "-1012047",
     "teamId": 290,
     "firstName": "Max",
-    "lastName": "Maga\u00f1a",
+    "lastName": "Magaña",
     "position": "OL",
     "positionGroup": "OL",
     "jersey": 71,
@@ -50966,7 +50966,7 @@
   {
     "id": "-1012872",
     "teamId": 62,
-    "firstName": "Ka\u2018aumoana",
+    "firstName": "Ka‘aumoana",
     "lastName": "Gifford",
     "position": "DL",
     "positionGroup": "DL",
@@ -51027,7 +51027,7 @@
     "id": "-1012867",
     "teamId": 62,
     "firstName": "John",
-    "lastName": "Wa\u2018a",
+    "lastName": "Wa‘a",
     "position": "OL",
     "positionGroup": "OL",
     "jersey": 51,
@@ -54470,7 +54470,7 @@
   {
     "id": "-1013547",
     "teamId": 356,
-    "firstName": "Tr\u00e9",
+    "firstName": "Tré",
     "lastName": "Watson",
     "position": "LB",
     "positionGroup": "LB",
@@ -55934,7 +55934,7 @@
   {
     "id": "-1013864",
     "teamId": 84,
-    "firstName": "Ja\u2019merez",
+    "firstName": "Ja’merez",
     "lastName": "Bowen",
     "position": "DL",
     "positionGroup": "DL",
@@ -55970,7 +55970,7 @@
   {
     "id": "-1013830",
     "teamId": 84,
-    "firstName": "A\u2019Shon",
+    "firstName": "A’Shon",
     "lastName": "Riggins",
     "position": "DB",
     "positionGroup": "DB",
@@ -92534,7 +92534,7 @@
   {
     "id": "-1023699",
     "teamId": 2440,
-    "firstName": "Dant\u00e9",
+    "firstName": "Danté",
     "lastName": "Mayes",
     "position": "QB",
     "positionGroup": "QB",
@@ -101942,7 +101942,7 @@
   {
     "id": "-1026382",
     "teamId": 87,
-    "firstName": "Aliz\u00e9",
+    "firstName": "Alizé",
     "lastName": "Jones",
     "position": "TE",
     "positionGroup": "TE",
@@ -110283,7 +110283,7 @@
     "id": "-1021678",
     "teamId": 145,
     "firstName": "D.J.",
-    "lastName": "Fort\u00e9",
+    "lastName": "Forté",
     "position": "DL",
     "positionGroup": "DL",
     "jersey": 87,
@@ -110390,7 +110390,7 @@
   {
     "id": "-1021667",
     "teamId": 145,
-    "firstName": "Tr\u00e9",
+    "firstName": "Tré",
     "lastName": "Nixon",
     "position": "WR",
     "positionGroup": "WR",
@@ -113366,7 +113366,7 @@
   {
     "id": "-1028718",
     "teamId": 204,
-    "firstName": "Kiahv\u00e9",
+    "firstName": "Kiahvé",
     "lastName": "Dennis-Lee",
     "position": "OLB",
     "positionGroup": "LB",
@@ -125354,7 +125354,7 @@
   {
     "id": "-1031695",
     "teamId": 6,
-    "firstName": "Finess\u00e9",
+    "firstName": "Finessé",
     "lastName": "Middleton",
     "position": "DE",
     "positionGroup": "DL",
@@ -133358,7 +133358,7 @@
   {
     "id": "-1033551",
     "teamId": 2628,
-    "firstName": "Deant\u00e9",
+    "firstName": "Deanté",
     "lastName": "Gray",
     "position": "WR",
     "positionGroup": "WR",
@@ -137738,7 +137738,7 @@
   {
     "id": "-1034740",
     "teamId": 251,
-    "firstName": "D\u2019Onta",
+    "firstName": "D’Onta",
     "lastName": "Foreman",
     "position": "RB",
     "positionGroup": "RB",
@@ -151682,7 +151682,7 @@
   {
     "id": "-1008443",
     "teamId": 41,
-    "firstName": "Marsh\u00e9",
+    "firstName": "Marshé",
     "lastName": "Terry",
     "position": "LB",
     "positionGroup": "LB",
@@ -174254,7 +174254,7 @@
   {
     "id": "-1043774",
     "teamId": 275,
-    "firstName": "Kar\u00e9",
+    "firstName": "Karé",
     "lastName": "Lyles",
     "position": "QB",
     "positionGroup": "QB",
