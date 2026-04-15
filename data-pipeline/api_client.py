@@ -79,9 +79,34 @@ def fetch_all_rosters(api_key, team_names, year):
 
 
 def fetch_player_stats(api_key, year):
-    return _get(api_key, "/stats/player/season", {
+    """Fetch player season stats for regular + postseason, merged by playerId+statType."""
+    regular = _get(api_key, "/stats/player/season", {
         "year": year, "seasonType": "regular",
     })
+    try:
+        postseason = _get(api_key, "/stats/player/season", {
+            "year": year, "seasonType": "postseason",
+        })
+    except Exception:
+        postseason = []
+
+    if not postseason:
+        return regular
+
+    # Build lookup of regular stats: (playerId, statType) -> entry
+    merged = {(e["playerId"], e["statType"]): e for e in regular}
+    for entry in postseason:
+        key = (entry["playerId"], entry["statType"])
+        if key in merged:
+            # Add postseason stat value to regular season total
+            try:
+                merged[key]["stat"] = float(merged[key]["stat"]) + float(entry["stat"])
+            except (ValueError, TypeError):
+                pass  # non-numeric stat (e.g. pct), skip
+        else:
+            merged[key] = entry
+
+    return list(merged.values())
 
 
 def fetch_ppa(api_key, year):
@@ -127,10 +152,14 @@ def fetch_games(api_key, year):
 
 
 def fetch_game_player_stats_for_team(api_key, team, year):
-    """Fetch per-game box score stats for one team. API requires team param."""
-    return _fetch_safe(api_key, "/games/players", {
+    """Fetch per-game box score stats for one team, regular + postseason."""
+    regular = _fetch_safe(api_key, "/games/players", {
         "year": year, "seasonType": "regular", "team": team
     })
+    postseason = _fetch_safe(api_key, "/games/players", {
+        "year": year, "seasonType": "postseason", "team": team
+    })
+    return regular + postseason
 
 
 def fetch_all_game_player_stats(api_key, team_names, year):
@@ -150,7 +179,7 @@ def fetch_all_game_player_stats(api_key, team_names, year):
 
 
 def fetch_drives_for_year(api_key, year):
-    """Fetch all drives for all teams by iterating weeks 1-16. Returns flat list."""
+    """Fetch all drives for all teams by iterating weeks 1-16 + postseason. Returns flat list."""
     all_drives = []
     for week in range(1, 17):
         print(f"    drives week {week}/16")
@@ -158,6 +187,15 @@ def fetch_drives_for_year(api_key, year):
             "year": year, "week": week, "seasonType": "regular"
         })
         all_drives.extend(drives)
+        time.sleep(0.3)
+    # Fetch postseason (bowl games, CFP) — weeks 1-6 covers all postseason rounds
+    for week in range(1, 7):
+        post = _fetch_safe(api_key, "/drives", {
+            "year": year, "week": week, "seasonType": "postseason"
+        })
+        if post:
+            print(f"    drives postseason week {week}: {len(post)} drives")
+            all_drives.extend(post)
         time.sleep(0.3)
     return all_drives
 
@@ -168,7 +206,7 @@ def fetch_transfer_portal(api_key, year):
 
 
 def fetch_plays_for_year(api_key, year):
-    """Fetch all plays for all teams by iterating weeks 1-16. Returns flat list."""
+    """Fetch all plays for all teams by iterating weeks 1-16 + postseason. Returns flat list."""
     all_plays = []
     for week in range(1, 17):
         print(f"    plays week {week}/16")
@@ -176,5 +214,14 @@ def fetch_plays_for_year(api_key, year):
             "year": year, "week": week, "seasonType": "regular"
         })
         all_plays.extend(plays)
+        time.sleep(0.3)
+    # Fetch postseason (bowl games, CFP) — weeks 1-6 covers all postseason rounds
+    for week in range(1, 7):
+        post = _fetch_safe(api_key, "/plays", {
+            "year": year, "week": week, "seasonType": "postseason"
+        })
+        if post:
+            print(f"    plays postseason week {week}: {len(post)} plays")
+            all_plays.extend(post)
         time.sleep(0.3)
     return all_plays

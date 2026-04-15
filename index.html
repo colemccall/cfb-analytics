@@ -802,11 +802,10 @@ function renderRoster(t, subNavHTML='') {
   }
 
   // Normal (non-projected) year roster
-  // OL shown in olBlock when ALL; shown inline when OL filter selected
+  // OL not shown — no reliable individual stats available
   const filtered = posFilter === 'ALL'
     ? ps.filter(p => p.positionGroup !== 'OL')
     : ps.filter(p => {
-        if (posFilter === 'OL') return p.positionGroup === 'OL';
         // allow sub-position matches like 'DE','DT' within positionGroup
         return p.positionGroup === posFilter || p.position === posFilter;
       });
@@ -826,13 +825,7 @@ function renderRoster(t, subNavHTML='') {
   const skillCols = posFilter === 'ALL' ? [] : (SKILL_COLS[posFilter] || []);
   const allCols = [['jersey','#'],['pos','Pos'],['name','Name'],['yr','Yr'],['overall','OVR'], ...skillCols];
 
-  const olBlock = olPlayers.length ? `
-    <div class="ol-section">
-      <div class="ol-section-header">Offensive Line</div>
-      <div class="ol-names-grid">
-        ${olPlayers.map(p => `<div class="ol-name-chip" onclick="showPlayerModal('${p.id}')">${p.firstName} ${p.lastName} <span style="color:var(--text-dim);font-size:11px">${p.position}</span></div>`).join('')}
-      </div>
-    </div>` : '';
+  const olBlock = ''; // OL hidden — no reliable individual stats available
 
 const UNIT_GROUPS = {
     'Offense':       ['QB','RB','WR','TE'],
@@ -848,7 +841,7 @@ const UNIT_GROUPS = {
   }
 
   // Two-row position filter (ordered)
-  const OFF_FILTERS = ['ALL','QB','RB','WR','TE','OL'];
+  const OFF_FILTERS = ['ALL','QB','RB','WR','TE'];
   const DEF_FILTERS = ['DL','DT','DE','LB','CB','DB','S','K','P'];
   const makeChip = pg => `<span class="pos-chip ${posFilter === pg ? 'active' : ''}" onclick="filterPos('${pg}')">${pg}</span>`;
   const filterRowHTML = `
@@ -2086,15 +2079,37 @@ function showPlayerModal(playerId) {
 
   // Stats for current year
   const stats = r.stats || {};
+  const adjStats = r.adjStats || null;
   const statDefs = STAT_LABELS[posGroup] || [];
-  const statCells = statDefs.filter(([k]) => stats[k] != null && stats[k] !== 0).map(([k, label]) =>
-    dynasty
-      ? `<div class="d-stat-cell"><div class="d-stat-val">${stats[k]}</div><div class="d-stat-key">${label}</div></div>`
-      : `<div class="stat-cell"><div class="sv">${stats[k]}</div><div class="sk">${label}</div></div>`
-  ).join('');
+
+  function makeStatCell(k, label, val, isAdj) {
+    if (val == null || val === 0) return '';
+    const dimStyle = isAdj ? 'color:var(--text-dim);font-style:italic' : '';
+    return dynasty
+      ? `<div class="d-stat-cell"><div class="d-stat-val" style="${dimStyle}">${val}</div><div class="d-stat-key">${label}</div></div>`
+      : `<div class="stat-cell"><div class="sv" style="${dimStyle}">${val}</div><div class="sk">${label}</div></div>`;
+  }
+
+  const statCells = statDefs.filter(([k]) => stats[k] != null && stats[k] !== 0)
+    .map(([k, label]) => makeStatCell(k, label, stats[k], false)).join('');
+
+  // Adj stats row — only show if meaningfully different from raw (>3% delta on any key)
+  let adjCells = '';
+  if (adjStats) {
+    const hasDiff = statDefs.some(([k]) => {
+      const raw = stats[k] || 0, adj = adjStats[k] || 0;
+      return typeof raw === 'number' && raw > 0 && Math.abs(adj - raw) / raw > 0.03;
+    });
+    if (hasDiff) {
+      adjCells = statDefs.filter(([k]) => adjStats[k] != null && adjStats[k] !== 0)
+        .map(([k, label]) => makeStatCell(k, label, adjStats[k], true)).join('');
+    }
+  }
+
   const statsHTML = statCells ? `<div class="modal-section">
     <div class="${dynasty ? 'd-section-label' : 'modal-section-title'}">Stats (${currentYear})</div>
     <div class="${dynasty ? 'd-stat-grid' : 'stat-grid'}">${statCells}</div>
+    ${adjCells ? `<div style="font-size:10px;color:var(--text-dim);margin:4px 0 2px">Adj. vs avg schedule</div><div class="${dynasty ? 'd-stat-grid' : 'stat-grid'}">${adjCells}</div>` : ''}
   </div>` : '';
 
   // Year-over-year progression

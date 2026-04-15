@@ -18,7 +18,7 @@
       "runOff": 87,
       "passDef": 79,
       "runDef": 81,
-      "specialTeams": 79
+      "specialTeams": 81
     }
   },
   {
@@ -40,7 +40,7 @@
       "runOff": 58,
       "passDef": 71,
       "runDef": 65,
-      "specialTeams": 66
+      "specialTeams": 71
     }
   },
   {
@@ -62,7 +62,7 @@
       "runOff": 92,
       "passDef": 92,
       "runDef": 87,
-      "specialTeams": 79
+      "specialTeams": 75
     }
   },
   {
@@ -84,7 +84,7 @@
       "runOff": 86,
       "passDef": 84,
       "runDef": 84,
-      "specialTeams": 82
+      "specialTeams": 85
     }
   },
   {
@@ -101,12 +101,12 @@
     "state": "AZ",
     "capacity": 50782,
     "ratings": {
-      "overall": 75,
+      "overall": 73,
       "passOff": 80,
-      "runOff": 81,
-      "passDef": 66,
-      "runDef": 71,
-      "specialTeams": 68
+      "runOff": 80,
+      "passDef": 63,
+      "runDef": 69,
+      "specialTeams": 67
     }
   },
   {
@@ -123,12 +123,12 @@
     "state": "AZ",
     "capacity": 65870,
     "ratings": {
-      "overall": 81,
+      "overall": 82,
       "passOff": 81,
       "runOff": 77,
-      "passDef": 79,
+      "passDef": 81,
       "runDef": 83,
-      "specialTeams": 87
+      "specialTeams": 92
     }
   },
   {
@@ -145,7 +145,7 @@
     "state": "AR",
     "capacity": 80000,
     "ratings": {
-      "overall": 71,
+      "overall": 70,
       "passOff": 72,
       "runOff": 73,
       "passDef": 76,
@@ -167,12 +167,12 @@
     "state": "AR",
     "capacity": 30382,
     "ratings": {
-      "overall": 75,
-      "passOff": 83,
+      "overall": 76,
+      "passOff": 84,
       "runOff": 78,
       "passDef": 71,
-      "runDef": 69,
-      "specialTeams": 84
+      "runDef": 70,
+      "specialTeams": 81
     }
   },
   {
@@ -193,8 +193,8 @@
       "passOff": 73,
       "runOff": 83,
       "passDef": 78,
-      "runDef": 73,
-      "specialTeams": 67
+      "runDef": 74,
+      "specialTeams": 65
     }
   },
   {
@@ -213,10 +213,10 @@
     "ratings": {
       "overall": 87,
       "passOff": 84,
-      "runOff": 86,
+      "runOff": 85,
       "passDef": 87,
       "runDef": 88,
-      "specialTeams": 88
+      "specialTeams": 87
     }
   },
   {
@@ -233,12 +233,12 @@
     "state": "IN",
     "capacity": 22500,
     "ratings": {
-      "overall": 76,
-      "passOff": 79,
-      "runOff": 81,
+      "overall": 77,
+      "passOff": 78,
+      "runOff": 80,
       "passDef": 76,
-      "runDef": 74,
-      "specialTeams": 68
+      "runDef": 75,
+      "specialTeams": 72
     }
   },
   {
@@ -258,9 +258,9 @@
       "overall": 87,
       "passOff": 86,
       "runOff": 86,
-      "passDef": 87,
+      "passDef": 86,
       "runDef": 87,
-      "specialTeams": 88
+      "specialTeams": 86
     }
   },
   {
@@ -277,12 +277,12 @@
     "state": "ID",
     "capacity": 36387,
     "ratings": {
-      "overall": 85,
+      "overall": 84,
       "passOff": 86,
       "runOff": 86,
       "passDef": 81,
-      "runDef": 84,
-      "specialTeams": 75
+      "runDef": 83,
+      "specialTeams": 67
     }
   },
   {
@@ -299,12 +299,12 @@
     "state": "MA",
     "capacity": 44500,
     "ratings": {
-      "overall": 76,
+      "overall": 77,
       "passOff": 83,
-      "runOff": 84,
-      "passDef": 63,
+      "runOff": 86,
+      "passDef": 64,
       "runDef": 70,
-      "specialTeams": 78
+      "specialTeams": 81
     }
   },
   {
@@ -321,12 +321,12 @@
     "state": "OH",
     "capacity": 24000,
     "ratings": {
-      "overall": 61,
+      "overall": 60,
       "passOff": 60,
       "runOff": 63,
-      "passDef": 66,
-      "runDef": 62,
-      "specialTeams": 73
+      "passDef": 64,
+      "runDef": 61,
+      "specialTeams": 68
     }
   },
   {
@@ -343,12 +343,12 @@
     "state": "NY",
     "capacity": 30270,
     "ratings": {
-      "overall": 79,
+      "overall": 81,
       "passOff": 75,
-      "runOff": 81,
-      "passDef": 83,
+      "runOff": 80,
+      "passDef": 84,
       "runDef": 84,
-      "specialTeams": 61
+      "specialTeams": 65
     }
   },
   {
@@ -365,12 +365,12 @@
     "state": "UT",
     "capacity": 63470,
     "ratings": {
-      "overall": 79,
+      "overall": 77,
       "passOff": 81,
       "runOff": 79,
       "passDef": 78,
       "runDef": 78,
-      "specialTeams": 69
+      "specialTeams": 60
     }
   },
   {
@@ -387,12 +387,12 @@
     "state": "CA",
     "capacity": 62467,
     "ratings": {
-      "overall": 76,
-      "passOff": 75,
-      "runOff": 74,
+      "overall": 78,
+      "passOff": 76,
+      "runOff": 76,
       "passDef": 79,
       "runDef": 82,
-      "specialTeams": 73
+      "specialTeams": 78
     }
   },
   {
@@ -414,7 +414,7 @@
       "runOff": 79,
       "passDef": 78,
       "runDef": 81,
-      "specialTeams": 74
+      "specialTeams": 79
     }
   },
   {
@@ -431,12 +431,12 @@
     "state": "NC",
     "capacity": 15300,
     "ratings": {
-      "overall": 76,
+      "overall": 78,
       "passOff": 78,
-      "runOff": 79,
-      "passDef": 76,
+      "runOff": 80,
+      "passDef": 77,
       "runDef": 72,
-      "specialTeams": 76
+      "specialTeams": 78
     }
   },
   {
@@ -458,7 +458,7 @@
       "runOff": 82,
       "passDef": 84,
       "runDef": 86,
-      "specialTeams": 85
+      "specialTeams": 86
     }
   },
   {
@@ -479,8 +479,8 @@
       "passOff": 91,
       "runOff": 91,
       "passDef": 93,
-      "runDef": 90,
-      "specialTeams": 84
+      "runDef": 92,
+      "specialTeams": 81
     }
   },
   {
@@ -501,7 +501,7 @@
       "passOff": 75,
       "runOff": 76,
       "passDef": 72,
-      "runDef": 74,
+      "runDef": 72,
       "specialTeams": 64
     }
   },
@@ -521,10 +521,10 @@
     "ratings": {
       "overall": 76,
       "passOff": 79,
-      "runOff": 79,
+      "runOff": 78,
       "passDef": 67,
       "runDef": 75,
-      "specialTeams": 80
+      "specialTeams": 82
     }
   },
   {
@@ -563,12 +563,12 @@
     "state": "NC",
     "capacity": 40004,
     "ratings": {
-      "overall": 78,
+      "overall": 76,
       "passOff": 68,
       "runOff": 67,
       "passDef": 85,
-      "runDef": 84,
-      "specialTeams": 86
+      "runDef": 82,
+      "specialTeams": 82
     }
   },
   {
@@ -588,9 +588,9 @@
       "overall": 68,
       "passOff": 76,
       "runOff": 72,
-      "passDef": 67,
+      "passDef": 68,
       "runDef": 68,
-      "specialTeams": 82
+      "specialTeams": 77
     }
   },
   {
@@ -607,12 +607,12 @@
     "state": "MI",
     "capacity": 30200,
     "ratings": {
-      "overall": 72,
+      "overall": 71,
       "passOff": 81,
-      "runOff": 78,
-      "passDef": 64,
-      "runDef": 65,
-      "specialTeams": 71
+      "runOff": 77,
+      "passDef": 65,
+      "runDef": 66,
+      "specialTeams": 68
     }
   },
   {
@@ -629,12 +629,12 @@
     "state": "FL",
     "capacity": 88548,
     "ratings": {
-      "overall": 88,
+      "overall": 87,
       "passOff": 87,
       "runOff": 84,
       "passDef": 88,
       "runDef": 88,
-      "specialTeams": 89
+      "specialTeams": 83
     }
   },
   {
@@ -651,12 +651,12 @@
     "state": "FL",
     "capacity": 29419,
     "ratings": {
-      "overall": 81,
+      "overall": 79,
       "passOff": 81,
       "runOff": 79,
       "passDef": 78,
       "runDef": 81,
-      "specialTeams": 85
+      "specialTeams": 77
     }
   },
   {
@@ -675,10 +675,10 @@
     "ratings": {
       "overall": 74,
       "passOff": 73,
-      "runOff": 75,
+      "runOff": 74,
       "passDef": 79,
-      "runDef": 76,
-      "specialTeams": 78
+      "runDef": 77,
+      "specialTeams": 77
     }
   },
   {
@@ -695,12 +695,12 @@
     "state": "FL",
     "capacity": 67277,
     "ratings": {
-      "overall": 79,
+      "overall": 81,
       "passOff": 83,
-      "runOff": 79,
+      "runOff": 80,
       "passDef": 76,
-      "runDef": 78,
-      "specialTeams": 80
+      "runDef": 79,
+      "specialTeams": 83
     }
   },
   {
@@ -719,10 +719,10 @@
     "ratings": {
       "overall": 76,
       "passOff": 78,
-      "runOff": 80,
+      "runOff": 78,
       "passDef": 75,
       "runDef": 77,
-      "specialTeams": 74
+      "specialTeams": 72
     }
   },
   {
@@ -744,7 +744,7 @@
       "runOff": 87,
       "passDef": 88,
       "runDef": 93,
-      "specialTeams": 90
+      "specialTeams": 92
     }
   },
   {
@@ -763,10 +763,10 @@
     "ratings": {
       "overall": 74,
       "passOff": 61,
-      "runOff": 75,
-      "passDef": 80,
+      "runOff": 74,
+      "passDef": 79,
       "runDef": 81,
-      "specialTeams": 78
+      "specialTeams": 79
     }
   },
   {
@@ -785,10 +785,10 @@
     "ratings": {
       "overall": 72,
       "passOff": 79,
-      "runOff": 83,
+      "runOff": 84,
       "passDef": 61,
-      "runDef": 63,
-      "specialTeams": 58
+      "runDef": 62,
+      "specialTeams": 59
     }
   },
   {
@@ -810,7 +810,7 @@
       "runOff": 66,
       "passDef": 78,
       "runDef": 75,
-      "specialTeams": 77
+      "specialTeams": 72
     }
   },
   {
@@ -827,12 +827,12 @@
     "state": "HI",
     "capacity": 9000,
     "ratings": {
-      "overall": 78,
+      "overall": 79,
       "passOff": 88,
       "runOff": 84,
-      "passDef": 67,
+      "passDef": 68,
       "runDef": 66,
-      "specialTeams": 65
+      "specialTeams": 76
     }
   },
   {
@@ -851,10 +851,10 @@
     "ratings": {
       "overall": 76,
       "passOff": 78,
-      "runOff": 80,
-      "passDef": 68,
+      "runOff": 79,
+      "passDef": 69,
       "runDef": 75,
-      "specialTeams": 85
+      "specialTeams": 83
     }
   },
   {
@@ -873,10 +873,10 @@
     "ratings": {
       "overall": 78,
       "passOff": 74,
-      "runOff": 73,
+      "runOff": 75,
       "passDef": 83,
       "runDef": 79,
-      "specialTeams": 85
+      "specialTeams": 83
     }
   },
   {
@@ -898,7 +898,7 @@
       "runOff": 84,
       "passDef": 82,
       "runDef": 82,
-      "specialTeams": 84
+      "specialTeams": 86
     }
   },
   {
@@ -917,10 +917,10 @@
     "ratings": {
       "overall": 86,
       "passOff": 81,
-      "runOff": 80,
+      "runOff": 81,
       "passDef": 87,
-      "runDef": 86,
-      "specialTeams": 91
+      "runDef": 87,
+      "specialTeams": 87
     }
   },
   {
@@ -937,12 +937,12 @@
     "state": "IA",
     "capacity": 61500,
     "ratings": {
-      "overall": 84,
+      "overall": 85,
       "passOff": 84,
       "runOff": 81,
       "passDef": 84,
       "runDef": 84,
-      "specialTeams": 79
+      "specialTeams": 86
     }
   },
   {
@@ -959,12 +959,12 @@
     "state": "KS",
     "capacity": 47000,
     "ratings": {
-      "overall": 68,
+      "overall": 69,
       "passOff": 76,
-      "runOff": 77,
+      "runOff": 76,
       "passDef": 72,
       "runDef": 67,
-      "specialTeams": 77
+      "specialTeams": 76
     }
   },
   {
@@ -981,12 +981,12 @@
     "state": "KS",
     "capacity": 50000,
     "ratings": {
-      "overall": 79,
+      "overall": 81,
       "passOff": 78,
-      "runOff": 80,
-      "passDef": 82,
+      "runOff": 81,
+      "passDef": 83,
       "runDef": 81,
-      "specialTeams": 65
+      "specialTeams": 66
     }
   },
   {
@@ -1003,12 +1003,12 @@
     "state": "OH",
     "capacity": 25319,
     "ratings": {
-      "overall": 69,
+      "overall": 72,
       "passOff": 77,
       "runOff": 78,
-      "passDef": 64,
-      "runDef": 60,
-      "specialTeams": 82
+      "passDef": 65,
+      "runDef": 63,
+      "specialTeams": 80
     }
   },
   {
@@ -1027,10 +1027,10 @@
     "ratings": {
       "overall": 84,
       "passOff": 76,
-      "runOff": 85,
+      "runOff": 84,
       "passDef": 86,
-      "runDef": 82,
-      "specialTeams": 82
+      "runDef": 84,
+      "specialTeams": 77
     }
   },
   {
@@ -1047,12 +1047,12 @@
     "state": "VA",
     "capacity": 25000,
     "ratings": {
-      "overall": 77,
+      "overall": 78,
       "passOff": 79,
-      "runOff": 78,
+      "runOff": 79,
       "passDef": 76,
       "runDef": 75,
-      "specialTeams": 75
+      "specialTeams": 78
     }
   },
   {
@@ -1074,7 +1074,7 @@
       "runOff": 90,
       "passDef": 80,
       "runDef": 77,
-      "specialTeams": 79
+      "specialTeams": 84
     }
   },
   {
@@ -1095,8 +1095,8 @@
       "passOff": 78,
       "runOff": 78,
       "passDef": 82,
-      "runDef": 83,
-      "specialTeams": 76
+      "runDef": 84,
+      "specialTeams": 70
     }
   },
   {
@@ -1113,12 +1113,12 @@
     "state": "KY",
     "capacity": 60000,
     "ratings": {
-      "overall": 80,
+      "overall": 79,
       "passOff": 85,
       "runOff": 85,
       "passDef": 75,
       "runDef": 75,
-      "specialTeams": 78
+      "specialTeams": 82
     }
   },
   {
@@ -1137,10 +1137,10 @@
     "ratings": {
       "overall": 93,
       "passOff": 94,
-      "runOff": 92,
+      "runOff": 93,
       "passDef": 86,
-      "runDef": 86,
-      "specialTeams": 92
+      "runDef": 87,
+      "specialTeams": 89
     }
   },
   {
@@ -1159,10 +1159,10 @@
     "ratings": {
       "overall": 78,
       "passOff": 75,
-      "runOff": 77,
+      "runOff": 76,
       "passDef": 80,
       "runDef": 79,
-      "specialTeams": 83
+      "specialTeams": 86
     }
   },
   {
@@ -1181,10 +1181,10 @@
     "ratings": {
       "overall": 75,
       "passOff": 74,
-      "runOff": 77,
+      "runOff": 76,
       "passDef": 77,
       "runDef": 78,
-      "specialTeams": 72
+      "specialTeams": 73
     }
   },
   {
@@ -1206,7 +1206,7 @@
       "runOff": 60,
       "passDef": 58,
       "runDef": 58,
-      "specialTeams": 64
+      "specialTeams": 69
     }
   },
   {
@@ -1223,12 +1223,12 @@
     "state": "TN",
     "capacity": 58325,
     "ratings": {
-      "overall": 86,
+      "overall": 87,
       "passOff": 89,
       "runOff": 88,
       "passDef": 85,
-      "runDef": 82,
-      "specialTeams": 87
+      "runDef": 81,
+      "specialTeams": 90
     }
   },
   {
@@ -1247,10 +1247,10 @@
     "ratings": {
       "overall": 85,
       "passOff": 77,
-      "runOff": 75,
+      "runOff": 76,
       "passDef": 90,
-      "runDef": 91,
-      "specialTeams": 81
+      "runDef": 90,
+      "specialTeams": 78
     }
   },
   {
@@ -1267,12 +1267,12 @@
     "state": "OH",
     "capacity": 24286,
     "ratings": {
-      "overall": 72,
-      "passOff": 67,
-      "runOff": 67,
+      "overall": 75,
+      "passOff": 68,
+      "runOff": 69,
       "passDef": 80,
       "runDef": 78,
-      "specialTeams": 92
+      "specialTeams": 89
     }
   },
   {
@@ -1289,12 +1289,12 @@
     "state": "MI",
     "capacity": 107601,
     "ratings": {
-      "overall": 89,
+      "overall": 88,
       "passOff": 86,
-      "runOff": 85,
+      "runOff": 86,
       "passDef": 91,
       "runDef": 89,
-      "specialTeams": 84
+      "specialTeams": 88
     }
   },
   {
@@ -1311,12 +1311,12 @@
     "state": "MI",
     "capacity": 75005,
     "ratings": {
-      "overall": 84,
+      "overall": 86,
       "passOff": 76,
-      "runOff": 75,
+      "runOff": 77,
       "passDef": 89,
-      "runDef": 91,
-      "specialTeams": 85
+      "runDef": 90,
+      "specialTeams": 87
     }
   },
   {
@@ -1333,12 +1333,12 @@
     "state": "TN",
     "capacity": 30788,
     "ratings": {
-      "overall": 73,
+      "overall": 72,
       "passOff": 77,
       "runOff": 77,
-      "passDef": 68,
+      "passDef": 69,
       "runDef": 70,
-      "specialTeams": 75
+      "specialTeams": 76
     }
   },
   {
@@ -1355,12 +1355,12 @@
     "state": "MN",
     "capacity": 50850,
     "ratings": {
-      "overall": 87,
+      "overall": 88,
       "passOff": 90,
       "runOff": 88,
       "passDef": 86,
       "runDef": 86,
-      "specialTeams": 75
+      "specialTeams": 84
     }
   },
   {
@@ -1382,7 +1382,7 @@
       "runOff": 85,
       "passDef": 79,
       "runDef": 79,
-      "specialTeams": 83
+      "specialTeams": 76
     }
   },
   {
@@ -1400,11 +1400,11 @@
     "capacity": 71168,
     "ratings": {
       "overall": 82,
-      "passOff": 76,
+      "passOff": 75,
       "runOff": 77,
       "passDef": 89,
-      "runDef": 87,
-      "specialTeams": 67
+      "runDef": 86,
+      "specialTeams": 61
     }
   },
   {
@@ -1424,9 +1424,9 @@
       "overall": 86,
       "passOff": 81,
       "runOff": 90,
-      "passDef": 81,
+      "passDef": 82,
       "runDef": 83,
-      "specialTeams": 76
+      "specialTeams": 79
     }
   },
   {
@@ -1443,12 +1443,12 @@
     "state": "NC",
     "capacity": 58000,
     "ratings": {
-      "overall": 77,
+      "overall": 75,
       "passOff": 75,
       "runOff": 75,
       "passDef": 76,
       "runDef": 78,
-      "specialTeams": 86
+      "specialTeams": 85
     }
   },
   {
@@ -1470,7 +1470,7 @@
       "runOff": 82,
       "passDef": 82,
       "runDef": 79,
-      "specialTeams": 81
+      "specialTeams": 83
     }
   },
   {
@@ -1489,10 +1489,10 @@
     "ratings": {
       "overall": 69,
       "passOff": 70,
-      "runOff": 68,
+      "runOff": 70,
       "passDef": 75,
       "runDef": 76,
-      "specialTeams": 81
+      "specialTeams": 80
     }
   },
   {
@@ -1510,11 +1510,11 @@
     "capacity": 39224,
     "ratings": {
       "overall": 66,
-      "passOff": 71,
-      "runOff": 74,
+      "passOff": 70,
+      "runOff": 73,
       "passDef": 60,
       "runDef": 69,
-      "specialTeams": 77
+      "specialTeams": 69
     }
   },
   {
@@ -1531,12 +1531,12 @@
     "state": "NM",
     "capacity": 28853,
     "ratings": {
-      "overall": 64,
-      "passOff": 67,
+      "overall": 61,
+      "passOff": 66,
       "runOff": 66,
-      "passDef": 65,
-      "runDef": 61,
-      "specialTeams": 59
+      "passDef": 66,
+      "runDef": 60,
+      "specialTeams": 62
     }
   },
   {
@@ -1556,7 +1556,7 @@
       "overall": 86,
       "passOff": 86,
       "runOff": 86,
-      "passDef": 83,
+      "passDef": 82,
       "runDef": 83,
       "specialTeams": 86
     }
@@ -1575,12 +1575,12 @@
     "state": "IL",
     "capacity": 23595,
     "ratings": {
-      "overall": 70,
+      "overall": 67,
       "passOff": 71,
-      "runOff": 68,
+      "runOff": 67,
       "passDef": 76,
-      "runDef": 75,
-      "specialTeams": 79
+      "runDef": 73,
+      "specialTeams": 76
     }
   },
   {
@@ -1600,9 +1600,9 @@
       "overall": 75,
       "passOff": 77,
       "runOff": 75,
-      "passDef": 77,
+      "passDef": 76,
       "runDef": 76,
-      "specialTeams": 80
+      "specialTeams": 78
     }
   },
   {
@@ -1622,9 +1622,9 @@
       "overall": 75,
       "passOff": 64,
       "runOff": 67,
-      "passDef": 86,
+      "passDef": 85,
       "runDef": 85,
-      "specialTeams": 69
+      "specialTeams": 73
     }
   },
   {
@@ -1645,8 +1645,8 @@
       "passOff": 86,
       "runOff": 86,
       "passDef": 91,
-      "runDef": 87,
-      "specialTeams": 90
+      "runDef": 86,
+      "specialTeams": 93
     }
   },
   {
@@ -1663,12 +1663,12 @@
     "state": "OH",
     "capacity": 24000,
     "ratings": {
-      "overall": 80,
+      "overall": 81,
       "passOff": 86,
       "runOff": 87,
-      "passDef": 73,
+      "passDef": 72,
       "runDef": 76,
-      "specialTeams": 70
+      "specialTeams": 75
     }
   },
   {
@@ -1687,10 +1687,10 @@
     "ratings": {
       "overall": 94,
       "passOff": 92,
-      "runOff": 93,
+      "runOff": 94,
       "passDef": 94,
       "runDef": 94,
-      "specialTeams": 87
+      "specialTeams": 91
     }
   },
   {
@@ -1709,10 +1709,10 @@
     "ratings": {
       "overall": 91,
       "passOff": 92,
-      "runOff": 94,
-      "passDef": 84,
+      "runOff": 92,
+      "passDef": 83,
       "runDef": 85,
-      "specialTeams": 89
+      "specialTeams": 87
     }
   },
   {
@@ -1729,7 +1729,7 @@
     "state": "OK",
     "capacity": 55509,
     "ratings": {
-      "overall": 85,
+      "overall": 84,
       "passOff": 85,
       "runOff": 86,
       "passDef": 79,
@@ -1778,7 +1778,7 @@
       "runOff": 82,
       "passDef": 80,
       "runDef": 83,
-      "specialTeams": 77
+      "specialTeams": 76
     }
   },
   {
@@ -1795,12 +1795,12 @@
     "state": "OR",
     "capacity": 54000,
     "ratings": {
-      "overall": 87,
+      "overall": 89,
       "passOff": 87,
       "runOff": 87,
       "passDef": 87,
       "runDef": 89,
-      "specialTeams": 81
+      "specialTeams": 85
     }
   },
   {
@@ -1817,12 +1817,12 @@
     "state": "OR",
     "capacity": 43363,
     "ratings": {
-      "overall": 80,
+      "overall": 79,
       "passOff": 84,
-      "runOff": 84,
+      "runOff": 83,
       "passDef": 73,
       "runDef": 76,
-      "specialTeams": 78
+      "specialTeams": 79
     }
   },
   {
@@ -1843,8 +1843,8 @@
       "passOff": 88,
       "runOff": 89,
       "passDef": 86,
-      "runDef": 90,
-      "specialTeams": 93
+      "runDef": 91,
+      "specialTeams": 94
     }
   },
   {
@@ -1863,10 +1863,10 @@
     "ratings": {
       "overall": 83,
       "passOff": 76,
-      "runOff": 71,
+      "runOff": 70,
       "passDef": 90,
-      "runDef": 92,
-      "specialTeams": 84
+      "runDef": 91,
+      "specialTeams": 79
     }
   },
   {
@@ -1886,9 +1886,9 @@
       "overall": 78,
       "passOff": 83,
       "runOff": 78,
-      "passDef": 77,
+      "passDef": 78,
       "runDef": 77,
-      "specialTeams": 77
+      "specialTeams": 78
     }
   },
   {
@@ -1906,11 +1906,11 @@
     "capacity": 47000,
     "ratings": {
       "overall": 64,
-      "passOff": 65,
+      "passOff": 64,
       "runOff": 64,
-      "passDef": 74,
-      "runDef": 77,
-      "specialTeams": 62
+      "passDef": 73,
+      "runDef": 76,
+      "specialTeams": 66
     }
   },
   {
@@ -1927,12 +1927,12 @@
     "state": "NJ",
     "capacity": 52454,
     "ratings": {
-      "overall": 67,
+      "overall": 68,
       "passOff": 65,
       "runOff": 64,
       "passDef": 77,
       "runDef": 76,
-      "specialTeams": 83
+      "specialTeams": 84
     }
   },
   {
@@ -1949,12 +1949,12 @@
     "state": "CA",
     "capacity": 35000,
     "ratings": {
-      "overall": 81,
-      "passOff": 69,
-      "runOff": 69,
+      "overall": 82,
+      "passOff": 71,
+      "runOff": 70,
       "passDef": 87,
       "runDef": 90,
-      "specialTeams": 87
+      "specialTeams": 86
     }
   },
   {
@@ -1971,12 +1971,12 @@
     "state": "CA",
     "capacity": 30456,
     "ratings": {
-      "overall": 77,
-      "passOff": 84,
+      "overall": 75,
+      "passOff": 82,
       "runOff": 77,
       "passDef": 74,
       "runDef": 67,
-      "specialTeams": 85
+      "specialTeams": 84
     }
   },
   {
@@ -1998,7 +1998,7 @@
       "runOff": 85,
       "passDef": 78,
       "runDef": 80,
-      "specialTeams": 76
+      "specialTeams": 74
     }
   },
   {
@@ -2015,12 +2015,12 @@
     "state": "AL",
     "capacity": 25450,
     "ratings": {
-      "overall": 65,
-      "passOff": 64,
+      "overall": 66,
+      "passOff": 65,
       "runOff": 65,
       "passDef": 76,
-      "runDef": 70,
-      "specialTeams": 76
+      "runDef": 71,
+      "specialTeams": 77
     }
   },
   {
@@ -2037,12 +2037,12 @@
     "state": "SC",
     "capacity": 80250,
     "ratings": {
-      "overall": 82,
+      "overall": 80,
       "passOff": 75,
-      "runOff": 76,
+      "runOff": 75,
       "passDef": 85,
       "runDef": 85,
-      "specialTeams": 94
+      "specialTeams": 79
     }
   },
   {
@@ -2064,7 +2064,7 @@
       "runOff": 72,
       "passDef": 79,
       "runDef": 82,
-      "specialTeams": 77
+      "specialTeams": 74
     }
   },
   {
@@ -2085,7 +2085,7 @@
       "passOff": 72,
       "runOff": 72,
       "passDef": 84,
-      "runDef": 79,
+      "runDef": 78,
       "specialTeams": 77
     }
   },
@@ -2104,11 +2104,11 @@
     "capacity": 50424,
     "ratings": {
       "overall": 77,
-      "passOff": 80,
-      "runOff": 77,
-      "passDef": 75,
+      "passOff": 79,
+      "runOff": 78,
+      "passDef": 74,
       "runDef": 77,
-      "specialTeams": 81
+      "specialTeams": 80
     }
   },
   {
@@ -2127,10 +2127,10 @@
     "ratings": {
       "overall": 77,
       "passOff": 77,
-      "runOff": 76,
+      "runOff": 77,
       "passDef": 78,
       "runDef": 78,
-      "specialTeams": 81
+      "specialTeams": 79
     }
   },
   {
@@ -2147,10 +2147,10 @@
     "state": "TX",
     "capacity": 46000,
     "ratings": {
-      "overall": 86,
+      "overall": 85,
       "passOff": 80,
       "runOff": 83,
-      "passDef": 86,
+      "passDef": 85,
       "runDef": 85,
       "specialTeams": 86
     }
@@ -2171,10 +2171,10 @@
     "ratings": {
       "overall": 82,
       "passOff": 77,
-      "runOff": 76,
+      "runOff": 75,
       "passDef": 85,
       "runDef": 85,
-      "specialTeams": 79
+      "specialTeams": 82
     }
   },
   {
@@ -2194,9 +2194,9 @@
       "overall": 86,
       "passOff": 82,
       "runOff": 81,
-      "passDef": 86,
+      "passDef": 87,
       "runDef": 86,
-      "specialTeams": 87
+      "specialTeams": 90
     }
   },
   {
@@ -2217,8 +2217,8 @@
       "passOff": 90,
       "runOff": 90,
       "passDef": 77,
-      "runDef": 80,
-      "specialTeams": 83
+      "runDef": 82,
+      "specialTeams": 75
     }
   },
   {
@@ -2235,12 +2235,12 @@
     "state": "TX",
     "capacity": 102733,
     "ratings": {
-      "overall": 87,
+      "overall": 86,
       "passOff": 85,
       "runOff": 85,
       "passDef": 86,
       "runDef": 86,
-      "specialTeams": 91
+      "specialTeams": 84
     }
   },
   {
@@ -2260,7 +2260,7 @@
       "overall": 67,
       "passOff": 69,
       "runOff": 61,
-      "passDef": 78,
+      "passDef": 77,
       "runDef": 71,
       "specialTeams": 75
     }
@@ -2284,7 +2284,7 @@
       "runOff": 83,
       "passDef": 75,
       "runDef": 77,
-      "specialTeams": 87
+      "specialTeams": 85
     }
   },
   {
@@ -2303,10 +2303,10 @@
     "ratings": {
       "overall": 70,
       "passOff": 77,
-      "runOff": 78,
-      "passDef": 65,
-      "runDef": 66,
-      "specialTeams": 72
+      "runOff": 79,
+      "passDef": 66,
+      "runDef": 65,
+      "specialTeams": 67
     }
   },
   {
@@ -2323,12 +2323,12 @@
     "state": "AL",
     "capacity": 30000,
     "ratings": {
-      "overall": 77,
+      "overall": 76,
       "passOff": 85,
-      "runOff": 83,
-      "passDef": 69,
-      "runDef": 72,
-      "specialTeams": 60
+      "runOff": 81,
+      "passDef": 70,
+      "runDef": 73,
+      "specialTeams": 58
     }
   },
   {
@@ -2348,9 +2348,9 @@
       "overall": 83,
       "passOff": 82,
       "runOff": 85,
-      "passDef": 82,
+      "passDef": 81,
       "runDef": 80,
-      "specialTeams": 76
+      "specialTeams": 84
     }
   },
   {
@@ -2369,7 +2369,7 @@
     "ratings": {
       "overall": 80,
       "passOff": 77,
-      "runOff": 76,
+      "runOff": 75,
       "passDef": 84,
       "runDef": 80,
       "specialTeams": 77
@@ -2389,12 +2389,12 @@
     "state": "AL",
     "capacity": 0,
     "ratings": {
-      "overall": 79,
-      "passOff": 70,
-      "runOff": 69,
+      "overall": 78,
+      "passOff": 69,
+      "runOff": 68,
       "passDef": 86,
       "runDef": 86,
-      "specialTeams": 83
+      "specialTeams": 87
     }
   },
   {
@@ -2412,11 +2412,11 @@
     "capacity": 44206,
     "ratings": {
       "overall": 90,
-      "passOff": 87,
+      "passOff": 89,
       "runOff": 89,
       "passDef": 90,
       "runDef": 87,
-      "specialTeams": 86
+      "specialTeams": 88
     }
   },
   {
@@ -2433,12 +2433,12 @@
     "state": "CA",
     "capacity": 88565,
     "ratings": {
-      "overall": 78,
+      "overall": 77,
       "passOff": 80,
       "runOff": 79,
-      "passDef": 69,
+      "passDef": 70,
       "runDef": 78,
-      "specialTeams": 78
+      "specialTeams": 77
     }
   },
   {
@@ -2460,7 +2460,7 @@
       "runOff": 62,
       "passDef": 62,
       "runDef": 64,
-      "specialTeams": 66
+      "specialTeams": 70
     }
   },
   {
@@ -2479,10 +2479,10 @@
     "ratings": {
       "overall": 73,
       "passOff": 80,
-      "runOff": 82,
-      "passDef": 70,
+      "runOff": 81,
+      "passDef": 67,
       "runDef": 64,
-      "specialTeams": 70
+      "specialTeams": 75
     }
   },
   {
@@ -2501,8 +2501,8 @@
     "ratings": {
       "overall": 65,
       "passOff": 67,
-      "runOff": 70,
-      "passDef": 70,
+      "runOff": 68,
+      "passDef": 67,
       "runDef": 67,
       "specialTeams": 63
     }
@@ -2524,9 +2524,9 @@
       "overall": 86,
       "passOff": 90,
       "runOff": 87,
-      "passDef": 81,
+      "passDef": 80,
       "runDef": 80,
-      "specialTeams": 86
+      "specialTeams": 87
     }
   },
   {
@@ -2543,7 +2543,7 @@
     "state": "UT",
     "capacity": 51444,
     "ratings": {
-      "overall": 88,
+      "overall": 87,
       "passOff": 87,
       "runOff": 87,
       "passDef": 87,
@@ -2565,12 +2565,12 @@
     "state": "UT",
     "capacity": 25513,
     "ratings": {
-      "overall": 78,
-      "passOff": 78,
+      "overall": 79,
+      "passOff": 80,
       "runOff": 78,
       "passDef": 77,
       "runDef": 77,
-      "specialTeams": 80
+      "specialTeams": 85
     }
   },
   {
@@ -2587,8 +2587,8 @@
     "state": "TX",
     "capacity": 51500,
     "ratings": {
-      "overall": 60,
-      "passOff": 66,
+      "overall": 64,
+      "passOff": 67,
       "runOff": 65,
       "passDef": 59,
       "runDef": 59,
@@ -2609,12 +2609,12 @@
     "state": "TX",
     "capacity": 36582,
     "ratings": {
-      "overall": 66,
-      "passOff": 68,
-      "runOff": 70,
+      "overall": 65,
+      "passOff": 67,
+      "runOff": 69,
       "passDef": 70,
       "runDef": 68,
-      "specialTeams": 75
+      "specialTeams": 76
     }
   },
   {
@@ -2635,8 +2635,8 @@
       "passOff": 70,
       "runOff": 71,
       "passDef": 77,
-      "runDef": 73,
-      "specialTeams": 84
+      "runDef": 74,
+      "specialTeams": 85
     }
   },
   {
@@ -2655,7 +2655,7 @@
     "ratings": {
       "overall": 85,
       "passOff": 85,
-      "runOff": 80,
+      "runOff": 82,
       "passDef": 83,
       "runDef": 84,
       "specialTeams": 86
@@ -2677,10 +2677,10 @@
     "ratings": {
       "overall": 85,
       "passOff": 82,
-      "runOff": 81,
+      "runOff": 82,
       "passDef": 85,
       "runDef": 85,
-      "specialTeams": 86
+      "specialTeams": 90
     }
   },
   {
@@ -2699,10 +2699,10 @@
     "ratings": {
       "overall": 83,
       "passOff": 85,
-      "runOff": 82,
+      "runOff": 83,
       "passDef": 81,
-      "runDef": 81,
-      "specialTeams": 82
+      "runDef": 80,
+      "specialTeams": 81
     }
   },
   {
@@ -2721,10 +2721,10 @@
     "ratings": {
       "overall": 87,
       "passOff": 86,
-      "runOff": 86,
-      "passDef": 85,
+      "runOff": 85,
+      "passDef": 86,
       "runDef": 86,
-      "specialTeams": 90
+      "specialTeams": 91
     }
   },
   {
@@ -2744,9 +2744,9 @@
       "overall": 84,
       "passOff": 91,
       "runOff": 86,
-      "passDef": 72,
+      "passDef": 75,
       "runDef": 76,
-      "specialTeams": 86
+      "specialTeams": 81
     }
   },
   {
@@ -2763,12 +2763,12 @@
     "state": "KY",
     "capacity": 22113,
     "ratings": {
-      "overall": 82,
+      "overall": 80,
       "passOff": 78,
       "runOff": 76,
-      "passDef": 85,
+      "passDef": 86,
       "runDef": 85,
-      "specialTeams": 76
+      "specialTeams": 64
     }
   },
   {
@@ -2785,12 +2785,12 @@
     "state": "MI",
     "capacity": 30200,
     "ratings": {
-      "overall": 81,
-      "passOff": 82,
+      "overall": 80,
+      "passOff": 83,
       "runOff": 84,
       "passDef": 77,
       "runDef": 78,
-      "specialTeams": 67
+      "specialTeams": 80
     }
   },
   {
@@ -2807,12 +2807,12 @@
     "state": "WV",
     "capacity": 60000,
     "ratings": {
-      "overall": 75,
+      "overall": 76,
       "passOff": 76,
-      "runOff": 70,
+      "runOff": 71,
       "passDef": 81,
       "runDef": 79,
-      "specialTeams": 79
+      "specialTeams": 80
     }
   },
   {
@@ -2830,11 +2830,11 @@
     "capacity": 80321,
     "ratings": {
       "overall": 91,
-      "passOff": 89,
+      "passOff": 87,
       "runOff": 91,
       "passDef": 92,
       "runDef": 92,
-      "specialTeams": 80
+      "specialTeams": 82
     }
   },
   {
@@ -2853,10 +2853,10 @@
     "ratings": {
       "overall": 79,
       "passOff": 72,
-      "runOff": 76,
+      "runOff": 77,
       "passDef": 83,
       "runDef": 86,
-      "specialTeams": 72
+      "specialTeams": 75
     }
   }
 ]

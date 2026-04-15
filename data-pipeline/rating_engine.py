@@ -41,7 +41,7 @@ DISPLAY_ONLY_SKILLS = {"QB": {"mobility"}}
 
 POSITION_OVERALL_WEIGHTS = {
     "QB":  {"passVolume": 0.20, "accuracy": 0.28, "deepBall": 0.17, "decisionMaking": 0.24, "clutch": 0.11},
-    "RB":  {"rushing": 0.28, "efficiency": 0.25, "powerRunning": 0.18, "receiving": 0.15, "explosiveness": 0.14},
+    "RB":  {"rushing": 0.32, "efficiency": 0.25, "powerRunning": 0.20, "receiving": 0.10, "explosiveness": 0.13},
     "FB":  {"blocking": 0.55, "rushing": 0.30, "receiving": 0.15},
     "WR":  {"receiving": 0.28, "routeRunning": 0.25, "bigPlayAbility": 0.22, "yac": 0.14, "consistency": 0.11},
     "TE":  {"receiving": 0.42, "blocking": 0.25, "routeRunning": 0.20, "bigPlayAbility": 0.13},
@@ -328,10 +328,10 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
         recs     = sf(player_stats.get("receivingREC", player_stats.get("receptions", 0)))
         td_rate  = rush_tds / (rush_yds / 10.0) if rush_yds > 50 else 0.0
 
-        raw["rushing"]      = (rush_yds * 0.009 + rush_tds * 2.2) * combined_mult
-        raw["efficiency"]   = (ypc * 2.8 + ppa_val * 4.5 + 2.5) * combined_mult
-        raw["powerRunning"] = (td_rate * 9.0 + rush_tds * 1.8) * combined_mult
-        raw["receiving"]    = (rec_yds * 0.013 + rec_tds * 2.5 + recs * 0.20) * combined_mult
+        raw["rushing"]      = (rush_yds * 0.015 + rush_tds * 3.5) * combined_mult
+        raw["efficiency"]   = (ypc * 3.8 + ppa_val * 5.5 + 3.5) * combined_mult
+        raw["powerRunning"] = (td_rate * 12.0 + rush_tds * 2.8) * combined_mult
+        raw["receiving"]    = (rec_yds * 0.016 + rec_tds * 3.2 + recs * 0.25) * combined_mult
         raw["explosiveness"] = 0.0  # filled by compute_gamelog_skills() / PBP lookup
 
         if pos_group == "FB":
@@ -371,15 +371,22 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
 
         # Rate-based pressure: normalize against opponent pass attempts so a DL on a
         # run-heavy team isn't punished for fewer raw sack opportunities.
+        import math as _math
         opp_pass_att = sf(team_stats.get("passAttemptsOpponent", 0))
         team_pass_faced = max(opp_pass_att, 350)  # fallback: typical FBS ~400/season
         pressure_events = sacks + tfl * 0.5 + qbh * 0.4
         pressure_rate = pressure_events / team_pass_faced * 100.0  # per 100 pass plays
 
-        # Blend 70% rate + 30% volume: rewards efficiency AND full-season presence
+        # Log-compress pressure_rate to prevent runaway scores for elite rushers.
+        # Linear was giving ~5.4 rate * 1.80 = 9.72 raw just from rate, pushing everyone
+        # with 12+ sacks into 95+ territory. Log(1+rate)*3.8 gives diminishing returns:
+        #   rate=2 → 4.6, rate=4 → 6.7, rate=6 → 8.1  (tightens top end vs *4.5)
+        pressure_rate_log = _math.log1p(pressure_rate) * 3.8
+
+        # Volume component (raw sack/tfl total — presence matters, not just rate)
         sack_vol = sacks + tfl * 0.4 + qbh * 0.3
-        raw["passRush"] = (pressure_rate * 1.80 + sack_vol * 0.80 + ppa_val * 3.5 + ff * 1.2) * combined_mult
-        raw["runStop"]  = (tackles * 0.09 + tfl * 2.2 + ppa_val * 1.5) * combined_mult
+        raw["passRush"] = (pressure_rate_log * 1.00 + sack_vol * 0.35 + ppa_val * 2.5 + ff * 0.8) * combined_mult
+        raw["runStop"]  = (tackles * 0.07 + tfl * 1.5 + ppa_val * 1.0) * combined_mult
 
     # ── LB ────────────────────────────────────────────────────────────────
     elif pos_group == "LB" and has_stats:
@@ -479,17 +486,26 @@ def compute_raw_ratings(player_id, pos_group, player_stats, ppa_val,
         attributed_sr = sack_rate_al * sack_sh
 
         # Usage multiplier: separates confirmed starters (snap% data) from unknowns.
-        # nodata reduced to 0.40 to widen gap between confirmed and unconfirmed.
         ol_usage_mult = {"starter": 1.00, "rotation": 0.60, "backup": 0.30, "nodata": 0.40}.get(snap_tier, 0.40)
 
         d_signal = _OL_DRAFT_SIGNAL.get(draft_round, 0.0)
         a_signal = _OL_AWARD_SIGNAL.get(award_tier,  0.0)
         # Stars carry more weight for OL: only signal we have for individual talent.
-        # 5-star → +3.0, 4-star → +2.0, 3-star → +1.0, 2-star → 0, 1-star → -0.5
-        stars_sig = (recruit_stars - 2) * 1.0
+        # 5-star → +3.0, 4-star → +2.0, 3-star → +1.0, 2-star → 0, 1-star → -1.0
+        stars_sig = (recruit_stars - 2) * 1.2
 
-        run_base  = (team_run_eff * 2.5 + sp_off * 0.045 + stars_sig + d_signal * 1.5 + a_signal * 2.0) * tq_mult_proxy * ol_usage_mult
-        pass_base = (max(0.0, 7.0 - attributed_sr * 1.8) + sp_off * 0.040 + stars_sig + d_signal * 1.5 + a_signal * 2.0) * tq_mult_proxy * ol_usage_mult
+        # OL formula: individual signals (stars, draft, awards) have higher weight than
+        # team signals (run_eff, sack_rate). Team signal is context, not individual quality.
+        # Reduced team_run_eff weight (1.5→ from 2.5) so a good G5 run game doesn't inflate
+        # every OL on that team to match elite P4 tackles.
+        # tq_mult_proxy: narrowed to 0.55-0.90 (was 0.50-1.00) — tighter G5/P4 gap for OL
+        # since the SP+ signal already encodes schedule quality.
+        tq_mult_ol = 0.55 + 0.35 * team_quality   # 0.55 (G5) to 0.90 (elite P4)
+
+        # Cap combined individual signals — draft+award shouldn't stack to double-elite
+        indiv_sig = min(stars_sig * 1.2 + d_signal * 1.8 + a_signal * 2.0, 9.0)
+        run_base  = (team_run_eff * 1.5 + sp_off * 0.04 + indiv_sig) * tq_mult_ol * ol_usage_mult
+        pass_base = (max(0.0, 6.0 - attributed_sr * 1.5) + sp_off * 0.035 + indiv_sig) * tq_mult_ol * ol_usage_mult
 
         raw["runBlock"]  = run_base  * run_val  + _hash_jitter(player_id, "runBlock",  1)
         raw["passBlock"] = pass_base * pass_val + _hash_jitter(player_id, "passBlock", 1)

@@ -327,10 +327,15 @@ def build_rb_explosive_rate(plays_flat, qb_names=None):
     return stats
 
 
-def capture_display_stats(pos_group, player_stats):
-    """Extract human-readable stats for player detail display."""
+def capture_display_stats(pos_group, player_stats, gamelog_totals=None):
+    """Extract human-readable stats for player detail display.
+
+    gamelog_totals: optional dict of summed gamelog stats (used as fallback for
+    RB/FB receiving when the season stats API returns 0 for light receivers).
+    """
     s = player_stats
     sf = _safe_float
+    gl = gamelog_totals or {}
 
     if pos_group == "QB":
         pass_yds = sf(s.get("passingYDS", s.get("passingYards", 0)))
@@ -350,7 +355,16 @@ def capture_display_stats(pos_group, player_stats):
         ypc = round(sf(s.get("rushingYPC", s.get("yardsPerRushAttempt", 0))), 1)
         rec_yds = sf(s.get("receivingYDS", s.get("receivingYards", 0)))
         rec_tds = int(sf(s.get("receivingTD", s.get("receivingTDs", 0))))
-        return {"rushYds": int(rush_yds), "rushTDs": rush_tds, "ypc": ypc, "recYds": int(rec_yds), "recTDs": rec_tds}
+        receptions = int(sf(s.get("receivingREC", s.get("receptions", 0))))
+        # Fall back to gamelog totals for receiving when API returns 0
+        if rec_yds == 0 and gl.get("recYds", 0) > 0:
+            rec_yds = gl["recYds"]
+        if rec_tds == 0 and gl.get("recTDs", 0) > 0:
+            rec_tds = gl["recTDs"]
+        if receptions == 0 and gl.get("receptions", 0) > 0:
+            receptions = gl["receptions"]
+        return {"rushYds": int(rush_yds), "rushTDs": rush_tds, "ypc": ypc,
+                "recYds": int(rec_yds), "recTDs": rec_tds, "receptions": receptions}
 
     elif pos_group in ("WR", "TE"):
         rec_yds = sf(s.get("receivingYDS", s.get("receivingYards", 0)))
@@ -391,6 +405,62 @@ def capture_display_stats(pos_group, player_stats):
         return {"punts": punt_no, "puntAvg": punt_avg, "longPunt": punt_long, "in20": in20}
 
     return {}
+
+
+def capture_adj_stats(pos_group, adj):
+    """Build opponent-adjusted stats dict from the _adj sub-dict of weighted stats.
+
+    adj: the '_adj' key from build_opp_weighted_stats result — already rescaled to
+    'vs average schedule' equivalents. Mirrors the same keys as capture_display_stats.
+    Returns None if no adj data available.
+    """
+    if not adj:
+        return None
+    sf = _safe_float
+
+    def _r(key, decimals=0):
+        v = adj.get(key, 0)
+        return round(v, decimals) if decimals else int(round(v))
+
+    if pos_group == "QB":
+        # Only counting stats — rates (compPct, ypa) are omitted from adj display
+        pass_yds = _r("passYds")
+        pass_tds = _r("passTDs")
+        comp = _r("comp")
+        att = _r("att")
+        ints = _r("ints")
+        rush_yds = _r("rushYds")
+        return {"passYds": pass_yds, "passTDs": pass_tds, "comp": comp, "att": att,
+                "ints": ints, "rushYds": rush_yds}
+
+    elif pos_group in ("RB", "FB"):
+        # Only counting stats — rates (ypc) are omitted from adj display
+        rush_yds = _r("rushYds")
+        rush_tds = _r("rushTDs")
+        rec_yds = _r("recYds")
+        rec_tds = _r("recTDs")
+        receptions = _r("receptions")
+        return {"rushYds": rush_yds, "rushTDs": rush_tds,
+                "recYds": rec_yds, "recTDs": rec_tds, "receptions": receptions}
+
+    elif pos_group in ("WR", "TE"):
+        # Only counting stats — rates (ypr) are omitted from adj display
+        rec_yds = _r("recYds")
+        rec_tds = _r("recTDs")
+        rec = _r("receptions")
+        return {"recYds": rec_yds, "recTDs": rec_tds, "receptions": rec}
+
+    elif pos_group in ("DL", "LB", "DB"):
+        return {
+            "tackles": round(adj.get("tackles", 0), 1),
+            "sacks":   round(adj.get("sacks",   0), 1),
+            "tfl":     round(adj.get("tfl",     0), 1),
+            "qbh":     round(adj.get("qbh",     0), 1),
+            "pds":     round(adj.get("pds",     0), 1),
+            "ints":    int(round(adj.get("dints", 0))),
+        }
+
+    return None
 
 
 def _safe_float(val, default=0.0):
@@ -849,18 +919,28 @@ def build_opp_weighted_stats(player_gamelogs, sp_detail):
 
             weight_sum += w
 
-        # Resolve rate stats to weighted averages, count stats to weighted sums
+        # Resolve rate stats to weighted averages, count stats to weighted sums.
+        # Also compute rescaled "vs average schedule" totals:
+        #   adj_stat = weighted_sum / avg_weight
+        # where avg_weight = weight_sum / num_games.
+        # This gives what the player would have totaled on a perfectly average schedule.
+        # e.g. Jeanty on MWC schedule: adj_rush_yds ≈ 2369 / (avg_w ~0.91) ≈ 2603 — close to raw.
+        # A P4 player who pads stats vs cupcakes: adj pulls them back down.
+        num_games = len(games)
+        avg_weight = weight_sum / num_games if num_games > 0 else 1.0
+
         result = {"_games_weighted": weight_sum}
+        adj    = {}
         for key, val in totals.items():
             if isinstance(val, dict):
-                # Rate stat: weighted average
                 result[key] = val["wsum"] / val["wcount"] if val["wcount"] > 0 else 0.0
+                adj[key]    = result[key]  # rate stats: adj == weighted avg
             else:
-                # Count stat: weighted sum (normalize back to "per game equivalent" scale)
-                # We keep it as a raw weighted sum — the formula uses it as a season total
-                # and the normalization step handles cross-player comparison.
                 result[key] = val
+                # Rescale: what would this total be vs an avg-quality schedule?
+                adj[key] = val / avg_weight if avg_weight > 0 else val
 
+        result["_adj"] = adj
         weighted[pid] = result
 
     return weighted
@@ -1099,7 +1179,10 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
             p_stats = find_player_stats(stat_lookup, first, last, school)
             ppa_val = find_player_ppa(ppa_lookup, first, last, school)
 
-            # Merge opponent-weighted stats over raw season totals.
+            # Keep raw stats for display (UI always shows actual season totals).
+            raw_p_stats = p_stats
+
+            # Merge opponent-weighted stats over raw season totals for rating formula only.
             # Weighted stats use the gamelog's per-game data scaled by opponent SP+,
             # so production vs elite opponents counts more than vs weak ones.
             # We only override counting stats (yards, TDs, tackles, etc.) — not rates.
@@ -1130,7 +1213,7 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
                     if gl_key in w_stats:
                         for sk in stat_keys:
                             merged[sk] = w_stats[gl_key]
-                p_stats = merged
+                p_stats = merged  # weighted version used for rating formula only
             full_lower = f"{first} {last}".lower()
             stars = recruit_lookup.get((full_lower, school.lower()), 0)
 
@@ -1147,12 +1230,28 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
                 draft_round=ol_draft, award_tier=ol_award,
                 rb_explosive_lookup=rb_explosive_lookup,
             )
+            # Gamelog totals for RB/FB receiving fallback
+            # _gamelogs_for_weighting keys may be int or str depending on source
+            pid_games = _gamelogs_for_weighting.get(pid) or _gamelogs_for_weighting.get(int(pid) if str(pid).isdigit() else pid, [])
+            gl_totals = {}
+            if pos_group in ("RB", "FB") and pid_games:
+                gl_totals = {
+                    "receptions": sum(g.get("stats", {}).get("receptions", 0) or 0 for g in pid_games),
+                    "recYds":     sum(g.get("stats", {}).get("recYds",     0) or 0 for g in pid_games),
+                    "recTDs":     sum(g.get("stats", {}).get("recTDs",     0) or 0 for g in pid_games),
+                }
+
+            # Adj stats: rescaled weighted totals (vs average schedule equivalent)
+            adj_data = w_stats.get("_adj") if w_stats else None
+            adj_stats = capture_adj_stats(pos_group, adj_data) if adj_data else None
+
             raw_ratings_all[pid] = {
                 "pos": pos_group,
                 "pos_detail": pos,
                 "name": full_lower,
                 "raw": raw,
-                "stats": capture_display_stats(pos_group, p_stats),
+                "stats": capture_display_stats(pos_group, raw_p_stats, gamelog_totals=gl_totals),
+                "adjStats": adj_stats,
                 "ppa": round(ppa_val, 4),
                 "usage": {
                     "snap": round(float(usage.get("overall") or 0), 3),
@@ -1312,6 +1411,7 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
         ovr = compute_overall(attrs, p["positionGroup"])
         player_info = raw_ratings_all.get(pid, {})
         display_stats = player_info.get("stats", {})
+        adj_stats = player_info.get("adjStats")
         ctx = player_info.get("_explain_ctx", {})
         explanation = generate_rating_explanation(
             pos_group=p["positionGroup"],
@@ -1324,7 +1424,7 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
             overall=ovr,
             position=ctx.get("position"),
         )
-        ratings.append({
+        entry = {
             "playerId": pid,
             "overall": ovr,
             **attrs,
@@ -1332,7 +1432,10 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
             "ppa": player_info.get("ppa", 0.0),
             "usage": player_info.get("usage", {}),
             "ratingExplanation": explanation,
-        })
+        }
+        if adj_stats:
+            entry["adjStats"] = adj_stats
+        ratings.append(entry)
 
     # Team ratings: compute then normalize distribution
     print("Computing team ratings...")
