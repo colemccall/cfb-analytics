@@ -79,34 +79,13 @@ def fetch_all_rosters(api_key, team_names, year):
 
 
 def fetch_player_stats(api_key, year):
-    """Fetch player season stats for regular + postseason, merged by playerId+statType."""
-    regular = _get(api_key, "/stats/player/season", {
+    """Fetch player season stats (regular season only).
+    Postseason production is captured via per-game gamelogs which already include
+    bowl/CFP games, so we avoid double-counting by not merging the postseason
+    season-totals endpoint here."""
+    return _get(api_key, "/stats/player/season", {
         "year": year, "seasonType": "regular",
     })
-    try:
-        postseason = _get(api_key, "/stats/player/season", {
-            "year": year, "seasonType": "postseason",
-        })
-    except Exception:
-        postseason = []
-
-    if not postseason:
-        return regular
-
-    # Build lookup of regular stats: (playerId, statType) -> entry
-    merged = {(e["playerId"], e["statType"]): e for e in regular}
-    for entry in postseason:
-        key = (entry["playerId"], entry["statType"])
-        if key in merged:
-            # Add postseason stat value to regular season total
-            try:
-                merged[key]["stat"] = float(merged[key]["stat"]) + float(entry["stat"])
-            except (ValueError, TypeError):
-                pass  # non-numeric stat (e.g. pct), skip
-        else:
-            merged[key] = entry
-
-    return list(merged.values())
 
 
 def fetch_ppa(api_key, year):
@@ -148,7 +127,9 @@ def fetch_awards(api_key, year):
 
 
 def fetch_games(api_key, year):
-    return _fetch_safe(api_key, "/games", {"year": year, "seasonType": "regular"})
+    regular = _fetch_safe(api_key, "/games", {"year": year, "seasonType": "regular"})
+    postseason = _fetch_safe(api_key, "/games", {"year": year, "seasonType": "postseason"})
+    return regular + postseason
 
 
 def fetch_game_player_stats_for_team(api_key, team, year):

@@ -330,78 +330,89 @@ def build_rb_explosive_rate(plays_flat, qb_names=None):
 def capture_display_stats(pos_group, player_stats, gamelog_totals=None):
     """Extract human-readable stats for player detail display.
 
-    gamelog_totals: optional dict of summed gamelog stats (used as fallback for
-    RB/FB receiving when the season stats API returns 0 for light receivers).
+    gamelog_totals: dict of unweighted gamelog sums (short-form keys: rushYds, rushTDs,
+    receptions, recYds, recTDs, tackles, sacks, etc.) — includes postseason games.
+    When provided, gamelog totals take priority over the season stats API for counting
+    stats so the UI shows the correct full-season totals including bowl/CFP games.
+    Rate stats (ypc, ypa, compPct) always come from the season API.
     """
     s = player_stats
     sf = _safe_float
     gl = gamelog_totals or {}
 
+    # Helper: prefer gamelog value when non-zero, else fall back to season API
+    def _gl(gl_key, *api_keys, default=0.0):
+        gl_val = gl.get(gl_key, 0)
+        if gl_val:
+            return sf(gl_val)
+        for k in api_keys:
+            v = s.get(k)
+            if v is not None:
+                return sf(v)
+        return sf(default)
+
     if pos_group == "QB":
-        pass_yds = sf(s.get("passingYDS", s.get("passingYards", 0)))
-        pass_tds = int(sf(s.get("passingTD", s.get("passingTDs", 0))))
-        comp = int(sf(s.get("passingCOMPLETIONS", s.get("passingCOMP", s.get("completions", 0)))))
-        att = int(sf(s.get("passingATT", s.get("passingAttempts", s.get("attempts", 0)))))
-        ints = int(sf(s.get("passingINT", s.get("interceptions", 0))))
-        rush_yds = sf(s.get("rushingYDS", s.get("rushingYards", 0)))
+        pass_yds = _gl("passYds", "passingYDS", "passingYards")
+        pass_tds = int(_gl("passTDs", "passingTD", "passingTDs"))
+        comp = int(_gl("comp", "passingCOMPLETIONS", "passingCOMP", "completions"))
+        att  = int(_gl("att",  "passingATT",         "passingAttempts", "attempts"))
+        ints = int(_gl("ints", "passingINT",          "interceptions"))
+        rush_yds = _gl("rushYds", "rushingYDS", "rushingYards")
         comp_pct = round(comp / att * 100, 1) if att > 0 else 0.0
         ypa = round(pass_yds / att, 1) if att > 0 else 0.0
         return {"passYds": int(pass_yds), "passTDs": pass_tds, "comp": comp, "att": att,
                 "compPct": comp_pct, "ypa": ypa, "ints": ints, "rushYds": int(rush_yds)}
 
     elif pos_group in ("RB", "FB"):
-        rush_yds = sf(s.get("rushingYDS", s.get("rushingYards", 0)))
-        rush_tds = int(sf(s.get("rushingTD", s.get("rushingTDs", 0))))
-        ypc = round(sf(s.get("rushingYPC", s.get("yardsPerRushAttempt", 0))), 1)
-        rec_yds = sf(s.get("receivingYDS", s.get("receivingYards", 0)))
-        rec_tds = int(sf(s.get("receivingTD", s.get("receivingTDs", 0))))
-        receptions = int(sf(s.get("receivingREC", s.get("receptions", 0))))
-        # Fall back to gamelog totals for receiving when API returns 0
-        if rec_yds == 0 and gl.get("recYds", 0) > 0:
-            rec_yds = gl["recYds"]
-        if rec_tds == 0 and gl.get("recTDs", 0) > 0:
-            rec_tds = gl["recTDs"]
-        if receptions == 0 and gl.get("receptions", 0) > 0:
-            receptions = gl["receptions"]
+        rush_yds = _gl("rushYds",    "rushingYDS",   "rushingYards")
+        rush_tds = int(_gl("rushTDs", "rushingTD",   "rushingTDs"))
+        rec_yds  = _gl("recYds",     "receivingYDS", "receivingYards")
+        rec_tds  = int(_gl("recTDs", "receivingTD",  "receivingTDs"))
+        recs     = int(_gl("receptions", "receivingREC", "receptions"))
+        # Rate from API (gamelog carries may not be tracked per-game)
+        carries  = _gl("carries", "rushingCAR", "rushingATT")
+        ypc_api  = sf(s.get("rushingYPC", s.get("yardsPerRushAttempt", 0)))
+        ypc = round(rush_yds / carries, 1) if carries > 0 else round(ypc_api, 1)
         return {"rushYds": int(rush_yds), "rushTDs": rush_tds, "ypc": ypc,
-                "recYds": int(rec_yds), "recTDs": rec_tds, "receptions": receptions}
+                "recYds": int(rec_yds), "recTDs": rec_tds, "receptions": recs}
 
     elif pos_group in ("WR", "TE"):
-        rec_yds = sf(s.get("receivingYDS", s.get("receivingYards", 0)))
-        rec_tds = int(sf(s.get("receivingTD", s.get("receivingTDs", 0))))
-        rec = int(sf(s.get("receivingREC", s.get("receptions", 0))))
-        ypr = round(rec_yds / rec, 1) if rec > 0 else 0.0
-        return {"recYds": int(rec_yds), "recTDs": rec_tds, "receptions": rec, "ypr": ypr}
+        rec_yds = _gl("recYds",    "receivingYDS", "receivingYards")
+        rec_tds = int(_gl("recTDs", "receivingTD", "receivingTDs"))
+        recs    = int(_gl("receptions", "receivingREC", "receptions"))
+        ypr = round(rec_yds / recs, 1) if recs > 0 else 0.0
+        return {"recYds": int(rec_yds), "recTDs": rec_tds, "receptions": recs, "ypr": ypr}
 
     elif pos_group in ("DL", "LB", "DB"):
-        tackles = round(sf(s.get("defensiveTOT", s.get("totalTackles", 0))), 1)
-        sacks = round(sf(s.get("defensiveSACKS", s.get("sacks", 0))), 1)
-        ints = max(
-            sf(s.get("defensiveINT", s.get("interceptions", 0))),
+        tackles = round(_gl("tackles", "defensiveTOT", "totalTackles"), 1)
+        sacks   = round(_gl("sacks",   "defensiveSACKS", "sacks"), 1)
+        ints_raw = max(
+            _gl("dints", "defensiveINT", "interceptions"),
             sf(s.get("interceptionsINT", 0)),
         )
-        pds = round(sf(s.get("defensivePD", s.get("passesDeflected", 0))), 1)
-        tfl = round(sf(s.get("defensiveTFL", 0)), 1)
-        qbh = round(sf(s.get("defensiveQBH", s.get("defensiveQB HUR", 0))), 1)
-        ff = round(sf(s.get("defensiveFF", 0)), 1)
+        pds     = round(_gl("pds", "defensivePD", "passesDeflected"), 1)
+        tfl     = round(_gl("tfl", "defensiveTFL"), 1)
+        qbh     = round(_gl("qbh", "defensiveQBH", "defensiveQB HUR"), 1)
+        ff      = round(_gl("ff",  "defensiveFF"), 1)
         int_tds = round(sf(s.get("interceptionsTD", 0)), 1)
-        return {"tackles": tackles, "sacks": sacks, "ints": int(ints), "pds": pds, "tfl": tfl, "qbh": qbh, "ff": ff, "intTDs": int_tds if int_tds > 0 else None}
+        return {"tackles": tackles, "sacks": sacks, "ints": int(ints_raw), "pds": pds,
+                "tfl": tfl, "qbh": qbh, "ff": ff, "intTDs": int_tds if int_tds > 0 else None}
 
     elif pos_group == "K":
-        fgm = int(sf(s.get("kickingFGM", s.get("fieldGoalsMade", 0))))
-        fga = int(sf(s.get("kickingFGA", s.get("fieldGoalAttempts", 0))))
-        fg_pct = round(fgm / max(fga, 1) * 100, 1) if fga > 0 else 0
+        fgm     = int(_gl("fgm", "kickingFGM", "fieldGoalsMade"))
+        fga     = int(_gl("fga", "kickingFGA", "fieldGoalAttempts"))
+        fg_pct  = round(fgm / max(fga, 1) * 100, 1) if fga > 0 else 0
         longest = int(sf(s.get("kickingLONG", s.get("longFieldGoal", 0))))
-        xpm = int(sf(s.get("kickingXPM", s.get("extraPointsMade", 0))))
-        xpa = int(sf(s.get("kickingXPA", s.get("extraPointAttempts", 0))))
+        xpm     = int(_gl("xpm",    "kickingXPM",  "extraPointsMade"))
+        xpa     = int(_gl("xpa",    "kickingXPA",  "extraPointAttempts"))
         return {"fgm": fgm, "fga": fga, "fgPct": fg_pct, "longFG": longest, "xpm": xpm, "xpa": xpa}
 
     elif pos_group == "P":
-        punt_yds = sf(s.get("puntingYDS", s.get("puntYards", 0)))
-        punt_no = int(sf(s.get("puntingNO", s.get("punts", 0))))
+        punt_no  = int(_gl("punts",   "puntingNO",   "punts"))
+        punt_yds = _gl("puntYds",  "puntingYDS",  "puntYards")
         punt_avg = round(punt_yds / max(punt_no, 1), 1) if punt_no > 0 else 0
         punt_long = int(sf(s.get("puntingLONG", s.get("longPunt", 0))))
-        in20 = int(sf(s.get("puntingIN20", s.get("puntsInsideTwenty", 0))))
+        in20      = int(_gl("in20",     "puntingIN20", "puntsInsideTwenty"))
         return {"punts": punt_no, "puntAvg": punt_avg, "longPunt": punt_long, "in20": in20}
 
     return {}
@@ -929,6 +940,22 @@ def build_opp_weighted_stats(player_gamelogs, sp_detail):
         num_games = len(games)
         avg_weight = weight_sum / num_games if num_games > 0 else 1.0
 
+        # Also compute raw (unweighted) totals — used for display stats so the UI
+        # always shows actual season totals including postseason games.
+        raw_totals = {}
+        for g in games:
+            st = g.get("stats", {})
+            for key, val in st.items():
+                if val is None:
+                    continue
+                try:
+                    fval = float(val)
+                except (TypeError, ValueError):
+                    continue
+                # Exclude rate stats and max-value stats (longFG, longPunt) from raw sums
+                if key not in ("ypc", "ypr", "ypa", "compPct", "puntAvg", "longFG", "longPunt"):
+                    raw_totals[key] = raw_totals.get(key, 0.0) + fval
+
         result = {"_games_weighted": weight_sum}
         adj    = {}
         for key, val in totals.items():
@@ -941,6 +968,7 @@ def build_opp_weighted_stats(player_gamelogs, sp_detail):
                 adj[key] = val / avg_weight if avg_weight > 0 else val
 
         result["_adj"] = adj
+        result["_raw"] = raw_totals  # unweighted gamelog totals (postseason-inclusive)
         weighted[pid] = result
 
     return weighted
@@ -1230,16 +1258,11 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
                 draft_round=ol_draft, award_tier=ol_award,
                 rb_explosive_lookup=rb_explosive_lookup,
             )
-            # Gamelog totals for RB/FB receiving fallback
-            # _gamelogs_for_weighting keys may be int or str depending on source
-            pid_games = _gamelogs_for_weighting.get(pid) or _gamelogs_for_weighting.get(int(pid) if str(pid).isdigit() else pid, [])
-            gl_totals = {}
-            if pos_group in ("RB", "FB") and pid_games:
-                gl_totals = {
-                    "receptions": sum(g.get("stats", {}).get("receptions", 0) or 0 for g in pid_games),
-                    "recYds":     sum(g.get("stats", {}).get("recYds",     0) or 0 for g in pid_games),
-                    "recTDs":     sum(g.get("stats", {}).get("recTDs",     0) or 0 for g in pid_games),
-                }
+            # Use raw gamelog totals (unweighted, includes postseason games) for display stats.
+            # This ensures the UI shows the correct full-season numbers including bowl/CFP games.
+            # Fall back to season API stats (raw_p_stats) when no gamelog is available.
+            gl_raw = w_stats.get("_raw") if w_stats else None
+            gl_totals = gl_raw or {}
 
             # Adj stats: rescaled weighted totals (vs average schedule equivalent)
             adj_data = w_stats.get("_adj") if w_stats else None
