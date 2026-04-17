@@ -2084,37 +2084,21 @@ function showPlayerModal(playerId) {
 
   // Stats for current year
   const stats = r.stats || {};
-  const adjStats = r.adjStats || null;
   const statDefs = STAT_LABELS[posGroup] || [];
 
-  function makeStatCell(k, label, val, isAdj) {
+  function makeStatCell(k, label, val) {
     if (val == null || val === 0) return '';
-    const dimStyle = isAdj ? 'color:var(--text-dim);font-style:italic' : '';
     return dynasty
-      ? `<div class="d-stat-cell"><div class="d-stat-val" style="${dimStyle}">${val}</div><div class="d-stat-key">${label}</div></div>`
-      : `<div class="stat-cell"><div class="sv" style="${dimStyle}">${val}</div><div class="sk">${label}</div></div>`;
+      ? `<div class="d-stat-cell"><div class="d-stat-val">${val}</div><div class="d-stat-key">${label}</div></div>`
+      : `<div class="stat-cell"><div class="sv">${val}</div><div class="sk">${label}</div></div>`;
   }
 
   const statCells = statDefs.filter(([k]) => stats[k] != null && stats[k] !== 0)
-    .map(([k, label]) => makeStatCell(k, label, stats[k], false)).join('');
-
-  // Adj stats row — only show if meaningfully different from raw (>3% delta on any key)
-  let adjCells = '';
-  if (adjStats) {
-    const hasDiff = statDefs.some(([k]) => {
-      const raw = stats[k] || 0, adj = adjStats[k] || 0;
-      return typeof raw === 'number' && raw > 0 && Math.abs(adj - raw) / raw > 0.03;
-    });
-    if (hasDiff) {
-      adjCells = statDefs.filter(([k]) => adjStats[k] != null && adjStats[k] !== 0)
-        .map(([k, label]) => makeStatCell(k, label, adjStats[k], true)).join('');
-    }
-  }
+    .map(([k, label]) => makeStatCell(k, label, stats[k])).join('');
 
   const statsHTML = statCells ? `<div class="modal-section">
     <div class="${dynasty ? 'd-section-label' : 'modal-section-title'}">Stats (${currentYear})</div>
     <div class="${dynasty ? 'd-stat-grid' : 'stat-grid'}">${statCells}</div>
-    ${adjCells ? `<div style="font-size:10px;color:var(--text-dim);margin:4px 0 2px">Adj. vs avg schedule</div><div class="${dynasty ? 'd-stat-grid' : 'stat-grid'}">${adjCells}</div>` : ''}
   </div>` : '';
 
   // Year-over-year progression
