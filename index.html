@@ -861,9 +861,9 @@ const UNIT_GROUPS = {
         <div class="d-depth-name">${p.firstName} ${p.lastName}</div>
         <div class="d-depth-pos-tag" style="color:${pgColor}">${p.position || p.positionGroup} · ${yrLabel(p.year) || '—'}</div>
       </div>
-      ${(SKILL_COLS[p.positionGroup]||[]).slice(0,3).map(([a,lbl])=>`<span class="d-skill-chip" style="color:${ratingColor(r[a]||0)}">${lbl} ${r[a]||'-'}</span>`).join('')}
-      <div class="d-depth-ovr-box" style="background:${ratingColor(r.overall||0)};color:${ratingTextColor(r.overall||0)}">
-        <span class="d-depth-ovr-num">${r.overall||'-'}</span>
+      ${r.noRating ? '' : (SKILL_COLS[p.positionGroup]||[]).slice(0,3).map(([a,lbl])=>`<span class="d-skill-chip" style="color:${ratingColor(r[a]||0)}">${lbl} ${r[a]||'-'}</span>`).join('')}
+      <div class="d-depth-ovr-box" style="background:${r.noRating ? 'var(--card-bg)' : ratingColor(r.overall||0)};color:${r.noRating ? 'var(--text-dim)' : ratingTextColor(r.overall||0)}">
+        <span class="d-depth-ovr-num">${r.overall ?? '-'}</span>
         <span class="d-depth-ovr-label">OVR</span>
       </div>
     </div>`;
@@ -890,6 +890,7 @@ function renderDepth(t, subNavHTML='') {
     const groupPlayers = ps
       .filter(p => p.positionGroup === group && (!positions || positions.includes(p.position)))
       .map(p => ({ p, r: rMap[p.id] || {} }))
+      .filter(({ r }) => !r.noRating)  // skip unrated players (e.g. DL pre-2019 without individual stats)
       .sort((a, b) => (b.r.overall || 0) - (a.r.overall || 0))
       .slice(0, slots);
 
@@ -959,6 +960,7 @@ function renderDepth(t, subNavHTML='') {
       const groupPlayers = ps
         .filter(p => p.positionGroup === group && (!positions || positions.includes(p.position)))
         .map(p => ({ p, r: rMap[p.id] || {} }))
+        .filter(({ r }) => !r.noRating)
         .sort((a, b) => (b.r.overall || 0) - (a.r.overall || 0))
         .slice(0, 1); // just starter for radar
       if (!groupPlayers.length) return '';
@@ -991,6 +993,7 @@ function renderDepth(t, subNavHTML='') {
         const groupPlayers = ps
           .filter(p => p.positionGroup === group && (!positions || positions.includes(p.position)))
           .map(p => ({ p, r: rMap[p.id] || {} }))
+          .filter(({ r }) => !r.noRating)
           .sort((a, b) => (b.r.overall || 0) - (a.r.overall || 0))
           .slice(0, 1);
         if (!groupPlayers.length) return;
@@ -1669,6 +1672,7 @@ function renderTopPlayers() {
 
   let filtered = players.filter(p => {
     if (p.positionGroup === 'OL') return false;
+    if ((rMap[p.id] || {}).noRating) return false;
     const matchPos = topPosFilter === 'ALL' || p.positionGroup === topPosFilter;
     const name = `${p.firstName} ${p.lastName}`.toLowerCase();
     const teamName = (teamMap[p.teamId]?.name || '').toLowerCase();
@@ -2055,11 +2059,12 @@ function showPlayerModal(playerId) {
   const team = teamMap[p.teamId] || {};
   const posGroup = p.positionGroup;
   const ovr = r.overall || 0;
+  const noRating = !!r.noRating;
 
   const dynasty = isDynasty();
 
   // Skill bars
-  const skills = SKILL_ATTRS[posGroup] || [];
+  const skills = noRating ? [] : (SKILL_ATTRS[posGroup] || []);
   const skillBarsHTML = skills.map(([key, label]) => {
     const val = r[key] || 0;
     const pct = ((val - 40) / 59) * 100;
@@ -2293,7 +2298,7 @@ function showPlayerModal(playerId) {
   const overviewHTML = `
     <div class="modal-section">
       ${sectionTitle(dynasty ? 'Attributes' : 'Skill Ratings')}
-      ${skills.length ? skillBarsHTML : '<div style="color:var(--text-dim);font-size:12px">No skill data available</div>'}
+      ${noRating ? '<div style="color:var(--text-dim);font-size:12px">Individual defensive stats not available for this year — rating unavailable</div>' : (skills.length ? skillBarsHTML : '<div style="color:var(--text-dim);font-size:12px">No skill data available</div>')}
       ${explainChipHTML}
     </div>
     ${statsHTML}
@@ -2304,8 +2309,8 @@ function showPlayerModal(playerId) {
 
   const modalHeader = dynasty ? `
     <div class="d-modal-header">
-      <div class="d-modal-ovr-box" style="background:${ratingColor(ovr)};color:${ratingTextColor(ovr)}">
-        <span class="d-modal-ovr-num">${ovr || '—'}</span>
+      <div class="d-modal-ovr-box" style="background:${noRating ? 'var(--card-bg)' : ratingColor(ovr)};color:${noRating ? 'var(--text-dim)' : ratingTextColor(ovr)}">
+        <span class="d-modal-ovr-num">${noRating ? '—' : (ovr || '—')}</span>
         <span class="d-modal-ovr-label">OVR</span>
       </div>
       <div style="flex:1;min-width:0">
@@ -2327,7 +2332,7 @@ function showPlayerModal(playerId) {
     </div>` : `
     <div class="a-modal-header">
       <div>
-        <span class="a-modal-ovr" style="color:${ratingColor(ovr)}">${ovr || '—'}</span>
+        <span class="a-modal-ovr" style="color:${noRating ? 'var(--text-dim)' : ratingColor(ovr)}">${noRating ? '—' : (ovr || '—')}</span>
       </div>
       <div style="flex:1;min-width:0">
         <div class="a-modal-name">${p.firstName} ${p.lastName}</div>

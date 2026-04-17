@@ -568,7 +568,7 @@ def compute_team_ratings(team_id, team_name_lower, players_private, ratings_list
         return {"overall": 50, "passOff": 50, "runOff": 50, "passDef": 50, "runDef": 50, "specialTeams": 50}
 
     def avg_top(players, n=5):
-        vals = sorted([rmap[p["id"]]["overall"] for p in players if p["id"] in rmap], reverse=True)
+        vals = sorted([rmap[p["id"]]["overall"] for p in players if p["id"] in rmap and rmap[p["id"]].get("overall") is not None], reverse=True)
         return int(round(sum(vals[:n]) / max(len(vals[:n]), 1))) if vals else 50
 
     qbs = [p for p in team_players if p["positionGroup"] == "QB"]
@@ -1268,11 +1268,24 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
             adj_data = w_stats.get("_adj") if w_stats else None
             adj_stats = capture_adj_stats(pos_group, adj_data) if adj_data else None
 
+            # DL with no individual defensive stats in years before 2019 are unrateable —
+            # the team-proxy formula inflates everyone on good defenses. Flag them so the
+            # UI can show them on the roster without displaying a rating.
+            dl_no_rating = (
+                pos_group == "DL" and year < 2019 and
+                not any(
+                    k.startswith("defensive") and _safe_float(raw_p_stats.get(k, 0)) > 0
+                    for k in raw_p_stats
+                ) and
+                not (gl_totals.get("tackles", 0) > 0 or gl_totals.get("sacks", 0) > 0)
+            )
+
             raw_ratings_all[pid] = {
                 "pos": pos_group,
                 "pos_detail": pos,
                 "name": full_lower,
                 "raw": raw,
+                "noRating": dl_no_rating,
                 "stats": capture_display_stats(pos_group, raw_p_stats, gamelog_totals=gl_totals),
                 "adjStats": adj_stats,
                 "ppa": round(ppa_val, 4),
@@ -1433,6 +1446,7 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
         attrs = normalized.get(pid, {a: 55 for a in SKILL_ATTRS.get(p["positionGroup"], ["runBlock", "passBlock"])})
         ovr = compute_overall(attrs, p["positionGroup"])
         player_info = raw_ratings_all.get(pid, {})
+        no_rating = player_info.get("noRating", False)
         display_stats = player_info.get("stats", {})
         adj_stats = player_info.get("adjStats")
         ctx = player_info.get("_explain_ctx", {})
@@ -1447,15 +1461,25 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
             overall=ovr,
             position=ctx.get("position"),
         )
-        entry = {
-            "playerId": pid,
-            "overall": ovr,
-            **attrs,
-            "stats": display_stats,
-            "ppa": player_info.get("ppa", 0.0),
-            "usage": player_info.get("usage", {}),
-            "ratingExplanation": explanation,
-        }
+        if no_rating:
+            entry = {
+                "playerId": pid,
+                "overall": None,
+                "stats": display_stats,
+                "ppa": player_info.get("ppa", 0.0),
+                "usage": player_info.get("usage", {}),
+                "noRating": True,
+            }
+        else:
+            entry = {
+                "playerId": pid,
+                "overall": ovr,
+                **attrs,
+                "stats": display_stats,
+                "ppa": player_info.get("ppa", 0.0),
+                "usage": player_info.get("usage", {}),
+                "ratingExplanation": explanation,
+            }
         if adj_stats:
             entry["adjStats"] = adj_stats
         ratings.append(entry)
@@ -1472,10 +1496,10 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
     players_public, teams_public = build_public_versions(players_private, teams_private, team_name_map)
 
     # Rating distribution
-    ovrs = [r["overall"] for r in ratings]
+    ovrs = [r["overall"] for r in ratings if r.get("overall") is not None]
     from collections import Counter
     buckets = Counter((v // 10) * 10 for v in ovrs)
-    print(f"\n  Year {year} rating distribution:")
+    print(f"\n  Year {year} rating distribution ({len(ratings)-len(ovrs)} unrated):")
     for b in sorted(buckets):
         pct = buckets[b] * 100 // len(ovrs)
         bar = "#" * (pct // 2)

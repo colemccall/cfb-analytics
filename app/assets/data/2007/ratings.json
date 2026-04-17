@@ -3089,9 +3089,7 @@
   },
   {
     "playerId": "190047",
-    "overall": 60,
-    "passRush": 55,
-    "runStop": 67,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -3109,9 +3107,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.49) — stats weighted by opponent quality each game"
-    ],
+    "noRating": true,
     "adjStats": {
       "tackles": 0,
       "sacks": 0,
@@ -5324,9 +5320,7 @@
   },
   {
     "playerId": "189750",
-    "overall": 81,
-    "passRush": 81,
-    "runStop": 82,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -5344,9 +5338,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "Solid program context (tq=0.59, average)"
-    ]
+    "noRating": true
   },
   {
     "playerId": "189755",
@@ -9228,9 +9220,7 @@
   },
   {
     "playerId": "188261",
-    "overall": 52,
-    "passRush": 50,
-    "runStop": 54,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -9248,9 +9238,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.38) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "191399",
@@ -12623,9 +12611,7 @@
   },
   {
     "playerId": "169298",
-    "overall": 65,
-    "passRush": 60,
-    "runStop": 73,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -12643,9 +12629,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "Solid program context (tq=0.58, average)"
-    ]
+    "noRating": true
   },
   {
     "playerId": "185063",
@@ -15396,9 +15380,7 @@
   },
   {
     "playerId": "181717",
-    "overall": 79,
-    "passRush": 78,
-    "runStop": 81,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -15416,9 +15398,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "Solid program context (tq=0.57, average)"
-    ],
+    "noRating": true,
     "adjStats": {
       "tackles": 0,
       "sacks": 0,
@@ -16066,9 +16046,7 @@
   },
   {
     "playerId": "174183",
-    "overall": 65,
-    "passRush": 68,
-    "runStop": 60,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -16086,9 +16064,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "Solid program context (tq=0.58, average)"
-    ]
+    "noRating": true
   },
   {
     "playerId": "174189",
@@ -16274,9 +16250,7 @@
   },
   {
     "playerId": "188418",
-    "overall": 90,
-    "passRush": 89,
-    "runStop": 91,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -16294,9 +16268,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "Solid program context (tq=0.58, average)"
-    ]
+    "noRating": true
   },
   {
     "playerId": "188421",
@@ -16982,9 +16954,7 @@
   },
   {
     "playerId": "170594",
-    "overall": 58,
-    "passRush": 62,
-    "runStop": 52,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -17002,16 +16972,11 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "Backup/reserve — rated on recruiting profile relative to team starters",
-      "G5 program (tq=0.33) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "170596",
-    "overall": 58,
-    "passRush": 62,
-    "runStop": 52,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -17029,9 +16994,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.33) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "179437",
@@ -22457,9 +22420,7 @@
   },
   {
     "playerId": "191351",
-    "overall": 76,
-    "passRush": 87,
-    "runStop": 61,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -22477,9 +22438,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.22) — stats weighted by opponent quality each game"
-    ],
+    "noRating": true,
     "adjStats": {
       "tackles": 0,
       "sacks": 0,
@@ -25228,9 +25187,7 @@
   },
   {
     "playerId": "186576",
-    "overall": 92,
-    "passRush": 91,
-    "runStop": 94,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -25248,9 +25205,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "Solid program context (tq=0.69, above avg)"
-    ]
+    "noRating": true
   },
   {
     "playerId": "186578",
@@ -25615,9 +25570,7 @@
   },
   {
     "playerId": "235225",
-    "overall": 75,
-    "passRush": 82,
-    "runStop": 66,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -25635,9 +25588,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "Solid program context (tq=0.69, above avg)"
-    ]
+    "noRating": true
   },
   {
     "playerId": "235228",
@@ -27302,9 +27253,7 @@
   },
   {
     "playerId": "191713",
-    "overall": 40,
-    "passRush": 40,
-    "runStop": 40,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -27322,9 +27271,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.12) — stats weighted by opponent quality each game"
-    ],
+    "noRating": true,
     "adjStats": {
       "tackles": 0,
       "sacks": 0,
@@ -35395,9 +35342,7 @@
   },
   {
     "playerId": "174871",
-    "overall": 78,
-    "passRush": 77,
-    "runStop": 80,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -35415,9 +35360,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.54) — stats weighted by opponent quality each game"
-    ],
+    "noRating": true,
     "adjStats": {
       "tackles": 0,
       "sacks": 0,
@@ -40080,9 +40023,7 @@
   },
   {
     "playerId": "173871",
-    "overall": 76,
-    "passRush": 80,
-    "runStop": 71,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -40100,9 +40041,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "Solid program context (tq=0.59, average)"
-    ]
+    "noRating": true
   },
   {
     "playerId": "192024",
@@ -41225,9 +41164,7 @@
   },
   {
     "playerId": "184286",
-    "overall": 66,
-    "passRush": 61,
-    "runStop": 74,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -41245,9 +41182,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.31) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "184287",
@@ -42592,9 +42527,7 @@
   },
   {
     "playerId": "188623",
-    "overall": 58,
-    "passRush": 58,
-    "runStop": 58,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -42612,10 +42545,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "Backup/reserve — rated on recruiting profile relative to team starters",
-      "G5 program (tq=0.55) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "188625",
@@ -49221,9 +49151,7 @@
   },
   {
     "playerId": "184228",
-    "overall": 48,
-    "passRush": 47,
-    "runStop": 49,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -49241,9 +49169,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.30) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "232777",
@@ -58405,9 +58331,7 @@
   },
   {
     "playerId": "159665",
-    "overall": 57,
-    "passRush": 53,
-    "runStop": 63,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -58425,10 +58349,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "Backup/reserve — rated on recruiting profile relative to team starters",
-      "G5 program (tq=0.41) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "169026",
@@ -58503,9 +58424,7 @@
   },
   {
     "playerId": "175243",
-    "overall": 55,
-    "passRush": 53,
-    "runStop": 57,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -58523,9 +58442,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.41) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "175247",
@@ -59777,9 +59694,7 @@
   },
   {
     "playerId": "175300",
-    "overall": 76,
-    "passRush": 66,
-    "runStop": 89,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -59797,10 +59712,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "Limited playing time — rated as 4-star prospect anchored to team depth",
-      "G5 program (tq=0.52) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "175301",
@@ -66520,9 +66432,7 @@
   },
   {
     "playerId": "169289",
-    "overall": 69,
-    "passRush": 64,
-    "runStop": 76,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -66540,9 +66450,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.40) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "177330",
@@ -68601,9 +68509,7 @@
   },
   {
     "playerId": "188919",
-    "overall": 49,
-    "passRush": 49,
-    "runStop": 50,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -68621,9 +68527,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.32) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "188920",
@@ -69473,9 +69377,7 @@
   },
   {
     "playerId": "174020",
-    "overall": 77,
-    "passRush": 83,
-    "runStop": 68,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -69493,9 +69395,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "Solid program context (tq=0.69, above avg)"
-    ]
+    "noRating": true
   },
   {
     "playerId": "183877",
@@ -70970,9 +70870,7 @@
   },
   {
     "playerId": "192238",
-    "overall": 84,
-    "passRush": 85,
-    "runStop": 83,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -70990,9 +70888,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "Solid program context (tq=0.71, above avg)"
-    ]
+    "noRating": true
   },
   {
     "playerId": "192240",
@@ -72609,9 +72505,7 @@
   },
   {
     "playerId": "191208",
-    "overall": 60,
-    "passRush": 63,
-    "runStop": 55,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -72629,9 +72523,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.40) — stats weighted by opponent quality each game"
-    ],
+    "noRating": true,
     "adjStats": {
       "tackles": 0,
       "sacks": 0,
@@ -72758,9 +72650,7 @@
   },
   {
     "playerId": "191221",
-    "overall": 67,
-    "passRush": 71,
-    "runStop": 62,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -72778,9 +72668,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.40) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "191224",
@@ -74983,9 +74871,7 @@
   },
   {
     "playerId": "183360",
-    "overall": 70,
-    "passRush": 69,
-    "runStop": 72,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -75003,9 +74889,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.53) — stats weighted by opponent quality each game"
-    ],
+    "noRating": true,
     "adjStats": {
       "tackles": 0,
       "sacks": 0,
@@ -78876,9 +78760,7 @@
   },
   {
     "playerId": "170298",
-    "overall": 61,
-    "passRush": 71,
-    "runStop": 47,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -78896,9 +78778,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.29) — stats weighted by opponent quality each game"
-    ],
+    "noRating": true,
     "adjStats": {
       "tackles": 0,
       "sacks": 0,
@@ -80132,9 +80012,7 @@
   },
   {
     "playerId": "191176",
-    "overall": 69,
-    "passRush": 68,
-    "runStop": 70,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -80152,9 +80030,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "Solid program context (tq=0.56, average)"
-    ]
+    "noRating": true
   },
   {
     "playerId": "191177",
@@ -80379,9 +80255,7 @@
   },
   {
     "playerId": "238869",
-    "overall": 74,
-    "passRush": 77,
-    "runStop": 70,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -80399,9 +80273,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "Solid program context (tq=0.56, average)"
-    ]
+    "noRating": true
   },
   {
     "playerId": "147783",
@@ -82149,9 +82021,7 @@
   },
   {
     "playerId": "190992",
-    "overall": 59,
-    "passRush": 70,
-    "runStop": 44,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -82169,9 +82039,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.28) — stats weighted by opponent quality each game"
-    ],
+    "noRating": true,
     "adjStats": {
       "tackles": 0,
       "sacks": 0,
@@ -83744,9 +83612,7 @@
   },
   {
     "playerId": "173680",
-    "overall": 71,
-    "passRush": 79,
-    "runStop": 59,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -83764,9 +83630,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "Solid program context (tq=0.57, average)"
-    ]
+    "noRating": true
   },
   {
     "playerId": "173681",
@@ -88835,9 +88699,7 @@
   },
   {
     "playerId": "160327",
-    "overall": 75,
-    "passRush": 74,
-    "runStop": 77,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -88855,9 +88717,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.48) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "160329",
@@ -89401,9 +89261,7 @@
   },
   {
     "playerId": "183258",
-    "overall": 65,
-    "passRush": 65,
-    "runStop": 65,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -89421,9 +89279,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.48) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "183259",
@@ -92401,9 +92257,7 @@
   },
   {
     "playerId": "183434",
-    "overall": 91,
-    "passRush": 94,
-    "runStop": 87,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -92421,9 +92275,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "Solid program context (tq=0.66, above avg)"
-    ]
+    "noRating": true
   },
   {
     "playerId": "183441",
@@ -94970,9 +94822,7 @@
   },
   {
     "playerId": "184592",
-    "overall": 60,
-    "passRush": 58,
-    "runStop": 62,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -94990,9 +94840,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.31) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "184598",
@@ -96253,9 +96101,7 @@
   },
   {
     "playerId": "233705",
-    "overall": 62,
-    "passRush": 51,
-    "runStop": 76,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -96273,9 +96119,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.40) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "233719",
@@ -99700,9 +99544,7 @@
   },
   {
     "playerId": "184734",
-    "overall": 67,
-    "passRush": 73,
-    "runStop": 58,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -99720,9 +99562,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.46) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "184735",
@@ -100721,9 +100561,7 @@
   },
   {
     "playerId": "175587",
-    "overall": 72,
-    "passRush": 67,
-    "runStop": 78,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -100741,9 +100579,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.53) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "175594",
@@ -101848,9 +101684,7 @@
   },
   {
     "playerId": "189287",
-    "overall": 67,
-    "passRush": 65,
-    "runStop": 69,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -101868,9 +101702,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.50) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "192891",
@@ -105613,9 +105445,7 @@
   },
   {
     "playerId": "183986",
-    "overall": 77,
-    "passRush": 76,
-    "runStop": 79,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -105633,9 +105463,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.53) — stats weighted by opponent quality each game"
-    ],
+    "noRating": true,
     "adjStats": {
       "tackles": 0,
       "sacks": 0,
@@ -106208,9 +106036,7 @@
   },
   {
     "playerId": "170187",
-    "overall": 57,
-    "passRush": 44,
-    "runStop": 74,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -106228,9 +106054,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.17) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "170195",
@@ -108869,9 +108693,7 @@
   },
   {
     "playerId": "188455",
-    "overall": 70,
-    "passRush": 59,
-    "runStop": 85,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -108889,9 +108711,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.45) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "188461",
@@ -109689,9 +109509,7 @@
   },
   {
     "playerId": "177402",
-    "overall": 62,
-    "passRush": 57,
-    "runStop": 68,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -109709,9 +109527,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.49) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "177404",
@@ -111812,9 +111628,7 @@
   },
   {
     "playerId": "169075",
-    "overall": 70,
-    "passRush": 74,
-    "runStop": 65,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -111832,9 +111646,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.48) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "169077",
@@ -111908,9 +111720,7 @@
   },
   {
     "playerId": "174880",
-    "overall": 75,
-    "passRush": 74,
-    "runStop": 77,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -111928,10 +111738,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "Backup/reserve — rated on recruiting profile relative to team starters",
-      "G5 program (tq=0.48) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "189254",
@@ -113749,9 +113556,7 @@
   },
   {
     "playerId": "189091",
-    "overall": 69,
-    "passRush": 72,
-    "runStop": 64,
+    "overall": null,
     "stats": {
       "tackles": 0.0,
       "sacks": 0.0,
@@ -113769,9 +113574,7 @@
       "rushSnap": 0.0,
       "games": 0
     },
-    "ratingExplanation": [
-      "G5 program (tq=0.45) — stats weighted by opponent quality each game"
-    ]
+    "noRating": true
   },
   {
     "playerId": "232030",

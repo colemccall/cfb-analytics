@@ -192,8 +192,8 @@
       "overall": 76,
       "passOff": 73,
       "runOff": 86,
-      "passDef": 72,
-      "runDef": 70,
+      "passDef": 70,
+      "runDef": 68,
       "specialTeams": 59
     }
   },
@@ -237,7 +237,7 @@
       "passOff": 67,
       "runOff": 66,
       "passDef": 67,
-      "runDef": 68,
+      "runDef": 69,
       "specialTeams": 65
     }
   },
@@ -391,7 +391,7 @@
       "passOff": 78,
       "runOff": 77,
       "passDef": 76,
-      "runDef": 78,
+      "runDef": 77,
       "specialTeams": 80
     }
   },
@@ -500,7 +500,7 @@
       "overall": 70,
       "passOff": 71,
       "runOff": 73,
-      "passDef": 70,
+      "passDef": 71,
       "runDef": 71,
       "specialTeams": 61
     }
@@ -588,7 +588,7 @@
       "overall": 64,
       "passOff": 81,
       "runOff": 75,
-      "passDef": 58,
+      "passDef": 59,
       "runDef": 58,
       "specialTeams": 76
     }
@@ -610,7 +610,7 @@
       "overall": 76,
       "passOff": 70,
       "runOff": 68,
-      "passDef": 82,
+      "passDef": 83,
       "runDef": 79,
       "specialTeams": 70
     }
@@ -742,7 +742,7 @@
       "overall": 91,
       "passOff": 89,
       "runOff": 92,
-      "passDef": 89,
+      "passDef": 87,
       "runDef": 87,
       "specialTeams": 91
     }
@@ -787,7 +787,7 @@
       "passOff": 67,
       "runOff": 65,
       "passDef": 76,
-      "runDef": 77,
+      "runDef": 78,
       "specialTeams": 62
     }
   },
@@ -808,8 +808,8 @@
       "overall": 84,
       "passOff": 81,
       "runOff": 86,
-      "passDef": 83,
-      "runDef": 80,
+      "passDef": 81,
+      "runDef": 79,
       "specialTeams": 79
     }
   },
@@ -963,7 +963,7 @@
       "passOff": 87,
       "runOff": 84,
       "passDef": 78,
-      "runDef": 80,
+      "runDef": 81,
       "specialTeams": 85
     }
   },
@@ -1117,7 +1117,7 @@
       "passOff": 92,
       "runOff": 92,
       "passDef": 81,
-      "runDef": 80,
+      "runDef": 79,
       "specialTeams": 85
     }
   },
@@ -1205,7 +1205,7 @@
       "passOff": 76,
       "runOff": 74,
       "passDef": 78,
-      "runDef": 76,
+      "runDef": 75,
       "specialTeams": 63
     }
   },
@@ -1248,7 +1248,7 @@
       "overall": 87,
       "passOff": 85,
       "runOff": 84,
-      "passDef": 87,
+      "passDef": 88,
       "runDef": 87,
       "specialTeams": 88
     }
@@ -1380,7 +1380,7 @@
       "overall": 86,
       "passOff": 82,
       "runOff": 84,
-      "passDef": 88,
+      "passDef": 89,
       "runDef": 87,
       "specialTeams": 86
     }
@@ -1425,7 +1425,7 @@
       "passOff": 77,
       "runOff": 86,
       "passDef": 75,
-      "runDef": 75,
+      "runDef": 76,
       "specialTeams": 68
     }
   },
@@ -1600,7 +1600,7 @@
       "overall": 77,
       "passOff": 83,
       "runOff": 80,
-      "passDef": 71,
+      "passDef": 72,
       "runDef": 70,
       "specialTeams": 72
     }
@@ -1905,7 +1905,7 @@
     "state": "TX",
     "capacity": 47000,
     "ratings": {
-      "overall": 61,
+      "overall": 62,
       "passOff": 64,
       "runOff": 69,
       "passDef": 66,
@@ -1953,7 +1953,7 @@
       "passOff": 79,
       "runOff": 83,
       "passDef": 84,
-      "runDef": 81,
+      "runDef": 79,
       "specialTeams": 78
     }
   },
@@ -1971,7 +1971,7 @@
     "state": "CA",
     "capacity": 30456,
     "ratings": {
-      "overall": 62,
+      "overall": 60,
       "passOff": 64,
       "runOff": 61,
       "passDef": 69,
@@ -2129,7 +2129,7 @@
       "passOff": 82,
       "runOff": 78,
       "passDef": 80,
-      "runDef": 79,
+      "runDef": 80,
       "specialTeams": 80
     }
   },
@@ -2257,7 +2257,7 @@
     "state": "TX",
     "capacity": 30000,
     "ratings": {
-      "overall": 60,
+      "overall": 61,
       "passOff": 63,
       "runOff": 62,
       "passDef": 64,
@@ -2305,7 +2305,7 @@
       "passOff": 85,
       "runOff": 85,
       "passDef": 81,
-      "runDef": 79,
+      "runDef": 80,
       "specialTeams": 82
     }
   },
@@ -2437,7 +2437,7 @@
       "passOff": 90,
       "runOff": 86,
       "passDef": 77,
-      "runDef": 69,
+      "runDef": 70,
       "specialTeams": 86
     }
   },
@@ -2480,7 +2480,7 @@
       "overall": 72,
       "passOff": 84,
       "runOff": 82,
-      "passDef": 59,
+      "passDef": 58,
       "runDef": 59,
       "specialTeams": 73
     }
@@ -2503,7 +2503,7 @@
       "passOff": 75,
       "runOff": 81,
       "passDef": 67,
-      "runDef": 64,
+      "runDef": 65,
       "specialTeams": 77
     }
   },
@@ -2568,7 +2568,7 @@
       "overall": 77,
       "passOff": 75,
       "runOff": 76,
-      "passDef": 81,
+      "passDef": 82,
       "runDef": 77,
       "specialTeams": 85
     }
@@ -2591,7 +2591,7 @@
       "passOff": 58,
       "runOff": 58,
       "passDef": 68,
-      "runDef": 65,
+      "runDef": 64,
       "specialTeams": 64
     }
   },
@@ -2657,7 +2657,7 @@
       "passOff": 77,
       "runOff": 75,
       "passDef": 85,
-      "runDef": 79,
+      "runDef": 80,
       "specialTeams": 82
     }
   },
