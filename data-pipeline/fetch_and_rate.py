@@ -702,6 +702,7 @@ def build_team_schedule(games_raw, sp_detail):
         schedule.append({
             "gameId":      g.get("id"),
             "week":        g.get("week"),
+            "seasonType":  g.get("_seasonType", "regular"),
             "date":        (g.get("startDate") or g.get("start_date") or "")[:10],
             "homeTeam":    home,
             "awayTeam":    away,
@@ -1014,6 +1015,148 @@ def build_team_drives(drives_by_team, games_raw):
             })
         team_drives.sort(key=lambda x: (x.get("week") or 0, x.get("driveNumber") or 0))
         result[team_name] = team_drives
+    return result
+
+
+def build_team_tendencies(plays_by_team):
+    """Build per-team offensive tendency summaries from play-by-play data.
+
+    Returns dict: {teamName: {summary, downDistance, fieldZones, direction}}
+    """
+    import re
+    DIST_BUCKETS = [(1, 3, "1-3"), (4, 6, "4-6"), (7, 10, "7-10"), (11, 99, "11+")]
+    ZONES = [
+        ("own 1-20",   1,  20),
+        ("own 21-40",  21, 40),
+        ("mid 41-59",  41, 59),
+        ("opp 40-21",  60, 79),
+        ("opp 20-1",   80, 99),
+    ]
+    DIR_RE = {
+        "left":   re.compile(r'\b(left|sweep left|outside left|off left|around left)\b', re.I),
+        "right":  re.compile(r'\b(right|sweep right|outside right|off right|around right)\b', re.I),
+        "middle": re.compile(r'\b(middle|up the middle|inside|between|center)\b', re.I),
+    }
+
+    def _is_run(pt):
+        return bool(pt and ('rush' in pt.lower() or 'run' in pt.lower()))
+
+    def _is_pass(pt):
+        return bool(pt and ('pass' in pt.lower() or 'sack' in pt.lower()))
+
+    def _dist_bucket(d):
+        for lo, hi, label in DIST_BUCKETS:
+            if lo <= d <= hi:
+                return label
+        return "11+"
+
+    def _zone(ytg):
+        # yardsToGoal: 1=opponent endzone, 99=own endzone
+        for label, lo, hi in ZONES:
+            if lo <= ytg <= hi:
+                return label
+        return None
+
+    result = {}
+    for team_name, plays in plays_by_team.items():
+        total = run_cnt = pass_cnt = 0
+        ppa_sum = 0.0
+        dd = {}   # {(down, dist_bucket): {run, pass, total, ppa_sum, success}}
+        zones = {z[0]: {"plays": 0, "success": 0} for z in ZONES}
+        dirs = {"left": 0, "right": 0, "middle": 0, "unknown": 0}
+
+        for pl in plays:
+            pt = pl.get("playType") or ""
+            is_run = _is_run(pt)
+            is_pass = _is_pass(pt)
+            if not (is_run or is_pass):
+                continue
+
+            total += 1
+            ppa = pl.get("ppa") or 0.0
+            ppa_sum += ppa
+            down = pl.get("down")
+            dist = pl.get("distance")
+            ytg = pl.get("yardsToGoal")
+
+            if is_run:
+                run_cnt += 1
+            else:
+                pass_cnt += 1
+
+            # Down × distance
+            if down and dist:
+                key = (down, _dist_bucket(dist))
+                if key not in dd:
+                    dd[key] = {"run": 0, "pass": 0, "total": 0, "ppaSum": 0.0, "success": 0}
+                dd[key]["total"] += 1
+                dd[key]["ppaSum"] = round(dd[key]["ppaSum"] + ppa, 4)
+                if is_run:
+                    dd[key]["run"] += 1
+                else:
+                    dd[key]["pass"] += 1
+                if ppa > 0 or pl.get("scoring"):
+                    dd[key]["success"] += 1
+
+            # Field zone
+            if ytg is not None:
+                z = _zone(ytg)
+                if z:
+                    zones[z]["plays"] += 1
+                    if ppa > 0 or pl.get("scoring"):
+                        zones[z]["success"] += 1
+
+            # Play direction
+            txt = pl.get("playText") or ""
+            matched = False
+            for d, rx in DIR_RE.items():
+                if rx.search(txt):
+                    dirs[d] += 1
+                    matched = True
+                    break
+            if not matched:
+                dirs["unknown"] += 1
+
+        # Serialize down-distance to list for JSON
+        dd_list = []
+        for (down, dist_bucket), v in sorted(dd.items()):
+            run_pct = round(v["run"] / v["total"] * 100, 1) if v["total"] else 0
+            dd_list.append({
+                "down": down,
+                "distBucket": dist_bucket,
+                "total": v["total"],
+                "runPct": run_pct,
+                "passPct": round(100 - run_pct, 1),
+                "avgPpa": round(v["ppaSum"] / v["total"], 4) if v["total"] else 0,
+                "successRate": round(v["success"] / v["total"] * 100, 1) if v["total"] else 0,
+            })
+
+        zone_list = []
+        for label, lo, hi in ZONES:
+            z = zones[label]
+            zone_list.append({
+                "zone": label,
+                "plays": z["plays"],
+                "successRate": round(z["success"] / z["plays"] * 100, 1) if z["plays"] else 0,
+            })
+
+        dir_total = sum(dirs.values()) or 1
+        result[team_name] = {
+            "summary": {
+                "totalPlays": total,
+                "runPct": round(run_cnt / total * 100, 1) if total else 0,
+                "passPct": round(pass_cnt / total * 100, 1) if total else 0,
+                "avgPpa": round(ppa_sum / total, 4) if total else 0,
+            },
+            "downDistance": dd_list,
+            "fieldZones": zone_list,
+            "direction": {
+                "left":    round(dirs["left"] / dir_total * 100, 1),
+                "middle":  round(dirs["middle"] / dir_total * 100, 1),
+                "right":   round(dirs["right"] / dir_total * 100, 1),
+                "unknown": round(dirs["unknown"] / dir_total * 100, 1),
+            },
+        }
     return result
 
 
@@ -1440,6 +1583,12 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
     if boosted_count:
         print(f"  OL boosts applied to {boosted_count} player(s) (draft/awards/continuity)")
 
+    # Build gamelog game count per player for winsAdded fallback
+    # (API usage endpoint often omits players; gamelogs are more complete)
+    gl_game_count = {}
+    for pid_str, games_list in player_gamelogs_early.items():
+        gl_game_count[str(pid_str)] = len(games_list)
+
     ratings = []
     for p in players_private:
         pid = p["id"]
@@ -1461,13 +1610,22 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
             overall=ovr,
             position=ctx.get("position"),
         )
+        ppa_val_entry = player_info.get("ppa", 0.0)
+        usage_entry = player_info.get("usage", {})
+        snap_pct = float(usage_entry.get("snap") or 0)
+        # Prefer API usage games; fall back to gamelog game count
+        api_games = int(usage_entry.get("games") or 0)
+        games_played = api_games or gl_game_count.get(str(pid), 0)
+        # winsAdded requires snap% from API — skip if not available (avoids inflated values)
+        wins_added = round(ppa_val_entry * snap_pct * api_games / 15.0, 3) if (snap_pct and api_games) else 0.0
+
         if no_rating:
             entry = {
                 "playerId": pid,
                 "overall": None,
                 "stats": display_stats,
-                "ppa": player_info.get("ppa", 0.0),
-                "usage": player_info.get("usage", {}),
+                "ppa": ppa_val_entry,
+                "usage": usage_entry,
                 "noRating": True,
             }
         else:
@@ -1476,8 +1634,9 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
                 "overall": ovr,
                 **attrs,
                 "stats": display_stats,
-                "ppa": player_info.get("ppa", 0.0),
-                "usage": player_info.get("usage", {}),
+                "ppa": ppa_val_entry,
+                "usage": usage_entry,
+                "winsAdded": wins_added,
                 "ratingExplanation": explanation,
             }
         if adj_stats:
@@ -1508,13 +1667,15 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
     print(f"  {len(teams_private)} teams, {len(players_private)} players.")
 
 
-    print("Building schedule, drives, and plays...")
+    print("Building schedule, drives, plays, and tendencies...")
     team_schedule = build_team_schedule(games_raw, sp_detail)
     player_gamelogs = player_gamelogs_early  # already built above
     team_drives = build_team_drives(drives_by_team, games_raw)
     team_plays = build_team_plays(plays_by_team, games_raw)
+    team_tendencies = build_team_tendencies(plays_by_team)
     print(f"  {len(team_schedule)} games, {len(player_gamelogs)} players with gamelogs")
     print(f"  {sum(len(v) for v in team_drives.values())} drives, {sum(len(v) for v in team_plays.values())} plays")
+    print(f"  {len(team_tendencies)} teams with tendency data")
 
     return {
         "teams_private": teams_private,
@@ -1526,6 +1687,7 @@ def process_year(api_key, year, team_name_map, draft_data=None, prior_player_ids
         "player_gamelogs": player_gamelogs,
         "team_drives": team_drives,
         "team_plays": team_plays,
+        "team_tendencies": team_tendencies,
     }
 
 
@@ -1556,8 +1718,9 @@ def write_year(year, data, output_dir):
 
     # Dict-valued files
     for filename, key in [
-        ("player_gamelog.json", "player_gamelogs"),
-        ("team_drives.json",    "team_drives"),
+        ("player_gamelog.json",   "player_gamelogs"),
+        ("team_drives.json",      "team_drives"),
+        ("team_tendencies.json",  "team_tendencies"),
     ]:
         payload = data.get(key, {})
         path = os.path.join(year_dir, filename)
@@ -1886,6 +2049,7 @@ def build_projected_year(api_key, proj_year, base_year, output_dir, team_name_ma
         "player_gamelogs": {},
         "team_drives": {},
         "team_plays": {},
+        "team_tendencies": {},
     }, output_dir)
 
 

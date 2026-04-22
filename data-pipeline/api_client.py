@@ -129,6 +129,8 @@ def fetch_awards(api_key, year):
 def fetch_games(api_key, year):
     regular = _fetch_safe(api_key, "/games", {"year": year, "seasonType": "regular"})
     postseason = _fetch_safe(api_key, "/games", {"year": year, "seasonType": "postseason"})
+    for g in postseason:
+        g["_seasonType"] = "postseason"
     return regular + postseason
 
 

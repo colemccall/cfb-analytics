@@ -2,6 +2,7 @@
   {
     "gameId": 401218616,
     "week": 1,
+    "seasonType": "regular",
     "date": "2020-08-30",
     "homeTeam": "Central Arkansas",
     "awayTeam": "Austin Peay",
@@ -14,6 +15,7 @@
   {
     "gameId": 401238035,
     "week": 1,
+    "seasonType": "regular",
     "date": "2020-09-04",
     "homeTeam": "UAB",
     "awayTeam": "Central Arkansas",
@@ -26,6 +28,7 @@
   {
     "gameId": 401207101,
     "week": 1,
+    "seasonType": "regular",
     "date": "2020-09-04",
     "homeTeam": "Southern Miss",
     "awayTeam": "South Alabama",
@@ -38,6 +41,7 @@
   {
     "gameId": 401237353,
     "week": 1,
+    "seasonType": "regular",
     "date": "2020-09-05",
     "homeTeam": "Marshall",
     "awayTeam": "Eastern Kentucky",
@@ -50,6 +54,7 @@
   {
     "gameId": 401235700,
     "week": 1,
+    "seasonType": "regular",
     "date": "2020-09-05",
     "homeTeam": "Army",
     "awayTeam": "Middle Tennessee",
@@ -62,6 +67,7 @@
   {
     "gameId": 401212484,
     "week": 1,
+    "seasonType": "regular",
     "date": "2020-09-05",
     "homeTeam": "Texas State",
     "awayTeam": "SMU",
@@ -74,6 +80,7 @@
   {
     "gameId": 401207098,
     "week": 1,
+    "seasonType": "regular",
     "date": "2020-09-05",
     "homeTeam": "North Texas",
     "awayTeam": "Houston Christian",
@@ -86,6 +93,7 @@
   {
     "gameId": 401212553,
     "week": 1,
+    "seasonType": "regular",
     "date": "2020-09-06",
     "homeTeam": "Memphis",
     "awayTeam": "Arkansas State",
@@ -98,6 +106,7 @@
   {
     "gameId": 401239884,
     "week": 1,
+    "seasonType": "regular",
     "date": "2020-09-06",
     "homeTeam": "UTEP",
     "awayTeam": "Stephen F. Austin",
@@ -110,6 +119,7 @@
   {
     "gameId": 401234576,
     "week": 1,
+    "seasonType": "regular",
     "date": "2020-09-08",
     "homeTeam": "Navy",
     "awayTeam": "BYU",
@@ -122,6 +132,7 @@
   {
     "gameId": 401234559,
     "week": 2,
+    "seasonType": "regular",
     "date": "2020-09-11",
     "homeTeam": "Miami",
     "awayTeam": "UAB",
@@ -134,6 +145,7 @@
   {
     "gameId": 401234565,
     "week": 2,
+    "seasonType": "regular",
     "date": "2020-09-12",
     "homeTeam": "North Carolina",
     "awayTeam": "Syracuse",
@@ -146,6 +158,7 @@
   {
     "gameId": 401236221,
     "week": 2,
+    "seasonType": "regular",
     "date": "2020-09-12",
     "homeTeam": "Iowa State",
     "awayTeam": "Louisiana",
@@ -158,6 +171,7 @@
   {
     "gameId": 401236038,
     "week": 2,
+    "seasonType": "regular",
     "date": "2020-09-12",
     "homeTeam": "West Virginia",
     "awayTeam": "Eastern Kentucky",
@@ -170,6 +184,7 @@
   {
     "gameId": 401236053,
     "week": 2,
+    "seasonType": "regular",
     "date": "2020-09-12",
     "homeTeam": "Kansas State",
     "awayTeam": "Arkansas State",
@@ -182,6 +197,7 @@
   {
     "gameId": 401236081,
     "week": 2,
+    "seasonType": "regular",
     "date": "2020-09-12",
     "homeTeam": "App State",
     "awayTeam": "Charlotte",
@@ -194,6 +210,7 @@
   {
     "gameId": 401240113,
     "week": 2,
+    "seasonType": "regular",
     "date": "2020-09-12",
     "homeTeam": "Army",
     "awayTeam": "UL Monroe",
@@ -206,6 +223,7 @@
   {
     "gameId": 401234574,
     "week": 2,
+    "seasonType": "regular",
     "date": "2020-09-12",
     "homeTeam": "Notre Dame",
     "awayTeam": "Duke",
@@ -218,6 +236,7 @@
   {
     "gameId": 401207113,
     "week": 2,
+    "seasonType": "regular",
     "date": "2020-09-12",
     "homeTeam": "Texas State",
     "awayTeam": "UTSA",
@@ -230,6 +249,7 @@
   {
     "gameId": 401234563,
     "week": 2,
+    "seasonType": "regular",
     "date": "2020-09-12",
     "homeTeam": "Florida State",
     "awayTeam": "Georgia Tech",
@@ -242,6 +262,7 @@
   {
     "gameId": 401240233,
     "week": 2,
+    "seasonType": "regular",
     "date": "2020-09-12",
     "homeTeam": "Pittsburgh",
     "awayTeam": "Austin Peay",
@@ -254,6 +275,7 @@
   {
     "gameId": 401215298,
     "week": 2,
+    "seasonType": "regular",
     "date": "2020-09-12",
     "homeTeam": "Georgia Southern",
     "awayTeam": "Campbell",
@@ -266,6 +288,7 @@
   {
     "gameId": 401236054,
     "week": 2,
+    "seasonType": "regular",
     "date": "2020-09-12",
     "homeTeam": "Oklahoma",
     "awayTeam": "Missouri State",
@@ -278,6 +301,7 @@
   {
     "gameId": 401240039,
     "week": 2,
+    "seasonType": "regular",
     "date": "2020-09-12",
     "homeTeam": "South Florida",
     "awayTeam": "The Citadel",
@@ -290,6 +314,7 @@
   {
     "gameId": 401234562,
     "week": 2,
+    "seasonType": "regular",
     "date": "2020-09-12",
     "homeTeam": "Wake Forest",
     "awayTeam": "Clemson",
@@ -302,6 +327,7 @@
   {
     "gameId": 401239973,
     "week": 2,
+    "seasonType": "regular",
     "date": "2020-09-12",
     "homeTeam": "South Alabama",
     "awayTeam": "Tulane",
@@ -314,6 +340,7 @@
   {
     "gameId": 401234564,
     "week": 2,
+    "seasonType": "regular",
     "date": "2020-09-13",
     "homeTeam": "Louisville",
     "awayTeam": "Western Kentucky",
@@ -326,6 +353,7 @@
   {
     "gameId": 401236039,
     "week": 2,
+    "seasonType": "regular",
     "date": "2020-09-13",
     "homeTeam": "Texas Tech",
     "awayTeam": "Houston Christian",
@@ -338,6 +366,7 @@
   {
     "gameId": 401236222,
     "week": 2,
+    "seasonType": "regular",
     "date": "2020-09-13",
     "homeTeam": "Texas",
     "awayTeam": "UTEP",
@@ -350,6 +379,7 @@
   {
     "gameId": 401236658,
     "week": 2,
+    "seasonType": "regular",
     "date": "2020-09-13",
     "homeTeam": "Kansas",
     "awayTeam": "Coastal Carolina",
@@ -362,6 +392,7 @@
   {
     "gameId": 401240126,
     "week": 3,
+    "seasonType": "regular",
     "date": "2020-09-18",
     "homeTeam": "Coastal Carolina",
     "awayTeam": "Campbell",
@@ -374,6 +405,7 @@
   {
     "gameId": 401212541,
     "week": 3,
+    "seasonType": "regular",
     "date": "2020-09-19",
     "homeTeam": "Cincinnati",
     "awayTeam": "Austin Peay",
@@ -386,6 +418,7 @@
   {
     "gameId": 401207124,
     "week": 3,
+    "seasonType": "regular",
     "date": "2020-09-19",
     "homeTeam": "Western Kentucky",
     "awayTeam": "Liberty",
@@ -398,6 +431,7 @@
   {
     "gameId": 401215301,
     "week": 3,
+    "seasonType": "regular",
     "date": "2020-09-19",
     "homeTeam": "Georgia State",
     "awayTeam": "Louisiana",
@@ -410,6 +444,7 @@
   {
     "gameId": 401234571,
     "week": 3,
+    "seasonType": "regular",
     "date": "2020-09-19",
     "homeTeam": "Pittsburgh",
     "awayTeam": "Syracuse",
@@ -422,6 +457,7 @@
   {
     "gameId": 401236041,
     "week": 3,
+    "seasonType": "regular",
     "date": "2020-09-19",
     "homeTeam": "Oklahoma State",
     "awayTeam": "Tulsa",
@@ -434,6 +470,7 @@
   {
     "gameId": 401234567,
     "week": 3,
+    "seasonType": "regular",
     "date": "2020-09-19",
     "homeTeam": "Duke",
     "awayTeam": "Boston College",
@@ -446,6 +483,7 @@
   {
     "gameId": 401212522,
     "week": 3,
+    "seasonType": "regular",
     "date": "2020-09-19",
     "homeTeam": "Tulane",
     "awayTeam": "Navy",
@@ -458,6 +496,7 @@
   {
     "gameId": 401241282,
     "week": 3,
+    "seasonType": "regular",
     "date": "2020-09-19",
     "homeTeam": "Notre Dame",
     "awayTeam": "South Florida",
@@ -470,6 +509,7 @@
   {
     "gameId": 401234568,
     "week": 3,
+    "seasonType": "regular",
     "date": "2020-09-19",
     "homeTeam": "Georgia Tech",
     "awayTeam": "UCF",
@@ -482,6 +522,7 @@
   {
     "gameId": 401236939,
     "week": 3,
+    "seasonType": "regular",
     "date": "2020-09-19",
     "homeTeam": "Marshall",
     "awayTeam": "App State",
@@ -494,6 +535,7 @@
   {
     "gameId": 401240640,
     "week": 3,
+    "seasonType": "regular",
     "date": "2020-09-19",
     "homeTeam": "Middle Tennessee",
     "awayTeam": "Troy",
@@ -506,6 +548,7 @@
   {
     "gameId": 401240041,
     "week": 3,
+    "seasonType": "regular",
     "date": "2020-09-19",
     "homeTeam": "UTSA",
     "awayTeam": "Stephen F. Austin",
@@ -518,6 +561,7 @@
   {
     "gameId": 401237492,
     "week": 3,
+    "seasonType": "regular",
     "date": "2020-09-19",
     "homeTeam": "Clemson",
     "awayTeam": "The Citadel",
@@ -530,6 +574,7 @@
   {
     "gameId": 401207120,
     "week": 3,
+    "seasonType": "regular",
     "date": "2020-09-19",
     "homeTeam": "North Texas",
     "awayTeam": "SMU",
@@ -542,6 +587,7 @@
   {
     "gameId": 401207106,
     "week": 3,
+    "seasonType": "regular",
     "date": "2020-09-19",
     "homeTeam": "Southern Miss",
     "awayTeam": "Louisiana Tech",
@@ -554,6 +600,7 @@
   {
     "gameId": 401215302,
     "week": 3,
+    "seasonType": "regular",
     "date": "2020-09-19",
     "homeTeam": "UL Monroe",
     "awayTeam": "Texas State",
@@ -566,6 +613,7 @@
   {
     "gameId": 401234569,
     "week": 3,
+    "seasonType": "regular",
     "date": "2020-09-19",
     "homeTeam": "Louisville",
     "awayTeam": "Miami",
@@ -578,6 +626,7 @@
   {
     "gameId": 401234570,
     "week": 3,
+    "seasonType": "regular",
     "date": "2020-09-20",
     "homeTeam": "NC State",
     "awayTeam": "Wake Forest",
@@ -590,6 +639,7 @@
   {
     "gameId": 401239885,
     "week": 3,
+    "seasonType": "regular",
     "date": "2020-09-20",
     "homeTeam": "UTEP",
     "awayTeam": "Abilene Christian",
@@ -602,6 +652,7 @@
   {
     "gameId": 401207132,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-24",
     "homeTeam": "South Alabama",
     "awayTeam": "UAB",
@@ -614,6 +665,7 @@
   {
     "gameId": 401207134,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "UTSA",
     "awayTeam": "Middle Tennessee",
@@ -626,6 +678,7 @@
   {
     "gameId": 401234594,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "Syracuse",
     "awayTeam": "Georgia Tech",
@@ -638,6 +691,7 @@
   {
     "gameId": 401237034,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "Auburn",
     "awayTeam": "Kentucky",
@@ -650,6 +704,7 @@
   {
     "gameId": 401215303,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "Louisiana",
     "awayTeam": "Georgia Southern",
@@ -662,6 +717,7 @@
   {
     "gameId": 401234595,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "Pittsburgh",
     "awayTeam": "Louisville",
@@ -674,6 +730,7 @@
   {
     "gameId": 401236952,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "Ole Miss",
     "awayTeam": "Florida",
@@ -686,6 +743,7 @@
   {
     "gameId": 401235996,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "Oklahoma",
     "awayTeam": "Kansas State",
@@ -698,6 +756,7 @@
   {
     "gameId": 401236253,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "App State",
     "awayTeam": "Campbell",
@@ -710,6 +769,7 @@
   {
     "gameId": 401212536,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "East Carolina",
     "awayTeam": "UCF",
@@ -722,6 +782,7 @@
   {
     "gameId": 401237493,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "The Citadel",
     "awayTeam": "Eastern Kentucky",
@@ -734,6 +795,7 @@
   {
     "gameId": 401207126,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "Liberty",
     "awayTeam": "Florida International",
@@ -746,6 +808,7 @@
   {
     "gameId": 401235994,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "TCU",
     "awayTeam": "Iowa State",
@@ -758,6 +821,7 @@
   {
     "gameId": 401240996,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "Cincinnati",
     "awayTeam": "Army",
@@ -770,6 +834,7 @@
   {
     "gameId": 401235997,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "Oklahoma State",
     "awayTeam": "West Virginia",
@@ -782,6 +847,7 @@
   {
     "gameId": 401240194,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "UL Monroe",
     "awayTeam": "UTEP",
@@ -794,6 +860,7 @@
   {
     "gameId": 401237035,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "LSU",
     "awayTeam": "Mississippi State",
@@ -806,6 +873,7 @@
   {
     "gameId": 401235995,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "Texas Tech",
     "awayTeam": "Texas",
@@ -818,6 +886,7 @@
   {
     "gameId": 401237033,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "Arkansas",
     "awayTeam": "Georgia",
@@ -830,6 +899,7 @@
   {
     "gameId": 401234638,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "Virginia",
     "awayTeam": "Duke",
@@ -842,6 +912,7 @@
   {
     "gameId": 401241303,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "Boston College",
     "awayTeam": "Texas State",
@@ -854,6 +925,7 @@
   {
     "gameId": 401236951,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "Missouri",
     "awayTeam": "Alabama",
@@ -866,6 +938,7 @@
   {
     "gameId": 401234734,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "Southern Miss",
     "awayTeam": "Tulane",
@@ -878,6 +951,7 @@
   {
     "gameId": 401232157,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "Louisiana Tech",
     "awayTeam": "Houston Christian",
@@ -890,6 +964,7 @@
   {
     "gameId": 401212485,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "SMU",
     "awayTeam": "Stephen F. Austin",
@@ -902,6 +977,7 @@
   {
     "gameId": 401237036,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "South Carolina",
     "awayTeam": "Tennessee",
@@ -914,6 +990,7 @@
   {
     "gameId": 401234593,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "Miami",
     "awayTeam": "Florida State",
@@ -926,6 +1003,7 @@
   {
     "gameId": 401235993,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "Baylor",
     "awayTeam": "Kansas",
@@ -938,6 +1016,7 @@
   {
     "gameId": 401237037,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-26",
     "homeTeam": "Texas A&M",
     "awayTeam": "Vanderbilt",
@@ -950,6 +1029,7 @@
   {
     "gameId": 401234566,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-27",
     "homeTeam": "Virginia Tech",
     "awayTeam": "NC State",
@@ -962,6 +1042,7 @@
   {
     "gameId": 401236381,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-27",
     "homeTeam": "Central Arkansas",
     "awayTeam": "Missouri State",
@@ -974,6 +1055,7 @@
   {
     "gameId": 401236223,
     "week": 4,
+    "seasonType": "regular",
     "date": "2020-09-27",
     "homeTeam": "BYU",
     "awayTeam": "Troy",
@@ -986,6 +1068,7 @@
   {
     "gameId": 401240282,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-02",
     "homeTeam": "Wake Forest",
     "awayTeam": "Campbell",
@@ -998,6 +1081,7 @@
   {
     "gameId": 401246275,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "BYU",
     "awayTeam": "Louisiana Tech",
@@ -1010,6 +1094,7 @@
   {
     "gameId": 401212547,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Georgia State",
     "awayTeam": "East Carolina",
@@ -1022,6 +1107,7 @@
   {
     "gameId": 401234600,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Pittsburgh",
     "awayTeam": "NC State",
@@ -1034,6 +1120,7 @@
   {
     "gameId": 401235998,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "West Virginia",
     "awayTeam": "Baylor",
@@ -1046,6 +1133,7 @@
   {
     "gameId": 401215304,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Coastal Carolina",
     "awayTeam": "Arkansas State",
@@ -1058,6 +1146,7 @@
   {
     "gameId": 401236002,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Texas",
     "awayTeam": "TCU",
@@ -1070,6 +1159,7 @@
   {
     "gameId": 401237099,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Tennessee",
     "awayTeam": "Missouri",
@@ -1082,6 +1172,7 @@
   {
     "gameId": 401237096,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Florida",
     "awayTeam": "South Carolina",
@@ -1094,6 +1185,7 @@
   {
     "gameId": 401207141,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "UAB",
     "awayTeam": "UTSA",
@@ -1106,6 +1198,7 @@
   {
     "gameId": 401237513,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Liberty",
     "awayTeam": "North Alabama",
@@ -1118,6 +1211,7 @@
   {
     "gameId": 401240040,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Army",
     "awayTeam": "Abilene Christian",
@@ -1130,6 +1224,7 @@
   {
     "gameId": 401246566,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Eastern Kentucky",
     "awayTeam": "Houston Christian",
@@ -1142,6 +1237,7 @@
   {
     "gameId": 401237093,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Alabama",
     "awayTeam": "Texas A&M",
@@ -1154,6 +1250,7 @@
   {
     "gameId": 401240124,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "North Dakota State",
     "awayTeam": "Central Arkansas",
@@ -1166,6 +1263,7 @@
   {
     "gameId": 401212476,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Cincinnati",
     "awayTeam": "South Florida",
@@ -1178,6 +1276,7 @@
   {
     "gameId": 401234597,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Boston College",
     "awayTeam": "North Carolina",
@@ -1190,6 +1289,7 @@
   {
     "gameId": 401212486,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "SMU",
     "awayTeam": "Memphis",
@@ -1202,6 +1302,7 @@
   {
     "gameId": 401236001,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Kansas State",
     "awayTeam": "Texas Tech",
@@ -1214,6 +1315,7 @@
   {
     "gameId": 401236000,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Kansas",
     "awayTeam": "Oklahoma State",
@@ -1226,6 +1328,7 @@
   {
     "gameId": 401207136,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Florida Atlantic",
     "awayTeam": "Charlotte",
@@ -1238,6 +1341,7 @@
   {
     "gameId": 401234599,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Duke",
     "awayTeam": "Virginia Tech",
@@ -1250,6 +1354,7 @@
   {
     "gameId": 401238034,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Florida State",
     "awayTeam": "Jacksonville State",
@@ -1262,6 +1367,7 @@
   {
     "gameId": 401237097,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Kentucky",
     "awayTeam": "Ole Miss",
@@ -1274,6 +1380,7 @@
   {
     "gameId": 401207138,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Middle Tennessee",
     "awayTeam": "Western Kentucky",
@@ -1286,6 +1393,7 @@
   {
     "gameId": 401240042,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Stephen F. Austin",
     "awayTeam": "West Texas A&M",
@@ -1298,6 +1406,7 @@
   {
     "gameId": 401212557,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Air Force",
     "awayTeam": "Navy",
@@ -1310,6 +1419,7 @@
   {
     "gameId": 401215305,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "UL Monroe",
     "awayTeam": "Georgia Southern",
@@ -1322,6 +1432,7 @@
   {
     "gameId": 401237098,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Vanderbilt",
     "awayTeam": "LSU",
@@ -1334,6 +1445,7 @@
   {
     "gameId": 401237095,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Georgia",
     "awayTeam": "Auburn",
@@ -1346,6 +1458,7 @@
   {
     "gameId": 401235999,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Iowa State",
     "awayTeam": "Oklahoma",
@@ -1358,6 +1471,7 @@
   {
     "gameId": 401212531,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "UCF",
     "awayTeam": "Tulsa",
@@ -1370,6 +1484,7 @@
   {
     "gameId": 401207139,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "North Texas",
     "awayTeam": "Southern Miss",
@@ -1382,6 +1497,7 @@
   {
     "gameId": 401237094,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-03",
     "homeTeam": "Mississippi State",
     "awayTeam": "Arkansas",
@@ -1394,6 +1510,7 @@
   {
     "gameId": 401234598,
     "week": 5,
+    "seasonType": "regular",
     "date": "2020-10-04",
     "homeTeam": "Clemson",
     "awayTeam": "Virginia",
@@ -1406,6 +1523,7 @@
   {
     "gameId": 401212523,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-08",
     "homeTeam": "Houston",
     "awayTeam": "Tulane",
@@ -1418,6 +1536,7 @@
   {
     "gameId": 401234601,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-09",
     "homeTeam": "Georgia Tech",
     "awayTeam": "Louisville",
@@ -1430,6 +1549,7 @@
   {
     "gameId": 401237106,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "Vanderbilt",
     "awayTeam": "South Carolina",
@@ -1442,6 +1562,7 @@
   {
     "gameId": 401237102,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "Texas A&M",
     "awayTeam": "Florida",
@@ -1454,6 +1575,7 @@
   {
     "gameId": 401237105,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "LSU",
     "awayTeam": "Missouri",
@@ -1466,6 +1588,7 @@
   {
     "gameId": 401236005,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "Oklahoma",
     "awayTeam": "Texas",
@@ -1478,6 +1601,7 @@
   {
     "gameId": 401207215,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "Liberty",
     "awayTeam": "UL Monroe",
@@ -1490,6 +1614,7 @@
   {
     "gameId": 401234607,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "North Carolina",
     "awayTeam": "Virginia Tech",
@@ -1502,6 +1627,7 @@
   {
     "gameId": 401234608,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "Virginia",
     "awayTeam": "NC State",
@@ -1514,6 +1640,7 @@
   {
     "gameId": 401234605,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "Syracuse",
     "awayTeam": "Duke",
@@ -1526,6 +1653,7 @@
   {
     "gameId": 401240114,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "Army",
     "awayTeam": "The Citadel",
@@ -1538,6 +1666,7 @@
   {
     "gameId": 401240117,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "Jacksonville State",
     "awayTeam": "Mercer",
@@ -1550,6 +1679,7 @@
   {
     "gameId": 401215308,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "Troy",
     "awayTeam": "Texas State",
@@ -1562,6 +1692,7 @@
   {
     "gameId": 401236003,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "Iowa State",
     "awayTeam": "Texas Tech",
@@ -1574,6 +1705,7 @@
   {
     "gameId": 401240997,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "BYU",
     "awayTeam": "UTSA",
@@ -1586,6 +1718,7 @@
   {
     "gameId": 401237103,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "Georgia",
     "awayTeam": "Tennessee",
@@ -1598,6 +1731,7 @@
   {
     "gameId": 401246425,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "Arkansas State",
     "awayTeam": "Central Arkansas",
@@ -1610,6 +1744,7 @@
   {
     "gameId": 401236004,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "TCU",
     "awayTeam": "Kansas State",
@@ -1622,6 +1757,7 @@
   {
     "gameId": 401207143,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "Florida International",
     "awayTeam": "Middle Tennessee",
@@ -1634,6 +1770,7 @@
   {
     "gameId": 401237101,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "Auburn",
     "awayTeam": "Arkansas",
@@ -1646,6 +1783,7 @@
   {
     "gameId": 401234603,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "Boston College",
     "awayTeam": "Pittsburgh",
@@ -1658,6 +1796,7 @@
   {
     "gameId": 401212515,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "Navy",
     "awayTeam": "Temple",
@@ -1670,6 +1809,7 @@
   {
     "gameId": 401212477,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "South Florida",
     "awayTeam": "East Carolina",
@@ -1682,6 +1822,7 @@
   {
     "gameId": 401237100,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "Ole Miss",
     "awayTeam": "Alabama",
@@ -1694,6 +1835,7 @@
   {
     "gameId": 401207146,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "Western Kentucky",
     "awayTeam": "Marshall",
@@ -1706,6 +1848,7 @@
   {
     "gameId": 401237104,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "Kentucky",
     "awayTeam": "Mississippi State",
@@ -1718,6 +1861,7 @@
   {
     "gameId": 401234606,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "Notre Dame",
     "awayTeam": "Florida State",
@@ -1730,6 +1874,7 @@
   {
     "gameId": 401207145,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "Louisiana Tech",
     "awayTeam": "UTEP",
@@ -1742,6 +1887,7 @@
   {
     "gameId": 401234604,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-10",
     "homeTeam": "Clemson",
     "awayTeam": "Miami",
@@ -1754,6 +1900,7 @@
   {
     "gameId": 401207142,
     "week": 6,
+    "seasonType": "regular",
     "date": "2020-10-11",
     "homeTeam": "North Texas",
     "awayTeam": "Charlotte",
@@ -1766,6 +1913,7 @@
   {
     "gameId": 401215311,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-14",
     "homeTeam": "Louisiana",
     "awayTeam": "Coastal Carolina",
@@ -1778,6 +1926,7 @@
   {
     "gameId": 401215310,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-15",
     "homeTeam": "Arkansas State",
     "awayTeam": "Georgia State",
@@ -1790,6 +1939,7 @@
   {
     "gameId": 401212487,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-16",
     "homeTeam": "Tulane",
     "awayTeam": "SMU",
@@ -1802,6 +1952,7 @@
   {
     "gameId": 401212551,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "Houston",
     "awayTeam": "BYU",
@@ -1814,6 +1965,7 @@
   {
     "gameId": 401234615,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "Syracuse",
     "awayTeam": "Liberty",
@@ -1826,6 +1978,7 @@
   {
     "gameId": 401234610,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "Georgia Tech",
     "awayTeam": "Clemson",
@@ -1838,6 +1991,7 @@
   {
     "gameId": 401234614,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "Miami",
     "awayTeam": "Pittsburgh",
@@ -1850,6 +2004,7 @@
   {
     "gameId": 401215313,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "South Alabama",
     "awayTeam": "Texas State",
@@ -1862,6 +2017,7 @@
   {
     "gameId": 401212478,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "Temple",
     "awayTeam": "South Florida",
@@ -1874,6 +2030,7 @@
   {
     "gameId": 401236007,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "West Virginia",
     "awayTeam": "Kansas",
@@ -1886,6 +2043,7 @@
   {
     "gameId": 401212548,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "East Carolina",
     "awayTeam": "Navy",
@@ -1898,6 +2056,7 @@
   {
     "gameId": 401237109,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "South Carolina",
     "awayTeam": "Auburn",
@@ -1910,6 +2069,7 @@
   {
     "gameId": 401237111,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "Tennessee",
     "awayTeam": "Kentucky",
@@ -1922,6 +2082,7 @@
   {
     "gameId": 401207153,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "UAB",
     "awayTeam": "Western Kentucky",
@@ -1934,6 +2095,7 @@
   {
     "gameId": 401240115,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "UTSA",
     "awayTeam": "Army",
@@ -1946,6 +2108,7 @@
   {
     "gameId": 401240034,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "North Alabama",
     "awayTeam": "Jacksonville State",
@@ -1958,6 +2121,7 @@
   {
     "gameId": 401234613,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "Notre Dame",
     "awayTeam": "Louisville",
@@ -1970,6 +2134,7 @@
   {
     "gameId": 401237108,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "Arkansas",
     "awayTeam": "Ole Miss",
@@ -1982,6 +2147,7 @@
   {
     "gameId": 401239872,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "Troy",
     "awayTeam": "Eastern Kentucky",
@@ -1994,6 +2160,7 @@
   {
     "gameId": 401212537,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "Memphis",
     "awayTeam": "UCF",
@@ -2006,6 +2173,7 @@
   {
     "gameId": 401234611,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "NC State",
     "awayTeam": "Duke",
@@ -2018,6 +2186,7 @@
   {
     "gameId": 401234616,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "Wake Forest",
     "awayTeam": "Virginia",
@@ -2030,6 +2199,7 @@
   {
     "gameId": 401250215,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "Georgia Southern",
     "awayTeam": "Massachusetts",
@@ -2042,6 +2212,7 @@
   {
     "gameId": 401237112,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "Mississippi State",
     "awayTeam": "Texas A&M",
@@ -2054,6 +2225,7 @@
   {
     "gameId": 401249652,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "Stephen F. Austin",
     "awayTeam": "Angelo State",
@@ -2066,6 +2238,7 @@
   {
     "gameId": 401207150,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "Middle Tennessee",
     "awayTeam": "North Texas",
@@ -2078,6 +2251,7 @@
   {
     "gameId": 401207149,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "Louisiana Tech",
     "awayTeam": "Marshall",
@@ -2090,6 +2264,7 @@
   {
     "gameId": 401234612,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-17",
     "homeTeam": "Florida State",
     "awayTeam": "North Carolina",
@@ -2102,6 +2277,7 @@
   {
     "gameId": 401236382,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-18",
     "homeTeam": "Missouri State",
     "awayTeam": "Central Arkansas",
@@ -2114,6 +2290,7 @@
   {
     "gameId": 401234609,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-18",
     "homeTeam": "Virginia Tech",
     "awayTeam": "Boston College",
@@ -2126,6 +2303,7 @@
   {
     "gameId": 401237107,
     "week": 7,
+    "seasonType": "regular",
     "date": "2020-10-18",
     "homeTeam": "Alabama",
     "awayTeam": "Georgia",
@@ -2138,6 +2316,7 @@
   {
     "gameId": 401240642,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-22",
     "homeTeam": "App State",
     "awayTeam": "Arkansas State",
@@ -2150,6 +2329,7 @@
   {
     "gameId": 401250783,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-23",
     "homeTeam": "Florida International",
     "awayTeam": "Jacksonville State",
@@ -2162,6 +2342,7 @@
   {
     "gameId": 401212479,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-23",
     "homeTeam": "South Florida",
     "awayTeam": "Tulsa",
@@ -2174,6 +2355,7 @@
   {
     "gameId": 401247297,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Wisconsin",
     "awayTeam": "Illinois",
@@ -2186,6 +2368,7 @@
   {
     "gameId": 401238036,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "UAB",
     "awayTeam": "Louisiana",
@@ -2198,6 +2381,7 @@
   {
     "gameId": 401212516,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Memphis",
     "awayTeam": "Temple",
@@ -2210,6 +2394,7 @@
   {
     "gameId": 401236011,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "TCU",
     "awayTeam": "Oklahoma",
@@ -2222,6 +2407,7 @@
   {
     "gameId": 401247293,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Ohio State",
     "awayTeam": "Nebraska",
@@ -2234,6 +2420,7 @@
   {
     "gameId": 401207154,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Charlotte",
     "awayTeam": "UTEP",
@@ -2246,6 +2433,7 @@
   {
     "gameId": 401215316,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Coastal Carolina",
     "awayTeam": "Georgia Southern",
@@ -2258,6 +2446,7 @@
   {
     "gameId": 401237115,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Ole Miss",
     "awayTeam": "Auburn",
@@ -2270,6 +2459,7 @@
   {
     "gameId": 401234621,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "North Carolina",
     "awayTeam": "NC State",
@@ -2282,6 +2472,7 @@
   {
     "gameId": 401234619,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Louisville",
     "awayTeam": "Florida State",
@@ -2294,6 +2485,7 @@
   {
     "gameId": 401234618,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Clemson",
     "awayTeam": "Syracuse",
@@ -2306,6 +2498,7 @@
   {
     "gameId": 401247299,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Michigan State",
     "awayTeam": "Rutgers",
@@ -2318,6 +2511,7 @@
   {
     "gameId": 401236010,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Kansas State",
     "awayTeam": "Kansas",
@@ -2330,6 +2524,7 @@
   {
     "gameId": 401240116,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Army",
     "awayTeam": "Mercer",
@@ -2342,6 +2537,7 @@
   {
     "gameId": 401207160,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Liberty",
     "awayTeam": "Southern Miss",
@@ -2354,6 +2550,7 @@
   {
     "gameId": 401248039,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Stephen F. Austin",
     "awayTeam": "Abilene Christian",
@@ -2366,6 +2563,7 @@
   {
     "gameId": 401212524,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "UCF",
     "awayTeam": "Tulane",
@@ -2378,6 +2576,7 @@
   {
     "gameId": 401207156,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Marshall",
     "awayTeam": "Florida Atlantic",
@@ -2390,6 +2589,7 @@
   {
     "gameId": 401239871,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Eastern Kentucky",
     "awayTeam": "Central Arkansas",
@@ -2402,6 +2602,7 @@
   {
     "gameId": 401247296,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Purdue",
     "awayTeam": "Iowa",
@@ -2414,6 +2615,7 @@
   {
     "gameId": 401212552,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Navy",
     "awayTeam": "Houston",
@@ -2426,6 +2628,7 @@
   {
     "gameId": 401236009,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Oklahoma State",
     "awayTeam": "Iowa State",
@@ -2438,6 +2641,7 @@
   {
     "gameId": 401207158,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Rice",
     "awayTeam": "Middle Tennessee",
@@ -2450,6 +2654,7 @@
   {
     "gameId": 401234623,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Wake Forest",
     "awayTeam": "Virginia Tech",
@@ -2462,6 +2667,7 @@
   {
     "gameId": 401247295,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Indiana",
     "awayTeam": "Penn State",
@@ -2474,6 +2680,7 @@
   {
     "gameId": 401237114,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Tennessee",
     "awayTeam": "Alabama",
@@ -2486,6 +2693,7 @@
   {
     "gameId": 401236008,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Texas",
     "awayTeam": "Baylor",
@@ -2498,6 +2706,7 @@
   {
     "gameId": 401234622,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Pittsburgh",
     "awayTeam": "Notre Dame",
@@ -2510,6 +2719,7 @@
   {
     "gameId": 401237122,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Missouri",
     "awayTeam": "Kentucky",
@@ -2522,6 +2732,7 @@
   {
     "gameId": 401215317,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Troy",
     "awayTeam": "Georgia State",
@@ -2534,6 +2745,7 @@
   {
     "gameId": 401234617,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Boston College",
     "awayTeam": "Georgia Tech",
@@ -2546,6 +2758,7 @@
   {
     "gameId": 401207102,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Western Kentucky",
     "awayTeam": "Chattanooga",
@@ -2558,6 +2771,7 @@
   {
     "gameId": 401236012,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Texas Tech",
     "awayTeam": "West Virginia",
@@ -2570,6 +2784,7 @@
   {
     "gameId": 401237118,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "LSU",
     "awayTeam": "South Carolina",
@@ -2582,6 +2797,7 @@
   {
     "gameId": 401248997,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Boise State",
     "awayTeam": "Utah State",
@@ -2594,6 +2810,7 @@
   {
     "gameId": 401248998,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Nevada",
     "awayTeam": "Wyoming",
@@ -2606,6 +2823,7 @@
   {
     "gameId": 401250784,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "South Alabama",
     "awayTeam": "UL Monroe",
@@ -2618,6 +2836,7 @@
   {
     "gameId": 401247294,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Minnesota",
     "awayTeam": "Michigan",
@@ -2630,6 +2849,7 @@
   {
     "gameId": 401248994,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Fresno State",
     "awayTeam": "Hawai'i",
@@ -2642,6 +2862,7 @@
   {
     "gameId": 401247298,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-24",
     "homeTeam": "Northwestern",
     "awayTeam": "Maryland",
@@ -2654,6 +2875,7 @@
   {
     "gameId": 401234620,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-25",
     "homeTeam": "Miami",
     "awayTeam": "Virginia",
@@ -2666,6 +2888,7 @@
   {
     "gameId": 401207157,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-25",
     "homeTeam": "UTSA",
     "awayTeam": "Louisiana Tech",
@@ -2678,6 +2901,7 @@
   {
     "gameId": 401212488,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-25",
     "homeTeam": "SMU",
     "awayTeam": "Cincinnati",
@@ -2690,6 +2914,7 @@
   {
     "gameId": 401240998,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-25",
     "homeTeam": "BYU",
     "awayTeam": "Texas State",
@@ -2702,6 +2927,7 @@
   {
     "gameId": 401248993,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-25",
     "homeTeam": "San José State",
     "awayTeam": "Air Force",
@@ -2714,6 +2940,7 @@
   {
     "gameId": 401248996,
     "week": 8,
+    "seasonType": "regular",
     "date": "2020-10-25",
     "homeTeam": "San Diego State",
     "awayTeam": "UNLV",
@@ -2726,6 +2953,7 @@
   {
     "gameId": 401215321,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-29",
     "homeTeam": "Georgia Southern",
     "awayTeam": "South Alabama",
@@ -2738,6 +2966,7 @@
   {
     "gameId": 401249000,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-30",
     "homeTeam": "Fresno State",
     "awayTeam": "Colorado State",
@@ -2750,6 +2979,7 @@
   {
     "gameId": 401247675,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-30",
     "homeTeam": "Southern Illinois",
     "awayTeam": "Southeast Missouri State",
@@ -2762,6 +2992,7 @@
   {
     "gameId": 401247302,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-30",
     "homeTeam": "Maryland",
     "awayTeam": "Minnesota",
@@ -2774,6 +3005,7 @@
   {
     "gameId": 401212533,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Tulsa",
     "awayTeam": "East Carolina",
@@ -2786,6 +3018,7 @@
   {
     "gameId": 401249001,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Wyoming",
     "awayTeam": "Hawai'i",
@@ -2798,6 +3031,7 @@
   {
     "gameId": 401247305,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Michigan",
     "awayTeam": "Michigan State",
@@ -2810,6 +3044,7 @@
   {
     "gameId": 401207162,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Florida Atlantic",
     "awayTeam": "UTSA",
@@ -2822,6 +3057,7 @@
   {
     "gameId": 401237117,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Kentucky",
     "awayTeam": "Georgia",
@@ -2834,6 +3070,7 @@
   {
     "gameId": 401234624,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Clemson",
     "awayTeam": "Boston College",
@@ -2846,6 +3083,7 @@
   {
     "gameId": 401236014,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Kansas",
     "awayTeam": "Iowa State",
@@ -2858,6 +3096,7 @@
   {
     "gameId": 401234629,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Syracuse",
     "awayTeam": "Wake Forest",
@@ -2870,6 +3109,7 @@
   {
     "gameId": 401212517,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Tulane",
     "awayTeam": "Temple",
@@ -2882,6 +3122,7 @@
   {
     "gameId": 401215318,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Georgia State",
     "awayTeam": "Coastal Carolina",
@@ -2894,6 +3135,7 @@
   {
     "gameId": 401236015,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "West Virginia",
     "awayTeam": "Kansas State",
@@ -2906,6 +3148,7 @@
   {
     "gameId": 401247301,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Illinois",
     "awayTeam": "Purdue",
@@ -2918,6 +3161,7 @@
   {
     "gameId": 401212543,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Cincinnati",
     "awayTeam": "Memphis",
@@ -2930,6 +3174,7 @@
   {
     "gameId": 401212538,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Houston",
     "awayTeam": "UCF",
@@ -2942,6 +3187,7 @@
   {
     "gameId": 401248073,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Mercer",
     "awayTeam": "Abilene Christian",
@@ -2954,6 +3200,7 @@
   {
     "gameId": 401250213,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Stephen F. Austin",
     "awayTeam": "Western Colorado",
@@ -2966,6 +3213,7 @@
   {
     "gameId": 401207166,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Southern Miss",
     "awayTeam": "Rice",
@@ -2978,6 +3226,7 @@
   {
     "gameId": 401215320,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Arkansas State",
     "awayTeam": "Troy",
@@ -2990,6 +3239,7 @@
   {
     "gameId": 401207163,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Louisiana Tech",
     "awayTeam": "UAB",
@@ -3002,6 +3252,7 @@
   {
     "gameId": 401247300,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Rutgers",
     "awayTeam": "Indiana",
@@ -3014,6 +3265,7 @@
   {
     "gameId": 401247303,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Iowa",
     "awayTeam": "Northwestern",
@@ -3026,6 +3278,7 @@
   {
     "gameId": 401236013,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Baylor",
     "awayTeam": "TCU",
@@ -3038,6 +3291,7 @@
   {
     "gameId": 401234626,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Georgia Tech",
     "awayTeam": "Notre Dame",
@@ -3050,6 +3304,7 @@
   {
     "gameId": 401237121,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Auburn",
     "awayTeam": "LSU",
@@ -3062,6 +3317,7 @@
   {
     "gameId": 401237123,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Vanderbilt",
     "awayTeam": "Ole Miss",
@@ -3074,6 +3330,7 @@
   {
     "gameId": 401234627,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Louisville",
     "awayTeam": "Virginia Tech",
@@ -3086,6 +3343,7 @@
   {
     "gameId": 401215319,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "UL Monroe",
     "awayTeam": "App State",
@@ -3098,6 +3356,7 @@
   {
     "gameId": 401239873,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Central Arkansas",
     "awayTeam": "Missouri Western",
@@ -3110,6 +3369,7 @@
   {
     "gameId": 401236017,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Oklahoma State",
     "awayTeam": "Texas",
@@ -3122,6 +3382,7 @@
   {
     "gameId": 401248999,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Air Force",
     "awayTeam": "Boise State",
@@ -3134,6 +3395,7 @@
   {
     "gameId": 401249003,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "New Mexico",
     "awayTeam": "San José State",
@@ -3146,6 +3408,7 @@
   {
     "gameId": 401237119,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Alabama",
     "awayTeam": "Mississippi State",
@@ -3158,6 +3421,7 @@
   {
     "gameId": 401234625,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Duke",
     "awayTeam": "Charlotte",
@@ -3170,6 +3434,7 @@
   {
     "gameId": 401237120,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Texas A&M",
     "awayTeam": "Arkansas",
@@ -3182,6 +3447,7 @@
   {
     "gameId": 401237116,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Florida",
     "awayTeam": "Missouri",
@@ -3194,6 +3460,7 @@
   {
     "gameId": 401247306,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "Penn State",
     "awayTeam": "Ohio State",
@@ -3206,6 +3473,7 @@
   {
     "gameId": 401212489,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-10-31",
     "homeTeam": "SMU",
     "awayTeam": "Navy",
@@ -3218,6 +3486,7 @@
   {
     "gameId": 401215322,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-11-01",
     "homeTeam": "Texas State",
     "awayTeam": "Louisiana",
@@ -3230,6 +3499,7 @@
   {
     "gameId": 401236016,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-11-01",
     "homeTeam": "Texas Tech",
     "awayTeam": "Oklahoma",
@@ -3242,6 +3512,7 @@
   {
     "gameId": 401234628,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-11-01",
     "homeTeam": "Virginia",
     "awayTeam": "North Carolina",
@@ -3254,6 +3525,7 @@
   {
     "gameId": 401249004,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-11-01",
     "homeTeam": "Utah State",
     "awayTeam": "San Diego State",
@@ -3266,6 +3538,7 @@
   {
     "gameId": 401239887,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-11-01",
     "homeTeam": "BYU",
     "awayTeam": "Western Kentucky",
@@ -3278,6 +3551,7 @@
   {
     "gameId": 401249002,
     "week": 9,
+    "seasonType": "regular",
     "date": "2020-11-01",
     "homeTeam": "UNLV",
     "awayTeam": "Nevada",
@@ -3290,6 +3564,7 @@
   {
     "gameId": 401249857,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-04",
     "homeTeam": "Akron",
     "awayTeam": "Western Michigan",
@@ -3302,6 +3577,7 @@
   {
     "gameId": 401249856,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-04",
     "homeTeam": "Kent State",
     "awayTeam": "Eastern Michigan",
@@ -3314,6 +3590,7 @@
   {
     "gameId": 401249860,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-05",
     "homeTeam": "Central Michigan",
     "awayTeam": "Ohio",
@@ -3326,6 +3603,7 @@
   {
     "gameId": 401249859,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-05",
     "homeTeam": "Northern Illinois",
     "awayTeam": "Buffalo",
@@ -3338,6 +3616,7 @@
   {
     "gameId": 401249889,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-05",
     "homeTeam": "Miami (OH)",
     "awayTeam": "Ball State",
@@ -3350,6 +3629,7 @@
   {
     "gameId": 401249858,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-05",
     "homeTeam": "Toledo",
     "awayTeam": "Bowling Green",
@@ -3362,6 +3642,7 @@
   {
     "gameId": 401249009,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-06",
     "homeTeam": "Nevada",
     "awayTeam": "Utah State",
@@ -3374,6 +3655,7 @@
   {
     "gameId": 401249010,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-06",
     "homeTeam": "Colorado State",
     "awayTeam": "Wyoming",
@@ -3386,6 +3668,7 @@
   {
     "gameId": 401234630,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "NC State",
     "awayTeam": "Miami",
@@ -3398,6 +3681,7 @@
   {
     "gameId": 401249008,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "San Diego State",
     "awayTeam": "San José State",
@@ -3410,6 +3694,7 @@
   {
     "gameId": 401249005,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Boise State",
     "awayTeam": "BYU",
@@ -3422,6 +3707,7 @@
   {
     "gameId": 401234633,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Duke",
     "awayTeam": "North Carolina",
@@ -3434,6 +3720,7 @@
   {
     "gameId": 401215327,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Georgia State",
     "awayTeam": "UL Monroe",
@@ -3446,6 +3733,7 @@
   {
     "gameId": 401253924,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Louisiana",
     "awayTeam": "Arkansas State",
@@ -3458,6 +3746,7 @@
   {
     "gameId": 401249400,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "USC",
     "awayTeam": "Arizona State",
@@ -3470,6 +3759,7 @@
   {
     "gameId": 401212490,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Temple",
     "awayTeam": "SMU",
@@ -3482,6 +3772,7 @@
   {
     "gameId": 401212525,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "East Carolina",
     "awayTeam": "Tulane",
@@ -3494,6 +3785,7 @@
   {
     "gameId": 401236022,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Texas",
     "awayTeam": "West Virginia",
@@ -3506,6 +3798,7 @@
   {
     "gameId": 401234636,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Virginia Tech",
     "awayTeam": "Liberty",
@@ -3518,6 +3811,7 @@
   {
     "gameId": 401247313,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Iowa",
     "awayTeam": "Michigan State",
@@ -3530,6 +3824,7 @@
   {
     "gameId": 401212480,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Memphis",
     "awayTeam": "South Florida",
@@ -3542,6 +3837,7 @@
   {
     "gameId": 401247307,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Northwestern",
     "awayTeam": "Nebraska",
@@ -3554,6 +3850,7 @@
   {
     "gameId": 401247309,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Indiana",
     "awayTeam": "Michigan",
@@ -3566,6 +3863,7 @@
   {
     "gameId": 401215326,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Georgia Southern",
     "awayTeam": "Troy",
@@ -3578,6 +3876,7 @@
   {
     "gameId": 401234631,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Syracuse",
     "awayTeam": "Boston College",
@@ -3590,6 +3889,7 @@
   {
     "gameId": 401251931,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Marshall",
     "awayTeam": "Massachusetts",
@@ -3602,6 +3902,7 @@
   {
     "gameId": 401239874,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Eastern Kentucky",
     "awayTeam": "Stephen F. Austin",
@@ -3614,6 +3915,7 @@
   {
     "gameId": 401215324,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Texas State",
     "awayTeam": "App State",
@@ -3626,6 +3928,7 @@
   {
     "gameId": 401240035,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Southern Miss",
     "awayTeam": "North Alabama",
@@ -3638,6 +3941,7 @@
   {
     "gameId": 401247308,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Illinois",
     "awayTeam": "Minnesota",
@@ -3650,6 +3954,7 @@
   {
     "gameId": 401237125,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Georgia",
     "awayTeam": "Florida",
@@ -3662,6 +3967,7 @@
   {
     "gameId": 401237126,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Mississippi State",
     "awayTeam": "Vanderbilt",
@@ -3674,6 +3980,7 @@
   {
     "gameId": 401236019,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Oklahoma",
     "awayTeam": "Kansas",
@@ -3686,6 +3993,7 @@
   {
     "gameId": 401212544,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Cincinnati",
     "awayTeam": "Houston",
@@ -3698,6 +4006,7 @@
   {
     "gameId": 401236021,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "TCU",
     "awayTeam": "Texas Tech",
@@ -3710,6 +4019,7 @@
   {
     "gameId": 401247312,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Penn State",
     "awayTeam": "Maryland",
@@ -3722,6 +4032,7 @@
   {
     "gameId": 401249006,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "UNLV",
     "awayTeam": "Fresno State",
@@ -3734,6 +4045,7 @@
   {
     "gameId": 401236020,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Kansas State",
     "awayTeam": "Oklahoma State",
@@ -3746,6 +4058,7 @@
   {
     "gameId": 401248273,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Abilene Christian",
     "awayTeam": "Angelo State",
@@ -3758,6 +4071,7 @@
   {
     "gameId": 401234634,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Florida State",
     "awayTeam": "Pittsburgh",
@@ -3770,6 +4084,7 @@
   {
     "gameId": 401207169,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-07",
     "homeTeam": "Florida Atlantic",
     "awayTeam": "Western Kentucky",
@@ -3782,6 +4097,7 @@
   {
     "gameId": 401237127,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-08",
     "homeTeam": "South Carolina",
     "awayTeam": "Texas A&M",
@@ -3794,6 +4110,7 @@
   {
     "gameId": 401249402,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-08",
     "homeTeam": "Colorado",
     "awayTeam": "UCLA",
@@ -3806,6 +4123,7 @@
   {
     "gameId": 401236018,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-08",
     "homeTeam": "Iowa State",
     "awayTeam": "Baylor",
@@ -3818,6 +4136,7 @@
   {
     "gameId": 401247310,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-08",
     "homeTeam": "Ohio State",
     "awayTeam": "Rutgers",
@@ -3830,6 +4149,7 @@
   {
     "gameId": 401249399,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-08",
     "homeTeam": "Oregon",
     "awayTeam": "Stanford",
@@ -3842,6 +4162,7 @@
   {
     "gameId": 401234632,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-08",
     "homeTeam": "Notre Dame",
     "awayTeam": "Clemson",
@@ -3854,6 +4175,7 @@
   {
     "gameId": 401237124,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-08",
     "homeTeam": "Arkansas",
     "awayTeam": "Tennessee",
@@ -3866,6 +4188,7 @@
   {
     "gameId": 401215325,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-08",
     "homeTeam": "Coastal Carolina",
     "awayTeam": "South Alabama",
@@ -3878,6 +4201,7 @@
   {
     "gameId": 401249397,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-08",
     "homeTeam": "Oregon State",
     "awayTeam": "Washington State",
@@ -3890,6 +4214,7 @@
   {
     "gameId": 401249007,
     "week": 10,
+    "seasonType": "regular",
     "date": "2020-11-08",
     "homeTeam": "Hawai'i",
     "awayTeam": "New Mexico",
@@ -3902,6 +4227,7 @@
   {
     "gameId": 401249861,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-11",
     "homeTeam": "Ohio",
     "awayTeam": "Akron",
@@ -3914,6 +4240,7 @@
   {
     "gameId": 401249862,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-11",
     "homeTeam": "Bowling Green",
     "awayTeam": "Kent State",
@@ -3926,6 +4253,7 @@
   {
     "gameId": 401249890,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-11",
     "homeTeam": "Buffalo",
     "awayTeam": "Miami (OH)",
@@ -3938,6 +4266,7 @@
   {
     "gameId": 401249865,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-12",
     "homeTeam": "Ball State",
     "awayTeam": "Eastern Michigan",
@@ -3950,6 +4279,7 @@
   {
     "gameId": 401249864,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-12",
     "homeTeam": "Northern Illinois",
     "awayTeam": "Central Michigan",
@@ -3962,6 +4292,7 @@
   {
     "gameId": 401249866,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-12",
     "homeTeam": "Western Michigan",
     "awayTeam": "Toledo",
@@ -3974,6 +4305,7 @@
   {
     "gameId": 401249012,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-13",
     "homeTeam": "Boise State",
     "awayTeam": "Colorado State",
@@ -3986,6 +4318,7 @@
   {
     "gameId": 401207174,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Florida International",
     "awayTeam": "Florida Atlantic",
@@ -3998,6 +4331,7 @@
   {
     "gameId": 401247317,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Minnesota",
     "awayTeam": "Iowa",
@@ -4010,6 +4344,7 @@
   {
     "gameId": 401212545,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Cincinnati",
     "awayTeam": "East Carolina",
@@ -4022,6 +4357,7 @@
   {
     "gameId": 401236024,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "West Virginia",
     "awayTeam": "TCU",
@@ -4034,6 +4370,7 @@
   {
     "gameId": 401237132,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Kentucky",
     "awayTeam": "Vanderbilt",
@@ -4046,6 +4383,7 @@
   {
     "gameId": 401247316,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Michigan State",
     "awayTeam": "Indiana",
@@ -4058,6 +4396,7 @@
   {
     "gameId": 401207176,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Marshall",
     "awayTeam": "Middle Tennessee",
@@ -4070,6 +4409,7 @@
   {
     "gameId": 401207218,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Liberty",
     "awayTeam": "Western Carolina",
@@ -4082,6 +4422,7 @@
   {
     "gameId": 401234641,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Virginia Tech",
     "awayTeam": "Miami",
@@ -4094,6 +4435,7 @@
   {
     "gameId": 401234642,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "North Carolina",
     "awayTeam": "Wake Forest",
@@ -4106,6 +4448,7 @@
   {
     "gameId": 401207200,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Tulane",
     "awayTeam": "Army",
@@ -4118,6 +4461,7 @@
   {
     "gameId": 401247320,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Nebraska",
     "awayTeam": "Penn State",
@@ -4130,6 +4474,7 @@
   {
     "gameId": 401247314,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Rutgers",
     "awayTeam": "Illinois",
@@ -4142,6 +4487,7 @@
   {
     "gameId": 401215332,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Louisiana",
     "awayTeam": "South Alabama",
@@ -4154,6 +4500,7 @@
   {
     "gameId": 401249013,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Utah State",
     "awayTeam": "Fresno State",
@@ -4166,6 +4513,7 @@
   {
     "gameId": 401215328,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "App State",
     "awayTeam": "Georgia State",
@@ -4178,6 +4526,7 @@
   {
     "gameId": 401207179,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "UTSA",
     "awayTeam": "UTEP",
@@ -4190,6 +4539,7 @@
   {
     "gameId": 401212481,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Houston",
     "awayTeam": "South Florida",
@@ -4202,6 +4552,7 @@
   {
     "gameId": 401215331,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Georgia Southern",
     "awayTeam": "Texas State",
@@ -4214,6 +4565,7 @@
   {
     "gameId": 401207178,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Western Kentucky",
     "awayTeam": "Southern Miss",
@@ -4226,6 +4578,7 @@
   {
     "gameId": 401234637,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Boston College",
     "awayTeam": "Notre Dame",
@@ -4238,6 +4591,7 @@
   {
     "gameId": 401249403,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Arizona",
     "awayTeam": "USC",
@@ -4250,6 +4604,7 @@
   {
     "gameId": 401249406,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Stanford",
     "awayTeam": "Colorado",
@@ -4262,6 +4617,7 @@
   {
     "gameId": 401257934,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Virginia",
     "awayTeam": "Louisville",
@@ -4274,6 +4630,7 @@
   {
     "gameId": 401248074,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Central Arkansas",
     "awayTeam": "Eastern Kentucky",
@@ -4286,6 +4643,7 @@
   {
     "gameId": 401236023,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Texas Tech",
     "awayTeam": "Baylor",
@@ -4298,6 +4656,7 @@
   {
     "gameId": 401249014,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "San Diego State",
     "awayTeam": "Hawai'i",
@@ -4310,6 +4669,7 @@
   {
     "gameId": 401247315,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Purdue",
     "awayTeam": "Northwestern",
@@ -4322,6 +4682,7 @@
   {
     "gameId": 401247413,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "Stephen F. Austin",
     "awayTeam": "Pittsburg St",
@@ -4334,6 +4695,7 @@
   {
     "gameId": 401249015,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-14",
     "homeTeam": "New Mexico",
     "awayTeam": "Nevada",
@@ -4346,6 +4708,7 @@
   {
     "gameId": 401212491,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-15",
     "homeTeam": "Tulsa",
     "awayTeam": "SMU",
@@ -4358,6 +4721,7 @@
   {
     "gameId": 401249405,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-15",
     "homeTeam": "Washington State",
     "awayTeam": "Oregon",
@@ -4370,6 +4734,7 @@
   {
     "gameId": 401237129,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-15",
     "homeTeam": "Florida",
     "awayTeam": "Arkansas",
@@ -4382,6 +4747,7 @@
   {
     "gameId": 401247319,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-15",
     "homeTeam": "Michigan",
     "awayTeam": "Wisconsin",
@@ -4394,6 +4760,7 @@
   {
     "gameId": 401212518,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-15",
     "homeTeam": "UCF",
     "awayTeam": "Temple",
@@ -4406,6 +4773,7 @@
   {
     "gameId": 401237133,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-15",
     "homeTeam": "Ole Miss",
     "awayTeam": "South Carolina",
@@ -4418,6 +4786,7 @@
   {
     "gameId": 401234639,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-15",
     "homeTeam": "NC State",
     "awayTeam": "Florida State",
@@ -4430,6 +4799,7 @@
   {
     "gameId": 401249016,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-15",
     "homeTeam": "San José State",
     "awayTeam": "UNLV",
@@ -4442,6 +4812,7 @@
   {
     "gameId": 401249404,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-15",
     "homeTeam": "Washington",
     "awayTeam": "Oregon State",
@@ -4454,6 +4825,7 @@
   {
     "gameId": 401261454,
     "week": 11,
+    "seasonType": "regular",
     "date": "2020-11-15",
     "homeTeam": "UCLA",
     "awayTeam": "California",
@@ -4466,6 +4838,7 @@
   {
     "gameId": 401249868,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-18",
     "homeTeam": "Bowling Green",
     "awayTeam": "Buffalo",
@@ -4478,6 +4851,7 @@
   {
     "gameId": 401249867,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-18",
     "homeTeam": "Kent State",
     "awayTeam": "Akron",
@@ -4490,6 +4864,7 @@
   {
     "gameId": 401249870,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-19",
     "homeTeam": "Ball State",
     "awayTeam": "Northern Illinois",
@@ -4502,6 +4877,7 @@
   {
     "gameId": 401249872,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-19",
     "homeTeam": "Central Michigan",
     "awayTeam": "Western Michigan",
@@ -4514,6 +4890,7 @@
   {
     "gameId": 401249871,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-19",
     "homeTeam": "Eastern Michigan",
     "awayTeam": "Toledo",
@@ -4526,6 +4903,7 @@
   {
     "gameId": 401212526,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-20",
     "homeTeam": "Tulsa",
     "awayTeam": "Tulane",
@@ -4538,6 +4916,7 @@
   {
     "gameId": 401234643,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Louisville",
     "awayTeam": "Syracuse",
@@ -4550,6 +4929,7 @@
   {
     "gameId": 401247325,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Minnesota",
     "awayTeam": "Purdue",
@@ -4562,6 +4942,7 @@
   {
     "gameId": 401261674,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Florida Atlantic",
     "awayTeam": "Massachusetts",
@@ -4574,6 +4955,7 @@
   {
     "gameId": 401249018,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Air Force",
     "awayTeam": "New Mexico",
@@ -4586,6 +4968,7 @@
   {
     "gameId": 401212519,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Temple",
     "awayTeam": "East Carolina",
@@ -4598,6 +4981,7 @@
   {
     "gameId": 401247326,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Ohio State",
     "awayTeam": "Indiana",
@@ -4610,6 +4994,7 @@
   {
     "gameId": 401237138,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Vanderbilt",
     "awayTeam": "Florida",
@@ -4622,6 +5007,7 @@
   {
     "gameId": 401237136,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Arkansas",
     "awayTeam": "LSU",
@@ -4634,6 +5020,7 @@
   {
     "gameId": 401235975,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Army",
     "awayTeam": "Georgia Southern",
@@ -4646,6 +5033,7 @@
   {
     "gameId": 401215334,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Texas State",
     "awayTeam": "Arkansas State",
@@ -4658,6 +5046,7 @@
   {
     "gameId": 401215333,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Coastal Carolina",
     "awayTeam": "App State",
@@ -4670,6 +5059,7 @@
   {
     "gameId": 401247321,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Nebraska",
     "awayTeam": "Illinois",
@@ -4682,6 +5072,7 @@
   {
     "gameId": 401247374,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Memphis",
     "awayTeam": "Stephen F. Austin",
@@ -4694,6 +5085,7 @@
   {
     "gameId": 401207181,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Western Kentucky",
     "awayTeam": "Florida International",
@@ -4706,6 +5098,7 @@
   {
     "gameId": 401207184,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "North Texas",
     "awayTeam": "Rice",
@@ -4718,6 +5111,7 @@
   {
     "gameId": 401239875,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Eastern Kentucky",
     "awayTeam": "Western Carolina",
@@ -4730,6 +5124,7 @@
   {
     "gameId": 401207185,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Southern Miss",
     "awayTeam": "UTSA",
@@ -4742,6 +5137,7 @@
   {
     "gameId": 401209818,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "BYU",
     "awayTeam": "North Alabama",
@@ -4754,6 +5150,7 @@
   {
     "gameId": 401247323,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Northwestern",
     "awayTeam": "Wisconsin",
@@ -4766,6 +5163,7 @@
   {
     "gameId": 401212540,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "UCF",
     "awayTeam": "Cincinnati",
@@ -4778,6 +5176,7 @@
   {
     "gameId": 401249019,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Nevada",
     "awayTeam": "San Diego State",
@@ -4790,6 +5189,7 @@
   {
     "gameId": 401247327,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Penn State",
     "awayTeam": "Iowa",
@@ -4802,6 +5202,7 @@
   {
     "gameId": 401240641,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Troy",
     "awayTeam": "Middle Tennessee",
@@ -4814,6 +5215,7 @@
   {
     "gameId": 401249415,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Oregon",
     "awayTeam": "UCLA",
@@ -4826,6 +5228,7 @@
   {
     "gameId": 401215335,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "South Alabama",
     "awayTeam": "Georgia State",
@@ -4838,6 +5241,7 @@
   {
     "gameId": 401249411,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Oregon State",
     "awayTeam": "California",
@@ -4850,6 +5254,7 @@
   {
     "gameId": 401237135,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Alabama",
     "awayTeam": "Kentucky",
@@ -4862,6 +5267,7 @@
   {
     "gameId": 401234648,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Pittsburgh",
     "awayTeam": "Virginia Tech",
@@ -4874,6 +5280,7 @@
   {
     "gameId": 401236025,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Iowa State",
     "awayTeam": "Kansas State",
@@ -4886,6 +5293,7 @@
   {
     "gameId": 401248275,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-21",
     "homeTeam": "Virginia",
     "awayTeam": "Abilene Christian",
@@ -4898,6 +5306,7 @@
   {
     "gameId": 401237137,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-22",
     "homeTeam": "Auburn",
     "awayTeam": "Tennessee",
@@ -4910,6 +5319,7 @@
   {
     "gameId": 401237139,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-22",
     "homeTeam": "Georgia",
     "awayTeam": "Mississippi State",
@@ -4922,6 +5332,7 @@
   {
     "gameId": 401247324,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-22",
     "homeTeam": "Rutgers",
     "awayTeam": "Michigan",
@@ -4934,6 +5345,7 @@
   {
     "gameId": 401237141,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-22",
     "homeTeam": "South Carolina",
     "awayTeam": "Missouri",
@@ -4946,6 +5358,7 @@
   {
     "gameId": 401236027,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-22",
     "homeTeam": "Oklahoma",
     "awayTeam": "Oklahoma State",
@@ -4958,6 +5371,7 @@
   {
     "gameId": 401234647,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-22",
     "homeTeam": "NC State",
     "awayTeam": "Liberty",
@@ -4970,6 +5384,7 @@
   {
     "gameId": 401249413,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-22",
     "homeTeam": "Washington",
     "awayTeam": "Arizona",
@@ -4982,6 +5397,7 @@
   {
     "gameId": 401249410,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-22",
     "homeTeam": "Utah",
     "awayTeam": "USC",
@@ -4994,6 +5410,7 @@
   {
     "gameId": 401249017,
     "week": 12,
+    "seasonType": "regular",
     "date": "2020-11-22",
     "homeTeam": "Hawai'i",
     "awayTeam": "Boise State",
@@ -5006,6 +5423,7 @@
   {
     "gameId": 401249025,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-27",
     "homeTeam": "Utah State",
     "awayTeam": "New Mexico",
@@ -5018,6 +5436,7 @@
   {
     "gameId": 401251926,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-27",
     "homeTeam": "Liberty",
     "awayTeam": "Massachusetts",
@@ -5030,6 +5449,7 @@
   {
     "gameId": 401236029,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-27",
     "homeTeam": "Texas",
     "awayTeam": "Iowa State",
@@ -5042,6 +5462,7 @@
   {
     "gameId": 401247332,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-27",
     "homeTeam": "Iowa",
     "awayTeam": "Nebraska",
@@ -5054,6 +5475,7 @@
   {
     "gameId": 401212483,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-27",
     "homeTeam": "South Florida",
     "awayTeam": "UCF",
@@ -5066,6 +5488,7 @@
   {
     "gameId": 401234650,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-27",
     "homeTeam": "North Carolina",
     "awayTeam": "Notre Dame",
@@ -5078,6 +5501,7 @@
   {
     "gameId": 401249028,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-27",
     "homeTeam": "UNLV",
     "awayTeam": "Wyoming",
@@ -5090,6 +5514,7 @@
   {
     "gameId": 401249874,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-27",
     "homeTeam": "Eastern Michigan",
     "awayTeam": "Central Michigan",
@@ -5102,6 +5527,7 @@
   {
     "gameId": 401249417,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-27",
     "homeTeam": "California",
     "awayTeam": "Stanford",
@@ -5114,6 +5540,7 @@
   {
     "gameId": 401249418,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "Oregon State",
     "awayTeam": "Oregon",
@@ -5126,6 +5553,7 @@
   {
     "gameId": 401234655,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "Syracuse",
     "awayTeam": "NC State",
@@ -5138,6 +5566,7 @@
   {
     "gameId": 401247333,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "Michigan",
     "awayTeam": "Penn State",
@@ -5150,6 +5579,7 @@
   {
     "gameId": 401249876,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "Ohio",
     "awayTeam": "Bowling Green",
@@ -5162,6 +5592,7 @@
   {
     "gameId": 401249875,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "Western Michigan",
     "awayTeam": "Northern Illinois",
@@ -5174,6 +5605,7 @@
   {
     "gameId": 401249873,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "Toledo",
     "awayTeam": "Ball State",
@@ -5186,6 +5618,7 @@
   {
     "gameId": 401212513,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "East Carolina",
     "awayTeam": "SMU",
@@ -5198,6 +5631,7 @@
   {
     "gameId": 401249877,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "Buffalo",
     "awayTeam": "Kent State",
@@ -5210,6 +5644,7 @@
   {
     "gameId": 401215339,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "Georgia State",
     "awayTeam": "Georgia Southern",
@@ -5222,6 +5657,7 @@
   {
     "gameId": 401237144,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "Florida",
     "awayTeam": "Kentucky",
@@ -5234,6 +5670,7 @@
   {
     "gameId": 401237143,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "Missouri",
     "awayTeam": "Vanderbilt",
@@ -5246,6 +5683,7 @@
   {
     "gameId": 401236032,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "Oklahoma State",
     "awayTeam": "Texas Tech",
@@ -5258,6 +5696,7 @@
   {
     "gameId": 401247329,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "Indiana",
     "awayTeam": "Maryland",
@@ -5270,6 +5709,7 @@
   {
     "gameId": 401249892,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "Akron",
     "awayTeam": "Miami (OH)",
@@ -5282,6 +5722,7 @@
   {
     "gameId": 401215340,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "UL Monroe",
     "awayTeam": "Louisiana",
@@ -5294,6 +5735,7 @@
   {
     "gameId": 401215337,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "Arkansas State",
     "awayTeam": "South Alabama",
@@ -5306,6 +5748,7 @@
   {
     "gameId": 401215338,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "Texas State",
     "awayTeam": "Coastal Carolina",
@@ -5318,6 +5761,7 @@
   {
     "gameId": 401207191,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "UTSA",
     "awayTeam": "North Texas",
@@ -5330,6 +5774,7 @@
   {
     "gameId": 401234651,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "Clemson",
     "awayTeam": "Pittsburgh",
@@ -5342,6 +5787,7 @@
   {
     "gameId": 401237142,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "Alabama",
     "awayTeam": "Auburn",
@@ -5354,6 +5800,7 @@
   {
     "gameId": 401247330,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "Michigan State",
     "awayTeam": "Northwestern",
@@ -5366,6 +5813,7 @@
   {
     "gameId": 401215336,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "App State",
     "awayTeam": "Troy",
@@ -5378,6 +5826,7 @@
   {
     "gameId": 401237147,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "Ole Miss",
     "awayTeam": "Mississippi State",
@@ -5390,6 +5839,7 @@
   {
     "gameId": 401234649,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "Boston College",
     "awayTeam": "Louisville",
@@ -5402,6 +5852,7 @@
   {
     "gameId": 401247328,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "Purdue",
     "awayTeam": "Rutgers",
@@ -5414,6 +5865,7 @@
   {
     "gameId": 401265734,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-28",
     "homeTeam": "Colorado",
     "awayTeam": "San Diego State",
@@ -5426,6 +5878,7 @@
   {
     "gameId": 401264080,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-29",
     "homeTeam": "Navy",
     "awayTeam": "Memphis",
@@ -5438,6 +5891,7 @@
   {
     "gameId": 401237146,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-29",
     "homeTeam": "Texas A&M",
     "awayTeam": "LSU",
@@ -5450,6 +5904,7 @@
   {
     "gameId": 401236028,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-29",
     "homeTeam": "Baylor",
     "awayTeam": "Kansas State",
@@ -5462,6 +5917,7 @@
   {
     "gameId": 401234652,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-29",
     "homeTeam": "Georgia Tech",
     "awayTeam": "Duke",
@@ -5474,6 +5930,7 @@
   {
     "gameId": 401265458,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-29",
     "homeTeam": "Washington",
     "awayTeam": "Utah",
@@ -5486,6 +5943,7 @@
   {
     "gameId": 401237145,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-29",
     "homeTeam": "South Carolina",
     "awayTeam": "Georgia",
@@ -5498,6 +5956,7 @@
   {
     "gameId": 401249421,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-29",
     "homeTeam": "UCLA",
     "awayTeam": "Arizona",
@@ -5510,6 +5969,7 @@
   {
     "gameId": 401236030,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-29",
     "homeTeam": "Kansas",
     "awayTeam": "TCU",
@@ -5522,6 +5982,7 @@
   {
     "gameId": 401249024,
     "week": 13,
+    "seasonType": "regular",
     "date": "2020-11-29",
     "homeTeam": "Hawai'i",
     "awayTeam": "Nevada",
@@ -5534,6 +5995,7 @@
   {
     "gameId": 401265703,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-03",
     "homeTeam": "North Texas",
     "awayTeam": "Louisiana Tech",
@@ -5546,6 +6008,7 @@
   {
     "gameId": 401249029,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-04",
     "homeTeam": "Utah State",
     "awayTeam": "Air Force",
@@ -5558,6 +6021,7 @@
   {
     "gameId": 401252117,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "App State",
     "awayTeam": "Louisiana",
@@ -5570,6 +6034,7 @@
   {
     "gameId": 401249880,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Northern Illinois",
     "awayTeam": "Toledo",
@@ -5582,6 +6047,7 @@
   {
     "gameId": 401247336,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Rutgers",
     "awayTeam": "Penn State",
@@ -5594,6 +6060,7 @@
   {
     "gameId": 401247335,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Purdue",
     "awayTeam": "Nebraska",
@@ -5606,6 +6073,7 @@
   {
     "gameId": 401257812,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Marshall",
     "awayTeam": "Rice",
@@ -5618,6 +6086,7 @@
   {
     "gameId": 401265818,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Missouri",
     "awayTeam": "Arkansas",
@@ -5630,6 +6099,7 @@
   {
     "gameId": 401247340,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Michigan State",
     "awayTeam": "Ohio State",
@@ -5642,6 +6112,7 @@
   {
     "gameId": 401237150,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Auburn",
     "awayTeam": "Texas A&M",
@@ -5654,6 +6125,7 @@
   {
     "gameId": 401248781,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "North Carolina",
     "awayTeam": "Western Carolina",
@@ -5666,6 +6138,7 @@
   {
     "gameId": 401236036,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Kansas State",
     "awayTeam": "Texas",
@@ -5678,6 +6151,7 @@
   {
     "gameId": 401236035,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Texas Tech",
     "awayTeam": "Kansas",
@@ -5690,6 +6164,7 @@
   {
     "gameId": 401264082,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Tulane",
     "awayTeam": "Memphis",
@@ -5702,6 +6177,7 @@
   {
     "gameId": 401236037,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "TCU",
     "awayTeam": "Oklahoma State",
@@ -5714,6 +6190,7 @@
   {
     "gameId": 401249881,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Akron",
     "awayTeam": "Bowling Green",
@@ -5726,6 +6203,7 @@
   {
     "gameId": 401249879,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Western Michigan",
     "awayTeam": "Eastern Michigan",
@@ -5738,6 +6216,7 @@
   {
     "gameId": 401262494,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "South Alabama",
     "awayTeam": "Troy",
@@ -5750,6 +6229,7 @@
   {
     "gameId": 401249878,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Central Michigan",
     "awayTeam": "Ball State",
@@ -5762,6 +6242,7 @@
   {
     "gameId": 401234662,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Notre Dame",
     "awayTeam": "Syracuse",
@@ -5774,6 +6255,7 @@
   {
     "gameId": 401262493,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Arkansas State",
     "awayTeam": "UL Monroe",
@@ -5786,6 +6268,7 @@
   {
     "gameId": 401236034,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Iowa State",
     "awayTeam": "West Virginia",
@@ -5798,6 +6281,7 @@
   {
     "gameId": 401247338,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Wisconsin",
     "awayTeam": "Indiana",
@@ -5810,6 +6294,7 @@
   {
     "gameId": 401247337,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Illinois",
     "awayTeam": "Iowa",
@@ -5822,6 +6307,7 @@
   {
     "gameId": 401264083,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Navy",
     "awayTeam": "Tulsa",
@@ -5834,6 +6320,7 @@
   {
     "gameId": 401237151,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Tennessee",
     "awayTeam": "Florida",
@@ -5846,6 +6333,7 @@
   {
     "gameId": 401234656,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Virginia",
     "awayTeam": "Boston College",
@@ -5858,6 +6346,7 @@
   {
     "gameId": 401249424,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Washington",
     "awayTeam": "Stanford",
@@ -5870,6 +6359,7 @@
   {
     "gameId": 401234659,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "NC State",
     "awayTeam": "Georgia Tech",
@@ -5882,6 +6372,7 @@
   {
     "gameId": 401237514,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Coastal Carolina",
     "awayTeam": "BYU",
@@ -5894,6 +6385,7 @@
   {
     "gameId": 401249033,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "San José State",
     "awayTeam": "Hawai'i",
@@ -5906,6 +6398,7 @@
   {
     "gameId": 401261675,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-05",
     "homeTeam": "Georgia Southern",
     "awayTeam": "Florida Atlantic",
@@ -5918,6 +6411,7 @@
   {
     "gameId": 401249031,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-06",
     "homeTeam": "San Diego State",
     "awayTeam": "Colorado State",
@@ -5930,6 +6424,7 @@
   {
     "gameId": 401249426,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-06",
     "homeTeam": "Arizona",
     "awayTeam": "Colorado",
@@ -5942,6 +6437,7 @@
   {
     "gameId": 401249423,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-06",
     "homeTeam": "California",
     "awayTeam": "Oregon",
@@ -5954,6 +6450,7 @@
   {
     "gameId": 401234657,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-06",
     "homeTeam": "Virginia Tech",
     "awayTeam": "Clemson",
@@ -5966,6 +6463,7 @@
   {
     "gameId": 401237153,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-06",
     "homeTeam": "Kentucky",
     "awayTeam": "South Carolina",
@@ -5978,6 +6476,7 @@
   {
     "gameId": 401266134,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-06",
     "homeTeam": "Duke",
     "awayTeam": "Miami",
@@ -5990,6 +6489,7 @@
   {
     "gameId": 401236033,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-06",
     "homeTeam": "Oklahoma",
     "awayTeam": "Baylor",
@@ -6002,6 +6502,7 @@
   {
     "gameId": 401265817,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-06",
     "homeTeam": "LSU",
     "awayTeam": "Alabama",
@@ -6014,6 +6515,7 @@
   {
     "gameId": 401249032,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-06",
     "homeTeam": "Nevada",
     "awayTeam": "Fresno State",
@@ -6026,6 +6528,7 @@
   {
     "gameId": 401249425,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-06",
     "homeTeam": "Arizona State",
     "awayTeam": "UCLA",
@@ -6038,6 +6541,7 @@
   {
     "gameId": 401249422,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-06",
     "homeTeam": "Utah",
     "awayTeam": "Oregon State",
@@ -6050,6 +6554,7 @@
   {
     "gameId": 401249034,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-06",
     "homeTeam": "New Mexico",
     "awayTeam": "Wyoming",
@@ -6062,6 +6567,7 @@
   {
     "gameId": 401266789,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-06",
     "homeTeam": "Charlotte",
     "awayTeam": "Western Kentucky",
@@ -6074,6 +6580,7 @@
   {
     "gameId": 401249427,
     "week": 14,
+    "seasonType": "regular",
     "date": "2020-12-07",
     "homeTeam": "USC",
     "awayTeam": "Washington State",
@@ -6086,6 +6593,7 @@
   {
     "gameId": 401257813,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-10",
     "homeTeam": "Southern Miss",
     "awayTeam": "Florida Atlantic",
@@ -6098,6 +6606,7 @@
   {
     "gameId": 401261245,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-11",
     "homeTeam": "Georgia Tech",
     "awayTeam": "Pittsburgh",
@@ -6110,6 +6619,7 @@
   {
     "gameId": 401257816,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-11",
     "homeTeam": "UTEP",
     "awayTeam": "North Texas",
@@ -6122,6 +6632,7 @@
   {
     "gameId": 401249429,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Arizona",
     "awayTeam": "Arizona State",
@@ -6134,6 +6645,7 @@
   {
     "gameId": 401249037,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "San José State",
     "awayTeam": "Nevada",
@@ -6146,6 +6658,7 @@
   {
     "gameId": 401267164,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Arkansas",
     "awayTeam": "Alabama",
@@ -6158,6 +6671,7 @@
   {
     "gameId": 401247345,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Nebraska",
     "awayTeam": "Minnesota",
@@ -6170,6 +6684,7 @@
   {
     "gameId": 401266696,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Louisville",
     "awayTeam": "Wake Forest",
@@ -6182,6 +6697,7 @@
   {
     "gameId": 401247344,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Northwestern",
     "awayTeam": "Illinois",
@@ -6194,6 +6710,7 @@
   {
     "gameId": 401249885,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Ball State",
     "awayTeam": "Western Michigan",
@@ -6206,6 +6723,7 @@
   {
     "gameId": 401249884,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Eastern Michigan",
     "awayTeam": "Northern Illinois",
@@ -6218,6 +6736,7 @@
   {
     "gameId": 401247342,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Maryland",
     "awayTeam": "Rutgers",
@@ -6230,6 +6749,7 @@
   {
     "gameId": 401247346,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Penn State",
     "awayTeam": "Michigan State",
@@ -6242,6 +6762,7 @@
   {
     "gameId": 401249428,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Colorado",
     "awayTeam": "Utah",
@@ -6254,6 +6775,7 @@
   {
     "gameId": 401267161,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Missouri",
     "awayTeam": "Georgia",
@@ -6266,6 +6788,7 @@
   {
     "gameId": 401257815,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Rice",
     "awayTeam": "UAB",
@@ -6278,6 +6801,7 @@
   {
     "gameId": 401249886,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Buffalo",
     "awayTeam": "Akron",
@@ -6290,6 +6814,7 @@
   {
     "gameId": 401207203,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Army",
     "awayTeam": "Navy",
@@ -6302,6 +6827,7 @@
   {
     "gameId": 401259671,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Troy",
     "awayTeam": "Coastal Carolina",
@@ -6314,6 +6840,7 @@
   {
     "gameId": 401249883,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Toledo",
     "awayTeam": "Central Michigan",
@@ -6326,6 +6853,7 @@
   {
     "gameId": 401234661,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Miami",
     "awayTeam": "North Carolina",
@@ -6338,6 +6866,7 @@
   {
     "gameId": 401264084,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Memphis",
     "awayTeam": "Houston",
@@ -6350,6 +6879,7 @@
   {
     "gameId": 401247347,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Iowa",
     "awayTeam": "Wisconsin",
@@ -6362,6 +6892,7 @@
   {
     "gameId": 401250713,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Baylor",
     "awayTeam": "Oklahoma State",
@@ -6374,6 +6905,7 @@
   {
     "gameId": 401266694,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Florida State",
     "awayTeam": "Duke",
@@ -6386,6 +6918,7 @@
   {
     "gameId": 401267163,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Vanderbilt",
     "awayTeam": "Tennessee",
@@ -6398,6 +6931,7 @@
   {
     "gameId": 401249035,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Wyoming",
     "awayTeam": "Boise State",
@@ -6410,6 +6944,7 @@
   {
     "gameId": 401215309,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-12",
     "homeTeam": "Georgia Southern",
     "awayTeam": "App State",
@@ -6422,6 +6957,7 @@
   {
     "gameId": 401251100,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-13",
     "homeTeam": "Florida",
     "awayTeam": "LSU",
@@ -6434,6 +6970,7 @@
   {
     "gameId": 401266711,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-13",
     "homeTeam": "TCU",
     "awayTeam": "Louisiana Tech",
@@ -6446,6 +6983,7 @@
   {
     "gameId": 401260157,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-13",
     "homeTeam": "Mississippi State",
     "awayTeam": "Auburn",
@@ -6458,6 +6996,7 @@
   {
     "gameId": 401249431,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-13",
     "homeTeam": "UCLA",
     "awayTeam": "USC",
@@ -6470,6 +7009,7 @@
   {
     "gameId": 401234572,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-13",
     "homeTeam": "Virginia Tech",
     "awayTeam": "Virginia",
@@ -6482,6 +7022,7 @@
   {
     "gameId": 401249432,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-13",
     "homeTeam": "Oregon State",
     "awayTeam": "Stanford",
@@ -6494,6 +7035,7 @@
   {
     "gameId": 401249435,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-13",
     "homeTeam": "BYU",
     "awayTeam": "San Diego State",
@@ -6506,6 +7048,7 @@
   {
     "gameId": 401249036,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-13",
     "homeTeam": "New Mexico",
     "awayTeam": "Fresno State",
@@ -6518,6 +7061,7 @@
   {
     "gameId": 401249038,
     "week": 15,
+    "seasonType": "regular",
     "date": "2020-12-13",
     "homeTeam": "Hawai'i",
     "awayTeam": "UNLV",
@@ -6530,6 +7074,7 @@
   {
     "gameId": 401240101,
     "week": 16,
+    "seasonType": "regular",
     "date": "2020-12-19",
     "homeTeam": "Marshall",
     "awayTeam": "UAB",
@@ -6542,6 +7087,7 @@
   {
     "gameId": 401269382,
     "week": 16,
+    "seasonType": "regular",
     "date": "2020-12-19",
     "homeTeam": "Rutgers",
     "awayTeam": "Nebraska",
@@ -6554,6 +7100,7 @@
   {
     "gameId": 401249854,
     "week": 16,
+    "seasonType": "regular",
     "date": "2020-12-19",
     "homeTeam": "Buffalo",
     "awayTeam": "Ball State",
@@ -6566,6 +7113,7 @@
   {
     "gameId": 401249434,
     "week": 16,
+    "seasonType": "regular",
     "date": "2020-12-19",
     "homeTeam": "USC",
     "awayTeam": "Oregon",
@@ -6578,6 +7126,7 @@
   {
     "gameId": 401247349,
     "week": 16,
+    "seasonType": "regular",
     "date": "2020-12-19",
     "homeTeam": "Ohio State",
     "awayTeam": "Northwestern",
@@ -6590,6 +7139,7 @@
   {
     "gameId": 401262060,
     "week": 16,
+    "seasonType": "regular",
     "date": "2020-12-19",
     "homeTeam": "Iowa State",
     "awayTeam": "Oklahoma",
@@ -6602,6 +7152,7 @@
   {
     "gameId": 401260158,
     "week": 16,
+    "seasonType": "regular",
     "date": "2020-12-19",
     "homeTeam": "Tennessee",
     "awayTeam": "Texas A&M",
@@ -6614,6 +7165,7 @@
   {
     "gameId": 401269375,
     "week": 16,
+    "seasonType": "regular",
     "date": "2020-12-19",
     "homeTeam": "Utah",
     "awayTeam": "Washington State",
@@ -6626,6 +7178,7 @@
   {
     "gameId": 401265699,
     "week": 16,
+    "seasonType": "regular",
     "date": "2020-12-19",
     "homeTeam": "Army",
     "awayTeam": "Air Force",
@@ -6638,6 +7191,7 @@
   {
     "gameId": 401267165,
     "week": 16,
+    "seasonType": "regular",
     "date": "2020-12-19",
     "homeTeam": "LSU",
     "awayTeam": "Ole Miss",
@@ -6650,6 +7204,7 @@
   {
     "gameId": 401267166,
     "week": 16,
+    "seasonType": "regular",
     "date": "2020-12-19",
     "homeTeam": "Mississippi State",
     "awayTeam": "Missouri",
@@ -6662,6 +7217,7 @@
   {
     "gameId": 401256001,
     "week": 16,
+    "seasonType": "regular",
     "date": "2020-12-19",
     "homeTeam": "Notre Dame",
     "awayTeam": "Clemson",
@@ -6674,6 +7230,7 @@
   {
     "gameId": 401269384,
     "week": 16,
+    "seasonType": "regular",
     "date": "2020-12-19",
     "homeTeam": "Wisconsin",
     "awayTeam": "Minnesota",
@@ -6686,6 +7243,7 @@
   {
     "gameId": 401249043,
     "week": 16,
+    "seasonType": "regular",
     "date": "2020-12-19",
     "homeTeam": "San José State",
     "awayTeam": "Boise State",
@@ -6698,6 +7256,7 @@
   {
     "gameId": 401269381,
     "week": 16,
+    "seasonType": "regular",
     "date": "2020-12-19",
     "homeTeam": "Penn State",
     "awayTeam": "Illinois",
@@ -6710,6 +7269,7 @@
   {
     "gameId": 401269376,
     "week": 16,
+    "seasonType": "regular",
     "date": "2020-12-20",
     "homeTeam": "UCLA",
     "awayTeam": "Stanford",
@@ -6722,6 +7282,7 @@
   {
     "gameId": 401237074,
     "week": 16,
+    "seasonType": "regular",
     "date": "2020-12-20",
     "homeTeam": "Florida",
     "awayTeam": "Alabama",
@@ -6734,6 +7295,7 @@
   {
     "gameId": 401264085,
     "week": 16,
+    "seasonType": "regular",
     "date": "2020-12-20",
     "homeTeam": "Cincinnati",
     "awayTeam": "Tulsa",
@@ -6746,6 +7308,7 @@
   {
     "gameId": 401269378,
     "week": 16,
+    "seasonType": "regular",
     "date": "2020-12-20",
     "homeTeam": "Oregon State",
     "awayTeam": "Arizona State",
@@ -6758,6 +7321,7 @@
   {
     "gameId": 401256135,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2020-12-21",
     "homeTeam": "North Texas",
     "awayTeam": "App State",
@@ -6770,6 +7334,7 @@
   {
     "gameId": 401256136,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2020-12-22",
     "homeTeam": "Nevada",
     "awayTeam": "Tulane",
@@ -6782,6 +7347,7 @@
   {
     "gameId": 401256137,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2020-12-23",
     "homeTeam": "BYU",
     "awayTeam": "UCF",
@@ -6794,6 +7360,7 @@
   {
     "gameId": 401256138,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2020-12-23",
     "homeTeam": "Georgia Southern",
     "awayTeam": "Louisiana Tech",
@@ -6806,6 +7373,7 @@
   {
     "gameId": 401256139,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2020-12-24",
     "homeTeam": "Florida Atlantic",
     "awayTeam": "Memphis",
@@ -6818,6 +7386,7 @@
   {
     "gameId": 401256140,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2020-12-24",
     "homeTeam": "Houston",
     "awayTeam": "Hawai'i",
@@ -6830,6 +7399,7 @@
   {
     "gameId": 401256141,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2020-12-25",
     "homeTeam": "Buffalo",
     "awayTeam": "Marshall",
@@ -6842,6 +7412,7 @@
   {
     "gameId": 401256144,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2020-12-26",
     "homeTeam": "UTSA",
     "awayTeam": "Louisiana",
@@ -6854,6 +7425,7 @@
   {
     "gameId": 401256145,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2020-12-26",
     "homeTeam": "Georgia State",
     "awayTeam": "Western Kentucky",
@@ -6866,6 +7438,7 @@
   {
     "gameId": 401256143,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2020-12-27",
     "homeTeam": "Coastal Carolina",
     "awayTeam": "Liberty",
@@ -6878,6 +7451,7 @@
   {
     "gameId": 401256150,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2020-12-29",
     "homeTeam": "Miami",
     "awayTeam": "Oklahoma State",
@@ -6890,6 +7464,7 @@
   {
     "gameId": 401256151,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2020-12-30",
     "homeTeam": "Colorado",
     "awayTeam": "Texas",
@@ -6902,6 +7477,7 @@
   {
     "gameId": 401256152,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2020-12-30",
     "homeTeam": "Wisconsin",
     "awayTeam": "Wake Forest",
@@ -6914,6 +7490,7 @@
   {
     "gameId": 401256194,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2020-12-31",
     "homeTeam": "Oklahoma",
     "awayTeam": "Florida",
@@ -6926,6 +7503,7 @@
   {
     "gameId": 401256196,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2020-12-31",
     "homeTeam": "Mississippi State",
     "awayTeam": "Tulsa",
@@ -6938,6 +7516,7 @@
   {
     "gameId": 401268773,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2020-12-31",
     "homeTeam": "San José State",
     "awayTeam": "Ball State",
@@ -6950,6 +7529,7 @@
   {
     "gameId": 401256197,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2020-12-31",
     "homeTeam": "Army",
     "awayTeam": "West Virginia",
@@ -6962,6 +7542,7 @@
   {
     "gameId": 401256108,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2021-01-01",
     "homeTeam": "Georgia",
     "awayTeam": "Cincinnati",
@@ -6974,6 +7555,7 @@
   {
     "gameId": 401256199,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2021-01-01",
     "homeTeam": "Northwestern",
     "awayTeam": "Auburn",
@@ -6986,6 +7568,7 @@
   {
     "gameId": 401240152,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2021-01-01",
     "homeTeam": "Alabama",
     "awayTeam": "Notre Dame",
@@ -6998,6 +7581,7 @@
   {
     "gameId": 401240173,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2021-01-02",
     "homeTeam": "Clemson",
     "awayTeam": "Ohio State",
@@ -7010,6 +7594,7 @@
   {
     "gameId": 401256109,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2021-01-02",
     "homeTeam": "Kentucky",
     "awayTeam": "NC State",
@@ -7022,6 +7607,7 @@
   {
     "gameId": 401256110,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2021-01-02",
     "homeTeam": "Indiana",
     "awayTeam": "Ole Miss",
@@ -7034,6 +7620,7 @@
   {
     "gameId": 401256111,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2021-01-02",
     "homeTeam": "Iowa State",
     "awayTeam": "Oregon",
@@ -7046,6 +7633,7 @@
   {
     "gameId": 401256112,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2021-01-03",
     "homeTeam": "North Carolina",
     "awayTeam": "Texas A&M",
@@ -7058,6 +7646,7 @@
   {
     "gameId": 401240174,
     "week": 1,
+    "seasonType": "postseason",
     "date": "2021-01-12",
     "homeTeam": "Alabama",
     "awayTeam": "Ohio State",
@@ -7070,6 +7659,7 @@
   {
     "gameId": 401321794,
     "week": 20,
+    "seasonType": "postseason",
     "date": "2021-04-24",
     "homeTeam": "James Madison",
     "awayTeam": "VMI",
@@ -7082,6 +7672,7 @@
   {
     "gameId": 401322680,
     "week": 20,
+    "seasonType": "postseason",
     "date": "2021-05-02",
     "homeTeam": "James Madison",
     "awayTeam": "North Dakota",
@@ -7094,6 +7685,7 @@
   {
     "gameId": 401324093,
     "week": 20,
+    "seasonType": "postseason",
     "date": "2021-05-08",
     "homeTeam": "Sam Houston",
     "awayTeam": "James Madison",
@@ -7106,6 +7698,7 @@
   {
     "gameId": 401325471,
     "week": 20,
+    "seasonType": "postseason",
     "date": "2021-05-16",
     "homeTeam": "South Dakota State",
     "awayTeam": "Sam Houston",

@@ -67,7 +67,7 @@ let sortCol = 'overall';
 let sortAsc = false;
 let posFilter = 'ALL';
 let activeTab = 'teams';
-let teamSubnav = 'roster'; // 'roster' | 'depth' | 'schedule'
+let teamSubnav = 'roster'; // 'roster' | 'depth' | 'schedule' | 'tendencies' | 'analysis' | 'map'
 let topSortCol = 'overall';
 let topSortAsc = false;
 let topSearch = '';
@@ -513,12 +513,14 @@ function renderTeamView(t) {
     <button class="team-subnav-btn ${teamSubnav==='roster'?'active':''}" onclick="setTeamSubnav('roster')">Roster</button>
     <button class="team-subnav-btn ${teamSubnav==='depth'?'active':''}" onclick="setTeamSubnav('depth')">Depth Chart</button>
     <button class="team-subnav-btn ${teamSubnav==='schedule'?'active':''}" onclick="setTeamSubnav('schedule')">Schedule</button>
+    <button class="team-subnav-btn ${teamSubnav==='tendencies'?'active':''}" onclick="setTeamSubnav('tendencies')">Tendencies</button>
     <button class="team-subnav-btn ${teamSubnav==='analysis'?'active':''}" onclick="setTeamSubnav('analysis')">Analysis</button>
     <button class="team-subnav-btn ${teamSubnav==='map'?'active':''}" onclick="setTeamSubnav('map')">Map</button>
   </div>`;
   if (teamSubnav === 'roster') renderRoster(t, subNavHTML);
   else if (teamSubnav === 'depth') renderDepth(t, subNavHTML);
   else if (teamSubnav === 'schedule') renderSchedule(t, subNavHTML);
+  else if (teamSubnav === 'tendencies') renderTendencies(t, subNavHTML);
   else if (teamSubnav === 'map') renderTeamMap(t, subNavHTML);
   else renderAnalysis(t, subNavHTML);
 }
@@ -1033,8 +1035,9 @@ function renderDepth(t, subNavHTML='') {
 // ── Phase 2: Lazy-load caches ──────────────────────────────────────────────
 const _scheduleCache = {};
 const _gamelogCache  = {};
-const _drivesCache   = {};
-const _playsCache    = {};  // keyed by `${year}_wk${week}`
+const _drivesCache      = {};
+const _playsCache       = {};  // keyed by `${year}_wk${week}`
+const _tendenciesCache  = {};
 
 // Fetch JSON, preferring .json.gz (browser-native decompression) then .json fallback
 async function _fetchJson(base) {
@@ -1077,6 +1080,15 @@ async function loadDrives(year) {
   } catch { return {}; }
 }
 
+async function loadTendencies(year) {
+  if (_tendenciesCache[year]) return _tendenciesCache[year];
+  try {
+    const data = await _fetchJson(`app/assets/data/${year}/team_tendencies.json`);
+    _tendenciesCache[year] = data;
+    return data;
+  } catch { return {}; }
+}
+
 async function loadPlaysForWeek(year, week) {
   // Plays are split into weekly .json.gz files: team_plays_wk01.json.gz etc.
   // Fetch directly (not via _fetchJson which would double-append .gz).
@@ -1098,6 +1110,130 @@ async function loadPlaysForWeek(year, week) {
     _playsCache[cacheKey] = data;
     return data;
   } catch { return {}; }
+}
+
+// ── Tendencies Tab ──────────────────────────────────────────────────────────
+async function renderTendencies(t, subNavHTML='') {
+  const el = document.getElementById('tab-content');
+  el.innerHTML = `${teamHeaderHTML(t)}${subNavHTML}<div id="loading">Loading tendencies...</div>`;
+
+  const tendenciesAll = await loadTendencies(currentYear);
+  const td = tendenciesAll[t.name];
+
+  if (!td) {
+    el.innerHTML = `${teamHeaderHTML(t)}${subNavHTML}
+      <div style="padding:32px;text-align:center;color:var(--text-dim)">
+        No tendency data available for ${t.name} (${currentYear}).
+        <br><small>Re-run the pipeline to generate tendency data.</small>
+      </div>`;
+    return;
+  }
+
+  const { summary, downDistance, fieldZones, direction } = td;
+
+  // Down-distance heatmap (4 downs × 4 dist buckets)
+  const DIST_BUCKETS = ['1-3','4-6','7-10','11+'];
+  const DOWNS = [1,2,3,4];
+  const ddMap = {};
+  for (const row of (downDistance||[])) ddMap[`${row.down}_${row.distBucket}`] = row;
+
+  const heatmapRows = DOWNS.map(down => {
+    const cells = DIST_BUCKETS.map(db => {
+      const cell = ddMap[`${down}_${db}`];
+      if (!cell || !cell.total) return `<td style="background:var(--card-bg);color:var(--text-dim);font-size:11px">—</td>`;
+      const runPct = cell.runPct;
+      // Color: blue=pass, red=run. Midpoint=50% run.
+      const runness = runPct / 100;
+      const r = Math.round(180 * runness + 30 * (1 - runness));
+      const g = Math.round(60 * runness + 80 * (1 - runness));
+      const b = Math.round(40 * runness + 180 * (1 - runness));
+      const bg = `rgb(${r},${g},${b})`;
+      const ppaSign = cell.avgPpa > 0 ? '+' : '';
+      return `<td style="background:${bg};color:#fff;font-size:11px;padding:6px 4px;text-align:center;border-radius:3px">
+        <div style="font-weight:700">${Math.round(runPct)}% Run</div>
+        <div style="font-size:10px;opacity:0.85">${cell.total} plays</div>
+        <div style="font-size:10px;opacity:0.85">PPA ${ppaSign}${cell.avgPpa.toFixed(2)}</div>
+      </td>`;
+    });
+    return `<tr><td style="font-weight:700;font-size:12px;padding:6px 8px;color:var(--text-dim)">Down ${down}</td>${cells.join('')}</tr>`;
+  }).join('');
+
+  const heatmapHTML = `
+    <div class="modal-section">
+      <div class="modal-section-title">Run/Pass Rate by Down & Distance</div>
+      <div style="overflow-x:auto">
+        <table style="border-collapse:separate;border-spacing:3px;width:100%">
+          <thead><tr>
+            <th style="width:64px"></th>
+            ${DIST_BUCKETS.map(b => `<th style="font-size:11px;font-weight:600;color:var(--text-dim);padding:4px;text-align:center">Dist ${b}</th>`).join('')}
+          </tr></thead>
+          <tbody>${heatmapRows}</tbody>
+        </table>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">
+        <span style="color:rgb(180,60,40)">■</span> Run-heavy &nbsp;
+        <span style="color:rgb(30,80,180)">■</span> Pass-heavy
+      </div>
+    </div>`;
+
+  // Field zone success rate bar chart
+  const zoneMax = Math.max(...(fieldZones||[]).map(z => z.successRate), 1);
+  const zoneHTML = `
+    <div class="modal-section">
+      <div class="modal-section-title">Field Zone Success Rate</div>
+      ${(fieldZones||[]).map(z => {
+        const pct = z.successRate;
+        const barW = Math.round(pct / zoneMax * 100);
+        const color = pct >= 50 ? 'var(--positive)' : pct >= 35 ? 'var(--text-dim)' : 'var(--negative)';
+        return `<div style="margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:2px">
+            <span style="color:var(--text-dim)">${z.zone}</span>
+            <span style="color:${color};font-weight:700">${pct.toFixed(1)}% success</span>
+          </div>
+          <div style="background:var(--border);border-radius:3px;height:8px">
+            <div style="width:${barW}%;background:${color};height:8px;border-radius:3px;transition:width 0.3s"></div>
+          </div>
+          <div style="font-size:10px;color:var(--text-dim);margin-top:1px">${z.plays} plays</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+
+  // Direction breakdown (pie-like bar)
+  const dirs = direction || {};
+  const dirLabels = [['left','Left'], ['middle','Middle'], ['right','Right']];
+  const totalDirPct = (dirs.left||0) + (dirs.middle||0) + (dirs.right||0);
+  const dirHTML = totalDirPct > 0 ? `
+    <div class="modal-section">
+      <div class="modal-section-title">Play Direction Tendency</div>
+      <div style="display:flex;border-radius:6px;overflow:hidden;height:28px;margin-bottom:8px">
+        ${dirLabels.map(([k, label]) => {
+          const pct = dirs[k] || 0;
+          if (pct < 1) return '';
+          return `<div style="width:${pct}%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:700" title="${label}: ${pct}%">${pct > 8 ? label : ''}</div>`;
+        }).join('')}
+      </div>
+      <div style="display:flex;gap:16px;font-size:12px">
+        ${dirLabels.map(([k, label]) => `<span><strong>${(dirs[k]||0).toFixed(1)}%</strong> ${label}</span>`).join('')}
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:4px">${(dirs.unknown||0).toFixed(1)}% unclassified from play text</div>
+    </div>` : '';
+
+  // Summary header
+  const summaryHTML = `
+    <div class="modal-section">
+      <div class="modal-section-title">Offensive Summary</div>
+      <div class="stat-grid">
+        <div class="stat-cell"><div class="sv">${summary.totalPlays.toLocaleString()}</div><div class="sk">Total Plays</div></div>
+        <div class="stat-cell"><div class="sv">${summary.runPct}%</div><div class="sk">Run Rate</div></div>
+        <div class="stat-cell"><div class="sv">${summary.passPct}%</div><div class="sk">Pass Rate</div></div>
+        <div class="stat-cell"><div class="sv" style="color:${summary.avgPpa>0?'var(--positive)':'var(--negative)'}">${summary.avgPpa>0?'+':''}${summary.avgPpa.toFixed(3)}</div><div class="sk">Avg PPA/Play</div></div>
+      </div>
+    </div>`;
+
+  el.innerHTML = `${teamHeaderHTML(t)}${subNavHTML}
+    <div class="modal-body" style="padding:12px">
+      ${summaryHTML}${heatmapHTML}${zoneHTML}${dirHTML}
+    </div>`;
 }
 
 // ── Analysis Tab (Team Report Card) ────────────────────────────────────────
@@ -1196,6 +1332,19 @@ async function renderAnalysis(t, subNavHTML='') {
 }
 
 // ── Schedule Tab ───────────────────────────────────────────────────────────
+function gameWeekLabel(g) {
+  if (g.seasonType === 'postseason') {
+    const d = new Date(g.date);
+    const mo = d.getMonth() + 1;
+    const day = d.getDate();
+    if (mo === 1 && day >= 18) return 'NCG';
+    if (mo === 1) return 'CFP';
+    if (mo === 12 && day >= 27) return 'CFP';
+    return 'Bowl';
+  }
+  return g.week != null ? `Wk ${g.week}` : '—';
+}
+
 async function renderSchedule(t, subNavHTML='') {
   document.getElementById('tab-content').innerHTML = `${teamHeaderHTML(t)}${subNavHTML}<div id="loading">Loading schedule...</div>`;
   const schedule = await loadSchedule(currentYear);
@@ -1258,7 +1407,7 @@ async function renderSchedule(t, subNavHTML='') {
         ? `<span class="d-game-margin" style="color:${margin > 0 ? 'var(--positive)' : 'var(--negative)'}">${margin > 0 ? '+' : ''}${margin}</span>`
         : `<span class="d-game-margin">—</span>`;
       return `<div class="d-game-row" onclick="showGameDetail(${g.gameId}, '${t.name.replace(/'/g,"\\'")}')">
-        <span class="d-game-week">Wk ${g.week ?? '—'}</span>
+        <span class="d-game-week">${gameWeekLabel(g)}</span>
         <span class="d-game-loc">${loc}</span>
         <div class="d-game-opp">
           ${oppTeam?.logoUrl ? `<img class="d-game-opp-logo" src="${oppTeam.logoUrl}" onerror="this.style.display='none'">` : ''}
@@ -1274,7 +1423,7 @@ async function renderSchedule(t, subNavHTML='') {
     const resultText = played ? `${win ? 'W' : 'L'} ${myScore}–${oppScore}` : '—';
     const marginColor = margin != null ? (margin > 0 ? 'var(--positive)' : 'var(--negative)') : 'var(--text-dim)';
     return `<tr class="clickable" onclick="showGameDetail(${g.gameId}, '${t.name.replace(/'/g,"\\'")}')">
-      <td style="color:var(--text-muted);font-size:11px">${g.week ?? '—'}</td>
+      <td style="color:var(--text-muted);font-size:11px">${gameWeekLabel(g)}</td>
       <td style="color:var(--text-dim);font-size:11px">${loc}</td>
       <td>
         <div class="a-player-team-cell">
@@ -1307,8 +1456,8 @@ async function renderSchedule(t, subNavHTML='') {
       const done = mine != null && opp != null;
       const win  = done && mine > opp;
       const cls  = done ? (win ? 'd-week-block-w' : 'd-week-block-l') : 'd-week-block-future';
-      const lbl  = g.week != null ? String(g.week) : '?';
-      return `<div class="d-week-block ${cls}" title="Wk ${lbl}: ${done ? (win?'W':'L')+' '+mine+'-'+opp : 'upcoming'}" onclick="showGameDetail(${g.gameId},'${t.name.replace(/'/g,"\\'")}')"><span class="d-week-block-lbl">${lbl}</span></div>`;
+      const lbl  = gameWeekLabel(g);
+      return `<div class="d-week-block ${cls}" title="${lbl}: ${done ? (win?'W':'L')+' '+mine+'-'+opp : 'upcoming'}" onclick="showGameDetail(${g.gameId},'${t.name.replace(/'/g,"\\'")}')"><span class="d-week-block-lbl">${lbl}</span></div>`;
     }).join('');
     return `<div class="d-season-timeline">${blocks}</div>`;
   })();
@@ -1422,7 +1571,7 @@ async function showGameDetail(gameId, teamName) {
             <div class="d-scoreboard-score ${game.homeScore != null ? (!awayWin ? 'win' : 'loss') : ''}">${game.homeScore ?? '—'}</div>
           </div>
         </div>
-        <div class="d-game-detail-meta">Week ${game.week} · ${game.neutralSite ? 'Neutral Site' : game.homeTeam + ' home'}</div>
+        <div class="d-game-detail-meta">${gameWeekLabel(game)} · ${game.neutralSite ? 'Neutral Site' : game.homeTeam + ' home'}</div>
         <div class="d-game-detail-body">
           <div class="d-game-detail-col">
             <div class="d-game-detail-col-header">${game.awayTeam}</div>
@@ -1439,7 +1588,7 @@ async function showGameDetail(gameId, teamName) {
     panel.innerHTML = `
       <div style="margin-top:20px;border:1px solid var(--border-mid);border-radius:8px;padding:16px">
         <div style="text-align:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)">
-          <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px">Week ${game.week} · ${game.neutralSite ? 'Neutral' : (game.homeTeam + ' home')}</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px">${gameWeekLabel(game)} · ${game.neutralSite ? 'Neutral' : (game.homeTeam + ' home')}</div>
           <div style="display:flex;justify-content:center;align-items:center;gap:24px">
             <div style="text-align:right">
               <div style="font-size:16px;font-weight:700">${game.awayTeam}</div>
@@ -2254,6 +2403,10 @@ function showPlayerModal(playerId) {
     }
     if (r.usage?.games) {
       cells.push(`<div class="stat-cell"><div class="sv">${r.usage.games}</div><div class="sk">Games</div></div>`);
+    }
+    if (r.winsAdded != null && r.winsAdded !== 0) {
+      const waColor = r.winsAdded > 0 ? 'var(--positive)' : 'var(--negative)';
+      cells.push(`<div class="stat-cell"><div class="sv" style="color:${waColor}">${r.winsAdded > 0 ? '+' : ''}${r.winsAdded.toFixed(2)}</div><div class="sk">Wins Added</div></div>`);
     }
     if (!cells.length) return '';
     return `<div class="modal-section">
